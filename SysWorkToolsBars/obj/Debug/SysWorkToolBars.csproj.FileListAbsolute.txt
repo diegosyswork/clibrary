@@ -1,0 +1,17 @@
+C:\SWSISTEMAS\Gerdanna\SysWorkToolsBars\bin\Debug\SysWorkToolsBars.dll
+C:\SWSISTEMAS\Gerdanna\SysWorkToolsBars\bin\Debug\SysWorkToolsBars.pdb
+C:\SWSISTEMAS\Gerdanna\SysWorkToolsBars\obj\Debug\SysWorkToolBars.Properties.Resources.resources
+C:\SWSISTEMAS\Gerdanna\SysWorkToolsBars\obj\Debug\SysWorkToolBars.ToolBarABM.resources
+C:\SWSISTEMAS\Gerdanna\SysWorkToolsBars\obj\Debug\SysWorkToolBars.ToolBarReporte.resources
+C:\SWSISTEMAS\Gerdanna\SysWorkToolsBars\obj\Debug\SysWorkToolBars.csproj.GenerateResource.Cache
+C:\SWSISTEMAS\Gerdanna\SysWorkToolsBars\obj\Debug\SysWorkToolBars.csproj.CoreCompileInputs.cache
+C:\SWSISTEMAS\Gerdanna\SysWorkToolsBars\obj\Debug\SysWorkToolsBars.dll
+C:\SWSISTEMAS\Gerdanna\SysWorkToolsBars\obj\Debug\SysWorkToolsBars.pdb
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Debug\SysWorkToolBars.csprojResolveAssemblyReference.cache
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Debug\SysWorkToolBars.Properties.Resources.resources
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Debug\SysWork.Controls.Toolbars.ToolBarABM.resources
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Debug\SysWork.Controls.Toolbars.ToolBarReporte.resources
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Debug\SysWorkToolBars.csproj.GenerateResource.Cache
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Debug\SysWorkToolBars.csproj.CoreCompileInputs.cache
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Debug\SysWorkToolsBars.dll
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Debug\SysWorkToolsBars.pdb

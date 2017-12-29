@@ -1,0 +1,6 @@
+C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\bin\Release\SysWork.Controls.dll
+C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\bin\Release\SysWork.Controls.pdb
+C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Release\SysWork.Controls.csproj.CoreCompileInputs.cache
+C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Release\SysWork.Controls.dll
+C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Release\SysWork.Controls.pdb
+C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Release\SysWork.Controls.csprojResolveAssemblyReference.cache

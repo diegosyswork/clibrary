@@ -1,0 +1,9 @@
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\bin\Debug\SysWork.ToolsBars.dll
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\bin\Debug\SysWork.ToolsBars.pdb
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Debug\SysWorkToolBars.Properties.Resources.resources
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Debug\SysWork.Controls.Toolbars.ToolBarABM.resources
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Debug\SysWork.Controls.Toolbars.ToolBarReporte.resources
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Debug\SysWork.ToolBars.csproj.GenerateResource.Cache
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Debug\SysWork.ToolBars.csproj.CoreCompileInputs.cache
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Debug\SysWork.ToolsBars.dll
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Debug\SysWork.ToolsBars.pdb

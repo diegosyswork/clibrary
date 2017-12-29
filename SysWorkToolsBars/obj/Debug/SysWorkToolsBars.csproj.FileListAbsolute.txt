@@ -1,0 +1,8 @@
+C:\SWSISTEMAS\Gerdanna\SysWorkToolsBars\bin\Debug\SysWorkToolsBars.dll
+C:\SWSISTEMAS\Gerdanna\SysWorkToolsBars\bin\Debug\SysWorkToolsBars.pdb
+C:\SWSISTEMAS\Gerdanna\SysWorkToolsBars\obj\Debug\SysWorkToolsBars.Properties.Resources.resources
+C:\SWSISTEMAS\Gerdanna\SysWorkToolsBars\obj\Debug\GestionGerdanna.ToolBarABM.resources
+C:\SWSISTEMAS\Gerdanna\SysWorkToolsBars\obj\Debug\SysWorkToolsBars.csproj.GenerateResource.Cache
+C:\SWSISTEMAS\Gerdanna\SysWorkToolsBars\obj\Debug\SysWorkToolsBars.dll
+C:\SWSISTEMAS\Gerdanna\SysWorkToolsBars\obj\Debug\SysWorkToolsBars.pdb
+C:\SWSISTEMAS\Gerdanna\SysWorkToolsBars\obj\Debug\SysWorkToolsBars.csprojResolveAssemblyReference.cache

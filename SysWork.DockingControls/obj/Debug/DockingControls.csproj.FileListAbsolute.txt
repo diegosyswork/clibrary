@@ -1,0 +1,13 @@
+C:\SWSISTEMAS\Gerdanna\DockingControls\bin\Debug\DockingControls.dll
+C:\SWSISTEMAS\Gerdanna\DockingControls\bin\Debug\DockingControls.pdb
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Debug\Darwen.Windows.Forms.Controls.Docking.DockingControl.resources
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Debug\Darwen.Windows.Forms.Controls.Docking.DockingManagerControl.resources
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Debug\Darwen.Windows.Forms.General.Properties.Resources.resources
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Debug\Darwen.Windows.Forms.Controls.Docking.DockControlContainer.resources
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Debug\Darwen.Windows.Forms.Controls.Docking.AutoResizeControl.resources
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Debug\Darwen.Windows.Forms.Controls.Docking.FloatingForm.resources
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Debug\Darwen.Windows.Forms.Controls.TabbedDocuments.TabbedDocumentControl.resources
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Debug\DockingControls.csproj.GenerateResource.Cache
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Debug\DockingControls.csproj.CoreCompileInputs.cache
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Debug\DockingControls.dll
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Debug\DockingControls.pdb

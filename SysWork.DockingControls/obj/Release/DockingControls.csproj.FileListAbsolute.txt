@@ -1,0 +1,39 @@
+C:\Users\Diego Martinez\Desktop\DockingControls\Assemblies\DockingControls\bin\Release\DockingControls.dll
+C:\Users\Diego Martinez\Desktop\DockingControls\Assemblies\DockingControls\bin\Release\DockingControls.pdb
+C:\Users\Diego Martinez\Desktop\DockingControls\Assemblies\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.Docking.DockingControl.resources
+C:\Users\Diego Martinez\Desktop\DockingControls\Assemblies\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.Docking.DockingManagerControl.resources
+C:\Users\Diego Martinez\Desktop\DockingControls\Assemblies\DockingControls\obj\Release\Darwen.Windows.Forms.General.Properties.Resources.resources
+C:\Users\Diego Martinez\Desktop\DockingControls\Assemblies\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.Docking.DockControlContainer.resources
+C:\Users\Diego Martinez\Desktop\DockingControls\Assemblies\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.Docking.AutoResizeControl.resources
+C:\Users\Diego Martinez\Desktop\DockingControls\Assemblies\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.Docking.FloatingForm.resources
+C:\Users\Diego Martinez\Desktop\DockingControls\Assemblies\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.TabbedDocuments.TabbedDocumentControl.resources
+C:\Users\Diego Martinez\Desktop\DockingControls\Assemblies\DockingControls\obj\Release\DockingControls.csproj.GenerateResource.Cache
+C:\Users\Diego Martinez\Desktop\DockingControls\Assemblies\DockingControls\obj\Release\DockingControls.dll
+C:\Users\Diego Martinez\Desktop\DockingControls\Assemblies\DockingControls\obj\Release\DockingControls.pdb
+G:\SWSISTEMAS\Gerdanna\DockingControls\bin\Release\DockingControls.dll
+G:\SWSISTEMAS\Gerdanna\DockingControls\bin\Release\DockingControls.pdb
+G:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.Docking.DockingControl.resources
+G:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.Docking.DockingManagerControl.resources
+G:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\Darwen.Windows.Forms.General.Properties.Resources.resources
+G:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.Docking.DockControlContainer.resources
+G:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.Docking.AutoResizeControl.resources
+G:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.Docking.FloatingForm.resources
+G:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.TabbedDocuments.TabbedDocumentControl.resources
+G:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\DockingControls.csproj.GenerateResource.Cache
+G:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\DockingControls.csproj.CoreCompileInputs.cache
+G:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\DockingControls.dll
+G:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\DockingControls.pdb
+C:\SWSISTEMAS\Gerdanna\DockingControls\bin\Release\DockingControls.dll
+C:\SWSISTEMAS\Gerdanna\DockingControls\bin\Release\DockingControls.pdb
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\DockingControls.csprojResolveAssemblyReference.cache
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.Docking.DockingControl.resources
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.Docking.DockingManagerControl.resources
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\Darwen.Windows.Forms.General.Properties.Resources.resources
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.Docking.DockControlContainer.resources
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.Docking.AutoResizeControl.resources
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.Docking.FloatingForm.resources
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\Darwen.Windows.Forms.Controls.TabbedDocuments.TabbedDocumentControl.resources
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\DockingControls.csproj.GenerateResource.Cache
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\DockingControls.csproj.CoreCompileInputs.cache
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\DockingControls.dll
+C:\SWSISTEMAS\Gerdanna\DockingControls\obj\Release\DockingControls.pdb

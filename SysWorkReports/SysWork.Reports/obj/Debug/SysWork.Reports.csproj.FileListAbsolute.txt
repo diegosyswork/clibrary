@@ -1,0 +1,10 @@
+C:\SWSISTEMAS\C#Library\SysWorkReports\SysWork.Reports\bin\Debug\SysWork.Reports.dll
+C:\SWSISTEMAS\C#Library\SysWorkReports\SysWork.Reports\bin\Debug\SysWork.Reports.pdb
+C:\SWSISTEMAS\C#Library\SysWorkReports\SysWork.Reports\bin\Debug\Microsoft.ReportViewer.Common.dll
+C:\SWSISTEMAS\C#Library\SysWorkReports\SysWork.Reports\bin\Debug\Microsoft.ReportViewer.WinForms.dll
+C:\SWSISTEMAS\C#Library\SysWorkReports\SysWork.Reports\bin\Debug\Microsoft.ReportViewer.WinForms.xml
+C:\SWSISTEMAS\C#Library\SysWorkReports\SysWork.Reports\obj\Debug\SysWork.Reports.FrmReportManager.resources
+C:\SWSISTEMAS\C#Library\SysWorkReports\SysWork.Reports\obj\Debug\SysWork.Reports.csproj.GenerateResource.Cache
+C:\SWSISTEMAS\C#Library\SysWorkReports\SysWork.Reports\obj\Debug\SysWork.Reports.csproj.CoreCompileInputs.cache
+C:\SWSISTEMAS\C#Library\SysWorkReports\SysWork.Reports\obj\Debug\SysWork.Reports.dll
+C:\SWSISTEMAS\C#Library\SysWorkReports\SysWork.Reports\obj\Debug\SysWork.Reports.pdb

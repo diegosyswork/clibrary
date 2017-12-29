@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3A644EE8-61E1-4CED-B7B9-6C06F05360A9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SysWorkToolBars</RootNamespace>
+    <AssemblyName>SysWork.ToolsBars</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ToolBarABM.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToolBarABM.Designer.cs">
+      <DependentUpon>ToolBarABM.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ToolBarReporte.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToolBarReporte.Designer.cs">
+      <DependentUpon>ToolBarReporte.cs</DependentUpon>
+    </Compile>
+    <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolBarABM.resx">
+      <DependentUpon>ToolBarABM.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolBarReporte.resx">
+      <DependentUpon>ToolBarReporte.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Imagenes\agregar-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Imagenes\borrar-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Imagenes\cancelarEdicion-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Imagenes\cancelarEdicion2-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Imagenes\confirmar-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Imagenes\consulta-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Imagenes\refresh-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Imagenes\salir-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Imagenes\impresora_48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Imagenes\impresora_48x482.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Imagenes\pantalla_48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Imagenes\export-48x48.fw.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Imagenes\file_export.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Imagenes\export.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Imagenes\report.fw.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Imagenes\printer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Imagenes\impresoraModelo2.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
