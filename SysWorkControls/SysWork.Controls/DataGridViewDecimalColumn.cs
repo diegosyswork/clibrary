@@ -60,6 +60,7 @@ namespace SysWork.Controls
             }
             catch (ArgumentOutOfRangeException e)
             {
+                Console.Write(e.StackTrace);
                 ctl.Text = Convert.ToString(this.DefaultNewRowValue);
             }
 

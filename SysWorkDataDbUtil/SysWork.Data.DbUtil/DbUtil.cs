@@ -12,7 +12,7 @@ namespace SysWork.Data.DbUtil
 {
     public class DbUtil
     {
-        public static void VerificaConexionYSolicitaDatos(string nombreConexion)
+        public static bool VerificaConexionYSolicitaDatos(string nombreConexion)
         {
             SqlConnectionStringBuilder connectionSb = new SqlConnectionStringBuilder();
             bool elUsuarioProporcionoParametros = false;
@@ -35,7 +35,6 @@ namespace SysWork.Data.DbUtil
             bool huboConexionExitosa = CunnectionSuccess(connectionSb.ConnectionString.ToString(), out mensajeError);
 
             bool solicitarParametrosConexion = (!huboConexionExitosa);
-
 
             while (solicitarParametrosConexion)
             {
@@ -65,8 +64,7 @@ namespace SysWork.Data.DbUtil
 
             if (!huboConexionExitosa)
             {
-                MessageBox.Show("No se pudo conectar con la base de datos con los parametros ingresados, verifique la cadena de conexion y vuelva  intentarlo \r\r\r El sistema se cerrará", "Aviso al operador", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
-                Environment.Exit(0);
+                return false;
             }
             else
             {
@@ -90,6 +88,8 @@ namespace SysWork.Data.DbUtil
                     }
                 }
             }
+
+            return true;
         }
         public static bool CunnectionSuccess(string connectionString, out string mensajeError)
         {

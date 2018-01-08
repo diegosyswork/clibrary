@@ -55,5 +55,6 @@ namespace SysWork.Data.DbUtil
             else
                 return reader.GetDateTime(position);
         }
+
     }
 }

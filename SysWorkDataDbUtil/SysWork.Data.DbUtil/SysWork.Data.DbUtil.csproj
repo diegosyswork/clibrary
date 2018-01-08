@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataReaderWithDynamic.cs" />
     <Compile Include="DbUtil.cs" />
     <Compile Include="FrmDatosConexion.cs">
       <SubType>Form</SubType>
@@ -51,6 +52,7 @@
     <Compile Include="FrmDatosConexion.designer.cs">
       <DependentUpon>FrmDatosConexion.cs</DependentUpon>
     </Compile>
+    <Compile Include="NulleableValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -58,6 +60,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SafeReader.cs" />
+    <Compile Include="SimpleQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FrmDatosConexion.resx">

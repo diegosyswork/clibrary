@@ -100,6 +100,21 @@ namespace SysWork.Data.DaoModel
         {
             return new SqlConnection(ConnectionString);
         }
+
+        /// <summary>
+        /// Devuelve un SQLCommand con la conexion abierta
+        /// </summary>
+        /// <returns>SqlConnection object</returns>
+        public SqlCommand GetSqlCommand(string commandText, SqlConnection sqlConnection)
+        {
+            if (sqlConnection.State != ConnectionState.Open)
+                sqlConnection.Open();
+
+            SqlCommand sqlCommand = new SqlCommand(commandText);
+            sqlCommand.Connection = sqlConnection;
+
+            return sqlCommand;
+        }
         /// <summary>
         /// Inserta un registro en la Tabla
         /// </summary>

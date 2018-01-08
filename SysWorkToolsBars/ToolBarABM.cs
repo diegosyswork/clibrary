@@ -216,7 +216,7 @@ namespace SysWork.Controls.Toolbars
         private void lanzarEventoNuevo() 
         {
             ToolBarABMClickEventArgs args = new ToolBarABMClickEventArgs();
-            args.opcion = eOpcionToolBarABM.nuevo;
+            args.opcion = EOpcionToolBarABM.nuevo;
             onToolBarABMClick(args);
         }
 
@@ -227,7 +227,7 @@ namespace SysWork.Controls.Toolbars
         private void lanzarEventoEliminar()
         {
             ToolBarABMClickEventArgs args = new ToolBarABMClickEventArgs();
-            args.opcion = eOpcionToolBarABM.eliminar;
+            args.opcion = EOpcionToolBarABM.eliminar;
             onToolBarABMClick(args);
         }
         private void btnRefresh_Click(object sender, EventArgs e)
@@ -238,7 +238,7 @@ namespace SysWork.Controls.Toolbars
         private void lanzarEventoRefresh()
         {
             ToolBarABMClickEventArgs args = new ToolBarABMClickEventArgs();
-            args.opcion = eOpcionToolBarABM.refresh;
+            args.opcion = EOpcionToolBarABM.refresh;
             onToolBarABMClick(args);
         }
 
@@ -250,7 +250,7 @@ namespace SysWork.Controls.Toolbars
         private void lanzarEventoConsultar()
         {
             ToolBarABMClickEventArgs args = new ToolBarABMClickEventArgs();
-            args.opcion = eOpcionToolBarABM.consultar;
+            args.opcion = EOpcionToolBarABM.consultar;
             onToolBarABMClick(args);
         }
 
@@ -262,7 +262,7 @@ namespace SysWork.Controls.Toolbars
         private void lanzarEventoCancelar()
         {
             ToolBarABMClickEventArgs args = new ToolBarABMClickEventArgs();
-            args.opcion = eOpcionToolBarABM.cancelar;
+            args.opcion = EOpcionToolBarABM.cancelar;
             onToolBarABMClick(args);
 
         }
@@ -275,7 +275,7 @@ namespace SysWork.Controls.Toolbars
         private void lanzarEventoGrabar()
         {
             ToolBarABMClickEventArgs args = new ToolBarABMClickEventArgs();
-            args.opcion = eOpcionToolBarABM.grabar;
+            args.opcion = EOpcionToolBarABM.grabar;
             onToolBarABMClick(args);
 
         }
@@ -288,7 +288,7 @@ namespace SysWork.Controls.Toolbars
         private void lanzarEventoSalir()
         {
             ToolBarABMClickEventArgs args = new ToolBarABMClickEventArgs();
-            args.opcion = eOpcionToolBarABM.salir;
+            args.opcion = EOpcionToolBarABM.salir;
             onToolBarABMClick(args);
         }
 
@@ -301,7 +301,7 @@ namespace SysWork.Controls.Toolbars
         private void lanzarEventoExportar()
         {
             ToolBarABMClickEventArgs args = new ToolBarABMClickEventArgs();
-            args.opcion = eOpcionToolBarABM.exportar;
+            args.opcion = EOpcionToolBarABM.exportar;
             onToolBarABMClick(args);
         }
 
@@ -314,16 +314,16 @@ namespace SysWork.Controls.Toolbars
         private void lanzarEventoReporte()
         {
             ToolBarABMClickEventArgs args = new ToolBarABMClickEventArgs();
-            args.opcion = eOpcionToolBarABM.reporte;
+            args.opcion = EOpcionToolBarABM.reporte;
             onToolBarABMClick(args);
         }
     }
 
     public class ToolBarABMClickEventArgs : EventArgs
     {
-        public eOpcionToolBarABM opcion;
+        public EOpcionToolBarABM opcion;
     }
-    public enum eOpcionToolBarABM
+    public enum EOpcionToolBarABM
     {
         nuevo,
         eliminar,
