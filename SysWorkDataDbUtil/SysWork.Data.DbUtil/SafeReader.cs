@@ -8,11 +8,11 @@ namespace SysWork.Data.DbUtil
 {
     public static class SafeReader
     {
-        public static long? ReadInt32(SqlDataReader reader, string columnName)
+        public static Int32? ReadInt32(SqlDataReader reader, string columnName)
         {
             return ReadInt32(reader, reader.GetOrdinal(columnName));
         }
-        public static long? ReadInt32(SqlDataReader reader, int position)
+        public static Int32? ReadInt32(SqlDataReader reader, int position)
         {
             if (reader.IsDBNull(position))
                 return null;
@@ -54,6 +54,17 @@ namespace SysWork.Data.DbUtil
                 return null;
             else
                 return reader.GetDateTime(position);
+        }
+        public static long? ReadLong(SqlDataReader reader, string columnName)
+        {
+            return ReadLong(reader, reader.GetOrdinal(columnName));
+        }
+        public static long? ReadLong(SqlDataReader reader, int position)
+        {
+            if (reader.IsDBNull(position))
+                return null;
+            else
+                return reader.GetInt32(position);
         }
 
     }

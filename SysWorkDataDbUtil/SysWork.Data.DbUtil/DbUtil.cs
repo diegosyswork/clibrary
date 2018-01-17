@@ -12,7 +12,7 @@ namespace SysWork.Data.DbUtil
 {
     public class DbUtil
     {
-        public static bool VerificaConexionYSolicitaDatos(string nombreConexion)
+        public static bool VerificaConexionYSolicitaDatos(string nombreConexion,string defDataSource = null,string defUserID=null, string defPassWord=null, string defInitialCatalog = null)
         {
             SqlConnectionStringBuilder connectionSb = new SqlConnectionStringBuilder();
             bool elUsuarioProporcionoParametros = false;
@@ -20,10 +20,10 @@ namespace SysWork.Data.DbUtil
             if (!ExistsConnectionString(nombreConexion))
             {
                 //ASIGNO DATOS DEFAULT
-                connectionSb.DataSource = "LOCALHOST";
-                connectionSb.UserID = "SA";
-                connectionSb.Password = "57125712";
-                connectionSb.InitialCatalog = "";
+                connectionSb.DataSource = (defDataSource == null ? "LOCALHOST" : defDataSource);
+                connectionSb.UserID = (defUserID == null ? "SA" : defUserID);
+                connectionSb.Password = (defPassWord == null ? "57125712" : defPassWord);
+                connectionSb.InitialCatalog = (defInitialCatalog == null ? "master" : defInitialCatalog);
             }
             else
             {
@@ -257,6 +257,14 @@ namespace SysWork.Data.DbUtil
             }
         }
 
+        public static bool ExecuteBatchNonQuery(string query, string ConnectionString)
+        {
+            bool result = false;
+
+            result = ExecuteBatchNonQuery(query, new SqlConnection(ConnectionString));
+
+            return result;
+        }
 
         public static bool ExecuteBatchNonQuery(string query, SqlConnection connection)
         {
