@@ -177,5 +177,37 @@ namespace SysWork.Controls.Toolbars
             args.opcion = eOpcionToolBarReportes.salir;
             onToolBarReporteClick(args);
         }
+
+        public void analizaTecla(Keys keyCode)
+        {
+
+            switch (keyCode)
+            {
+                case Keys.F2:
+                    if (btnPantalla.Enabled)
+                        lanzarEventoPantalla();
+                    break;
+                case Keys.F3:
+                    if (btnImprimir.Enabled)
+                        lanzarEventoImpresora();
+                    break;
+                case Keys.F4:
+                    if (btnExportar.Enabled)
+                        lanzarEventoExportar();
+                    break;
+                case Keys.F5:
+                    if (btnConsultar.Enabled)
+                        lanzarEventoConsultar();
+                    break;
+                case Keys.F8:
+                    if (btnRefresh.Enabled)
+                        lanzarEventoRefresh();
+                    break;
+                case Keys.Escape:
+                    if (btnSalir.Enabled)
+                        lanzarEventoSalir();
+                    break;
+            }
+        }
     }
 }

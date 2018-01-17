@@ -44,8 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataReaderWithDynamic.cs" />
+    <Compile Include="DataRecordDynamicWrapper.cs" />
     <Compile Include="DbUtil.cs" />
+    <Compile Include="Extensions\ExtensionProperties.cs" />
     <Compile Include="FrmDatosConexion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,5 +75,6 @@
   <ItemGroup>
     <None Include="Resources\db_comit.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -25,29 +25,30 @@ namespace SysWork.Data.DaoModel
     ///             via reflexion de las propiedades del objeto, al crear el DAO,  y
     ///             no en cada Operacion.
     ///             
+    /// 17/01/2018: Se crea la excepcion DaoModelException, para poder colectar mas 
+    ///             informacion, se utiliza en Add,AddRange,Update,UpdateRange,GetById,DeleteById
     /// </summary>
     /// <typeparam name="T"> Clase e Instanciable T</typeparam>
-
     internal class ColumnDbInfo
     {
         internal SqlDbType SqlDbType { get; set; }
         internal Int32? MaxLenght { get; set; }
     }
-    
+
 
     /// <summary>
     /// Clase Abstracta, debe implementarse en una clase.
     /// Usar con clases Entity/Model solamente
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class BaseDao<T> where T : class, new() 
+    public abstract class BaseDao<T> where T : class, new()
     {
         public string ConnectionString { get; private set; }
 
         private string TableName;
-        
+
         private Hashtable ColumnListWithDbInfo = new Hashtable();
-        
+
         /// <summary>
         /// Contiene la lista de propiedades de la entidad vinculadas a la DB.
         /// </summary>
@@ -57,11 +58,11 @@ namespace SysWork.Data.DaoModel
         /// Devuelve las columnas necesarias para hacer un Insert (No incluye las columnas Identity)
         /// </summary>
         public String ColumnsForInsert { get; private set; }
-        
+
         /// <summary>
         /// Devuelve las columnas de la entidad.
         /// </summary>
-        public String ColumnsForSelect{ get; private set; }
+        public String ColumnsForSelect { get; private set; }
 
         /// <summary>
         /// Crea una nueva instancia de BaseDao, sin pasar como parametro el nombre de la tabla a representar
@@ -91,7 +92,7 @@ namespace SysWork.Data.DaoModel
             else
                 return type.Name;
         }
-        
+
         /// <summary>
         /// Devuelve un Objeto SqlConnection
         /// </summary>
@@ -116,22 +117,54 @@ namespace SysWork.Data.DaoModel
             return sqlCommand;
         }
         /// <summary>
-        /// Inserta un registro en la Tabla
+        /// Inserta una Entidad en una Tabla.
+        /// Captura excepciones y en caso de ocurrir devuelve el mensaje de la misma en errMessage
         /// </summary>
         /// <returns>Devuelve el Id Generado en caso que la tabla tega una columna Identity, 0 en caso que no, y -1 si hubo un error</returns>
         /// <param name="entity"></param>
         /// 
-        public long Add(T entity,out string errMessage)
+        public long Add(T entity, out string errMessage)
+        {
+            errMessage = "";
+            long identity = 0;
+
+            try
+            {
+                identity = Add(entity);
+            }
+            catch (DaoModelException daoModelException)
+            {
+                errMessage = daoModelException.OriginalException.Message;
+                identity = -1;
+            }
+            catch (Exception exception)
+            {
+                errMessage = exception.Message;
+                identity = -1;
+            }
+
+
+            return identity;
+        }
+        /// <summary>
+        /// Inserta una Entidad en una Tabla.
+        /// En caso de ocurrir una Excepcion, la captura, y lanza una DaoModelExpception
+        /// la cual contiene informacion extra como sel el SqlCommand que la causo y la 
+        /// excepcion original.
+        /// 
+        /// </summary>
+        /// <returns>Devuelve el Id Generado en caso que la tabla tega una columna Identity, 0 en caso que no, y -1 si hubo un error</returns>
+        /// <param name="entity"></param>
+        /// 
+        public long Add(T entity)
         {
             long identity = 0;
             bool hasIdentity = false;
-
-            errMessage = "";
-
+            
             StringBuilder parameterList = new StringBuilder();
 
-            IDbCommand sqlCommand = new SqlCommand();
-           
+            SqlCommand sqlCommand = new SqlCommand();
+
             foreach (PropertyInfo i in ListObjectPropertyInfo)
             {
                 var customAttibute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
@@ -153,7 +186,7 @@ namespace SysWork.Data.DaoModel
 
             if (parameterList.ToString() != string.Empty)
             {
-                parameterList.Remove(parameterList.Length - 1, 1);    
+                parameterList.Remove(parameterList.Length - 1, 1);
 
                 StringBuilder insertQuery = new StringBuilder();
                 insertQuery.Append(string.Format("INSERT INTO [{0}] ( {1} ) VALUES ( {2} ) SELECT SCOPE_IDENTITY()  ", TableName, ColumnsForInsert, parameterList));
@@ -168,6 +201,7 @@ namespace SysWork.Data.DaoModel
 
                         if (hasIdentity)
                         {
+
                             identity = (long)(Decimal)sqlCommand.ExecuteScalar();
                         }
                         else
@@ -179,20 +213,52 @@ namespace SysWork.Data.DaoModel
                 }
                 catch (Exception exception)
                 {
-                    errMessage = exception.Message;
-                    identity = -1;
+                    throw new DaoModelException(exception, sqlCommand);
                 }
             }
 
             return identity;
         }
+
         /// <summary>
-        /// Inserta Multiples Registros en la tabla
+        /// Inserta Multiples Entidades en una tabla
+        /// Captura excepciones y en caso de ocurrir devuelve el mensaje de la misma en errMessage
         /// </summary>
         /// <param name="entities"></param>
-        public bool AddRange(IList<T> entities,out string errMessage)
+        public bool AddRange(IList<T> entities, out string errMessage)
         {
             errMessage = "";
+            bool result = false;
+
+            try
+            {
+                result = AddRange(entities);
+            }
+            catch (DaoModelException daoModelException)
+            {
+                errMessage = daoModelException.OriginalException.Message;
+                result = false;
+            }
+            catch (Exception exception)
+            {
+                errMessage = exception.Message;
+                result = false;
+            }
+
+
+            return result;
+        }
+
+        /// <summary>
+        /// Inserta Multiples Entidades en una tabla.
+        /// En caso de ocurrir una Excepcion, la captura, y lanza una DaoModelExpception
+        /// la cual contiene informacion extra como sel el SqlCommand que la causo y la 
+        /// excepcion original.
+        /// </summary>
+        /// <param name="entities"></param>
+
+        public bool AddRange(IList<T> entities)
+        {
 
             StringBuilder insertRangeQuery = new StringBuilder();
             int paramNro = 0;
@@ -242,19 +308,49 @@ namespace SysWork.Data.DaoModel
             }
             catch (Exception exception)
             {
-                errMessage = exception.Message;
-                return false;
+                throw new DaoModelException(exception, sqlCommand);
             }
 
             return true;
         }
+
         /// <summary>
-        /// Actualiza una Entidad
+        /// Actualiza una Entidad en una Tabla.
+        /// Captura excepciones y en caso de ocurrir devuelve el mensaje de la misma en errMessage
         /// </summary>
         /// <param name="entity"></param>
         public bool Update(T entity, out string errMessage)
         {
             errMessage = "";
+            bool result = false;
+
+            try
+            {
+                result = Update(entity);
+            }
+            catch (DaoModelException daoModelException)
+            {
+                errMessage = daoModelException.OriginalException.Message;
+                result = false;
+            }
+            catch (Exception exception)
+            {
+                errMessage = exception.Message;
+                result = false;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Actualiza una Entidad
+        /// En caso de ocurrir una Excepcion, la captura, y lanza una DaoModelExpception
+        /// la cual contiene informacion extra como sel el SqlCommand que la causo y la 
+        /// excepcion original.
+        /// </summary>
+        /// <param name="entity"></param>
+        public bool Update(T entity)
+        {
 
             StringBuilder parameterList = new StringBuilder();
             StringBuilder where = new StringBuilder();
@@ -312,24 +408,51 @@ namespace SysWork.Data.DaoModel
                 }
                 catch (Exception exception)
                 {
-                    errMessage = exception.Message;
-                    return false;
+                    throw new DaoModelException(exception, sqlCommand);
                 }
-            }
-            else
-            {
-
             }
 
             return true;
         }
+
         /// <summary>
-        /// Actualiza multiples entidadades en una sola Query
+        /// Actualiza multiples entidadades en una sola Query.
+        /// Captura excepciones y en caso de ocurrir devuelve el mensaje de la misma en errMessage
         /// </summary>
         /// <param name="entities"></param>
-        public bool UpdateRange(IList<T> entities,out string errMessage)
+        public bool UpdateRange(IList<T> entities, out string errMessage)
         {
+            bool result = false;
             errMessage = "";
+
+            try
+            {
+                result = UpdateRange(entities);
+            }
+            catch (DaoModelException daoModelException)
+            {
+                errMessage = daoModelException.OriginalException.Message;
+                result = false;
+            }
+            catch (Exception exception)
+            {
+                errMessage = exception.Message;
+                result = false;
+            }
+
+            return result;
+        }
+
+
+        /// <summary>
+        /// Actualiza multiples entidadades en una sola Query
+        /// En caso de ocurrir una Excepcion, la captura, y lanza una DaoModelExpception
+        /// la cual contiene informacion extra como sel el SqlCommand que la causo y la 
+        /// excepcion original.
+        /// </summary>
+        /// <param name="entities"></param>
+        public bool UpdateRange(IList<T> entities)
+        {
 
             StringBuilder updateRangeQuery = new StringBuilder();
             int paramNro = 0;
@@ -386,8 +509,7 @@ namespace SysWork.Data.DaoModel
             }
             catch (Exception exception)
             {
-                errMessage = exception.Message;
-                return false;
+                throw new DaoModelException(exception, sqlCommand);
             }
 
             return true;
@@ -414,7 +536,7 @@ namespace SysWork.Data.DaoModel
                     clause.Append(string.Format("[{0}]={1}", pi.Name, id));
 
                     ColumnDbInfo cdbi = (ColumnDbInfo)ColumnListWithDbInfo[pi.Name];
-                    sqlCommand.Parameters.Add(CreateSqlParameter(parameterName, cdbi.SqlDbType, id , cdbi.MaxLenght));
+                    sqlCommand.Parameters.Add(CreateSqlParameter(parameterName, cdbi.SqlDbType, id, cdbi.MaxLenght));
                     break;
                 }
             }
@@ -424,7 +546,7 @@ namespace SysWork.Data.DaoModel
             if (clause.ToString() != string.Empty)
             {
                 StringBuilder getQuery = new StringBuilder();
-                getQuery.Append(string.Format("SELECT {0} FROM [{1}] WHERE {2}",ColumnsForSelect, TableName, clause));
+                getQuery.Append(string.Format("SELECT {0} FROM [{1}] WHERE {2}", ColumnsForSelect, TableName, clause));
 
                 sqlCommand.CommandText = getQuery.ToString();
 
@@ -435,7 +557,7 @@ namespace SysWork.Data.DaoModel
                         sqlConnection.Open();
                         sqlCommand.Connection = sqlConnection;
 
-                        var _entities = new SqlDataReaderToEntity().Map<T>(sqlCommand.ExecuteReader(),ListObjectPropertyInfo);
+                        var _entities = new SqlDataReaderToEntity().Map<T>(sqlCommand.ExecuteReader(), ListObjectPropertyInfo);
 
                         if (_entities != null && _entities.Count > 0)
                             entity = _entities[0];
@@ -443,7 +565,7 @@ namespace SysWork.Data.DaoModel
                 }
                 catch (Exception exception)
                 {
-                    throw exception;
+                    throw new DaoModelException(exception, sqlCommand);
                 }
             }
 
@@ -469,12 +591,12 @@ namespace SysWork.Data.DaoModel
                     sqlConnection.Open();
                     sqlCommand.Connection = sqlConnection;
 
-                    collection = new SqlDataReaderToEntity().Map<T>(sqlCommand.ExecuteReader(),ListObjectPropertyInfo);
+                    collection = new SqlDataReaderToEntity().Map<T>(sqlCommand.ExecuteReader(), ListObjectPropertyInfo);
                 }
             }
             catch (Exception exception)
             {
-                throw exception;
+                throw new DaoModelException(exception, sqlCommand);
             }
 
             return collection;
@@ -507,13 +629,16 @@ namespace SysWork.Data.DaoModel
             }
             catch (Exception exception)
             {
-                throw exception;
+                throw new DaoModelException(exception, sqlCommand);
             }
 
             return collection;
         }
-
-
+        /// <summary>
+        /// Devuelve una lista en base a una lista de Ids.
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
         public IList<T> Find(IEnumerable<object> ids)
         {
             IList<T> entities = new List<T>();
@@ -541,29 +666,63 @@ namespace SysWork.Data.DaoModel
             if (clause.ToString() != string.Empty)
             {
                 StringBuilder findQuery = new StringBuilder();
-                findQuery.Append(string.Format("SELECT {0} FROM [{1}] WHERE {2}",ColumnsForSelect, TableName, clause));
+                findQuery.Append(string.Format("SELECT {0} FROM [{1}] WHERE {2}", ColumnsForSelect, TableName, clause));
 
                 SqlCommand sqlCommand = new SqlCommand();
                 using (SqlConnection sqlConnection = GetSqlConnection())
                 {
                     sqlConnection.Open();
                     sqlCommand.Connection = sqlConnection;
-                    
+
                     entities = new SqlDataReaderToEntity().Map<T>(sqlCommand.ExecuteReader(), ListObjectPropertyInfo);
                 }
             }
 
             return entities;
         }
+        /// <summary>
+        /// Elimina un Registro por su Id.
+        /// Captura excepciones y en caso de ocurrir devuelve el mensaje de la misma en errMessage
+        /// </summary>
+        /// <param name="entities"></param>
 
         public bool DeleteById(long Id, out string errMessage)
         {
+            bool result = false;
             errMessage = "";
+
+            try
+            {
+                result = DeleteById(Id);
+            }
+            catch (DaoModelException daoModelException)
+            {
+                errMessage = daoModelException.OriginalException.Message;
+                result = false;
+            }
+            catch (Exception exception)
+            {
+                errMessage = exception.Message;
+                result = false;
+            }
+
+            return result;
+
+        }
+        /// <summary>
+        /// Elimina un Registro por su Id.
+        /// En caso de ocurrir una Excepcion, la captura, y lanza una DaoModelExpception
+        /// la cual contiene informacion extra como sel el SqlCommand que la causo y la 
+        /// excepcion original.
+        /// </summary>
+        /// <param name="entities"></param>
+
+        public bool DeleteById(long Id)
+        {
 
             T entity = new T();
 
             StringBuilder where = new StringBuilder();
-
             SqlCommand sqlCommand = new SqlCommand();
 
             string parameterName;
@@ -604,8 +763,7 @@ namespace SysWork.Data.DaoModel
                 }
                 catch (Exception exception)
                 {
-                    errMessage = exception.Message;
-                    return false;
+                    throw new DaoModelException(exception, sqlCommand);
                 }
             }
 
@@ -804,122 +962,6 @@ namespace SysWork.Data.DaoModel
         {
             return entity.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
         }
-
-        private static string ConvertExpressionToString(Expression body)
-        {
-            if (body == null)
-            {
-                return string.Empty;
-            }
-            if (body is ConstantExpression)
-            {
-                return ValueToString(((ConstantExpression)body).Value);
-            }
-            if (body is MemberExpression)
-            {
-                var member = ((MemberExpression)body);
-                if (member.Member.MemberType == MemberTypes.Property)
-                {
-                    return member.Member.Name;
-                }
-                var value = GetValueOfMemberExpression(member);
-                // TODO: Averiguar por que pasa esto
-                // Esto trae problemas con los Stings que representan un numero, ejemplo 0000001, me 
-                // devuelve un 0,0,0,0,0,1,  entiende que eso es un IEnumerable
-                /*
-                if (value is IEnumerable)
-                {
-                    var sb = new StringBuilder();
-                    foreach (var item in value as IEnumerable)
-                    {
-                        sb.AppendFormat("{0},", ValueToString(item));
-                    }
-                    return sb.Remove(sb.Length - 1, 1).ToString();
-                }
-                */
-                return ValueToString(value);
-            }
-            if (body is UnaryExpression)
-            {
-                return ConvertExpressionToString(((UnaryExpression)body).Operand);
-            }
-            if (body is BinaryExpression)
-            {
-                var binary = body as BinaryExpression;
-                return string.Format("({0}{1}{2})", ConvertExpressionToString(binary.Left),
-                    ConvertExpressionTypeToString(binary.NodeType),
-                    ConvertExpressionToString(binary.Right));
-            }
-            if (body is MethodCallExpression)
-            {
-                var method = body as MethodCallExpression;
-                return string.Format("({0} IN ({1}))", ConvertExpressionToString(method.Arguments[0]),
-                    ConvertExpressionToString(method.Object));
-            }
-            if (body is LambdaExpression)
-            {
-                return ConvertExpressionToString(((LambdaExpression)body).Body);
-            }
-            return "";
-        }
-
-        private static string ValueToString(object value)
-        {
-            if (value is string)
-            {
-                return string.Format("'{0}'", value);
-            }
-            if (value is DateTime)
-            {
-                return string.Format("'{0:yyyy-MM-dd HH:mm:ss}'", value);
-            }
-
-            if (value is null)
-            {
-                return "IS NULL";
-            }
-
-            return value.ToString();
-        }
-
-        private static object GetValueOfMemberExpression(MemberExpression member)
-        {
-            var objectMember = Expression.Convert(member, typeof(object));
-            var getterLambda = Expression.Lambda<Func<object>>(objectMember);
-            var getter = getterLambda.Compile();
-            return getter();
-        }
-
-        private static string ConvertExpressionTypeToString(ExpressionType nodeType)
-        {
-            switch (nodeType)
-            {
-                case ExpressionType.And:
-                    return " AND ";
-                case ExpressionType.AndAlso:
-                    return " AND ";
-                case ExpressionType.Or:
-                    return " OR ";
-                case ExpressionType.OrElse:
-                    return " OR ";
-                case ExpressionType.Not:
-                    return "NOT";
-                case ExpressionType.NotEqual:
-                    return "!=";
-                case ExpressionType.Equal:
-                    return "=";
-                case ExpressionType.GreaterThan:
-                    return ">";
-                case ExpressionType.GreaterThanOrEqual:
-                    return ">=";
-                case ExpressionType.LessThan:
-                    return "<";
-                case ExpressionType.LessThanOrEqual:
-                    return "<=";
-                default:
-                    return "";
-            }
-        }
     }
     /// <summary>
     /// Author : Diego Martinez
@@ -944,7 +986,7 @@ namespace SysWork.Data.DaoModel
         /// <typeparam name="T">Entidad a mapear,solo los atributos que posean el decorador DbColumn seran tenidos en cuenta</typeparam>
         public IList<T> Map<T>(SqlDataReader reader) where T : class, new()
         {
-            return Map<T>(reader,null);
+            return Map<T>(reader, null);
         }
 
         /// <summary>
@@ -1002,5 +1044,31 @@ namespace SysWork.Data.DaoModel
             }
             return collection;
         }
+    }
+
+    public class DaoModelException : Exception
+    {
+        public Exception OriginalException { get; private set; }
+        public SqlCommand SqlCommand { get; private set; }
+        public string ErrMessage { get; private set; }
+        public string OriginalStackTrace { get; private set; }
+        public DaoModelException(Exception originalException,SqlCommand sqlCommand)
+        {
+            this.OriginalException = originalException;
+            this.SqlCommand = sqlCommand;
+            this.ErrMessage = originalException.Message;
+            this.OriginalStackTrace = originalException.StackTrace;
+        }
+
+        public DaoModelException() : base()
+        {
+        }
+
+        public DaoModelException(string message) : base(message)
+        {
+        }
+
+
+
     }
 }
