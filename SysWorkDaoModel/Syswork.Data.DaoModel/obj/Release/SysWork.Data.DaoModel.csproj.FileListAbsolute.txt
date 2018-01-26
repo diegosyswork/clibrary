@@ -1,5 +1,6 @@
 C:\SWSISTEMAS\C#Library\SysWorkDaoModel\Syswork.Data.DaoModel\bin\Release\SysWork.Data.DaoModel.dll
 C:\SWSISTEMAS\C#Library\SysWorkDaoModel\Syswork.Data.DaoModel\bin\Release\SysWork.Data.DaoModel.pdb
+C:\SWSISTEMAS\C#Library\SysWorkDaoModel\Syswork.Data.DaoModel\obj\Release\SysWork.Data.DaoModel.csprojResolveAssemblyReference.cache
 C:\SWSISTEMAS\C#Library\SysWorkDaoModel\Syswork.Data.DaoModel\obj\Release\SysWork.Data.DaoModel.csproj.CoreCompileInputs.cache
 C:\SWSISTEMAS\C#Library\SysWorkDaoModel\Syswork.Data.DaoModel\obj\Release\SysWork.Data.DaoModel.dll
 C:\SWSISTEMAS\C#Library\SysWorkDaoModel\Syswork.Data.DaoModel\obj\Release\SysWork.Data.DaoModel.pdb

@@ -1,9 +1,10 @@
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\bin\Release\SysWork.ToolsBars.dll
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\bin\Release\SysWork.ToolsBars.pdb
+C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Release\SysWork.ToolBars.csprojResolveAssemblyReference.cache
 C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Release\SysWorkToolBars.Properties.Resources.resources
 C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Release\SysWork.Controls.Toolbars.ToolBarABM.resources
 C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Release\SysWork.Controls.Toolbars.ToolBarReporte.resources
 C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Release\SysWork.ToolBars.csproj.GenerateResource.Cache
 C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Release\SysWork.ToolBars.csproj.CoreCompileInputs.cache
-C:\SWSISTEMAS\C#Library\SysWorkToolsBars\bin\Release\SysWork.ToolsBars.dll
-C:\SWSISTEMAS\C#Library\SysWorkToolsBars\bin\Release\SysWork.ToolsBars.pdb
 C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Release\SysWork.ToolsBars.dll
 C:\SWSISTEMAS\C#Library\SysWorkToolsBars\obj\Release\SysWork.ToolsBars.pdb

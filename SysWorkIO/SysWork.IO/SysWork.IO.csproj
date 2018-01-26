@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CsvExport.cs" />
+    <Compile Include="DataReaderToCSV.cs" />
     <Compile Include="FixedLengthFileReader.cs" />
     <Compile Include="FixedLenghtFileWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

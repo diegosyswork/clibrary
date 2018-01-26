@@ -26,6 +26,7 @@ namespace SysWork.Data.DbUtil.LoggerDb
             InfoSeAgregoUnRegistro,
             InfoSeModificoUnRegistro,
             InfoSeEliminoUnRegistro,
+            Info
         };
 
         public static string ConnectionString { get; set; }
@@ -39,7 +40,7 @@ namespace SysWork.Data.DbUtil.LoggerDb
                 throw new ArgumentException("No se ha informado el connectionString del LoggerDB");
 
 
-            if (!DbUtil.ExistsTable(ConnectionString, "LoggerDB"))
+            if (!DbUtil.ExistsTable(ConnectionString, "LogDB"))
                 DbUtil.ExecuteBatchNonQuery(GetLogDbScript(), new SqlConnection(ConnectionString));
         }
 
@@ -114,6 +115,7 @@ namespace SysWork.Data.DbUtil.LoggerDb
 
         public static bool Log(string tag, SqlCommand sqlCmd, Exception exception)
         {
+
             string sentenciaSQL = DbUtil.ConvertCommandParamatersToLiteralValues((sqlCmd));
             return Logger(DateTime.Now, tag: tag, mensaje: "", sentenciaSQL: sentenciaSQL, excepcion: exception.ToString());
         }
@@ -129,25 +131,25 @@ namespace SysWork.Data.DbUtil.LoggerDb
             StackTrace st = new StackTrace();
 
             LogDb logDb = new LogDb();
-            logDb.fechaHora = fechaHora;
-            logDb.usuario = usuario;
-            logDb.tag = tag;
-            logDb.mensaje = mensaje;
+            logDb.FechaHora = fechaHora;
+            logDb.Usuario = usuario;
+            logDb.Tag = tag;
+            logDb.Mensaje = mensaje;
 
             if (modulo == null)
                 modulo = st.GetFrame(2).GetMethod().DeclaringType.Name;
 
-            logDb.modulo = modulo;
+            logDb.Modulo = modulo;
 
             if (metodo == null)
                 metodo = st.GetFrame(2).GetMethod().Name;
 
-            logDb.metodo = metodo;
+            logDb.Metodo = metodo;
 
-            logDb.sentenciaSQL = sentenciaSQL;
-            logDb.parametros = parametros;
-            logDb.resultado = resultado;
-            logDb.excepcion = excepcion;
+            logDb.SentenciaSQL = sentenciaSQL;
+            logDb.Parametros = parametros;
+            logDb.Resultado = resultado;
+            logDb.Excepcion = excepcion;
 
             return Add(logDb) != -1;
         }
@@ -168,34 +170,34 @@ namespace SysWork.Data.DbUtil.LoggerDb
                     SqlCommand sqlCommand = new SqlCommand(sqlQuery, sqlConnection);
 
                     sqlCommand.Parameters.Add("@pFechaHora", SqlDbType.DateTime);
-                    sqlCommand.Parameters["@pFechaHora"].Value = entity.fechaHora;
+                    sqlCommand.Parameters["@pFechaHora"].Value = entity.FechaHora;
 
                     sqlCommand.Parameters.Add("@pUsuario", SqlDbType.NVarChar, 200);
-                    sqlCommand.Parameters["@pUsuario"].Value = entity.usuario == null ? (object)DBNull.Value : entity.usuario;
+                    sqlCommand.Parameters["@pUsuario"].Value = entity.Usuario == null ? (object)DBNull.Value : entity.Usuario;
 
                     sqlCommand.Parameters.Add("@ptag", SqlDbType.NVarChar, 200);
-                    sqlCommand.Parameters["@ptag"].Value = entity.tag == null ? (object)DBNull.Value : entity.tag;
+                    sqlCommand.Parameters["@ptag"].Value = entity.Tag == null ? (object)DBNull.Value : entity.Tag;
 
                     sqlCommand.Parameters.Add("@pMensaje", SqlDbType.NVarChar);
-                    sqlCommand.Parameters["@pMensaje"].Value = entity.mensaje;
+                    sqlCommand.Parameters["@pMensaje"].Value = entity.Mensaje;
 
                     sqlCommand.Parameters.Add("@pModulo", SqlDbType.NVarChar, 200);
-                    sqlCommand.Parameters["@pModulo"].Value = entity.modulo == null ? (object)DBNull.Value : entity.modulo;
+                    sqlCommand.Parameters["@pModulo"].Value = entity.Modulo == null ? (object)DBNull.Value : entity.Modulo;
 
                     sqlCommand.Parameters.Add("@pMetodo", SqlDbType.NVarChar, 200);
-                    sqlCommand.Parameters["@pMetodo"].Value = entity.metodo == null ? (object)DBNull.Value : entity.metodo;
+                    sqlCommand.Parameters["@pMetodo"].Value = entity.Metodo == null ? (object)DBNull.Value : entity.Metodo;
 
                     sqlCommand.Parameters.Add("@pSentenciaSQL", SqlDbType.NVarChar);
-                    sqlCommand.Parameters["@pSentenciaSQL"].Value = entity.sentenciaSQL == null ? (object)DBNull.Value : entity.sentenciaSQL;
+                    sqlCommand.Parameters["@pSentenciaSQL"].Value = entity.SentenciaSQL == null ? (object)DBNull.Value : entity.SentenciaSQL;
 
                     sqlCommand.Parameters.Add("@pParametros", SqlDbType.NVarChar);
-                    sqlCommand.Parameters["@pParametros"].Value = entity.parametros == null ? (object)DBNull.Value : entity.parametros;
+                    sqlCommand.Parameters["@pParametros"].Value = entity.Parametros == null ? (object)DBNull.Value : entity.Parametros;
 
                     sqlCommand.Parameters.Add("@pResultado", SqlDbType.NVarChar);
-                    sqlCommand.Parameters["@pResultado"].Value = entity.resultado == null ? (object)DBNull.Value : entity.resultado;
+                    sqlCommand.Parameters["@pResultado"].Value = entity.Resultado == null ? (object)DBNull.Value : entity.Resultado;
 
                     sqlCommand.Parameters.Add("@pExcepcion", SqlDbType.NVarChar);
-                    sqlCommand.Parameters["@pExcepcion"].Value = entity.excepcion == null ? (object)DBNull.Value : entity.excepcion;
+                    sqlCommand.Parameters["@pExcepcion"].Value = entity.Excepcion == null ? (object)DBNull.Value : entity.Excepcion;
 
                     id = (Int32)sqlCommand.ExecuteScalar();
                 }
@@ -215,17 +217,17 @@ namespace SysWork.Data.DbUtil.LoggerDb
 
     class LogDb
     {
-        public long? idLogDb { get; set; }
-        public DateTime fechaHora { get; set; }
-        public string usuario { get; set; }
-        public string tag { get; set; }
-        public string mensaje { get; set; }
-        public string modulo { get; set; }
-        public string metodo { get; set; }
-        public string sentenciaSQL { get; set; }
-        public string parametros { get; set; }
-        public string resultado { get; set; }
-        public string excepcion { get; set; }
+        public long? IdLogDb { get; set; }
+        public DateTime FechaHora { get; set; }
+        public string Usuario { get; set; }
+        public string Tag { get; set; }
+        public string Mensaje { get; set; }
+        public string Modulo { get; set; }
+        public string Metodo { get; set; }
+        public string SentenciaSQL { get; set; }
+        public string Parametros { get; set; }
+        public string Resultado { get; set; }
+        public string Excepcion { get; set; }
     }
 
 

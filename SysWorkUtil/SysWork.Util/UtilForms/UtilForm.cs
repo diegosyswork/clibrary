@@ -104,7 +104,7 @@ namespace SysWork.Util.UtilForms
                         }
                         else if (control is MaskedTextBox)
                         {
-                            ((MaskedTextBox)control).Enabled = (listInverse.Exists(i => control.Name == i)) ? !allowEdit : allowEdit;
+                            ((MaskedTextBox)control).ReadOnly = (listInverse.Exists(i => control.Name == i)) ? allowEdit : !allowEdit;
                         }
                     }
                 }

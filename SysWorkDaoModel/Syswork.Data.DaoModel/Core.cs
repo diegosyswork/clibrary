@@ -746,8 +746,8 @@ namespace SysWork.Data.DaoModel
 
             if (where.ToString() != string.Empty)
             {
-                StringBuilder updateQuery = new StringBuilder();
-                updateQuery.Append(string.Format("DELETE [{0}] WHERE {1}", TableName, where));
+                StringBuilder deleteQuery = new StringBuilder();
+                deleteQuery.Append(string.Format("DELETE [{0}] WHERE {1}", TableName, where));
 
                 try
                 {
@@ -755,7 +755,7 @@ namespace SysWork.Data.DaoModel
                     {
                         sqlConnection.Open();
 
-                        sqlCommand.CommandText = updateQuery.ToString();
+                        sqlCommand.CommandText = deleteQuery.ToString();
                         sqlCommand.Connection = sqlConnection;
 
                         sqlCommand.ExecuteNonQuery();
@@ -1050,25 +1050,14 @@ namespace SysWork.Data.DaoModel
     {
         public Exception OriginalException { get; private set; }
         public SqlCommand SqlCommand { get; private set; }
-        public string ErrMessage { get; private set; }
         public string OriginalStackTrace { get; private set; }
-        public DaoModelException(Exception originalException,SqlCommand sqlCommand)
+
+        public DaoModelException(Exception originalException,SqlCommand sqlCommand):base(originalException.Message)
         {
             this.OriginalException = originalException;
             this.SqlCommand = sqlCommand;
-            this.ErrMessage = originalException.Message;
             this.OriginalStackTrace = originalException.StackTrace;
         }
-
-        public DaoModelException() : base()
-        {
-        }
-
-        public DaoModelException(string message) : base(message)
-        {
-        }
-
-
 
     }
 }
