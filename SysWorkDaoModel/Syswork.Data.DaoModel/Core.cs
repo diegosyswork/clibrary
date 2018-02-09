@@ -51,8 +51,9 @@ namespace SysWork.Data.DaoModel
 
         /// <summary>
         /// Contiene la lista de propiedades de la entidad vinculadas a la DB.
+        /// UPDATE: Cambio Private Por Public
         /// </summary>
-        private IList<PropertyInfo> ListObjectPropertyInfo;
+        public IList<PropertyInfo> ListObjectPropertyInfo;
 
         /// <summary>
         /// Devuelve las columnas necesarias para hacer un Insert (No incluye las columnas Identity)
@@ -1043,6 +1044,50 @@ namespace SysWork.Data.DaoModel
                 collection.Add(obj);
             }
             return collection;
+        }
+
+        public T MapSingle<T>(SqlDataReader reader, IList<PropertyInfo> listObjectPropertyInfo) where T : class, new()
+        {
+            T obj = new T();
+
+            IList<PropertyInfo> _propertyInfo;
+
+            if (listObjectPropertyInfo != null)
+                _propertyInfo = listObjectPropertyInfo;
+            else
+                _propertyInfo = obj.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
+
+            obj = new T();
+
+            foreach (PropertyInfo i in _propertyInfo)
+            {
+                try
+                {
+                    var custumAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute));
+
+                    if (((DbColumnAttribute)custumAttribute).Convert == true)
+                    {
+                        if (reader[i.Name] != DBNull.Value)
+                            i.SetValue(obj, Convert.ChangeType(reader[i.Name], i.PropertyType));
+                    }
+                    else
+                    {
+                        if (reader[i.Name] != DBNull.Value)
+                        {
+                            var value = reader[i.Name];
+                            var type = Nullable.GetUnderlyingType(i.PropertyType) ?? i.PropertyType;
+                            var safeValue = (value == null) ? null : Convert.ChangeType(value, type);
+
+                            i.SetValue(obj, safeValue);
+                        }
+                    }
+                }
+                catch (Exception exception)
+                {
+                    throw exception;
+                }
+            }
+            return obj;
         }
     }
 

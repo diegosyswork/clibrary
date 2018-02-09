@@ -10,73 +10,73 @@ namespace SysWork.IO
 {
     public class FixedLenghtFileWriter
     {
-        private string fileName;
-        List<Record> recordList;
-        private string caracterCR = System.Environment.NewLine;
+        private string _fileName;
+        List<Record> _recordList;
+        private string _caracterCR = System.Environment.NewLine;
 
 
         public FixedLenghtFileWriter()
         {
-            initValues(null, caracterCR);
+            InitValues(null, _caracterCR);
         }
         public FixedLenghtFileWriter(string fileName)
         {
-            initValues(fileName, caracterCR);
+            InitValues(fileName, _caracterCR);
         }
 
         public FixedLenghtFileWriter(string fileName, String caracterCR)
         {
-            initValues(fileName, caracterCR);
+            InitValues(fileName, caracterCR);
         }
 
-        public void setFileName(string fileName)
+        public void SetFileName(string fileName)
         {
-            this.fileName = fileName;
+            this._fileName = fileName;
         }
 
-        private void initValues(string fileName, String caracterCR)
+        private void InitValues(string fileName, String caracterCR)
         {
-            this.fileName = fileName;
-            this.caracterCR = caracterCR;
-            recordList = new List<Record>();
+            this._fileName = fileName;
+            this._caracterCR = caracterCR;
+            _recordList = new List<Record>();
         }
-        public void addRecord(Record record)
+        public void AddRecord(Record record)
         {
-            recordList.Add(record);
+            _recordList.Add(record);
         }
-        public void clearRecord()
+        public void ClearRecord()
         {
-            recordList.Clear();
+            _recordList.Clear();
         }
-        public int getRecordCount()
+        public int GetRecordCount()
         {
-            return recordList.Count;
+            return _recordList.Count;
         }
 
-        public string getContentFile()
+        public string GetContentFile()
         {
             StringBuilder sbFileContent = new StringBuilder();
 
-            for (int pos = 0; pos < recordList.Count; pos++)
+            for (int pos = 0; pos < _recordList.Count; pos++)
             {
-                sbFileContent.Append(recordList[pos].ToString());
-                sbFileContent.Append(caracterCR);
+                sbFileContent.Append(_recordList[pos].ToString());
+                sbFileContent.Append(_caracterCR);
             }
 
             return sbFileContent.ToString();
         }
-        public bool saveFile()
+        public bool SaveFile()
         {
             bool returnBool = true;
 
-            if (fileName == null || fileName.Trim().Equals(""))
+            if (_fileName == null || _fileName.Trim().Equals(""))
             {
                 throw new ArgumentException("No se ha informado el nombre del archivo");
             }
 
             try
             {
-                File.WriteAllText(fileName, getContentFile());
+                File.WriteAllText(_fileName, GetContentFile());
             }
             catch (Exception ex)
             {
@@ -88,7 +88,7 @@ namespace SysWork.IO
         }
     }
 
-    public enum FieldFormat
+    public enum EFieldFormat
     {
         DATETIMEF_ddMMyyyy,                  // Recibe un Date o String Parseable a Date
         DATETIMEF_ddMMyy,                    // 
@@ -121,19 +121,19 @@ namespace SysWork.IO
     }
     public class FieldDefinition
     {
-        public string fieldName { get; set; }
-        public int initField { get; set; }
-        public int endField { get; set; }
-        public FieldFormat fieldformat { get; set; }
-        public int length { get; private set; }
+        public string FieldName { get; set; }
+        public int InitField { get; set; }
+        public int EndField { get; set; }
+        public EFieldFormat Fieldformat { get; set; }
+        public int Length { get; private set; }
 
-        public FieldDefinition(string fieldName, int initField, int endField, FieldFormat fieldformat)
+        public FieldDefinition(string fieldName, int initField, int endField, EFieldFormat fieldformat)
         {
-            this.fieldName = fieldName;
-            this.initField = initField;
-            this.endField = endField;
-            this.fieldformat = fieldformat;
-            this.length = endField - initField + 1;
+            this.FieldName = fieldName;
+            this.InitField = initField;
+            this.EndField = endField;
+            this.Fieldformat = fieldformat;
+            this.Length = endField - initField + 1;
         }
     }
     public class RecordDefinition
@@ -147,9 +147,9 @@ namespace SysWork.IO
             lastFieldDefinitionCreated = null;
         }
 
-        public void addFieldDefinition(FieldDefinition fieldDefinition)
+        public void AddFieldDefinition(FieldDefinition fieldDefinition)
         {
-            if (!validateFieldDefinitionFormatLenght(fieldDefinition))
+            if (!ValidateFieldDefinitionFormatLenght(fieldDefinition))
             {
                 throw new FormatException("El formato elegido no cabe en el largo del campo informado, verifiquelo y vueva a intentarlo");
             }
@@ -157,23 +157,23 @@ namespace SysWork.IO
             {
                 try
                 {
-                    fieldsDefinition.Add(fieldDefinition.fieldName, fieldDefinition);
+                    fieldsDefinition.Add(fieldDefinition.FieldName, fieldDefinition);
                     lastFieldDefinitionCreated = fieldDefinition;
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("ocurrio la siguiente excepcion mientras se intentaba agregar la definicion  (" + fieldDefinition.fieldName + ") " + ex.Message);
+                    throw new Exception("ocurrio la siguiente excepcion mientras se intentaba agregar la definicion  (" + fieldDefinition.FieldName + ") " + ex.Message);
                 }
             }
         }
 
-        private void addFieldDefinition(string fieldName, int initField, int endField, FieldFormat fieldformat, string defaultValue = null)
+        private void AddFieldDefinition(string fieldName, int initField, int endField, EFieldFormat fieldformat, string defaultValue = null)
         {
             FieldDefinition fieldDefinition = new FieldDefinition(fieldName, initField, endField, fieldformat);
-            addFieldDefinition(fieldDefinition);
+            AddFieldDefinition(fieldDefinition);
         }
 
-        public void addFieldDefinition(string fieldName, int lenght, FieldFormat fieldformat)
+        public void AddFieldDefinition(string fieldName, int lenght, EFieldFormat fieldformat)
         {
             int initField = 0, endField = 0;
             if (lastFieldDefinitionCreated == null)
@@ -183,59 +183,59 @@ namespace SysWork.IO
             }
             else
             {
-                initField = lastFieldDefinitionCreated.endField + 1;
+                initField = lastFieldDefinitionCreated.EndField + 1;
                 endField = initField + lenght - 1;
             }
 
             FieldDefinition fieldDefinition = new FieldDefinition(fieldName, initField, endField, fieldformat);
-            addFieldDefinition(fieldDefinition);
+            AddFieldDefinition(fieldDefinition);
         }
 
-        public Dictionary<string, FieldDefinition> getFieldsDefinition()
+        public Dictionary<string, FieldDefinition> GetFieldsDefinition()
         {
             return fieldsDefinition;
         }
 
-        private bool validateFieldDefinitionFormatLenght(FieldDefinition fieldDefinition)
+        private bool ValidateFieldDefinitionFormatLenght(FieldDefinition fieldDefinition)
         {
             bool returnValue = true;
 
-            if ((fieldDefinition.fieldformat == FieldFormat.DATETIMEF_ddMM) || (fieldDefinition.fieldformat == FieldFormat.DATETIMEF_ddMM)
-            || (fieldDefinition.fieldformat == FieldFormat.DATETIMEF_MMyy) || (fieldDefinition.fieldformat == FieldFormat.DATETIMEF_yyMM)
-            || (fieldDefinition.fieldformat == FieldFormat.DATETIMEF_yyMM) || (fieldDefinition.fieldformat == FieldFormat.DATETIMEF_HHmm)
-            || (fieldDefinition.fieldformat == FieldFormat.DATETIMEF_mmss))
+            if ((fieldDefinition.Fieldformat == EFieldFormat.DATETIMEF_ddMM) || (fieldDefinition.Fieldformat == EFieldFormat.DATETIMEF_ddMM)
+            || (fieldDefinition.Fieldformat == EFieldFormat.DATETIMEF_MMyy) || (fieldDefinition.Fieldformat == EFieldFormat.DATETIMEF_yyMM)
+            || (fieldDefinition.Fieldformat == EFieldFormat.DATETIMEF_yyMM) || (fieldDefinition.Fieldformat == EFieldFormat.DATETIMEF_HHmm)
+            || (fieldDefinition.Fieldformat == EFieldFormat.DATETIMEF_mmss))
             {
-                returnValue = (fieldDefinition.length >= 4);
+                returnValue = (fieldDefinition.Length >= 4);
             }
-            else if ((fieldDefinition.fieldformat == FieldFormat.DATETIMEF_ddMMyy) || (fieldDefinition.fieldformat == FieldFormat.DATETIMEF_MMyyyy)
-            || (fieldDefinition.fieldformat == FieldFormat.DATETIMEF_yyMMdd) || (fieldDefinition.fieldformat == FieldFormat.DATETIMEF_yyyyMM)
-            || (fieldDefinition.fieldformat == FieldFormat.DATETIMEF_HHmmss))
+            else if ((fieldDefinition.Fieldformat == EFieldFormat.DATETIMEF_ddMMyy) || (fieldDefinition.Fieldformat == EFieldFormat.DATETIMEF_MMyyyy)
+            || (fieldDefinition.Fieldformat == EFieldFormat.DATETIMEF_yyMMdd) || (fieldDefinition.Fieldformat == EFieldFormat.DATETIMEF_yyyyMM)
+            || (fieldDefinition.Fieldformat == EFieldFormat.DATETIMEF_HHmmss))
             {
-                returnValue = (fieldDefinition.length >= 6);
+                returnValue = (fieldDefinition.Length >= 6);
             }
-            else if ((fieldDefinition.fieldformat == FieldFormat.DATETIMEF_yyyyMMdd) || (fieldDefinition.fieldformat == FieldFormat.DATETIMEF_ddMMyyyy))
+            else if ((fieldDefinition.Fieldformat == EFieldFormat.DATETIMEF_yyyyMMdd) || (fieldDefinition.Fieldformat == EFieldFormat.DATETIMEF_ddMMyyyy))
             {
-                returnValue = (fieldDefinition.length >= 8);
+                returnValue = (fieldDefinition.Length >= 8);
             }
-            else if ((fieldDefinition.fieldformat == FieldFormat.NUMBER_INT) || (fieldDefinition.fieldformat == FieldFormat.NUMBER_INT_LEFT_FILLED_W_ZEROS))
+            else if ((fieldDefinition.Fieldformat == EFieldFormat.NUMBER_INT) || (fieldDefinition.Fieldformat == EFieldFormat.NUMBER_INT_LEFT_FILLED_W_ZEROS))
             {
-                returnValue = (fieldDefinition.length >= 1);
+                returnValue = (fieldDefinition.Length >= 1);
             }
-            else if ((fieldDefinition.fieldformat == FieldFormat.NUMBER_1DEC) || (fieldDefinition.fieldformat == FieldFormat.NUMBER_1DEC_LEFT_FILLED_W_ZEROS))
+            else if ((fieldDefinition.Fieldformat == EFieldFormat.NUMBER_1DEC) || (fieldDefinition.Fieldformat == EFieldFormat.NUMBER_1DEC_LEFT_FILLED_W_ZEROS))
             {
-                returnValue = (fieldDefinition.length >= 3);
+                returnValue = (fieldDefinition.Length >= 3);
             }
-            else if ((fieldDefinition.fieldformat == FieldFormat.NUMBER_2DEC) || (fieldDefinition.fieldformat == FieldFormat.NUMBER_2DEC_LEFT_FILLED_W_ZEROS))
+            else if ((fieldDefinition.Fieldformat == EFieldFormat.NUMBER_2DEC) || (fieldDefinition.Fieldformat == EFieldFormat.NUMBER_2DEC_LEFT_FILLED_W_ZEROS))
             {
-                returnValue = (fieldDefinition.length >= 4);
+                returnValue = (fieldDefinition.Length >= 4);
             }
-            else if ((fieldDefinition.fieldformat == FieldFormat.NUMBER_3DEC) || (fieldDefinition.fieldformat == FieldFormat.NUMBER_3DEC_LEFT_FILLED_W_ZEROS))
+            else if ((fieldDefinition.Fieldformat == EFieldFormat.NUMBER_3DEC) || (fieldDefinition.Fieldformat == EFieldFormat.NUMBER_3DEC_LEFT_FILLED_W_ZEROS))
             {
-                returnValue = (fieldDefinition.length >= 5);
+                returnValue = (fieldDefinition.Length >= 5);
             }
-            else if ((fieldDefinition.fieldformat == FieldFormat.NUMBER_4DEC) || (fieldDefinition.fieldformat == FieldFormat.NUMBER_4DEC_LEFT_FILLED_W_ZEROS))
+            else if ((fieldDefinition.Fieldformat == EFieldFormat.NUMBER_4DEC) || (fieldDefinition.Fieldformat == EFieldFormat.NUMBER_4DEC_LEFT_FILLED_W_ZEROS))
             {
-                returnValue = (fieldDefinition.length >= 6);
+                returnValue = (fieldDefinition.Length >= 6);
             }
 
             return returnValue;
@@ -252,7 +252,7 @@ namespace SysWork.IO
         {
             this.recordDefinition = recordDefinition;
             this.recordValues = new Dictionary<string, string>();
-            createRecordValueFieldsAndCompleteWithEmptyValues();
+            CreateRecordValueFieldsAndCompleteWithEmptyValues();
         }
 
         public Record this[string fieldName]
@@ -264,74 +264,74 @@ namespace SysWork.IO
             }
         }
 
-        public string getValue()
+        public string GetValue()
         {
             return (string)recordValues[currentFieldName];
         }
 
-        public void setValue(String value)
+        public void SetValue(String value)
         {
-            recordValues[currentFieldName] = formatValue(value);
+            recordValues[currentFieldName] = FormatValue(value);
         }
 
-        public void setValue(DateTime value)
+        public void SetValue(DateTime value)
         {
-            recordValues[currentFieldName] = formatValue(value);
+            recordValues[currentFieldName] = FormatValue(value);
         }
 
-        public void setValue(double value)
+        public void SetValue(double value)
         {
-            recordValues[currentFieldName] = formatValue(value);
+            recordValues[currentFieldName] = FormatValue(value);
         }
-        public void setValue(float value)
+        public void SetValue(float value)
         {
-            recordValues[currentFieldName] = formatValue(value);
+            recordValues[currentFieldName] = FormatValue(value);
         }
-        public void setValue(decimal value)
+        public void SetValue(decimal value)
         {
-            recordValues[currentFieldName] = formatValue(value);
+            recordValues[currentFieldName] = FormatValue(value);
         }
-        public void setValue(int value)
+        public void SetValue(int value)
         {
-            recordValues[currentFieldName] = formatValue(value);
+            recordValues[currentFieldName] = FormatValue(value);
         }
-        public void setValue(long value)
+        public void SetValue(long value)
         {
-            recordValues[currentFieldName] = formatValue(value);
+            recordValues[currentFieldName] = FormatValue(value);
         }
 
-        private string formatValue(object value)
+        private string FormatValue(object value)
         {
-            FieldDefinition fd = (FieldDefinition)recordDefinition.getFieldsDefinition()[currentFieldName];
+            FieldDefinition fd = (FieldDefinition)recordDefinition.GetFieldsDefinition()[currentFieldName];
             string newValue = "";
 
-            if (isDateField(fd.fieldformat))
+            if (IsDateField(fd.Fieldformat))
             {
-                newValue = getDateValueFormated(value, fd);
+                newValue = GetDateValueFormated(value, fd);
             }
-            else if (isStringField(fd.fieldformat))
+            else if (IsStringField(fd.Fieldformat))
             {
                 newValue = value.ToString();
-                if (newValue.Length > fd.length)
-                    newValue = newValue.Substring(0, fd.length);
+                if (newValue.Length > fd.Length)
+                    newValue = newValue.Substring(0, fd.Length);
                 else
                 {
-                    if (fd.fieldformat == FieldFormat.STRING_RIGHT)
-                        newValue = newValue.PadLeft(fd.length);
+                    if (fd.Fieldformat == EFieldFormat.STRING_RIGHT)
+                        newValue = newValue.PadLeft(fd.Length);
                     else
-                        newValue = newValue.PadRight(fd.length);
+                        newValue = newValue.PadRight(fd.Length);
                 }
             }
-            else if (isNumberField(fd.fieldformat))
+            else if (IsNumberField(fd.Fieldformat))
             {
-                newValue = getNumberValueFormated(value, fd);
+                newValue = GetNumberValueFormated(value, fd);
             }
             return newValue;
         }
 
-        private string getDateValueFormated(object value, FieldDefinition fd)
+        private string GetDateValueFormated(object value, FieldDefinition fd)
         {
-            string format = getFormatDateByEnum(fd.fieldformat);
+            string format = GetFormatDateByEnum(fd.Fieldformat);
             DateTime dateToEvaluate;
 
             if (value.GetType() == typeof(DateTime))
@@ -349,7 +349,7 @@ namespace SysWork.IO
             return String.Format(format, dateToEvaluate);
         }
 
-        private string getNumberValueFormated(object value, FieldDefinition fd)
+        private string GetNumberValueFormated(object value, FieldDefinition fd)
         {
             decimal numberToEvaluate = 0;
             string newValue = "0";
@@ -369,154 +369,154 @@ namespace SysWork.IO
                 throw new FormatException("Solo pueden Formatearse valores del tipo String o string(Parceable a numero), decimal, float, double, int o long");
             }
 
-            switch (fd.fieldformat)
+            switch (fd.Fieldformat)
             {
-                case FieldFormat.NUMBER_AS400F_2DEC:
-                    newValue = number2AS400Format(numberToEvaluate, fd.length - 2, 2);
+                case EFieldFormat.NUMBER_AS400F_2DEC:
+                    newValue = Number2AS400Format(numberToEvaluate, fd.Length - 2, 2);
                     break;
-                case FieldFormat.NUMBER_AS400F_3DEC:
-                    newValue = number2AS400Format(numberToEvaluate, fd.length - 3, 3);
+                case EFieldFormat.NUMBER_AS400F_3DEC:
+                    newValue = Number2AS400Format(numberToEvaluate, fd.Length - 3, 3);
                     break;
-                case FieldFormat.NUMBER_AS400F_4DEC:
-                    newValue = number2AS400Format(numberToEvaluate, fd.length - 4, 4);
+                case EFieldFormat.NUMBER_AS400F_4DEC:
+                    newValue = Number2AS400Format(numberToEvaluate, fd.Length - 4, 4);
                     break;
-                case FieldFormat.NUMBER_INT:
+                case EFieldFormat.NUMBER_INT:
                     newValue = string.Format("{0:#0}", numberToEvaluate);
-                    newValue = newValue.PadLeft(fd.length);
+                    newValue = newValue.PadLeft(fd.Length);
                     break;
-                case FieldFormat.NUMBER_1DEC:
+                case EFieldFormat.NUMBER_1DEC:
                     newValue = string.Format("{0:#0.0}", numberToEvaluate);
-                    newValue = newValue.PadLeft(fd.length);
+                    newValue = newValue.PadLeft(fd.Length);
                     break;
-                case FieldFormat.NUMBER_2DEC:
+                case EFieldFormat.NUMBER_2DEC:
                     newValue = string.Format("{0:#0.00}", numberToEvaluate);
-                    newValue = newValue.PadLeft(fd.length);
+                    newValue = newValue.PadLeft(fd.Length);
                     break;
-                case FieldFormat.NUMBER_3DEC:
+                case EFieldFormat.NUMBER_3DEC:
                     newValue = string.Format("{0:#0.000}", numberToEvaluate);
-                    newValue = newValue.PadLeft(fd.length);
+                    newValue = newValue.PadLeft(fd.Length);
                     break;
-                case FieldFormat.NUMBER_4DEC:
+                case EFieldFormat.NUMBER_4DEC:
                     newValue = string.Format("{0:#0.0000}", numberToEvaluate);
-                    newValue = newValue.PadLeft(fd.length);
+                    newValue = newValue.PadLeft(fd.Length);
                     break;
-                case FieldFormat.NUMBER_INT_LEFT_FILLED_W_ZEROS:
+                case EFieldFormat.NUMBER_INT_LEFT_FILLED_W_ZEROS:
                     newValue = string.Format("{0:#0}", numberToEvaluate);
-                    newValue = newValue.PadLeft(fd.length, '0');
+                    newValue = newValue.PadLeft(fd.Length, '0');
                     break;
-                case FieldFormat.NUMBER_1DEC_LEFT_FILLED_W_ZEROS:
+                case EFieldFormat.NUMBER_1DEC_LEFT_FILLED_W_ZEROS:
                     newValue = string.Format("{0:#0.0}", numberToEvaluate);
-                    newValue = newValue.PadLeft(fd.length, '0');
+                    newValue = newValue.PadLeft(fd.Length, '0');
                     break;
-                case FieldFormat.NUMBER_2DEC_LEFT_FILLED_W_ZEROS:
+                case EFieldFormat.NUMBER_2DEC_LEFT_FILLED_W_ZEROS:
                     newValue = string.Format("{0:#0.00}", numberToEvaluate);
-                    newValue = newValue.PadLeft(fd.length, '0');
+                    newValue = newValue.PadLeft(fd.Length, '0');
                     break;
-                case FieldFormat.NUMBER_3DEC_LEFT_FILLED_W_ZEROS:
+                case EFieldFormat.NUMBER_3DEC_LEFT_FILLED_W_ZEROS:
                     newValue = string.Format("{0:#0.000}", numberToEvaluate);
-                    newValue = newValue.PadLeft(fd.length, '0');
+                    newValue = newValue.PadLeft(fd.Length, '0');
                     break;
-                case FieldFormat.NUMBER_4DEC_LEFT_FILLED_W_ZEROS:
+                case EFieldFormat.NUMBER_4DEC_LEFT_FILLED_W_ZEROS:
                     newValue = string.Format("{0:#0.0000}", numberToEvaluate);
-                    newValue = newValue.PadLeft(fd.length, '0');
+                    newValue = newValue.PadLeft(fd.Length, '0');
                     break;
             }
 
             return newValue;
         }
 
-        private bool isDateField(FieldFormat fieldformat)
+        private bool IsDateField(EFieldFormat fieldformat)
         {
-            bool isDateField = (fieldformat == FieldFormat.DATETIMEF_ddMMyyyy) ||
-            (fieldformat == FieldFormat.DATETIMEF_ddMMyy) ||
-            (fieldformat == FieldFormat.DATETIMEF_ddMM) ||
-            (fieldformat == FieldFormat.DATETIMEF_MMyy) ||
-            (fieldformat == FieldFormat.DATETIMEF_MMyyyy) ||
-            (fieldformat == FieldFormat.DATETIMEF_yyyyMMdd) ||
-            (fieldformat == FieldFormat.DATETIMEF_yyyyMM) ||
-            (fieldformat == FieldFormat.DATETIMEF_MMdd) ||
-            (fieldformat == FieldFormat.DATETIMEF_yyMMdd) ||
-            (fieldformat == FieldFormat.DATETIMEF_yyMM) ||
-            (fieldformat == FieldFormat.DATETIMEF_HHmmss) ||
-            (fieldformat == FieldFormat.DATETIMEF_HHmm) ||
-            (fieldformat == FieldFormat.DATETIMEF_mmss);
+            bool isDateField = (fieldformat == EFieldFormat.DATETIMEF_ddMMyyyy) ||
+            (fieldformat == EFieldFormat.DATETIMEF_ddMMyy) ||
+            (fieldformat == EFieldFormat.DATETIMEF_ddMM) ||
+            (fieldformat == EFieldFormat.DATETIMEF_MMyy) ||
+            (fieldformat == EFieldFormat.DATETIMEF_MMyyyy) ||
+            (fieldformat == EFieldFormat.DATETIMEF_yyyyMMdd) ||
+            (fieldformat == EFieldFormat.DATETIMEF_yyyyMM) ||
+            (fieldformat == EFieldFormat.DATETIMEF_MMdd) ||
+            (fieldformat == EFieldFormat.DATETIMEF_yyMMdd) ||
+            (fieldformat == EFieldFormat.DATETIMEF_yyMM) ||
+            (fieldformat == EFieldFormat.DATETIMEF_HHmmss) ||
+            (fieldformat == EFieldFormat.DATETIMEF_HHmm) ||
+            (fieldformat == EFieldFormat.DATETIMEF_mmss);
 
             return isDateField;
         }
 
-        private bool isStringField(FieldFormat fieldformat)
+        private bool IsStringField(EFieldFormat fieldformat)
         {
-            return (fieldformat == FieldFormat.STRING) || (fieldformat == FieldFormat.STRING_RIGHT);
+            return (fieldformat == EFieldFormat.STRING) || (fieldformat == EFieldFormat.STRING_RIGHT);
         }
 
-        private bool isNumberField(FieldFormat fieldformat)
+        private bool IsNumberField(EFieldFormat fieldformat)
         {
             bool isNumberField =
 
-            (fieldformat == FieldFormat.NUMBER_INT) ||
-            (fieldformat == FieldFormat.NUMBER_1DEC) ||
-            (fieldformat == FieldFormat.NUMBER_2DEC) ||
-            (fieldformat == FieldFormat.NUMBER_3DEC) ||
-            (fieldformat == FieldFormat.NUMBER_4DEC) ||
-            (fieldformat == FieldFormat.NUMBER_INT_LEFT_FILLED_W_ZEROS) ||
-            (fieldformat == FieldFormat.NUMBER_1DEC_LEFT_FILLED_W_ZEROS) ||
-            (fieldformat == FieldFormat.NUMBER_2DEC_LEFT_FILLED_W_ZEROS) ||
-            (fieldformat == FieldFormat.NUMBER_3DEC_LEFT_FILLED_W_ZEROS) ||
-            (fieldformat == FieldFormat.NUMBER_4DEC_LEFT_FILLED_W_ZEROS) ||
-            (fieldformat == FieldFormat.NUMBER_AS400F_2DEC) ||
-            (fieldformat == FieldFormat.NUMBER_AS400F_3DEC) ||
-            (fieldformat == FieldFormat.NUMBER_AS400F_4DEC);
+            (fieldformat == EFieldFormat.NUMBER_INT) ||
+            (fieldformat == EFieldFormat.NUMBER_1DEC) ||
+            (fieldformat == EFieldFormat.NUMBER_2DEC) ||
+            (fieldformat == EFieldFormat.NUMBER_3DEC) ||
+            (fieldformat == EFieldFormat.NUMBER_4DEC) ||
+            (fieldformat == EFieldFormat.NUMBER_INT_LEFT_FILLED_W_ZEROS) ||
+            (fieldformat == EFieldFormat.NUMBER_1DEC_LEFT_FILLED_W_ZEROS) ||
+            (fieldformat == EFieldFormat.NUMBER_2DEC_LEFT_FILLED_W_ZEROS) ||
+            (fieldformat == EFieldFormat.NUMBER_3DEC_LEFT_FILLED_W_ZEROS) ||
+            (fieldformat == EFieldFormat.NUMBER_4DEC_LEFT_FILLED_W_ZEROS) ||
+            (fieldformat == EFieldFormat.NUMBER_AS400F_2DEC) ||
+            (fieldformat == EFieldFormat.NUMBER_AS400F_3DEC) ||
+            (fieldformat == EFieldFormat.NUMBER_AS400F_4DEC);
             return isNumberField;
         }
 
-        private string getFormatDateByEnum(FieldFormat fieldformat)
+        private string GetFormatDateByEnum(EFieldFormat fieldformat)
         {
             string newFormat = "";
             switch (fieldformat)
             {
-                case FieldFormat.DATETIMEF_ddMMyyyy:
+                case EFieldFormat.DATETIMEF_ddMMyyyy:
                     newFormat = "{0:ddMMyyyy}";
                     break;
-                case FieldFormat.DATETIMEF_ddMMyy:
+                case EFieldFormat.DATETIMEF_ddMMyy:
                     newFormat = "{0:ddMMyy}";
                     break;
-                case FieldFormat.DATETIMEF_ddMM:
+                case EFieldFormat.DATETIMEF_ddMM:
                     newFormat = "{0:ddMM}";
                     break;
-                case FieldFormat.DATETIMEF_MMyy:
+                case EFieldFormat.DATETIMEF_MMyy:
                     newFormat = "{0:MMyy}";
                     break;
-                case FieldFormat.DATETIMEF_MMyyyy:
+                case EFieldFormat.DATETIMEF_MMyyyy:
                     newFormat = "{0:MMyyyy}";
                     break;
-                case FieldFormat.DATETIMEF_yyyyMMdd:
+                case EFieldFormat.DATETIMEF_yyyyMMdd:
                     newFormat = "{0:yyyyMMdd}";
                     break;
-                case FieldFormat.DATETIMEF_yyyyMM:
+                case EFieldFormat.DATETIMEF_yyyyMM:
                     newFormat = "{0:yyyyMM}";
                     break;
-                case FieldFormat.DATETIMEF_MMdd:
+                case EFieldFormat.DATETIMEF_MMdd:
                     newFormat = "{0:MMdd}";
                     break;
-                case FieldFormat.DATETIMEF_yyMMdd:
+                case EFieldFormat.DATETIMEF_yyMMdd:
                     newFormat = "{0:yyMMdd}";
                     break;
-                case FieldFormat.DATETIMEF_yyMM:
+                case EFieldFormat.DATETIMEF_yyMM:
                     newFormat = "{0:yyMM}";
                     break;
-                case FieldFormat.DATETIMEF_HHmmss:
+                case EFieldFormat.DATETIMEF_HHmmss:
                     newFormat = "{0:HHmmss}";
                     break;
-                case FieldFormat.DATETIMEF_HHmm:
+                case EFieldFormat.DATETIMEF_HHmm:
                     newFormat = "{0:HHmm}";
                     break;
-                case FieldFormat.DATETIMEF_mmss:
+                case EFieldFormat.DATETIMEF_mmss:
                     newFormat = "{0:mmss}";
                     break;
             }
             return newFormat;
         }
-        private void createRecordValueFieldsAndCompleteWithEmptyValues()
+        private void CreateRecordValueFieldsAndCompleteWithEmptyValues()
         {
             /*
             foreach (string fieldName in recordDefinition.getFieldDefinition().Keys)
@@ -531,25 +531,25 @@ namespace SysWork.IO
             }
             */
 
-            foreach (string key in recordDefinition.getFieldsDefinition().Keys)
+            foreach (string key in recordDefinition.GetFieldsDefinition().Keys)
             {
-                FieldDefinition fieldDefinition = recordDefinition.getFieldsDefinition()[key];
-                recordValues.Add(key, defaultFieldValue(fieldDefinition));
+                FieldDefinition fieldDefinition = recordDefinition.GetFieldsDefinition()[key];
+                recordValues.Add(key, DefaultFieldValue(fieldDefinition));
             }
         }
 
-        private string defaultFieldValue(FieldDefinition fieldDefinition)
+        private string DefaultFieldValue(FieldDefinition fieldDefinition)
         {
             string defaultValue = "";
 
-            switch (fieldDefinition.fieldformat)
+            switch (fieldDefinition.Fieldformat)
             {
-                case FieldFormat.STRING:
-                    defaultValue = new string(' ', fieldDefinition.length);
+                case EFieldFormat.STRING:
+                    defaultValue = new string(' ', fieldDefinition.Length);
                     break;
 
                 default:
-                    defaultValue = new string(' ', fieldDefinition.length);
+                    defaultValue = new string(' ', fieldDefinition.Length);
                     break;
             }
 
@@ -565,7 +565,7 @@ namespace SysWork.IO
             return outputValue;
         }
 
-        private string number2AS400Format(decimal number, int positionsIntegerPart, int positionsDecimalPart)
+        private string Number2AS400Format(decimal number, int positionsIntegerPart, int positionsDecimalPart)
         {
             string newValue = "";
             string format = new string('0', positionsIntegerPart);

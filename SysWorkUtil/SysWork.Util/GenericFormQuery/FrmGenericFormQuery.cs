@@ -97,5 +97,32 @@ namespace SysWork.Util.GenericFormQuery
 
             listView1.Sort();
         }
+
+        private void tsbSelectAll_Click(object sender, EventArgs e)
+        {
+            foreach (var item in listView1.Items)
+            {
+                ((ListViewItem)item).Checked = true;
+            }
+
+        }
+
+        private void tsbUnSelectAll_Click(object sender, EventArgs e)
+        {
+            foreach (var item in listView1.Items)
+            {
+                ((ListViewItem)item).Checked = false;
+            }
+        }
+
+        private void tsbInvert_Click(object sender, EventArgs e)
+        {
+            foreach (var item in listView1.Items)
+            {
+                ((ListViewItem)item).Checked = !((ListViewItem)item).Checked;
+            }
+
+        }
+
     }
 }

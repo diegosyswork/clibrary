@@ -13,19 +13,19 @@ namespace SysWork.IO
 {
     public class FixedLengthFileReader
     {
-        private string fileName;
+        private string _fileName;
 
-        private string[] lines = null;
+        private string[] _lines = null;
 
-        private long currentlLineIndex;
+        private long _currentlLineIndex;
 
-        private Hashtable hashFixedFields;
+        private Hashtable _hashFixedFields;
 
-        private bool flag;
+        private bool _flag;
 
-        private bool fileOpen;
+        private bool _fileOpen;
 
-        private FixedFields lastFixedFieldCreated = null;
+        private FixedFields _lastFixedFieldCreated = null;
 
         /// <summary>
         /// Get the value of the field of the current record
@@ -34,28 +34,28 @@ namespace SysWork.IO
         {
             get
             {
-                return getFieldValue(fieldName);
+                return GetFieldValue(fieldName);
             }
         }
 
         public FixedLengthFileReader(string fileName)
         {
-            this.currentlLineIndex = 0;
-            this.fileName = fileName;
-            this.hashFixedFields = new Hashtable();
-            this.flag = true;
-            this.fileOpen = false;
+            this._currentlLineIndex = 0;
+            this._fileName = fileName;
+            this._hashFixedFields = new Hashtable();
+            this._flag = true;
+            this._fileOpen = false;
         }
 
         /// <summary>
         /// Reads the current file
         /// </summary>
-        public void readFile()
+        public void ReadFile()
         {
             try
             {
-                lines = File.ReadAllLines(fileName);
-                fileOpen = true;
+                _lines = File.ReadAllLines(_fileName);
+                _fileOpen = true;
             }
             catch (Exception ex)
             {
@@ -70,44 +70,44 @@ namespace SysWork.IO
         /// <param name="endField">Final position of the field</param>
         /// </summary>
 
-        public void addField(string fieldName, int initField, int endField)
+        public void AddField(string fieldName, int initField, int endField)
         {
             // TODO: validar que inicio o fin no esten dentro de otro campo
 
-            lastFixedFieldCreated = new FixedFields(initField, endField);
+            _lastFixedFieldCreated = new FixedFields(initField, endField);
 
-            hashFixedFields.Add(fieldName, lastFixedFieldCreated);
+            _hashFixedFields.Add(fieldName, _lastFixedFieldCreated);
         }
         /// <summary>
         /// <param name="fieldName">Name of the field</param>
         /// <param name="lenght">Lenght of the field. The initial and final position is calculated based on the final position of the previous field</param>
         /// </summary>
-        public void addField(string fieldName, int lenght)
+        public void AddField(string fieldName, int lenght)
         {
             int pos = 0;
-            if (lastFixedFieldCreated != null)
-                pos = lastFixedFieldCreated.endField;
+            if (_lastFixedFieldCreated != null)
+                pos = _lastFixedFieldCreated.EndField;
 
             pos++;
 
-            addField(fieldName, pos, pos + lenght - 1);
+            AddField(fieldName, pos, pos + lenght - 1);
         }
 
-        public string getFieldValue(string fieldName, long lineNumber)
+        public string GetFieldValue(string fieldName, long lineNumber)
         {
-            if (hashFixedFields.Count == 0)
+            if (_hashFixedFields.Count == 0)
                 throw new NoFieldsSetException("No fields Set");
 
-            if (lineNumber > lines.Count())
+            if (lineNumber > _lines.Count())
                 throw new IndexOutOfRangeException();
 
-            if (!fileOpen)
+            if (!_fileOpen)
                 throw new FileNoOpenException();
 
-            FixedFields ff = (FixedFields)hashFixedFields[fieldName];
-            string lineValue = lines[lineNumber - 1];
-            int initField = ff.initField;
-            int endField = ff.endField;
+            FixedFields ff = (FixedFields)_hashFixedFields[fieldName];
+            string lineValue = _lines[lineNumber - 1];
+            int initField = ff.InitField;
+            int endField = ff.EndField;
 
             if (lineValue.Equals(String.Empty))
                 return "";
@@ -116,22 +116,22 @@ namespace SysWork.IO
                 throw new LineLenghException();
 
 
-            return lines[lineNumber - 1].Substring(initField - 1, endField - initField + 1);
+            return _lines[lineNumber - 1].Substring(initField - 1, endField - initField + 1);
         }
-        public string getFieldValue(string fieldName)
+        public string GetFieldValue(string fieldName)
         {
-            return getFieldValue(fieldName, currentlLineIndex + 1);
+            return GetFieldValue(fieldName, _currentlLineIndex + 1);
         }
 
-        public string getCurrentLineValue()
+        public string GetCurrentLineValue()
         {
-            if (!fileOpen)
+            if (!_fileOpen)
                 throw new FileNoOpenException();
 
-            if (lines != null)
+            if (_lines != null)
             {
-                if (lines.Count() > 0)
-                    return lines[currentlLineIndex];
+                if (_lines.Count() > 0)
+                    return _lines[_currentlLineIndex];
                 else
                     return null;
             }
@@ -139,73 +139,73 @@ namespace SysWork.IO
                 return null;
         }
 
-        public long getCurrentLineIndex()
+        public long GetCurrentLineIndex()
         {
-            return currentlLineIndex;
+            return _currentlLineIndex;
         }
 
-        public bool hasNextLine()
+        public bool HasNextLine()
         {
-            if (!fileOpen)
+            if (!_fileOpen)
                 throw new FileNoOpenException();
 
-            if (flag)
+            if (_flag)
             {
-                flag = false;
-                if (lines.Count() > 0)
+                _flag = false;
+                if (_lines.Count() > 0)
                     return true;
                 else
                     return false;
             }
 
-            if (currentlLineIndex + 1 < lines.Count())
+            if (_currentlLineIndex + 1 < _lines.Count())
             {
-                currentlLineIndex++;
+                _currentlLineIndex++;
                 return true;
             }
 
             return false;
         }
-        public int getRecordLength()
+        public int GetRecordLength()
         {
             int length = 0;
 
-            if (hashFixedFields.Count == 0)
+            if (_hashFixedFields.Count == 0)
                 throw new NoFieldsSetException();
 
-            foreach (DictionaryEntry pair in hashFixedFields)
+            foreach (DictionaryEntry pair in _hashFixedFields)
             {
                 FixedFields fixedField = (FixedFields)pair.Value;
-                length += (fixedField.endField - fixedField.initField) + 1;
+                length += (fixedField.EndField - fixedField.InitField) + 1;
             }
 
             return length;
         }
 
-        public bool isFileOpen()
+        public bool IsFileOpen()
         {
-            return fileOpen;
+            return _fileOpen;
         }
 
-        public long getRecordsCount()
+        public long GetRecordsCount()
         {
-            if (lines == null)
+            if (_lines == null)
                 return 0;
 
-            return lines.Count();
+            return _lines.Count();
         }
 
     }
 
     class FixedFields
     {
-        public int initField { get; set; }
-        public int endField { get; set; }
+        public int InitField { get; set; }
+        public int EndField { get; set; }
 
         public FixedFields(int initField, int endField)
         {
-            this.initField = initField;
-            this.endField = endField;
+            this.InitField = initField;
+            this.EndField = endField;
         }
     }
 

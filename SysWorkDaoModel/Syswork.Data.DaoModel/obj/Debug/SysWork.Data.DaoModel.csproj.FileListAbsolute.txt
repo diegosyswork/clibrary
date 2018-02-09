@@ -9,3 +9,4 @@ C:\SWSISTEMAS\C#Library\SysWorkDaoModel\Syswork.Data.DaoModel\bin\Debug\SysWork.
 C:\SWSISTEMAS\C#Library\SysWorkDaoModel\Syswork.Data.DaoModel\obj\Debug\SysWork.Data.DaoModel.csproj.CoreCompileInputs.cache
 C:\SWSISTEMAS\C#Library\SysWorkDaoModel\Syswork.Data.DaoModel\obj\Debug\SysWork.Data.DaoModel.dll
 C:\SWSISTEMAS\C#Library\SysWorkDaoModel\Syswork.Data.DaoModel\obj\Debug\SysWork.Data.DaoModel.pdb
+C:\SWSISTEMAS\C#Library\SysWorkDaoModel\Syswork.Data.DaoModel\obj\Debug\SysWork.Data.DaoModel.csprojResolveAssemblyReference.cache

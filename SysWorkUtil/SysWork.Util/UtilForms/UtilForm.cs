@@ -110,5 +110,88 @@ namespace SysWork.Util.UtilForms
                 }
             }
         }
+
+        public static void AsignNulleableValueToCombo(ComboBox combo, long? value)
+        {
+            if (value == null)
+                combo.SelectedItem = null;
+            else
+                combo.SelectedValue = value;
+        }
+        /// <summary>
+        /// Verifica si el combo tiene un texto que no esta dentro de la lista.
+        /// </summary>
+        /// <param name="combo"></param>
+        /// <returns></returns>
+        public static bool ValidateComboFromDataSource(ComboBox combo)
+        {
+            if (combo.SelectedItem == null && !combo.Text.Equals(""))
+                return false;
+
+            return true;
+        }
+
+        public static void SetDateFormatMaskedTextBox(MaskedTextBox msk)
+        {
+            msk.Mask = "00/00/0000";
+            msk.Text = "";
+        }
+        public static bool ValidateDateFormatMaskedTextBox(MaskedTextBox msk,out string errMessage, bool required = false)
+        {
+            errMessage = "";
+            if (required && (msk.Text.Trim().Equals("") || !msk.MaskCompleted))
+            {
+                errMessage = "Debe informar la fecha";
+                return false;
+            }
+
+            if (msk.MaskCompleted)
+            {
+                if (!DateTime.TryParse(msk.Text, out DateTime fecha))
+                {
+                    errMessage = "La fecha ingresada no es valida";
+                    return false;
+                }
+            }
+            else
+            {
+                if (!required)
+                    msk.Text = "";
+            }
+            return true;
+        }
+
+        public static bool ValidateDateFormatMaskedFromTo(MaskedTextBox msk1, MaskedTextBox msk2, out string errMessage, string nombreParametro = null)
+        {
+            errMessage = "";
+            if (nombreParametro == null)
+                nombreParametro = "fecha";
+
+            DateTime fecha1 ;
+            DateTime fecha2 ;
+
+            if (msk1.MaskCompleted && msk2.MaskCompleted)
+            {
+                if (!DateTime.TryParse(msk1.Text, out fecha1))
+                {
+                    errMessage = "La " + nombreParametro + " desde ingresada no es valida";
+                    return false;
+                }
+                if (!DateTime.TryParse(msk2.Text, out fecha2))
+                {
+                    errMessage = "La " + nombreParametro + " hasta ingresada no es valida";
+                    return false;
+                }
+
+                if (fecha1 > fecha2)
+                {
+                    errMessage = "" + nombreParametro + " desde mayor que hasta";
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
     }
 }
