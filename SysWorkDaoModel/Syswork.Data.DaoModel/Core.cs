@@ -45,7 +45,7 @@ namespace SysWork.Data.DaoModel
     {
         public string ConnectionString { get; private set; }
 
-        private string TableName;
+        public string TableName { get; private set; }
 
         private Hashtable ColumnListWithDbInfo = new Hashtable();
 
@@ -53,7 +53,7 @@ namespace SysWork.Data.DaoModel
         /// Contiene la lista de propiedades de la entidad vinculadas a la DB.
         /// UPDATE: Cambio Private Por Public
         /// </summary>
-        public IList<PropertyInfo> ListObjectPropertyInfo;
+        public IList<PropertyInfo> ListObjectPropertyInfo { get; private set; }
 
         /// <summary>
         /// Devuelve las columnas necesarias para hacer un Insert (No incluye las columnas Identity)
@@ -202,7 +202,6 @@ namespace SysWork.Data.DaoModel
 
                         if (hasIdentity)
                         {
-
                             identity = (long)(Decimal)sqlCommand.ExecuteScalar();
                         }
                         else
@@ -962,6 +961,32 @@ namespace SysWork.Data.DaoModel
         private IList<PropertyInfo> GetPropertyInfoList(T entity)
         {
             return entity.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
+        }
+        public string GetNextCode(string field, int lenght)
+        {
+            string newCode = new string('0', lenght);
+            SqlCommand sqlCommand = new SqlCommand();
+            try
+            {
+                using (SqlConnection connection = GetSqlConnection())
+                {
+                    string query = "SELECT ISNULL(MAX({0}),0) AS MAXIMO FROM {1} WHERE (ISNUMERIC({2}) = 1) AND LEN({3}) = {4}";
+                    query = string.Format(query, field, TableName, field, field, lenght);
+
+                    using (sqlCommand = GetSqlCommand(query, connection))
+                    {
+                        var value = sqlCommand.ExecuteScalar();
+                        var numberValue = Int32.Parse(value.ToString()) + 1;
+                        newCode = string.Format("{0:" + new string('0', lenght) + "}", numberValue);
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new DaoModelException(exception, sqlCommand);
+            }
+
+            return newCode;
         }
     }
     /// <summary>

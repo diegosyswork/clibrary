@@ -15,7 +15,6 @@ namespace SysWork.Util.UtilForms
         /// <param name="excludedNamesControl">lista de controles separada por comas que no seran tenidos en cuenta</param>
         public static void CleanControls(Control container,params string[] excludedNamesControl)
         {
-
             var list = excludedNamesControl.ToList();
 
             foreach (Control control in container.Controls)
@@ -123,10 +122,18 @@ namespace SysWork.Util.UtilForms
         /// </summary>
         /// <param name="combo"></param>
         /// <returns></returns>
-        public static bool ValidateComboFromDataSource(ComboBox combo)
+        public static bool ValidateComboFromDataSource(ComboBox combo, bool required = false)
         {
-            if (combo.SelectedItem == null && !combo.Text.Equals(""))
-                return false;
+            if (required)
+            {
+                return combo.SelectedItem != null;
+            }
+            else
+            {
+                if (combo.SelectedItem == null && !combo.Text.Equals(""))
+                    return false;
+            }
+
 
             return true;
         }
@@ -161,6 +168,54 @@ namespace SysWork.Util.UtilForms
             return true;
         }
 
+        public static void ListViewCheckAll(ListView listView)
+        {
+            foreach (ListViewItem item in listView.Items)
+            {
+                item.Checked = true;
+            }
+        }
+
+        public static void ListViewUnCheckAll(ListView listView)
+        {
+            foreach (int index in listView.CheckedIndices)
+            {
+                listView.Items[index].Checked = false;
+            }
+        }
+
+        public static void ListViewInverseCheck(ListView listView)
+        {
+            foreach (ListViewItem item in listView.Items)
+            {
+                item.Checked = !item.Checked;
+            }
+        }
+
+        public static void ListViewSelectAll(ListView listView)
+        {
+            foreach (ListViewItem item in listView.Items)
+            {
+                item.Selected = true;
+            }
+        }
+
+        public static void ListViewUnSelectAll(ListView listView)
+        {
+            foreach (int index in listView.SelectedIndices)
+            {
+                listView.Items[index].Checked = false;
+            }
+        }
+
+        public static void ListViewInverseSelect(ListView listView)
+        {
+            foreach (ListViewItem item in listView.Items)
+            {
+                item.Selected = !item.Selected;
+            }
+        }
+
         public static bool ValidateDateFormatMaskedFromTo(MaskedTextBox msk1, MaskedTextBox msk2, out string errMessage, string nombreParametro = null)
         {
             errMessage = "";
@@ -192,6 +247,36 @@ namespace SysWork.Util.UtilForms
 
             return true;
         }
+        /// <summary>
+        /// 
+        /// En caso que en un DataGridView necesitemos representar una entidad que
+        /// posea otra entidad dentro, esta rutina se encarga de acceder a la propiedad. 
+        /// esta rutina se encarga de acceder a la misma.
+        /// 
+        /// Ejemplo: Entidad Factura, tiene una entidad Cliente  deseamos acceder a la Razon Social
+        /// 
+        ///  Factura.Cliente.RazonSocial
+        /// 
+        /// En el DataPropertyName de la columna deberemos poner:Factura.Cliente.RazonSocial
+        /// 
+        /// Y llamar a este metodo en el evento CellFormatting
+        /// 
+        /// </summary>
+        /// <param name="DataGridView1"></param>
+        /// <param name="e"></param>
+        public static void DataGridAccessProperty(DataGridView DataGridView1, DataGridViewCellFormattingEventArgs e)
+        {
+            DataGridViewColumn column = DataGridView1.Columns[e.ColumnIndex];
+            if (column.DataPropertyName.Contains("."))
+            {
 
+                object data = DataGridView1.Rows[e.RowIndex].DataBoundItem;
+                string[] properties = column.DataPropertyName.Split('.');
+                for (int i = 0; i < properties.Length && data != null; i++)
+                    data = data.GetType().GetProperty(properties[i]).GetValue(data);
+
+                DataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = data;
+            }
+        }
     }
 }

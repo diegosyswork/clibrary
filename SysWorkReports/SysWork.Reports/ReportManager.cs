@@ -23,6 +23,7 @@ namespace SysWork.Reports
         public bool MostrarPrintDialog { get; set; }
         public PrinterSettings PrinterSettings { get; set; }
         public PrintController PrintController { get; set; }
+
         public enum EDestino
         {
             pantalla,
@@ -44,6 +45,7 @@ namespace SysWork.Reports
             InstanciarControles();
             InicializarVariables(); 
         }
+
         private void InicializarVariables()
         {
             ReportDataSources = new List<ReportDataSource>();
@@ -53,7 +55,14 @@ namespace SysWork.Reports
         {
             _frmReportManager = new FrmReportManager();
             _reportViewer = _frmReportManager.GetReportViewer();
+            _reportViewer.SetDisplayMode(DisplayMode.PrintLayout);
             BindingSource = _frmReportManager.GetBindingSource();
+            _frmReportManager.Text = Titulo;
+        }
+
+        public void SetDisplayMode(DisplayMode displayMode)
+        {
+            _reportViewer.SetDisplayMode(displayMode);
         }
 
         public void Ejecutar()
@@ -61,7 +70,7 @@ namespace SysWork.Reports
 
             _reportViewer.ProcessingMode = ProcessingMode.Local;
             _reportViewer.LocalReport.ReportPath = this._reportPath;
-            
+
             foreach (ReportDataSource rds in ReportDataSources) 
             {
                 _reportViewer.LocalReport.DataSources.Add(rds);

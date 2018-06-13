@@ -12,17 +12,17 @@ namespace SysWork.Util.UtilForms
         /// <summary>
         /// Specifies the column to be sorted
         /// </summary>
-        private int ColumnToSort;
+        private int _columnToSort;
         /// <summary>
         /// Specifies the order in which to sort (i.e. 'Ascending').
         /// </summary>
-        private SortOrder OrderOfSort;
+        private SortOrder _orderOfSort;
         /// <summary>
         /// Case insensitive comparer object
         /// </summary>
-        private CaseInsensitiveComparer ObjectCompare;
+        private CaseInsensitiveComparer _objectCompare;
 
-        private bool compareAllAsString;
+        private bool _compareAllAsString;
 
         /// <summary>
         /// Class constructor.  Initializes various elements
@@ -30,16 +30,16 @@ namespace SysWork.Util.UtilForms
         public ListViewColumnSorter(bool compareAllAsString = false)
         {
             // Initialize the column to '0'
-            ColumnToSort = 0;
+            _columnToSort = 0;
 
             // Initialize the sort order to 'none'
-            OrderOfSort = SortOrder.None;
+            _orderOfSort = SortOrder.None;
 
             // Initialize the CaseInsensitiveComparer object
-            ObjectCompare = new CaseInsensitiveComparer();
+            _objectCompare = new CaseInsensitiveComparer();
 
             // by Default compare all columns as String 
-            this.compareAllAsString = compareAllAsString;
+            this._compareAllAsString = compareAllAsString;
         }
 
         /// <summary>
@@ -57,55 +57,53 @@ namespace SysWork.Util.UtilForms
             listviewX = (ListViewItem)x;
             listviewY = (ListViewItem)y;
 
-            if (!compareAllAsString)
+            if (!_compareAllAsString)
             {
                 // Intento Convertir a DateTime
                 DateTime x1, y1;
-                if (!DateTime.TryParse(listviewX.SubItems[ColumnToSort].Text, out x1))
+                if (!DateTime.TryParse(listviewX.SubItems[_columnToSort].Text, out x1))
                     x1 = DateTime.MinValue;
 
-                if (!DateTime.TryParse(listviewY.SubItems[ColumnToSort].Text, out y1))
+                if (!DateTime.TryParse(listviewY.SubItems[_columnToSort].Text, out y1))
                     y1 = DateTime.MinValue;
 
                 if (x1 != DateTime.MinValue && y1 != DateTime.MinValue)
                 {
                     compareResult = DateTime.Compare(x1, y1);
-                    return returnCompare(compareResult);
+                    return ReturnCompare(compareResult);
                 }
 
                 // Intento Convertir a Decimal
                 Decimal x2, y2;
-                if (!Decimal.TryParse(listviewX.SubItems[ColumnToSort].Text, out x2))
+                if (!Decimal.TryParse(listviewX.SubItems[_columnToSort].Text, out x2))
                     x2 = Decimal.MinValue;
 
-                if (!Decimal.TryParse(listviewY.SubItems[ColumnToSort].Text, out y2))
+                if (!Decimal.TryParse(listviewY.SubItems[_columnToSort].Text, out y2))
                     y2 = Decimal.MinValue;
 
                 if (x2 != Decimal.MinValue && y2 != Decimal.MinValue)
                 {
                     compareResult = Decimal.Compare(x2, y2);
-                    return returnCompare(compareResult);
+                    return ReturnCompare(compareResult);
                 }
             }
 
             // Compare the two items
-            compareResult = ObjectCompare.Compare(listviewX.SubItems[ColumnToSort].Text, listviewY.SubItems[ColumnToSort].Text);
+            compareResult = _objectCompare.Compare(listviewX.SubItems[_columnToSort].Text, listviewY.SubItems[_columnToSort].Text);
 
-            return returnCompare(compareResult);
+            return ReturnCompare(compareResult);
 
         }
-
-
-        public int returnCompare(int compareResult)
+        public int ReturnCompare(int compareResult)
         {
 
             // Calculate correct return value based on object comparison
-            if (OrderOfSort == SortOrder.Ascending)
+            if (_orderOfSort == SortOrder.Ascending)
             {
                 // Ascending sort is selected, return normal result of compare operation
                 return compareResult;
             }
-            else if (OrderOfSort == SortOrder.Descending)
+            else if (_orderOfSort == SortOrder.Descending)
             {
                 // Descending sort is selected, return negative result of compare operation
                 return (-compareResult);
@@ -116,7 +114,6 @@ namespace SysWork.Util.UtilForms
                 return 0;
             }
         }
-
         /// <summary>
         /// Gets or sets the number of the column to which to apply the sorting operation (Defaults to '0').
         /// </summary>
@@ -124,14 +121,13 @@ namespace SysWork.Util.UtilForms
         {
             set
             {
-                ColumnToSort = value;
+                _columnToSort = value;
             }
             get
             {
-                return ColumnToSort;
+                return _columnToSort;
             }
         }
-
         /// <summary>
         /// Gets or sets the order of sorting to apply (for example, 'Ascending' or 'Descending').
         /// </summary>
@@ -139,11 +135,11 @@ namespace SysWork.Util.UtilForms
         {
             set
             {
-                OrderOfSort = value;
+                _orderOfSort = value;
             }
             get
             {
-                return OrderOfSort;
+                return _orderOfSort;
             }
         }
     }
