@@ -1,6 +1,7 @@
 ﻿using Google.Apis.Auth.OAuth2;
 using Google.Apis.Download;
 using Google.Apis.Drive.v3;
+using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
 using Google.Apis.Upload;
 using Google.Apis.Util.Store;
@@ -78,7 +79,7 @@ namespace SysWork.IO.GoogleDriveManager
                 FilesResource.ListRequest listRequest = _driveService.Files.List();
                 listRequest.PageSize = 1000;
                 listRequest.Fields = "nextPageToken, files(mimeType, id, name, parents, size, modifiedTime, md5Checksum, webViewLink)";
-                //listRequest.OrderBy = "mimeType";
+                
                 // List files.
                 IList<Google.Apis.Drive.v3.Data.File> files = listRequest.Execute().Files;
                 filesList.Clear();
@@ -94,6 +95,7 @@ namespace SysWork.IO.GoogleDriveManager
                         file.MimeType,
                         file.Id, file.Md5Checksum,
                         file.WebViewLink));
+
                         System.Diagnostics.Debug.WriteLine("{0} {1} {2} {3}",
                             file.Name, file.Id, file.MimeType, file.Size.ToString());
                     }
@@ -187,15 +189,18 @@ namespace SysWork.IO.GoogleDriveManager
                 HttpClientInitializer = _credential,
                 ApplicationName = _applicationName,
             });
-            return true;
 
+            return true;
         }
 
-        
-        private static bool UploadFileToDrive(string folderId, string fileName, string filePath, string fileType, IGoogleStatusNotifier statusNotifier)
+        private static bool UploadFileToDrive(IGoogleStatusNotifier statusNotifier,string folderId, string fileName, string filePath, string fileType)
         {
+            return (UploadFileToDrive(folderId, fileName, filePath, fileType, statusNotifier) !=null);
+        }
 
-            statusNotifier.UpdateStatus(EGoogleStatusNotifierMessageType.Uploading,0);
+        private static GoogleDriveFile UploadFileToDrive(string folderId, string fileName, string filePath, string fileType, IGoogleStatusNotifier statusNotifier)
+        {
+            statusNotifier.UpdateStatus(EGoogleStatusNotifierMessageType.Uploading, 0);
             long totalSize = 100000;
             FileInfo fi = new FileInfo(filePath);
             totalSize = fi.Length;
@@ -242,41 +247,54 @@ namespace SysWork.IO.GoogleDriveManager
                             }
                     }
                 };
-
-                request.Fields = "id";
+                
+                request.Fields = "mimeType, id, name, parents, size, modifiedTime, md5Checksum, webViewLink";
                 request.Upload();
             }
             var file = request.ResponseBody;
-            System.Diagnostics.Debug.WriteLine("File ID:{0} \n FileName {1} ", file.Id, file.Name);
-            return true;
-        }
+            GoogleDriveFile googleDriveFile = null;
+            if (file != null)
+                googleDriveFile = new GoogleDriveFile(file.Name, SizeFix(file.Size.ToString(), file.MimeType), file.ModifiedTime.ToString(), file.MimeType,file.Id,file.Md5Checksum,file.WebViewLink);
 
-        private static bool UploadFileToDrive(string folderId, string fileName, string filePath, string fileType, bool onlyNew, IGoogleStatusNotifier statusNotifier)
+            return googleDriveFile;
+        }
+        private static bool UploadFileToDrive(IGoogleStatusNotifier statusNotifier, string folderId, string fileName, string filePath, string fileType, bool onlyNew)
+        {
+            return (UploadFileToDrive(folderId, fileName, filePath, fileType, onlyNew, statusNotifier) != null);
+        }
+        private static GoogleDriveFile UploadFileToDrive(string folderId, string fileName, string filePath, string fileType, bool onlyNew, IGoogleStatusNotifier statusNotifier)
         {
             if (onlyNew)
             {
                 if (!CompareHash(Gtools.HashGenerator(filePath)))
                 {
-                    UploadFileToDrive(folderId, fileName, filePath, fileType, statusNotifier);
-                    return true;
+                    return UploadFileToDrive(folderId, fileName, filePath, fileType, statusNotifier);
                 }
-                else return false;
+                else return null;
 
             }
             else
             {
-                UploadFileToDrive(folderId, fileName, filePath, fileType, statusNotifier);
-                return true;
+                return UploadFileToDrive(folderId, fileName, filePath, fileType, statusNotifier);
             }
                 
         }
 
-
         public static bool CompareHash(string hashToCompare)
         {
+            return CompareHash(hashToCompare, out GoogleDriveFile googleDriveFile);
+        }
+
+        public static bool CompareHash(string hashToCompare, out GoogleDriveFile googleDriveFile)
+        {
+            googleDriveFile = null;
             foreach (GoogleDriveFile file in GoogleDriveAPIV3.ListDriveFiles())
             {
-                if (file.Hash == hashToCompare) return true;
+                if (file.Hash == hashToCompare)
+                {
+                    googleDriveFile = file;
+                    return true;
+                }
             }
             return false;
         }
@@ -304,13 +322,15 @@ namespace SysWork.IO.GoogleDriveManager
                 System.Diagnostics.Debug.WriteLine("{0} {1}",file.Name, file.Id);
                 return file.Id;
         }
-
-
-        public static void UploadToDrive(string path, string name, string parentId, bool onlyNew, IGoogleStatusNotifier statusNotifier)
+        public static void UploadToDrive(IGoogleStatusNotifier statusNotifier,string path, string name, string parentId, bool onlyNew)
+        {
+            UploadToDrive(path, name, parentId, onlyNew, statusNotifier);
+        }
+        public static GoogleDriveFile UploadToDrive(string path, string name, string parentId, bool onlyNew, IGoogleStatusNotifier statusNotifier)
         {
             if (Path.HasExtension(path))
             {
-                UploadFileToDrive(
+                return UploadFileToDrive(
                     parentId,
                     name,
                     path,
@@ -320,6 +340,7 @@ namespace SysWork.IO.GoogleDriveManager
             else
             {
                 DirectoryUpload(path, parentId, onlyNew, statusNotifier);
+                return null;
             }
         }
 
@@ -359,7 +380,6 @@ namespace SysWork.IO.GoogleDriveManager
             FileStream fileStream;
             using (fileStream = new System.IO.FileStream(savePath, FileMode.OpenOrCreate, FileAccess.Write))
             {
-                // System.IO.File.Create(saveFile)
                 stream.WriteTo(fileStream);
                 fileStream.Close();
             }
@@ -472,5 +492,92 @@ namespace SysWork.IO.GoogleDriveManager
             return mimeType;
         }
 
+        /// <summary>
+        /// Insert a new permission.
+        /// </summary>
+        /// <param name="service">Drive API service instance.</param>
+        /// <param name="fileId">ID of the file to insert permission for.</param>
+        /// <param name="who">
+        /// User or group e-mail address, domain name or null for "default" type.
+        /// </param>
+        /// <param name="type">The value "user", "group", "domain" or "default".</param>
+        /// <param name="role">The value "owner", "writer" or "reader".</param>
+        /// <returns>The inserted permission, null is returned if an API error occurred</returns>
+        public static Permission InsertPermission(DriveService service, String fileId, String who, String type, String role)
+        {
+            Permission newPermission = new Permission();
+
+            newPermission.Type = type;
+            newPermission.Role = role;
+            newPermission.EmailAddress = who;
+
+            try
+            {
+                return service.Permissions.Create(newPermission, fileId).Execute();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occurred: " + e.Message);
+            }
+            return null;
+        }
+
+        public static Google.Apis.Drive.v3.Data.User GetUserData()
+        {
+            /*
+            AboutResource.GetRequest ag = new AboutResource.GetRequest(_driveService);
+            ag.Fields = "user,storageQuota";
+            var response = ag.Execute();
+            if (response.StorageQuota.Usage.HasValue)
+            {
+                var xx = response.StorageQuota.Usage.Value;
+            }
+            */
+
+            var request = _driveService.About.Get();
+            request.Fields = "user";
+            var response = request.Execute();
+
+            return response.User;
+        }
+
+        public static long GetDriveSpaceUsage()
+        {
+            try
+            {
+                AboutResource.GetRequest ag = new AboutResource.GetRequest(_driveService);
+                ag.Fields = "storageQuota";
+                var response = ag.Execute();
+                if (response.StorageQuota.Usage.HasValue)
+                    return response.StorageQuota.Usage.Value;
+                else
+                    return -1;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+                return -1;
+            }
+        }
+
+
+        public static long GetDriveSpaceLimit()
+        {
+            try
+            {
+                AboutResource.GetRequest ag = new AboutResource.GetRequest(_driveService);
+                ag.Fields = "storageQuota";
+                var response = ag.Execute();
+                if (response.StorageQuota.Limit.HasValue)
+                    return response.StorageQuota.Limit.Value;
+                else
+                    return -1;
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+                return -1;
+            }
+        }
     }
 }

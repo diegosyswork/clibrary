@@ -1,6 +1,5 @@
 C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\bin\Debug\SysWork.Controls.dll
 C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\bin\Debug\SysWork.Controls.pdb
-C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.csprojResolveAssemblyReference.cache
 C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.InputBox.FrmInputBox.resources
 C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.csproj.GenerateResource.Cache
 C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.csproj.CoreCompileInputs.cache
