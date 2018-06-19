@@ -48,6 +48,7 @@
     <Compile Include="DataGridViewNumericColumn.designer.cs">
       <DependentUpon>DataGridViewNumericColumn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\GUIExtensions.cs" />
     <Compile Include="InputBox\FrmInputBox.cs">
       <SubType>Form</SubType>
     </Compile>

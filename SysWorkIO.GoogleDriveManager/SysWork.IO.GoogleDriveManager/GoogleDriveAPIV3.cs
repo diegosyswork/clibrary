@@ -25,7 +25,7 @@ namespace SysWork.IO.GoogleDriveManager
     }
     public interface IGoogleStatusNotifier
     {
-        void UpdateStatus(EGoogleStatusNotifierMessageType messateType, long bytes);
+        void GoogleDriveUpdateStatus(EGoogleStatusNotifierMessageType messageType, long percent);
     }
 
     public class GoogleDriveFile
@@ -70,7 +70,7 @@ namespace SysWork.IO.GoogleDriveManager
 
         }
 
-        public static List<GoogleDriveFile> ListDriveFiles(string fileName = null, string fileType = null)
+        public static List<GoogleDriveFile> ListDriveFiles(string fileName = null, string fileType = null, bool includeTrashed = false, bool includeTeamDriveItems = false)
         {
             List<GoogleDriveFile> filesList = new List<GoogleDriveFile>();
 
@@ -78,8 +78,8 @@ namespace SysWork.IO.GoogleDriveManager
             {
                 FilesResource.ListRequest listRequest = _driveService.Files.List();
                 listRequest.PageSize = 1000;
-                listRequest.Fields = "nextPageToken, files(mimeType, id, name, parents, size, modifiedTime, md5Checksum, webViewLink)";
-                
+                listRequest.Fields = "nextPageToken, files(mimeType, id, name, parents, size, modifiedTime, md5Checksum, webViewLink, trashed)";
+                listRequest.IncludeTeamDriveItems = includeTeamDriveItems;
                 // List files.
                 IList<Google.Apis.Drive.v3.Data.File> files = listRequest.Execute().Files;
                 filesList.Clear();
@@ -87,17 +87,22 @@ namespace SysWork.IO.GoogleDriveManager
                 {
                     foreach (var file in files)
                     {
-                            
-                        filesList.Add(new GoogleDriveFile(
-                        file.Name,
-                        SizeFix(file.Size.ToString(), file.MimeType),
-                        file.ModifiedTime.ToString(),
-                        file.MimeType,
-                        file.Id, file.Md5Checksum,
-                        file.WebViewLink));
+                        bool isTrashed = file.Trashed ?? false;
+                        bool includeInList = (!isTrashed) || includeTrashed;
 
-                        System.Diagnostics.Debug.WriteLine("{0} {1} {2} {3}",
-                            file.Name, file.Id, file.MimeType, file.Size.ToString());
+                        if (includeInList)
+                        {
+                            filesList.Add(new GoogleDriveFile(
+                            file.Name,
+                            SizeFix(file.Size.ToString(), file.MimeType),
+                            file.ModifiedTime.ToString(),
+                            file.MimeType,
+                            file.Id, file.Md5Checksum,
+                            file.WebViewLink));
+
+                            System.Diagnostics.Debug.WriteLine("{0} {1} {2} {3}",
+                                file.Name, file.Id, file.MimeType, file.Size.ToString());
+                        }
                     }
                 }
                 else
@@ -119,23 +124,30 @@ namespace SysWork.IO.GoogleDriveManager
                         request.Q += "and (mimeType contains '" + fileType + "')";
                     }
                     request.Spaces = "drive";
-                    request.Fields = "nextPageToken, files(mimeType, id, name, parents, size, modifiedTime, md5Checksum, webViewLink)";
+                    request.Fields = "nextPageToken, files(mimeType, id, name, parents, size, modifiedTime, md5Checksum, webViewLink, trashed)";
                     request.PageToken = pageToken;
                     var result = request.Execute();
                     foreach (var file in result.Files)
                     {
-                        filesList.Add(new GoogleDriveFile(
-                            file.Name,
-                            SizeFix(file.Size.ToString(), file.MimeType),
-                            file.ModifiedTime.ToString(),
-                            file.MimeType,
-                            file.Id, file.Md5Checksum,
-                            file.WebViewLink));
+                        bool isTrashed = file.Trashed ?? false;
+                        bool includeInList = (!isTrashed) || includeTrashed;
+
+                        if (includeInList)
+                        {
+                            filesList.Add(new GoogleDriveFile(
+                                file.Name,
+                                SizeFix(file.Size.ToString(), file.MimeType),
+                                file.ModifiedTime.ToString(),
+                                file.MimeType,
+                                file.Id, file.Md5Checksum,
+                                file.WebViewLink));
+
+                        }
                     }
+
                     pageToken = result.NextPageToken;
                 } while (pageToken != null);
             }
-
             return filesList;
         }
 
@@ -159,8 +171,7 @@ namespace SysWork.IO.GoogleDriveManager
             else
             {
                 return type.Split('.').Last();
-            }
-            
+            }           
         }
 
         private static bool GetCredential(string clientSecretFile, string profileName)
@@ -200,7 +211,7 @@ namespace SysWork.IO.GoogleDriveManager
 
         private static GoogleDriveFile UploadFileToDrive(string folderId, string fileName, string filePath, string fileType, IGoogleStatusNotifier statusNotifier)
         {
-            statusNotifier.UpdateStatus(EGoogleStatusNotifierMessageType.Uploading, 0);
+            statusNotifier.GoogleDriveUpdateStatus(EGoogleStatusNotifierMessageType.Uploading, 0);
             long totalSize = 100000;
             FileInfo fi = new FileInfo(filePath);
             totalSize = fi.Length;
@@ -228,20 +239,20 @@ namespace SysWork.IO.GoogleDriveManager
                     {
                         case UploadStatus.Uploading:
                             {
-                                statusNotifier.UpdateStatus(EGoogleStatusNotifierMessageType.Uploading, ((progress.BytesSent * 100) / totalSize));
+                                statusNotifier.GoogleDriveUpdateStatus(EGoogleStatusNotifierMessageType.Uploading, ((progress.BytesSent * 100) / totalSize));
                                 System.Diagnostics.Debug.WriteLine(progress.BytesSent);
                                 break;
                             }
                         case UploadStatus.Completed:
                             {
 
-                                statusNotifier.UpdateStatus(EGoogleStatusNotifierMessageType.Completed, 100);
+                                statusNotifier.GoogleDriveUpdateStatus(EGoogleStatusNotifierMessageType.Completed, 100);
                                 System.Diagnostics.Debug.WriteLine("Upload complete.");
                                 break;
                             }
                         case UploadStatus.Failed:
                             {
-                                statusNotifier.UpdateStatus(EGoogleStatusNotifierMessageType.Failed, 0);
+                                statusNotifier.GoogleDriveUpdateStatus(EGoogleStatusNotifierMessageType.Failed, 0);
                                 System.Diagnostics.Debug.WriteLine("Upload failed.");
                                 break;
                             }
@@ -394,7 +405,7 @@ namespace SysWork.IO.GoogleDriveManager
         public static void DownloadFromDrive(string filename, string fileId, string savePath, string mimeType, IGoogleStatusNotifier statusNotifier)
         {
             long totalSize = 100000;
-            statusNotifier.UpdateStatus(EGoogleStatusNotifierMessageType.Downloading, 0);
+            statusNotifier.GoogleDriveUpdateStatus(EGoogleStatusNotifierMessageType.Downloading, 0);
             if (Path.HasExtension(filename))
             {
                 var request = _driveService.Files.Get(fileId);
@@ -412,20 +423,20 @@ namespace SysWork.IO.GoogleDriveManager
                             case DownloadStatus.Downloading:
                                 {
                                     System.Diagnostics.Debug.WriteLine(progress.BytesDownloaded);
-                                    statusNotifier.UpdateStatus(EGoogleStatusNotifierMessageType.Downloading, ((progress.BytesDownloaded * 100) / totalSize));
+                                    statusNotifier.GoogleDriveUpdateStatus(EGoogleStatusNotifierMessageType.Downloading, ((progress.BytesDownloaded * 100) / totalSize));
                                     break;
                                 }
                             case DownloadStatus.Completed:
                                 {
 
-                                    statusNotifier.UpdateStatus(EGoogleStatusNotifierMessageType.Completed, 100);
+                                    statusNotifier.GoogleDriveUpdateStatus(EGoogleStatusNotifierMessageType.Completed, 100);
                                     System.Diagnostics.Debug.WriteLine("Download complete.");
                                     break;
                                 }
                             case DownloadStatus.Failed:
                                 {
 
-                                    statusNotifier.UpdateStatus(EGoogleStatusNotifierMessageType.Failed, 0);
+                                    statusNotifier.GoogleDriveUpdateStatus(EGoogleStatusNotifierMessageType.Failed, 0);
                                     System.Diagnostics.Debug.WriteLine("Download failed.");
                                     break;
                                 }
@@ -459,18 +470,18 @@ namespace SysWork.IO.GoogleDriveManager
                             {
                                 case DownloadStatus.Downloading:
                                     {
-                                        statusNotifier.UpdateStatus(EGoogleStatusNotifierMessageType.Downloading, ((progress.BytesDownloaded * 100) / totalSize));
+                                        statusNotifier.GoogleDriveUpdateStatus(EGoogleStatusNotifierMessageType.Downloading, ((progress.BytesDownloaded * 100) / totalSize));
                                         Console.WriteLine(progress.BytesDownloaded);
                                         break;
                                     }
                                 case DownloadStatus.Completed:
                                     {
-                                        statusNotifier.UpdateStatus(EGoogleStatusNotifierMessageType.Completed, 100);
+                                        statusNotifier.GoogleDriveUpdateStatus(EGoogleStatusNotifierMessageType.Completed, 100);
                                         break;
                                     }
                                 case DownloadStatus.Failed:
                                     {
-                                        statusNotifier.UpdateStatus(EGoogleStatusNotifierMessageType.Failed, ((progress.BytesDownloaded * 100) / totalSize));
+                                        statusNotifier.GoogleDriveUpdateStatus(EGoogleStatusNotifierMessageType.Failed, ((progress.BytesDownloaded * 100) / totalSize));
                                         break;
                                     }
                             }
