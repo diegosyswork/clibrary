@@ -87,6 +87,10 @@ namespace SysWork.Data.DbUtil.LoggerDb
         {
             return Logger(DateTime.Now, mensaje: mensaje, tag: tag);
         }
+        public static bool Log(string tag, string mensaje,Exception excepcion)
+        {
+            return Logger(DateTime.Now, mensaje: mensaje, tag: tag,excepcion:excepcion.ToString());
+        }
         public static bool Log(string tag, string mensaje, string usuario)
         {
             return Logger(DateTime.Now, mensaje: mensaje, tag: tag, usuario: usuario);

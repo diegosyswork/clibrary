@@ -1,9 +1,9 @@
-C:\SWSISTEMAS\C#Library\SysWorkDataDbUtil\SysWork.Data.DbUtil\bin\Debug\SysWork.Data.DbUtil.dll
-C:\SWSISTEMAS\C#Library\SysWorkDataDbUtil\SysWork.Data.DbUtil\bin\Debug\SysWork.Data.DbUtil.pdb
 C:\SWSISTEMAS\C#Library\SysWorkDataDbUtil\SysWork.Data.DbUtil\obj\Debug\SysWork.Data.DbUtil.csprojResolveAssemblyReference.cache
 C:\SWSISTEMAS\C#Library\SysWorkDataDbUtil\SysWork.Data.DbUtil\obj\Debug\SysWork.Data.DbUtil.FrmDatosConexion.resources
 C:\SWSISTEMAS\C#Library\SysWorkDataDbUtil\SysWork.Data.DbUtil\obj\Debug\SysWork.Data.DbUtil.Properties.Resources.resources
 C:\SWSISTEMAS\C#Library\SysWorkDataDbUtil\SysWork.Data.DbUtil\obj\Debug\SysWork.Data.DbUtil.csproj.GenerateResource.Cache
 C:\SWSISTEMAS\C#Library\SysWorkDataDbUtil\SysWork.Data.DbUtil\obj\Debug\SysWork.Data.DbUtil.csproj.CoreCompileInputs.cache
+C:\SWSISTEMAS\C#Library\SysWorkDataDbUtil\SysWork.Data.DbUtil\bin\Debug\SysWork.Data.DbUtil.dll
+C:\SWSISTEMAS\C#Library\SysWorkDataDbUtil\SysWork.Data.DbUtil\bin\Debug\SysWork.Data.DbUtil.pdb
 C:\SWSISTEMAS\C#Library\SysWorkDataDbUtil\SysWork.Data.DbUtil\obj\Debug\SysWork.Data.DbUtil.dll
 C:\SWSISTEMAS\C#Library\SysWorkDataDbUtil\SysWork.Data.DbUtil\obj\Debug\SysWork.Data.DbUtil.pdb

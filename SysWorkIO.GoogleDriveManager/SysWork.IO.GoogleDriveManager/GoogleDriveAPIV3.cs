@@ -65,9 +65,7 @@ namespace SysWork.IO.GoogleDriveManager
 
         public static bool GoogleDriveConnection(string jsonSecretFile, string profileName)
         {
-
             return (GetCredential(jsonSecretFile, profileName) && CreateDriveService());
-
         }
 
         public static List<GoogleDriveFile> ListDriveFiles(string fileName = null, string fileType = null, bool includeTrashed = false, bool includeTeamDriveItems = false)
@@ -81,28 +79,23 @@ namespace SysWork.IO.GoogleDriveManager
                 listRequest.Fields = "nextPageToken, files(mimeType, id, name, parents, size, modifiedTime, md5Checksum, webViewLink, trashed)";
                 listRequest.IncludeTeamDriveItems = includeTeamDriveItems;
                 // List files.
+                listRequest.Q = " trashed = " + includeTrashed.ToString();
                 IList<Google.Apis.Drive.v3.Data.File> files = listRequest.Execute().Files;
                 filesList.Clear();
                 if (files != null && files.Count > 0)
                 {
                     foreach (var file in files)
                     {
-                        bool isTrashed = file.Trashed ?? false;
-                        bool includeInList = (!isTrashed) || includeTrashed;
+                        filesList.Add(new GoogleDriveFile(
+                        file.Name,
+                        SizeFix(file.Size.ToString(), file.MimeType),
+                        file.ModifiedTime.ToString(),
+                        file.MimeType,
+                        file.Id, file.Md5Checksum,
+                        file.WebViewLink));
 
-                        if (includeInList)
-                        {
-                            filesList.Add(new GoogleDriveFile(
-                            file.Name,
-                            SizeFix(file.Size.ToString(), file.MimeType),
-                            file.ModifiedTime.ToString(),
-                            file.MimeType,
-                            file.Id, file.Md5Checksum,
-                            file.WebViewLink));
-
-                            System.Diagnostics.Debug.WriteLine("{0} {1} {2} {3}",
-                                file.Name, file.Id, file.MimeType, file.Size.ToString());
-                        }
+                        System.Diagnostics.Debug.WriteLine("{0} {1} {2} {3}",
+                            file.Name, file.Id, file.MimeType, file.Size.ToString());
                     }
                 }
                 else
@@ -118,22 +111,22 @@ namespace SysWork.IO.GoogleDriveManager
                     FilesResource.ListRequest request = _driveService.Files.List();
                     request.PageSize = 1000;
                     //request.Q = "mimeType='image/jpeg'";
-                    request.Q = "name contains '" + fileName + "'";
+
+                    request.Q = "";
+                    if (fileName != null)
+                        request.Q += (request.Q==""?"":" and ") + " (name contains '" + fileName + "')";
+
                     if (fileType != null)
-                    {
-                        request.Q += "and (mimeType contains '" + fileType + "')";
-                    }
+                        request.Q += (request.Q == "" ? "" : " and ") + " (mimeType contains '" + fileType + "')";
+
+                    request.Q += (request.Q == "" ? "" : " and ") + " (trashed = " + includeTrashed.ToString() + ")";
+
                     request.Spaces = "drive";
                     request.Fields = "nextPageToken, files(mimeType, id, name, parents, size, modifiedTime, md5Checksum, webViewLink, trashed)";
                     request.PageToken = pageToken;
                     var result = request.Execute();
                     foreach (var file in result.Files)
                     {
-                        bool isTrashed = file.Trashed ?? false;
-                        bool includeInList = (!isTrashed) || includeTrashed;
-
-                        if (includeInList)
-                        {
                             filesList.Add(new GoogleDriveFile(
                                 file.Name,
                                 SizeFix(file.Size.ToString(), file.MimeType),
@@ -142,7 +135,6 @@ namespace SysWork.IO.GoogleDriveManager
                                 file.Id, file.Md5Checksum,
                                 file.WebViewLink));
 
-                        }
                     }
 
                     pageToken = result.NextPageToken;
@@ -307,6 +299,17 @@ namespace SysWork.IO.GoogleDriveManager
                     return true;
                 }
             }
+            return false;
+        }
+
+        public static bool ExistsFile(string fileName, string fileId)
+        {
+            foreach (GoogleDriveFile gdf in GoogleDriveAPIV3.ListDriveFiles(fileName: fileName, includeTrashed: false))
+            {
+                if (gdf.Id== fileId)
+                    return true;
+            }
+
             return false;
         }
 
@@ -511,17 +514,18 @@ namespace SysWork.IO.GoogleDriveManager
         /// <param name="who">
         /// User or group e-mail address, domain name or null for "default" type.
         /// </param>
-        /// <param name="type">The value "user", "group", "domain" or "default".</param>
+        /// <param name="type">The value "user", "group", "domain", "anyone" or "default".</param>
         /// <param name="role">The value "owner", "writer" or "reader".</param>
+        /// <param name="allowFileDiscovery">Only valid for domain or anyone</param>
         /// <returns>The inserted permission, null is returned if an API error occurred</returns>
-        public static Permission InsertPermission(DriveService service, String fileId, String who, String type, String role)
+        public static Permission InsertPermission(DriveService service, String fileId, String who, String type, String role, bool allowFileDiscovery)
         {
             Permission newPermission = new Permission();
 
             newPermission.Type = type;
             newPermission.Role = role;
             newPermission.EmailAddress = who;
-
+            newPermission.AllowFileDiscovery = allowFileDiscovery;
             try
             {
                 return service.Permissions.Create(newPermission, fileId).Execute();
