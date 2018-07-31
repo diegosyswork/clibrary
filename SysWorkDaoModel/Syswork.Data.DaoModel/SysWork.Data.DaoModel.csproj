@@ -41,9 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeWriter\CodeWriterUtil.cs" />
     <Compile Include="Core.cs" />
     <Compile Include="Attributes\DbColumnAttribute.cs" />
     <Compile Include="Attributes\DbTableAttribute.cs" />
+    <Compile Include="CodeWriter\DaoClassFromDb.cs" />
+    <Compile Include="CodeWriter\EntityClassFromDb.cs" />
     <Compile Include="LambdaSqlBuilder\Adapter\ISqlAdapter.cs" />
     <Compile Include="LambdaSqlBuilder\Adapter\SqlAdapterBase.cs" />
     <Compile Include="LambdaSqlBuilder\Adapter\SqlServer2008Adapter.cs" />

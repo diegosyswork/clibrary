@@ -57,7 +57,5 @@ namespace SysWork.Data.DbUtil
                 return iter.Current;
             }
         }
-
-
     }
 }

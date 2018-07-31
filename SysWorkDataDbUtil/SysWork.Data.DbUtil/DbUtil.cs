@@ -33,7 +33,7 @@ namespace SysWork.Data.DbUtil
 
             string mensajeError;
 
-            bool huboConexionExitosa = CunnectionSuccess(connectionSb.ConnectionString.ToString(), out mensajeError);
+            bool huboConexionExitosa = ConnectionSuccess(connectionSb.ConnectionString.ToString(), out mensajeError);
 
             bool solicitarParametrosConexion = (!huboConexionExitosa);
 
@@ -58,7 +58,7 @@ namespace SysWork.Data.DbUtil
                 if (!string.IsNullOrEmpty(frmDatosConexion.BaseDeDatos.Trim()))
                     connectionSb.InitialCatalog = frmDatosConexion.BaseDeDatos;
 
-                huboConexionExitosa = CunnectionSuccess(connectionSb.ConnectionString.ToString(), out mensajeError);
+                huboConexionExitosa = ConnectionSuccess(connectionSb.ConnectionString.ToString(), out mensajeError);
 
                 solicitarParametrosConexion = (!huboConexionExitosa) && (frmDatosConexion.DialogResult == DialogResult.OK);
             }
@@ -92,7 +92,19 @@ namespace SysWork.Data.DbUtil
 
             return true;
         }
-        public static bool CunnectionSuccess(string connectionString, out string mensajeError)
+        public static bool ConnectionSuccess(string dataSource,string initialCatalog,string userID, string password, out string mensajeError)
+        {
+            mensajeError = "";
+            SqlConnectionStringBuilder s = new SqlConnectionStringBuilder();
+            s.DataSource = dataSource;
+            s.UserID = userID;
+            s.Password = password;
+            s.InitialCatalog = initialCatalog;
+
+
+            return ConnectionSuccess(s.ConnectionString, out mensajeError);
+        }
+        public static bool ConnectionSuccess(string connectionString, out string mensajeError)
         {
             mensajeError = "";
             try
@@ -226,6 +238,22 @@ namespace SysWork.Data.DbUtil
                 return false;
             }
         }
+
+        public static List<string> GetListTables(string connectionString)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                DataTable schema = connection.GetSchema("Tables", new string[] { null, null, null, "BASE TABLE" });
+                List<string> TableNames = new List<string>();
+                foreach (DataRow row in schema.Rows)
+                {
+                    TableNames.Add(row[2].ToString());
+                }
+                return TableNames;
+            }
+        }
+
         public static bool ExistsColumn(string connectionString, string tableName, string columnName)
         {
 
