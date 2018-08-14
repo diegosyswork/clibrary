@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>tryDaoModelDelete</Title>
+            <Shortcut>tryDaoModelDelete</Shortcut>
+            <Description>Captura de Excepciones al eliminar </Description>
+            <Author>Diego Martinez</Author>
+            <SnippetTypes>
+                <SnippetType>Expansion</SnippetType>
+                <SnippetType>SurroundsWith</SnippetType>
+            </SnippetTypes>
+        </Header>
+        <Snippet>
+            <Declarations>
+                <Literal>
+                    <ID>expression</ID>
+                    <ToolTip>Exception type</ToolTip>
+                    <Function>SimpleTypeName(global::System.Exception)</Function>
+                </Literal>
+            </Declarations>
+            <Code Language="csharp"><![CDATA[
+              try
+            {
+                result = $selected$.DeleteById(_entity.id....);
+            }
+            catch (DaoModelException daoModelException)
+            {
+                LoggerDb.Log(ELoggerDbTagError.ErrorDeEliminacion.ToString(), daoModelException.DbCommand, daoModelException.OriginalException);
+                //MessageBox.Show("No pudo eliminarse el registro correctamente, ocurrio el siguiente error: \r\n\r\n" + daoModelException.Message, "Aviso al operador", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+			]]>
+            </Code>
+        </Snippet> 
+    </CodeSnippet>
+</CodeSnippets>

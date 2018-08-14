@@ -1,5 +1,0 @@
-C:\SWSISTEMAS\DaoModel\DaoModel\bin\Debug\DaoModel.dll
-C:\SWSISTEMAS\DaoModel\DaoModel\bin\Debug\DaoModel.pdb
-C:\SWSISTEMAS\DaoModel\DaoModel\obj\Debug\DaoModel.csproj.CoreCompileInputs.cache
-C:\SWSISTEMAS\DaoModel\DaoModel\obj\Debug\DaoModel.dll
-C:\SWSISTEMAS\DaoModel\DaoModel\obj\Debug\DaoModel.pdb
