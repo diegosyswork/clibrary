@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 namespace SysWork.Util.UtilForms
 {
-    public class UtilForm
+    public static class UtilForm
     {
         /// <summary>
         /// Limpia los controles (TextBox, ComboBox,CheckBox,RadioButton)

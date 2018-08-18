@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SysWork.Util.UtilForms
 {
-    public class UtilDataEntry
+    public static class UtilDataEntry
     {
         public static bool IsValidEmail(String mail)
         {
