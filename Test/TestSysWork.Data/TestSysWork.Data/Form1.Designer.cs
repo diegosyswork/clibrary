@@ -540,6 +540,7 @@
             this.BtnAddRangeCRepetidosSQL.TabIndex = 47;
             this.BtnAddRangeCRepetidosSQL.Text = "AddRange C/Repet";
             this.BtnAddRangeCRepetidosSQL.UseVisualStyleBackColor = true;
+            this.BtnAddRangeCRepetidosSQL.Click += new System.EventHandler(this.BtnAddRangeCRepetidosSQL_Click);
             // 
             // Form1
             // 

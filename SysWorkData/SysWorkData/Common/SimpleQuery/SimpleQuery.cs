@@ -12,6 +12,7 @@ namespace SysWork.Data.Common.SimpleQuery
         /// Dado un DbConnection instanciado y un commandText
         /// ejecuta una consulta de devuelve un IEnumerable dinamico.
         /// En caso que la conexion este cerrada, intenta abrirla.
+        /// *NO Cierra* la conexion al finalizar el metodo
         /// 
         /// </summary>
         /// <param name="dbConnection"></param>
@@ -19,15 +20,13 @@ namespace SysWork.Data.Common.SimpleQuery
         /// <returns>IEnumerable dinamico</returns>
         public static IEnumerable<dynamic> Execute(DbConnection dbConnection, string commandText)
         {
-            return Execute(DataObjectResolver.GetDataBaseEngineFromDbConnection(dbConnection), dbConnection, commandText);
+            return Execute(DataObjectResolver.GetDataBaseEngineFromDbConnection(dbConnection), dbConnection, commandText,false);
         }
 
-        public static IEnumerable<dynamic> Execute(EDataBaseEngine dataBaseEngine, string connectionString, string commandText)
+        public static IEnumerable<dynamic> Execute(EDataBaseEngine dataBaseEngine, string connectionString, string commandText,bool closeConnection = true)
         {
-            DbConnection dbConnection = DataObjectResolver.GetDbConnection(dataBaseEngine);
-            dbConnection.ConnectionString = connectionString;
-
-            return Execute(dataBaseEngine, dbConnection, commandText);
+            DbConnection dbConnection = DataObjectResolver.GetDbConnection(dataBaseEngine,connectionString);
+            return Execute(dataBaseEngine, dbConnection, commandText,closeConnection);
         }
         /// <summary>
         /// Dado un connectionString y un commandText intentará crear una
@@ -36,12 +35,31 @@ namespace SysWork.Data.Common.SimpleQuery
         /// <param name="connectionString"></param>
         /// <param name="commandText"></param>
         /// <returns></returns>
-        public static IEnumerable<dynamic> Execute(string connectionString, string commandText)
+        public static IEnumerable<dynamic> Execute(string connectionString, string commandText,bool closeConnection = true)
         {
             DbConnection dbConnection = DataObjectResolver.GetDbConnection(EDataBaseEngine.MSSqlServer);
             dbConnection.ConnectionString = connectionString;
 
-            return Execute(EDataBaseEngine.MSSqlServer, dbConnection, commandText);
+            return Execute(EDataBaseEngine.MSSqlServer, dbConnection, commandText, closeConnection);
+        }
+        private static IEnumerable<dynamic> Execute(EDataBaseEngine dataBaseEngine, DbConnection dbConnection, string commandText,bool closeConnection = true)
+        {
+            using (var connection = dbConnection)
+            {
+                if (connection.State != ConnectionState.Open)
+                    connection.Open();
+
+                using (var dbCommand = DataObjectResolver.GetDbCommand(dataBaseEngine, commandText, connection))
+                {
+                    using (DbDataReader dataReader = dbCommand.ExecuteReader(closeConnection ? CommandBehavior.CloseConnection: CommandBehavior.Default))
+                    {
+                        foreach (IDataRecord record in dataReader)
+                        {
+                            yield return new DataRecordDynamicWrapper(record);
+                        }
+                    }
+                }
+            }
         }
         /// <summary>
         /// Dado un IEnumerableDinamico y una posicion, devuelve el dinamico
@@ -57,25 +75,6 @@ namespace SysWork.Data.Common.SimpleQuery
             {
                 for (int i = 0; i <= index; i++, iter.MoveNext()) ;
                 return iter.Current;
-            }
-        }
-        private static IEnumerable<dynamic> Execute(EDataBaseEngine dataBaseEngine, DbConnection dbConnection, string commandText)
-        {
-            using (var connection = dbConnection)
-            {
-                if (connection.State != ConnectionState.Open)
-                    connection.Open();
-
-                using (var command = DataObjectResolver.GetDbCommand(dataBaseEngine, commandText, connection))
-                {
-                    using (DbDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection))
-                    {
-                        foreach (IDataRecord record in reader)
-                        {
-                            yield return new DataRecordDynamicWrapper(record);
-                        }
-                    }
-                }
             }
         }
 

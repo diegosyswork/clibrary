@@ -7,12 +7,14 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
-using SysWork.Data.DaoModel.LambdaSqlBuilder;
+using System.Data.OleDb;
 using System.Data.Common;
 using SysWork.Data.Common;
 using SysWork.Data.Common.ObjectResolver;
-using System.Data.OleDb;
+using SysWork.Data.DaoModel.LambdaSqlBuilder;
 using SysWork.Data.Extensions.OleDbCommandExtensions;
+using SysWork.Data.DaoModel.Interfaces;
+using SysWork.Data.DaoModel.Exceptions;
 
 namespace SysWork.Data.DaoModel
 {
@@ -22,22 +24,11 @@ namespace SysWork.Data.DaoModel
         internal Int32? MaxLenght { get; set; }
     }
 
-    public interface IBaseDao<T>
-    {
-        long Add(T entity);
-        bool AddRange(IList<T> entities);
-        bool Update(T entity);
-        bool UpdateRange(IList<T> entities);
-        bool DeleteById(long id);
-        T GetById(object id);
-        IList<T> GetAll();
-        IList<T> Find(IEnumerable<object> ids);
-    }
     /// <summary>
     /// Author : Diego Martinez
     /// Email : dmartinez@syswork.com.ar
     /// Date : 07/12/2017
-    /// Description : Clase abstracta para implementar CRUD con las bases de datos.
+    /// Description : Clase abstracta para implementar operaciones CRUD.
     ///               Debe definirse el motor de base de datos. Por default es MSSqlServer.
     /// 
     /// Update : 17/08/2017
@@ -80,7 +71,6 @@ namespace SysWork.Data.DaoModel
         {
             BaseDaoConstructorResolver(ConnectionString, EDataBaseEngine.MSSqlServer);
         }
-
         /// <summary>
         /// Crea una nueva instancia de BaseDao, especificando el motor de base de datos.
         /// </summary>
@@ -90,7 +80,6 @@ namespace SysWork.Data.DaoModel
         {
             BaseDaoConstructorResolver(ConnectionString, dataBaseEngine);
         }
-
         private void BaseDaoConstructorResolver(string ConnectionString, EDataBaseEngine dataBaseEngine)
         {
             _dataBaseEngine = dataBaseEngine;
@@ -108,7 +97,6 @@ namespace SysWork.Data.DaoModel
             this.ConnectionString = ConnectionString;
 
             GetDbColumnsAndAtributes();
-
         }
         private static string GetTableNameFromEntity(Type type)
         {
@@ -118,12 +106,6 @@ namespace SysWork.Data.DaoModel
             else
                 return type.Name;
         }
-
-        public long Add(T entity)
-        {
-            return Add(entity, null, null);
-        }
-
         public long Add(T entity, out string errMessage)
         {
             errMessage = "";
@@ -145,18 +127,25 @@ namespace SysWork.Data.DaoModel
             }
             return identity;
         }
+        public long Add(T entity)
+        {
+            return Add(entity, null, null);
+        }
         public long Add(T entity, IDbConnection extConnection)
         {
             return Add(entity, extConnection, null);
         }
-
+        public long Add(T entity, IDbTransaction dbTransaction)
+        {
+            return Add(entity, null, dbTransaction);
+        }
         public long Add(T entity, IDbConnection extConnection,IDbTransaction dbTransaction)
         {
             long identity = 0;
             bool hasIdentity = false;
 
             if (extConnection == null && dbTransaction != null)
-                throw new ArgumentException("Se especifico una dbTransaction pero no una dbConnection externa");
+                extConnection = dbTransaction.Connection;
 
             IDbConnection dbConnection = extConnection ?? GetIDbConnection();
             IDbCommand dbCommand = dbConnection.CreateCommand();
@@ -226,7 +215,6 @@ namespace SysWork.Data.DaoModel
                         dbConnection.Close();
                         dbConnection.Dispose();
                     }
-
                 }
                 catch (Exception exception)
                 {
@@ -249,10 +237,6 @@ namespace SysWork.Data.DaoModel
 
             throw new ArgumentException("Es necesario revisar el metodo GetSubQueryScalar()");
         }
-        public bool AddRange(IList<T> entities)
-        {
-            return AddRange(entities, null, null,out long recordsAffected);
-        }
         public bool AddRange(IList<T> entities, out string errMessage)
         {
             errMessage = "";
@@ -260,7 +244,7 @@ namespace SysWork.Data.DaoModel
 
             try
             {
-                result = AddRange(entities,null);
+                result = AddRange(entities);
             }
             catch (DaoModelException daoModelException)
             {
@@ -275,9 +259,17 @@ namespace SysWork.Data.DaoModel
 
             return result;
         }
+        public bool AddRange(IList<T> entities)
+        {
+            return AddRange(entities, null,null);
+        }
         public bool AddRange(IList<T> entities, IDbConnection extConnection)
         {
-            return AddRange(entities, extConnection,null,out long recordsaffected);
+            return AddRange(entities, extConnection, null);
+        }
+        public bool AddRange(IList<T> entities, IDbTransaction dbTransaction)
+        {
+            return AddRange(entities, null, dbTransaction);
         }
         public bool AddRange(IList<T> entities, IDbConnection extConnection, IDbTransaction dbTransaction)
         {
@@ -287,7 +279,7 @@ namespace SysWork.Data.DaoModel
         {
             recordsAffected = 0;
             if (extConnection == null && dbTransaction != null)
-                throw new ArgumentException("Se especifico una dbTransaction pero no una dbConnection externa");
+                extConnection = dbTransaction.Connection;
 
             IDbConnection dbConnection = extConnection ?? GetIDbConnection();
             IDbCommand dbCommand;
@@ -338,7 +330,6 @@ namespace SysWork.Data.DaoModel
                         dbCommand.Transaction = (OleDbTransaction)dbTransaction;
 
                     recordsAffected += dbCommand.ExecuteNonQuery();
-
                 }
                 catch (Exception commandException)
                 {
@@ -354,12 +345,6 @@ namespace SysWork.Data.DaoModel
 
             return true;
         }
-
-        public bool Update(T entity)
-        {
-            return Update(entity, null, null);
-        }
-
         public bool Update(T entity, out string errMessage)
         {
             errMessage = "";
@@ -367,7 +352,7 @@ namespace SysWork.Data.DaoModel
 
             try
             {
-                result = Update(entity,null,null);
+                result = Update(entity);
             }
             catch (DaoModelException daoModelException)
             {
@@ -382,9 +367,17 @@ namespace SysWork.Data.DaoModel
 
             return result;
         }
+        public bool Update(T entity)
+        {
+            return Update(entity, null, null);
+        }
         public bool Update(T entity, IDbConnection extConnection)
         {
             return Update(entity, extConnection, null);
+        }
+        public bool Update(T entity, IDbTransaction dbTransaction)
+        {
+            return Update(entity, null, dbTransaction);
         }
         public bool Update(T entity, IDbConnection extConnection, IDbTransaction dbTransaction)
         {
@@ -395,7 +388,7 @@ namespace SysWork.Data.DaoModel
             recordsAffected = 0;
 
             if (extConnection == null && dbTransaction != null)
-                throw new ArgumentException("Se especifico una dbTransaction pero no una dbConnection externa");
+                extConnection = dbTransaction.Connection;
 
             IDbConnection dbConnection = extConnection ?? GetIDbConnection();
             IDbCommand dbCommand = dbConnection.CreateCommand();
@@ -468,11 +461,6 @@ namespace SysWork.Data.DaoModel
             }
             return true;
         }
-        public bool UpdateRange(IList<T> entities)
-        {
-            return UpdateRange(entities, null, null);
-        }
-
         public bool UpdateRange(IList<T> entities, out string errMessage)
         {
             bool result = false;
@@ -495,10 +483,18 @@ namespace SysWork.Data.DaoModel
 
             return result;
         }
+        public bool UpdateRange(IList<T> entities)
+        {
+            return UpdateRange(entities, null,null);
+        }
 
         private bool UpdateRange(IList<T> entities, IDbConnection extConnection)
         {
-            return UpdateRange(entities, extConnection, null,out long recodsAffected);
+            return UpdateRange(entities, extConnection, null);
+        }
+        private bool UpdateRange(IList<T> entities, IDbTransaction dbTransaction)
+        {
+            return UpdateRange(entities, null, dbTransaction);
         }
         private bool UpdateRange(IList<T> entities, IDbConnection extConnection, IDbTransaction dbTransaction)
         {
@@ -510,7 +506,7 @@ namespace SysWork.Data.DaoModel
             recordsAffected = 0;
 
             if (extConnection == null && dbTransaction != null)
-                throw new ArgumentException("Se especifico una dbTransaction pero no una dbConnection externa");
+                extConnection = dbTransaction.Connection;
 
             IDbConnection dbConnection = extConnection ?? GetIDbConnection();
             IDbCommand dbCommand;
@@ -587,10 +583,6 @@ namespace SysWork.Data.DaoModel
 
             return true;
         }
-        public bool DeleteById(long Id)
-        {
-            return DeleteById(Id, null, null);
-        }
 
         public bool DeleteById(long Id, out string errMessage)
         {
@@ -614,9 +606,17 @@ namespace SysWork.Data.DaoModel
 
             return result;
         }
+        public bool DeleteById(long Id)
+        {
+            return DeleteById(Id, null, null);
+        }
         public bool DeleteById(long Id, IDbConnection extConnection)
         {
             return DeleteById(Id, extConnection, null);
+        }
+        public bool DeleteById(long Id, IDbTransaction dbTransaction)
+        {
+            return DeleteById(Id, null, dbTransaction);
         }
         public bool DeleteById(long Id, IDbConnection extConnection, IDbTransaction dbTransaction)
         {
@@ -627,7 +627,7 @@ namespace SysWork.Data.DaoModel
         {
             recordsAffected = 0;
             if (extConnection == null && dbTransaction != null)
-                throw new ArgumentException("Se especifico una dbTransaction pero no una dbConnection externa");
+                extConnection = dbTransaction.Connection;
 
             IDbConnection dbConnection = extConnection ?? GetIDbConnection();
             IDbCommand dbCommand = dbConnection.CreateCommand();
@@ -1055,7 +1055,7 @@ namespace SysWork.Data.DaoModel
             IDbDataParameter dataParameter = GetIDbDataParameter();
 
             dataParameter.ParameterName = parameterName;
-            dataParameter.Value = value == null ? (Object)DBNull.Value : value;
+            dataParameter.Value = value ?? (Object)DBNull.Value;
 
             if (size != null)
                 dataParameter.Size = (int)size;
@@ -1075,7 +1075,7 @@ namespace SysWork.Data.DaoModel
 
             dataParameter.ParameterName = parameterName;
             dataParameter.DbType = DbType;
-            dataParameter.Value = value == null ? (Object)DBNull.Value : value;
+            dataParameter.Value = value ?? (Object)DBNull.Value;
 
             if (size != null && size !=0)
                 dataParameter.Size = (int)size;
@@ -1254,31 +1254,6 @@ namespace SysWork.Data.DaoModel
                 }
             }
             return obj;
-        }
-    }
-    /// <summary>
-    /// 
-    /// Wrapper de excepciones, permite capturar la excepcion original, en caso que haya un DbCommand,
-    /// el contenido del mismo y el StackTrace original.
-    /// 
-    /// </summary>
-    public class DaoModelException : Exception
-    {
-        public Exception OriginalException { get; private set; }
-        public IDbCommand DbCommand { get; private set; }
-        public string OriginalStackTrace { get; private set; }
-
-        public DaoModelException(Exception originalException, IDbCommand dbCommand) : base(originalException.Message)
-        {
-            this.OriginalException = originalException;
-            this.DbCommand = dbCommand;
-            this.OriginalStackTrace = originalException.StackTrace;
-        }
-        public DaoModelException(Exception originalException) : base(originalException.Message)
-        {
-            this.OriginalException = originalException;
-            this.DbCommand = null;
-            this.OriginalStackTrace = originalException.StackTrace;
         }
     }
 }

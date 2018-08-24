@@ -51,6 +51,8 @@ namespace SysWork.Data.DaoModel.CodeWriter
             builder.AppendLine(CodeWriterUtil.AddUsing("System.Linq"));
             builder.AppendLine(CodeWriterUtil.AddUsing("System.Text"));
             builder.AppendLine(CodeWriterUtil.AddUsing("System.Threading.Tasks"));
+            builder.AppendLine(CodeWriterUtil.AddUsing("SysWork.Data.Common"));
+            builder.AppendLine(CodeWriterUtil.AddUsing("SysWork.Data.DaoModel"));
             builder.AppendLine(CodeWriterUtil.AddUsing("SysWork.Data.DaoModel.Attributes"));
             builder.AppendLine(CodeWriterUtil.AddUsing(_nameSpace + ".Entities"));
             builder.AppendLine(CodeWriterUtil.StartNamespace(_nameSpace + ".Daos"));
@@ -208,7 +210,7 @@ namespace SysWork.Data.DaoModel.CodeWriter
         {
             string ret = "";
 
-            ret += "\t\t public Dao" + _entityName + "(string connectionString) : base(connectionString)" + Environment.NewLine;
+            ret += "\t\t public Dao" + _entityName + "(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString,dataBaseEngine)" + Environment.NewLine;
             ret += "\t\t {" + Environment.NewLine;
             ret += "\t\t " + Environment.NewLine;
             ret += "\t\t }" + Environment.NewLine;

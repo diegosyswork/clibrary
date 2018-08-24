@@ -5,3 +5,4 @@ C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Contr
 C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.csproj.CoreCompileInputs.cache
 C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.dll
 C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.pdb
+C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.csprojResolveAssemblyReference.cache

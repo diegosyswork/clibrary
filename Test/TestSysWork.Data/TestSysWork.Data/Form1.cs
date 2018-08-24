@@ -543,5 +543,10 @@ namespace TestDaoModelDataCommon
                 transaction.Rollback();
             }
         }
+
+        private void BtnAddRangeCRepetidosSQL_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

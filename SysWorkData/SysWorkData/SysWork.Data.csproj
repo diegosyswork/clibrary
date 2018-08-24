@@ -68,6 +68,8 @@
     <Compile Include="DaoModel\CodeWriter\DaoClassFromDb.cs" />
     <Compile Include="DaoModel\CodeWriter\EntityClassFromDb.cs" />
     <Compile Include="DaoModel\Core.cs" />
+    <Compile Include="DaoModel\Exceptions\DaoModelException.cs" />
+    <Compile Include="DaoModel\Interfaces\IBaseDao.cs" />
     <Compile Include="DaoModel\LambdaSqlBuilder\Adapter\ISqlAdapter.cs" />
     <Compile Include="DaoModel\LambdaSqlBuilder\Adapter\SqlAdapterBase.cs" />
     <Compile Include="DaoModel\LambdaSqlBuilder\Adapter\SqlServer2008Adapter.cs" />

@@ -264,7 +264,7 @@ namespace SysWork.Data.Common.Utilities
         }
 
 
-        public static bool VerfifySQLConnectionStringOrGetParams(string connectionStringName, string defaultDataSource = null, string defaultUserId = null, string defaultPassWord = null, string defaultInitialCatalog = null)
+        public static bool VerifySQLConnectionStringOrGetParams(string connectionStringName, string defaultDataSource = null, string defaultUserId = null, string defaultPassWord = null, string defaultInitialCatalog = null)
         {
             SqlConnectionStringBuilder connectionSb = new SqlConnectionStringBuilder();
             bool userGotParameters = false;

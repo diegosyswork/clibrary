@@ -41,7 +41,6 @@ namespace SysWork.Data.Logger
         private static LoggerDb _loggerDbInstance = null;
         private static DaoLogDb _daoLogDb = null;
 
-
         private LoggerDb()
         {
             if (string.IsNullOrEmpty(ConnectionString))
@@ -212,11 +211,13 @@ namespace SysWork.Data.Logger
 
             StackTrace st = new StackTrace();
 
-            LogDb logDb = new LogDb();
-            logDb.FechaHora = fechaHora;
-            logDb.Usuario = usuario;
-            logDb.Tag = tag;
-            logDb.Mensaje = mensaje;
+            LogDb logDb = new LogDb
+            {
+                FechaHora = fechaHora,
+                Usuario = usuario,
+                Tag = tag,
+                Mensaje = mensaje
+            };
 
             if (modulo == null)
                 modulo = st.GetFrame(2).GetMethod().DeclaringType.Name;
