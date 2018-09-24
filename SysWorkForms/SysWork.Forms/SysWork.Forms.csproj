@@ -44,6 +44,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractCommunicatorProvider.cs" />
+    <Compile Include="Controls\BindableListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\GridLineDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FormsABM\FormABM.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -91,8 +97,6 @@
   <ItemGroup>
     <None Include="Resources\consulta-48x48.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

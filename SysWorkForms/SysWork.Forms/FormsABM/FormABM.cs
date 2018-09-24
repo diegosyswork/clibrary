@@ -117,8 +117,14 @@ namespace SysWork.Forms.FormsABM
             this.KeyPreview = true;
             this.KeyDown += FormABM_KeyDown;
             this.Load += FormABM_Load;
-
+            this.Shown += FormABM_Shown;
+            
             _toolBarABM.ToolBarABMClick += _toolBarABM_ToolBarABMClick;
+        }
+
+        private void FormABM_Shown(object sender, EventArgs e)
+        {
+            SetearFocoUniqueControl();
         }
 
         private void SetearPosicion()
@@ -280,9 +286,20 @@ namespace SysWork.Forms.FormsABM
             
             ModoEdicion(false);
 
+            SetearFocoUniqueControl();
+
             _errorProvider.Clear();
             _noLanzarEventosCombos = false;
             _noValidarFormulario = false;
+        }
+
+        protected virtual void SetearFocoUniqueControl()
+        {
+            if (!string.IsNullOrEmpty(UniqueKeyControls))
+            {
+                string[] controlesUnique = UniqueKeyControls.Split(',');
+                this.Controls.Find(controlesUnique[0], true)[0].Focus();
+            }
         }
 
         protected virtual void AsignarDatos()

@@ -58,7 +58,6 @@ namespace SysWork.Data.Logger
             
         }
 
-
         private string GetLogDbScript()
         {
 

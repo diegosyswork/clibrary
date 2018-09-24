@@ -12,6 +12,9 @@ using SysWork.Data.Common;
 using SysWork.Data.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.SimpleQuery;
 using SysWork.Data.Common.Utilities;
+using Microsoft.VisualBasic;
+using SysWork.Data.DaoModel;
+using SysWork.Data.Common.DbConnectionUtilities;
 
 namespace TestDaoModelDataCommon
 {
@@ -100,6 +103,28 @@ namespace TestDaoModelDataCommon
             p.Telefono = "11" + RandomNumber(500);
             idGenerado = _daoPersonaSQL.Add(p);
             MessageBox.Show("Inserto uno que Excede los maximos de los textos (para probar parametros) idGenerado : " + idGenerado);
+
+            try
+            {
+                p = new Persona();
+                p.Apellido = RandomString(500);
+                p.Nombre = RandomString(500);
+                p.Dni = RandomNumber(500);
+                p.FechaNacimiento = DateTime.Parse("24/05/1980");
+                p.Telefono = "11" + RandomNumber(500);
+                idGenerado = _daoPersonaSQL.Add(p);
+                idGenerado = _daoPersonaSQL.Add(p);
+                MessageBox.Show("Inserto repetido: " + idGenerado);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+
+
+
         }
         private void BtnAddOleDb_Click(object sender, EventArgs e)
         {
@@ -547,6 +572,82 @@ namespace TestDaoModelDataCommon
         private void BtnAddRangeCRepetidosSQL_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void BtnExecuteNonQuery_Click(object sender, EventArgs e)
+        {
+            long recordsAffected = _daoPersonaSQLite.GetDbConnectionExecute().SqlQuery(txtQuery.Text).ExecuteNonQuery(); 
+            MessageBox.Show($"records affected = {recordsAffected}");
+        }
+
+        private void BtnExecuteNonQuerySQL_Click(object sender, EventArgs e)
+        {
+            long recordsAffected = _daoPersonaSQL.GetDbConnectionExecute().SqlQuery(txtQuerySQL.Text).ExecuteNonQuery();
+            MessageBox.Show($"records affected = {recordsAffected}");
+        }
+
+        private void BtnExecuteNonQueryOleDB_Click(object sender, EventArgs e)
+        {
+            long recordsAffected = _daoPersonaOleDb.GetDbConnectionExecute().SqlQuery(txtQueryOleDb.Text).ExecuteNonQuery();
+            MessageBox.Show($"records affected = {recordsAffected}");
+
+        }
+
+        private void BtnExecuteNonQueryWparam_Click(object sender, EventArgs e)
+        {
+
+            DbConnectionExecute daoExecuteNonQuery = new DbConnectionExecute(GetSqliteConnectionString(), EDataBaseEngine.SqLite);
+            daoExecuteNonQuery.SqlQuery(txtQuery.Text);
+
+            string paramName;
+            string paramValue;
+            bool  seguir = true;
+            while (seguir)
+            {
+                paramName = Interaction.InputBox("Ingrese el nombre del parametro", "Parametro");
+                paramValue = Interaction.InputBox("Ingrese el valor del parametro", "Parametro");
+                seguir = (!string.IsNullOrEmpty(paramName.Trim()) && !string.IsNullOrEmpty(paramValue.Trim()));
+
+                if (seguir)
+                {
+                    daoExecuteNonQuery.AddParameters(paramName, paramValue);
+                }
+            }
+            long recordsAffected = daoExecuteNonQuery.ExecuteNonQuery();
+            MessageBox.Show($"records affected = {recordsAffected}");
+
+            
+
+        }
+
+        private void btnVerificaSQLServer_Click(object sender, EventArgs e)
+        {
+            if (DbUtil.VerifySQLConnectionStringOrGetParams("testSqlServer",@"NT-SYSWORK\SQLEXPRESS", "TEST", "TEST-MAL", "TEST"))
+            {
+                MessageBox.Show("Conexion Correcta");
+            }
+        }
+
+        private void btnVerificaSQLite_Click(object sender, EventArgs e)
+        {
+
+            string _SqliteDbPath = @"C:\SWSISTEMAS\C#Library\Test\TestSysWork.Data\TestSysWork.Data\Data\TEST.sqlite";
+            string _defaultSqliteConnectionString = "Data Source = {0}; Version = 3; New = {1}; Compress = True;";
+            _defaultSqliteConnectionString = string.Format(_defaultSqliteConnectionString, _SqliteDbPath, "false");
+
+            if (DbUtil.VerifySQLiteConnectionStringOrGetParams("testSqlite3", _defaultSqliteConnectionString))
+            {
+                MessageBox.Show("Conexion Correcta");
+            }
+        }
+
+        private void btnVerifyOleDb_Click(object sender, EventArgs e)
+        {
+            string _defaultOleDbConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\SWSISTEMAS\C#Library\Test\TestSysWork.Data\TestSysWork.Data\Data\TEST-mal.accdb;Persist Security Info=False;";
+            if (DbUtil.VerifyOleDbConnectionStringOrGetParams("TestOleDb", _defaultOleDbConnectionString))
+            {
+                MessageBox.Show("Conexion Correcta");
+            }
         }
     }
 }

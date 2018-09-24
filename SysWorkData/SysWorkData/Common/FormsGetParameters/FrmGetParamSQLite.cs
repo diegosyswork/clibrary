@@ -12,9 +12,40 @@ namespace SysWork.Data.Common.FormsGetParam
 {
     public partial class FrmGetParamSQLite : Form
     {
+        public string ConnectionString { get; set; }
+        public string MensajeError { get; set; }
+
         public FrmGetParamSQLite()
         {
             InitializeComponent();
+        }
+        private void FrmGetParamSQLite_Load(object sender, EventArgs e)
+        {
+            txtConnectionString.Text = ConnectionString;
+
+            txtMensajeError.Text = MensajeError;
+            txtMensajeError.Refresh();
+            if (!string.IsNullOrEmpty(MensajeError))
+            {
+                this.Height = this.Height + txtMensajeError.Height;
+            }
+            else
+            {
+                this.Height = this.Height - txtMensajeError.Height;
+            }
+        }
+
+        private void btnAceptar_Click(object sender, EventArgs e)
+        {
+            ConnectionString = txtConnectionString.Text;
+            DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            this.Close();
         }
     }
 }

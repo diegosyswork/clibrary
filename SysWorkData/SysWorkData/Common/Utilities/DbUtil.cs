@@ -4,7 +4,10 @@ using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
+using System.Data.OleDb;
 using System.Data.SqlClient;
+using System.Data.SQLite;
+using System.IO;
 using System.Windows.Forms;
 using SysWork.Data.Common.FormsGetParam;
 using SysWork.Data.Common.ObjectResolver;
@@ -264,7 +267,7 @@ namespace SysWork.Data.Common.Utilities
         }
 
 
-        public static bool VerifySQLConnectionStringOrGetParams(string connectionStringName, string defaultDataSource = null, string defaultUserId = null, string defaultPassWord = null, string defaultInitialCatalog = null)
+        public static bool VerifySQLConnectionStringOrGetParams(string connectionStringName, string defaultDataSource = null, string defaultUserId = null, string defaultPassWord = null, string defaultInitialCatalog = null, string defaultConnectionString = null)
         {
             SqlConnectionStringBuilder connectionSb = new SqlConnectionStringBuilder();
             bool userGotParameters = false;
@@ -272,19 +275,17 @@ namespace SysWork.Data.Common.Utilities
             if (!ExistsConnectionString(connectionStringName))
             {
                 //ASIGNO DATOS DEFAULT
-                connectionSb.DataSource = (defaultDataSource == null ? "LOCALHOST" : defaultDataSource);
-                connectionSb.UserID = (defaultUserId == null ? "SA" : defaultUserId);
-                connectionSb.Password = (defaultPassWord == null ? "" : defaultPassWord);
-                connectionSb.InitialCatalog = (defaultInitialCatalog == null ? "master" : defaultInitialCatalog);
+                connectionSb.DataSource = defaultDataSource ?? "LOCALHOST";
+                connectionSb.UserID = defaultUserId ?? "SA";
+                connectionSb.Password = defaultPassWord ?? "";
+                connectionSb.InitialCatalog = defaultInitialCatalog ?? "master";
             }
             else
             {
                 connectionSb.ConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
             }
 
-            string mensajeError;
-
-            bool hasConnectionSuccess = ConnectionSuccess(connectionSb.ConnectionString.ToString(), out mensajeError);
+            bool hasConnectionSuccess = ConnectionSuccess(connectionSb.ConnectionString.ToString(), out string mensajeError);
 
             bool needConnectionParameters = (!hasConnectionSuccess);
 
@@ -299,6 +300,8 @@ namespace SysWork.Data.Common.Utilities
                 frmGetParamSQL.InicioDeSesion = connectionSb.UserID;
                 frmGetParamSQL.Password = connectionSb.Password;
                 frmGetParamSQL.BaseDeDatos = connectionSb.InitialCatalog;
+                frmGetParamSQL.ConnectionString = defaultConnectionString;
+
                 frmGetParamSQL.MensajeError = "Ha ocurrido el siguiente error: \r\r" + mensajeError;
 
                 frmGetParamSQL.ShowDialog();
@@ -310,7 +313,13 @@ namespace SysWork.Data.Common.Utilities
                 if (!string.IsNullOrEmpty(frmGetParamSQL.BaseDeDatos.Trim()))
                     connectionSb.InitialCatalog = frmGetParamSQL.BaseDeDatos;
 
-                hasConnectionSuccess = ConnectionSuccess(connectionSb.ConnectionString.ToString(), out mensajeError);
+                if (!string.IsNullOrEmpty(frmGetParamSQL.ConnectionString))
+                    connectionSb.ConnectionString = frmGetParamSQL.ConnectionString;
+
+                if (frmGetParamSQL.DialogResult == DialogResult.OK)
+                    hasConnectionSuccess = ConnectionSuccess(connectionSb.ConnectionString.ToString(), out mensajeError);
+                else
+                    hasConnectionSuccess = false;
 
                 needConnectionParameters = (!hasConnectionSuccess) && (frmGetParamSQL.DialogResult == DialogResult.OK);
             }
@@ -344,8 +353,151 @@ namespace SysWork.Data.Common.Utilities
 
             return true;
         }
-        
-        private static DataTable ConvertToDatatable<T>(List<T> data)
+        public static bool VerifySQLiteConnectionStringOrGetParams(string connectionStringName, string defaultConnectionString)
+        {
+            SQLiteConnectionStringBuilder connectionSb = new SQLiteConnectionStringBuilder();
+            bool userGotParameters = false;
+
+            if (!ExistsConnectionString(connectionStringName))
+            {
+                connectionSb.ConnectionString = defaultConnectionString ?? "";
+            }
+            else
+            {
+                connectionSb.ConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+            }
+
+            string mensajeError = "";
+            bool hasConnectionSuccess = File.Exists(connectionSb.DataSource);
+            hasConnectionSuccess = hasConnectionSuccess && ConnectionSuccess(EDataBaseEngine.SqLite,connectionSb.ConnectionString.ToString(), out mensajeError);
+
+            bool needConnectionParameters = (!hasConnectionSuccess);
+
+            while (needConnectionParameters)
+            {
+                userGotParameters = true;
+
+                FrmGetParamSQLite frmGetParamSQLite;
+                frmGetParamSQLite = new FrmGetParamSQLite();
+                frmGetParamSQLite.ConnectionString = defaultConnectionString;
+
+                frmGetParamSQLite.MensajeError = "Ha ocurrido el siguiente error: \r\r" + mensajeError;
+
+                frmGetParamSQLite.ShowDialog();
+
+                connectionSb.ConnectionString = frmGetParamSQLite.ConnectionString;
+
+                if (frmGetParamSQLite.DialogResult == DialogResult.OK)
+                {
+                    hasConnectionSuccess = File.Exists(connectionSb.DataSource);
+                    hasConnectionSuccess = hasConnectionSuccess && ConnectionSuccess(EDataBaseEngine.SqLite, connectionSb.ConnectionString.ToString(), out mensajeError);
+                }
+                else
+                    hasConnectionSuccess = false;
+
+                needConnectionParameters = (!hasConnectionSuccess) && (frmGetParamSQLite.DialogResult == DialogResult.OK);
+            }
+
+            if (!hasConnectionSuccess)
+            {
+                return false;
+            }
+            else
+            {
+                if (!ExistsConnectionString(connectionStringName))
+                {
+                    Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                    ConnectionStringSettings connectionStringSettings = new ConnectionStringSettings(connectionStringName, connectionSb.ToString());
+                    config.ConnectionStrings.ConnectionStrings.Add(connectionStringSettings);
+
+                    config.Save(ConfigurationSaveMode.Modified, true);
+                    ConfigurationManager.RefreshSection("connectionStrings");
+                }
+                else
+                {
+                    if (userGotParameters)
+                    {
+                        Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                        config.ConnectionStrings.ConnectionStrings[connectionStringName].ConnectionString = connectionSb.ToString();
+                        config.Save(ConfigurationSaveMode.Modified, true);
+                        ConfigurationManager.RefreshSection("connectionStrings");
+                    }
+                }
+            }
+
+            return true;
+        }
+        public static bool VerifyOleDbConnectionStringOrGetParams(string connectionStringName, string defaultConnectionString)
+        {
+            OleDbConnectionStringBuilder connectionSb = new OleDbConnectionStringBuilder();
+            bool userGotParameters = false;
+
+            if (!ExistsConnectionString(connectionStringName))
+            {
+                connectionSb.ConnectionString = defaultConnectionString ?? "";
+            }
+            else
+            {
+                connectionSb.ConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+            }
+
+            bool hasConnectionSuccess = ConnectionSuccess(EDataBaseEngine.OleDb, connectionSb.ConnectionString.ToString(), out string mensajeError);
+
+            bool needConnectionParameters = (!hasConnectionSuccess);
+
+            while (needConnectionParameters)
+            {
+                userGotParameters = true;
+
+                FrmGetParamOleDb frmGetParamOleDb;
+                frmGetParamOleDb = new FrmGetParamOleDb();
+                frmGetParamOleDb.ConnectionString = defaultConnectionString;
+
+                frmGetParamOleDb.MensajeError = "Ha ocurrido el siguiente error: \r\r" + mensajeError;
+
+                frmGetParamOleDb.ShowDialog();
+
+                connectionSb.ConnectionString = frmGetParamOleDb.ConnectionString;
+
+                if (frmGetParamOleDb.DialogResult == DialogResult.OK)
+                    hasConnectionSuccess = ConnectionSuccess(EDataBaseEngine.OleDb, connectionSb.ConnectionString.ToString(), out mensajeError);
+                else
+                    hasConnectionSuccess = false;
+
+                needConnectionParameters = (!hasConnectionSuccess) && (frmGetParamOleDb.DialogResult == DialogResult.OK);
+            }
+
+            if (!hasConnectionSuccess)
+            {
+                return false;
+            }
+            else
+            {
+                if (!ExistsConnectionString(connectionStringName))
+                {
+                    Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                    ConnectionStringSettings connectionStringSettings = new ConnectionStringSettings(connectionStringName, connectionSb.ToString());
+                    config.ConnectionStrings.ConnectionStrings.Add(connectionStringSettings);
+
+                    config.Save(ConfigurationSaveMode.Modified, true);
+                    ConfigurationManager.RefreshSection("connectionStrings");
+                }
+                else
+                {
+                    if (userGotParameters)
+                    {
+                        Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                        config.ConnectionStrings.ConnectionStrings[connectionStringName].ConnectionString = connectionSb.ToString();
+                        config.Save(ConfigurationSaveMode.Modified, true);
+                        ConfigurationManager.RefreshSection("connectionStrings");
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public static DataTable ConvertToDatatable<T>(List<T> data)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(T));
             DataTable table = new DataTable();

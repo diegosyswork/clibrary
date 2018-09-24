@@ -31,6 +31,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -39,6 +41,7 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -62,6 +65,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\DbConnectionUtilities\DbConnectionExecute.cs" />
+    <Compile Include="Common\FormsGetParameters\FrmGetParamOleDb.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\FormsGetParameters\FrmGetParamOleDb.Designer.cs">
+      <DependentUpon>FrmGetParamOleDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\LambdaSqlBuilder\Adapter\ISqlAdapter.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Adapter\SqlAdapterBase.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Adapter\SqlServer2008Adapter.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Adapter\SqlServer2012Adapter.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Adapter\SqlServerAdapterBase.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Builder\SqlQueryBuilder.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Builder\SqlQueryBuilderExpr.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Builder\SqlQueryBuilderSpec.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Resolver\ExpressionTree\LikeNode.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Resolver\ExpressionTree\MemberNode.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Resolver\ExpressionTree\Node.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Resolver\ExpressionTree\OperationNode.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Resolver\ExpressionTree\SingleOperationNode.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Resolver\ExpressionTree\ValueNode.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Resolver\LambdaResolver.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Resolver\LambdaResolverIsIn.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Resolver\LambdaResolverQuery.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Resolver\LambdaResolverSpec.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\Resolver\LambdaResolverTree.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\SqlLam.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\SqlLamBase.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\ValueObjects\LikeMethod.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\ValueObjects\SelectFunction.cs" />
+    <Compile Include="Common\LambdaSqlBuilder\ValueObjects\SqlAdapter.cs" />
     <Compile Include="DaoModel\Attributes\DbColumnAttribute.cs" />
     <Compile Include="DaoModel\Attributes\DbTableAttribute.cs" />
     <Compile Include="DaoModel\CodeWriter\CodeWriterUtil.cs" />
@@ -69,31 +103,8 @@
     <Compile Include="DaoModel\CodeWriter\EntityClassFromDb.cs" />
     <Compile Include="DaoModel\Core.cs" />
     <Compile Include="DaoModel\Exceptions\DaoModelException.cs" />
+    <Compile Include="DaoModel\Extensions\DaoModelExtensions.cs" />
     <Compile Include="DaoModel\Interfaces\IBaseDao.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Adapter\ISqlAdapter.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Adapter\SqlAdapterBase.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Adapter\SqlServer2008Adapter.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Adapter\SqlServer2012Adapter.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Adapter\SqlServerAdapterBase.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Builder\SqlQueryBuilder.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Builder\SqlQueryBuilderExpr.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Builder\SqlQueryBuilderSpec.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Resolver\ExpressionTree\LikeNode.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Resolver\ExpressionTree\MemberNode.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Resolver\ExpressionTree\Node.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Resolver\ExpressionTree\OperationNode.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Resolver\ExpressionTree\SingleOperationNode.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Resolver\ExpressionTree\ValueNode.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Resolver\LambdaResolver.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Resolver\LambdaResolverIsIn.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Resolver\LambdaResolverQuery.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Resolver\LambdaResolverSpec.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\Resolver\LambdaResolverTree.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\SqlLam.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\SqlLamBase.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\ValueObjects\LikeMethod.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\ValueObjects\SelectFunction.cs" />
-    <Compile Include="DaoModel\LambdaSqlBuilder\ValueObjects\SqlAdapter.cs" />
     <Compile Include="Common\DataRecordDynamicWrapper.cs" />
     <Compile Include="Extensions\OleDbCommandExtensions.cs" />
     <Compile Include="Common\FormsGetParameters\FrmGetParamSQL.cs">
@@ -130,6 +141,9 @@
     <EmbeddedResource Include="Common\FormsGetParameters\FrmGetParamSQL.resx">
       <DependentUpon>FrmGetParamSQL.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Common\FormsGetParameters\FrmGetParamOleDb.resx">
+      <DependentUpon>FrmGetParamOleDb.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Common\FormsGetParameters\FrmGetParamSQLite.resx">
       <DependentUpon>FrmGetParamSQLite.cs</DependentUpon>
     </EmbeddedResource>
@@ -140,6 +154,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\675171-data_database_paradox_sqlite_db-512.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\connector-icon-mssqlserver.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\connector-icon-oledb.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\connector-icon-sqlite.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.108.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.108.0\build\net45\System.Data.SQLite.Core.targets')" />

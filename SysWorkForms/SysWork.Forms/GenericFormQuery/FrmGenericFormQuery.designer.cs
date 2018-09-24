@@ -132,7 +132,7 @@
             this.tsbInvert});
             this.tsSeleccion.Location = new System.Drawing.Point(15, 309);
             this.tsSeleccion.Name = "tsSeleccion";
-            this.tsSeleccion.Size = new System.Drawing.Size(72, 25);
+            this.tsSeleccion.Size = new System.Drawing.Size(103, 25);
             this.tsSeleccion.TabIndex = 8;
             this.tsSeleccion.Text = "toolStrip1";
             // 

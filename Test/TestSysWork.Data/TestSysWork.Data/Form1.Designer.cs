@@ -76,6 +76,18 @@
             this.BtnAddOleDb = new System.Windows.Forms.Button();
             this.BtnAddRangeCRepetidosOleDb = new System.Windows.Forms.Button();
             this.BtnAddRangeCRepetidosSQL = new System.Windows.Forms.Button();
+            this.txtQuery = new System.Windows.Forms.TextBox();
+            this.BtnExecuteNonQuery = new System.Windows.Forms.Button();
+            this.txtQuerySQL = new System.Windows.Forms.TextBox();
+            this.txtQueryOleDb = new System.Windows.Forms.TextBox();
+            this.BtnExecuteNonQuerySQL = new System.Windows.Forms.Button();
+            this.BtnExecuteNonQueryOleDB = new System.Windows.Forms.Button();
+            this.BtnExecuteNonQueryWparam = new System.Windows.Forms.Button();
+            this.BtnExecuteNonQueryWparamSQL = new System.Windows.Forms.Button();
+            this.BtnExecuteNonQueryWparamOleDb = new System.Windows.Forms.Button();
+            this.btnVerifySQL = new System.Windows.Forms.Button();
+            this.btnVerifySQLite = new System.Windows.Forms.Button();
+            this.btnVerifyOleDb = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -135,9 +147,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(15, 334);
+            this.dataGridView1.Location = new System.Drawing.Point(15, 423);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(878, 134);
+            this.dataGridView1.Size = new System.Drawing.Size(1007, 53);
             this.dataGridView1.TabIndex = 5;
             // 
             // BtnAddRange
@@ -542,11 +554,138 @@
             this.BtnAddRangeCRepetidosSQL.UseVisualStyleBackColor = true;
             this.BtnAddRangeCRepetidosSQL.Click += new System.EventHandler(this.BtnAddRangeCRepetidosSQL_Click);
             // 
+            // txtQuery
+            // 
+            this.txtQuery.Location = new System.Drawing.Point(17, 356);
+            this.txtQuery.Multiline = true;
+            this.txtQuery.Name = "txtQuery";
+            this.txtQuery.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtQuery.Size = new System.Drawing.Size(240, 61);
+            this.txtQuery.TabIndex = 48;
+            // 
+            // BtnExecuteNonQuery
+            // 
+            this.BtnExecuteNonQuery.Location = new System.Drawing.Point(15, 334);
+            this.BtnExecuteNonQuery.Name = "BtnExecuteNonQuery";
+            this.BtnExecuteNonQuery.Size = new System.Drawing.Size(105, 21);
+            this.BtnExecuteNonQuery.TabIndex = 49;
+            this.BtnExecuteNonQuery.Text = "ExecuteNonQuery";
+            this.BtnExecuteNonQuery.UseVisualStyleBackColor = true;
+            this.BtnExecuteNonQuery.Click += new System.EventHandler(this.BtnExecuteNonQuery_Click);
+            // 
+            // txtQuerySQL
+            // 
+            this.txtQuerySQL.Location = new System.Drawing.Point(279, 356);
+            this.txtQuerySQL.Multiline = true;
+            this.txtQuerySQL.Name = "txtQuerySQL";
+            this.txtQuerySQL.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtQuerySQL.Size = new System.Drawing.Size(238, 61);
+            this.txtQuerySQL.TabIndex = 50;
+            // 
+            // txtQueryOleDb
+            // 
+            this.txtQueryOleDb.Location = new System.Drawing.Point(545, 356);
+            this.txtQueryOleDb.Multiline = true;
+            this.txtQueryOleDb.Name = "txtQueryOleDb";
+            this.txtQueryOleDb.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.txtQueryOleDb.Size = new System.Drawing.Size(233, 61);
+            this.txtQueryOleDb.TabIndex = 51;
+            // 
+            // BtnExecuteNonQuerySQL
+            // 
+            this.BtnExecuteNonQuerySQL.Location = new System.Drawing.Point(279, 334);
+            this.BtnExecuteNonQuerySQL.Name = "BtnExecuteNonQuerySQL";
+            this.BtnExecuteNonQuerySQL.Size = new System.Drawing.Size(108, 21);
+            this.BtnExecuteNonQuerySQL.TabIndex = 52;
+            this.BtnExecuteNonQuerySQL.Text = "ExecuteNonQuery";
+            this.BtnExecuteNonQuerySQL.UseVisualStyleBackColor = true;
+            this.BtnExecuteNonQuerySQL.Click += new System.EventHandler(this.BtnExecuteNonQuerySQL_Click);
+            // 
+            // BtnExecuteNonQueryOleDB
+            // 
+            this.BtnExecuteNonQueryOleDB.Location = new System.Drawing.Point(545, 334);
+            this.BtnExecuteNonQueryOleDB.Name = "BtnExecuteNonQueryOleDB";
+            this.BtnExecuteNonQueryOleDB.Size = new System.Drawing.Size(108, 21);
+            this.BtnExecuteNonQueryOleDB.TabIndex = 53;
+            this.BtnExecuteNonQueryOleDB.Text = "ExecuteNonQuery";
+            this.BtnExecuteNonQueryOleDB.UseVisualStyleBackColor = true;
+            this.BtnExecuteNonQueryOleDB.Click += new System.EventHandler(this.BtnExecuteNonQueryOleDB_Click);
+            // 
+            // BtnExecuteNonQueryWparam
+            // 
+            this.BtnExecuteNonQueryWparam.Location = new System.Drawing.Point(126, 334);
+            this.BtnExecuteNonQueryWparam.Name = "BtnExecuteNonQueryWparam";
+            this.BtnExecuteNonQueryWparam.Size = new System.Drawing.Size(131, 21);
+            this.BtnExecuteNonQueryWparam.TabIndex = 54;
+            this.BtnExecuteNonQueryWparam.Text = "ExecuteNonQuery W/P";
+            this.BtnExecuteNonQueryWparam.UseVisualStyleBackColor = true;
+            this.BtnExecuteNonQueryWparam.Click += new System.EventHandler(this.BtnExecuteNonQueryWparam_Click);
+            // 
+            // BtnExecuteNonQueryWparamSQL
+            // 
+            this.BtnExecuteNonQueryWparamSQL.Location = new System.Drawing.Point(386, 334);
+            this.BtnExecuteNonQueryWparamSQL.Name = "BtnExecuteNonQueryWparamSQL";
+            this.BtnExecuteNonQueryWparamSQL.Size = new System.Drawing.Size(131, 21);
+            this.BtnExecuteNonQueryWparamSQL.TabIndex = 55;
+            this.BtnExecuteNonQueryWparamSQL.Text = "ExecuteNonQuery W/P";
+            this.BtnExecuteNonQueryWparamSQL.UseVisualStyleBackColor = true;
+            // 
+            // BtnExecuteNonQueryWparamOleDb
+            // 
+            this.BtnExecuteNonQueryWparamOleDb.Location = new System.Drawing.Point(652, 334);
+            this.BtnExecuteNonQueryWparamOleDb.Name = "BtnExecuteNonQueryWparamOleDb";
+            this.BtnExecuteNonQueryWparamOleDb.Size = new System.Drawing.Size(131, 21);
+            this.BtnExecuteNonQueryWparamOleDb.TabIndex = 56;
+            this.BtnExecuteNonQueryWparamOleDb.Text = "ExecuteNonQuery W/P";
+            this.BtnExecuteNonQueryWparamOleDb.UseVisualStyleBackColor = true;
+            // 
+            // btnVerifySQL
+            // 
+            this.btnVerifySQL.Location = new System.Drawing.Point(789, 40);
+            this.btnVerifySQL.Name = "btnVerifySQL";
+            this.btnVerifySQL.Size = new System.Drawing.Size(223, 23);
+            this.btnVerifySQL.TabIndex = 57;
+            this.btnVerifySQL.Text = "Verify SQL Connection or GetParams";
+            this.btnVerifySQL.UseVisualStyleBackColor = true;
+            this.btnVerifySQL.Click += new System.EventHandler(this.btnVerificaSQLServer_Click);
+            // 
+            // btnVerifySQLite
+            // 
+            this.btnVerifySQLite.Location = new System.Drawing.Point(789, 11);
+            this.btnVerifySQLite.Name = "btnVerifySQLite";
+            this.btnVerifySQLite.Size = new System.Drawing.Size(223, 23);
+            this.btnVerifySQLite.TabIndex = 58;
+            this.btnVerifySQLite.Text = "Verify SQLite Connection or GetParams";
+            this.btnVerifySQLite.UseVisualStyleBackColor = true;
+            this.btnVerifySQLite.Click += new System.EventHandler(this.btnVerificaSQLite_Click);
+            // 
+            // btnVerifyOleDb
+            // 
+            this.btnVerifyOleDb.Location = new System.Drawing.Point(789, 69);
+            this.btnVerifyOleDb.Name = "btnVerifyOleDb";
+            this.btnVerifyOleDb.Size = new System.Drawing.Size(223, 23);
+            this.btnVerifyOleDb.TabIndex = 59;
+            this.btnVerifyOleDb.Text = "Verify OleDb Connection or GetParams";
+            this.btnVerifyOleDb.UseVisualStyleBackColor = true;
+            this.btnVerifyOleDb.Click += new System.EventHandler(this.btnVerifyOleDb_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(905, 480);
+            this.ClientSize = new System.Drawing.Size(1034, 488);
+            this.Controls.Add(this.btnVerifyOleDb);
+            this.Controls.Add(this.btnVerifySQLite);
+            this.Controls.Add(this.btnVerifySQL);
+            this.Controls.Add(this.BtnExecuteNonQueryWparamOleDb);
+            this.Controls.Add(this.BtnExecuteNonQueryWparamSQL);
+            this.Controls.Add(this.BtnExecuteNonQueryWparam);
+            this.Controls.Add(this.BtnExecuteNonQueryOleDB);
+            this.Controls.Add(this.BtnExecuteNonQuerySQL);
+            this.Controls.Add(this.txtQueryOleDb);
+            this.Controls.Add(this.txtQuerySQL);
+            this.Controls.Add(this.BtnExecuteNonQuery);
+            this.Controls.Add(this.txtQuery);
             this.Controls.Add(this.BtnAddRangeCRepetidosSQL);
             this.Controls.Add(this.BtnAddRangeCRepetidosOleDb);
             this.Controls.Add(this.BtnSimpleQueryOleDb);
@@ -654,6 +793,18 @@
         private System.Windows.Forms.Button BtnAddOleDb;
         private System.Windows.Forms.Button BtnAddRangeCRepetidosOleDb;
         private System.Windows.Forms.Button BtnAddRangeCRepetidosSQL;
+        private System.Windows.Forms.TextBox txtQuery;
+        private System.Windows.Forms.Button BtnExecuteNonQuery;
+        private System.Windows.Forms.TextBox txtQuerySQL;
+        private System.Windows.Forms.TextBox txtQueryOleDb;
+        private System.Windows.Forms.Button BtnExecuteNonQuerySQL;
+        private System.Windows.Forms.Button BtnExecuteNonQueryOleDB;
+        private System.Windows.Forms.Button BtnExecuteNonQueryWparam;
+        private System.Windows.Forms.Button BtnExecuteNonQueryWparamSQL;
+        private System.Windows.Forms.Button BtnExecuteNonQueryWparamOleDb;
+        private System.Windows.Forms.Button btnVerifySQL;
+        private System.Windows.Forms.Button btnVerifySQLite;
+        private System.Windows.Forms.Button btnVerifyOleDb;
     }
 }
 
