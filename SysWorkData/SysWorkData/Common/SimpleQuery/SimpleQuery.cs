@@ -20,12 +20,12 @@ namespace SysWork.Data.Common.SimpleQuery
         /// <returns>IEnumerable dinamico</returns>
         public static IEnumerable<dynamic> Execute(DbConnection dbConnection, string commandText)
         {
-            return Execute(DataObjectResolver.GetDataBaseEngineFromDbConnection(dbConnection), dbConnection, commandText,false);
+            return Execute(StaticDataObjectProvider.GetDataBaseEngineFromDbConnection(dbConnection), dbConnection, commandText,false);
         }
 
         public static IEnumerable<dynamic> Execute(EDataBaseEngine dataBaseEngine, string connectionString, string commandText,bool closeConnection = true)
         {
-            DbConnection dbConnection = DataObjectResolver.GetDbConnection(dataBaseEngine,connectionString);
+            DbConnection dbConnection = StaticDataObjectProvider.GetDbConnection(dataBaseEngine,connectionString);
             return Execute(dataBaseEngine, dbConnection, commandText,closeConnection);
         }
         /// <summary>
@@ -37,7 +37,7 @@ namespace SysWork.Data.Common.SimpleQuery
         /// <returns></returns>
         public static IEnumerable<dynamic> Execute(string connectionString, string commandText,bool closeConnection = true)
         {
-            DbConnection dbConnection = DataObjectResolver.GetDbConnection(EDataBaseEngine.MSSqlServer);
+            DbConnection dbConnection = StaticDataObjectProvider.GetDbConnection(EDataBaseEngine.MSSqlServer);
             dbConnection.ConnectionString = connectionString;
 
             return Execute(EDataBaseEngine.MSSqlServer, dbConnection, commandText, closeConnection);
@@ -49,8 +49,9 @@ namespace SysWork.Data.Common.SimpleQuery
                 if (connection.State != ConnectionState.Open)
                     connection.Open();
 
-                using (var dbCommand = DataObjectResolver.GetDbCommand(dataBaseEngine, commandText, connection))
+                using (var dbCommand = connection.CreateCommand())
                 {
+                    dbCommand.CommandText = commandText;
                     using (DbDataReader dataReader = dbCommand.ExecuteReader(closeConnection ? CommandBehavior.CloseConnection: CommandBehavior.Default))
                     {
                         foreach (IDataRecord record in dataReader)

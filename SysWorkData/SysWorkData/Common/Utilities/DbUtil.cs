@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -16,14 +17,17 @@ namespace SysWork.Data.Common.Utilities
 {
     public static class DbUtil
     {
+        
         public static bool ExistsTable(EDataBaseEngine dataBaseEngine, string connectionString, string tableName)
         {
             bool exists = false;
 
-            using (DbConnection dbConnection = DataObjectResolver.GetDbConnection(dataBaseEngine, connectionString))
+            using (DbConnection dbConnection = StaticDataObjectProvider.GetDbConnection(dataBaseEngine, connectionString))
             {
                 dbConnection.Open();
                 if (dataBaseEngine == EDataBaseEngine.MSSqlServer)
+                    exists = dbConnection.GetSchema("Tables", new string[4] { null, null, tableName, "BASE TABLE" }).Rows.Count > 0;
+                else if (dataBaseEngine == EDataBaseEngine.MySql)
                     exists = dbConnection.GetSchema("Tables", new string[4] { null, null, tableName, "BASE TABLE" }).Rows.Count > 0;
                 else if (dataBaseEngine == EDataBaseEngine.OleDb)
                     exists = dbConnection.GetSchema("Tables", new string[4] { null, null, tableName, "TABLE" }).Rows.Count > 0;
@@ -43,17 +47,19 @@ namespace SysWork.Data.Common.Utilities
 
         public static List<string> GetListTables(EDataBaseEngine dataBaseEngine, string connectionString)
         {
-            using (DbConnection connection = DataObjectResolver.GetDbConnection(dataBaseEngine,connectionString))
+            using (DbConnection connection = StaticDataObjectProvider.GetDbConnection(dataBaseEngine,connectionString))
             {
                 connection.Open();
                 DataTable schema = null;
 
                 if (dataBaseEngine == EDataBaseEngine.MSSqlServer)
                     schema = connection.GetSchema("Tables", new string[] { null, null, null, "BASE TABLE" });
+                else if (dataBaseEngine == EDataBaseEngine.MySql)
+                    schema = connection.GetSchema("Tables", new string[] { null, null, null, "BASE TABLE" });
                 else if (dataBaseEngine == EDataBaseEngine.OleDb)
                     schema=connection.GetSchema("Tables", new string[] { null, null, null, "TABLE" });
                 else if (dataBaseEngine == EDataBaseEngine.SqLite)
-                    schema=connection.GetSchema("Tables", new string[] { null, null, null, "TABLE" });
+                    schema = connection.GetSchema("Tables", new string[] { null, null, null, "TABLE" });
 
                 List<string> TableNames = new List<string>();
                 foreach (DataRow row in schema.Rows)
@@ -73,17 +79,19 @@ namespace SysWork.Data.Common.Utilities
         public static bool ExistsColumn(EDataBaseEngine dataBaseEngine, string connectionString, string tableName, string columnName)
         {
             bool exists = false;
-            using (DbConnection dbConnection = DataObjectResolver.GetDbConnection(dataBaseEngine, connectionString))
+            using (DbConnection dbConnection = StaticDataObjectProvider.GetDbConnection(dataBaseEngine, connectionString))
             {
                 dbConnection.Open();
                 DataTable dtColumns = null;
 
                 if (dataBaseEngine == EDataBaseEngine.MSSqlServer)
                     dtColumns = dbConnection.GetSchema("Columns", new[] { null, null, tableName, null });
+                else if (dataBaseEngine == EDataBaseEngine.MySql)
+                    dtColumns = dbConnection.GetSchema("Columns", new[] { null, null, tableName, null });
                 else if (dataBaseEngine == EDataBaseEngine.OleDb)
                     dtColumns = dbConnection.GetSchema("Columns", new[] { null, null, tableName, null });
                 else if (dataBaseEngine == EDataBaseEngine.SqLite)
-                    dtColumns = dbConnection.GetSchema("Columns", new[] { null, tableName,null});
+                    dtColumns = dbConnection.GetSchema("Columns", new[] { null, tableName, null });
 
                 DataView dv = new DataView(dtColumns);
 
@@ -108,7 +116,7 @@ namespace SysWork.Data.Common.Utilities
         {
             bool result = false;
 
-            result = ExecuteBatchNonQuery(dataBaseEngine, query, DataObjectResolver.GetIDbConnection(dataBaseEngine, ConnectionString));
+            result = ExecuteBatchNonQuery(dataBaseEngine, query, StaticDataObjectProvider.GetIDbConnection(dataBaseEngine, ConnectionString));
 
             return result;
         }
@@ -117,8 +125,9 @@ namespace SysWork.Data.Common.Utilities
         {
             string sqlBatch = string.Empty;
 
-            using (IDbCommand dbCommand = DataObjectResolver.GetIDbCommand(dataBaseEngine, string.Empty, connection))
+            using (IDbCommand dbCommand = connection.CreateCommand())
             {
+                dbCommand.CommandText = string.Empty;
                 try
                 {
                     if (connection.State != ConnectionState.Open)
@@ -181,7 +190,7 @@ namespace SysWork.Data.Common.Utilities
             mensajeError = "";
             try
             {
-                using (IDbConnection dbConnection = DataObjectResolver.GetIDbConnection(dataBaseEngine, connectionString))
+                using (IDbConnection dbConnection = StaticDataObjectProvider.GetIDbConnection(dataBaseEngine, connectionString))
                 {
                     dbConnection.Open();
                     dbConnection.Close();
@@ -353,6 +362,94 @@ namespace SysWork.Data.Common.Utilities
 
             return true;
         }
+        public static bool VerifyMySQLConnectionStringOrGetParams(string connectionStringName, string defaultServer = null, string defaultUserId = null, string defaultPassWord = null, string defaultDataBase = null, string defaultConnectionString = null)
+        {
+            MySqlConnectionStringBuilder connectionSb = new MySqlConnectionStringBuilder();
+            bool userGotParameters = false;
+
+            if (!ExistsConnectionString(connectionStringName))
+            {
+                //ASIGNO DATOS DEFAULT
+                connectionSb.Server = defaultServer ?? "localhost";
+                connectionSb.UserID = defaultUserId ?? "root";
+                connectionSb.Password = defaultPassWord ?? "root";
+                connectionSb.Database = defaultDataBase ?? "";
+            }
+            else
+            {
+                connectionSb.ConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+            }
+
+            bool hasConnectionSuccess = ConnectionSuccess(EDataBaseEngine.MySql, connectionSb.ConnectionString.ToString(), out string mensajeError);
+
+            bool needConnectionParameters = (!hasConnectionSuccess);
+
+            while (needConnectionParameters)
+            {
+                userGotParameters = true;
+
+                FrmGetParamMySQL frmGetParamMySQL;
+                frmGetParamMySQL = new FrmGetParamMySQL();
+
+                frmGetParamMySQL.Server = connectionSb.Server;
+                frmGetParamMySQL.InicioDeSesion = connectionSb.UserID;
+                frmGetParamMySQL.Password = connectionSb.Password;
+                frmGetParamMySQL.BaseDeDatos = connectionSb.Database;
+                frmGetParamMySQL.ConnectionString = defaultConnectionString;
+
+                frmGetParamMySQL.MensajeError = "Ha ocurrido el siguiente error: \r\r" + mensajeError;
+
+                frmGetParamMySQL.ShowDialog();
+
+                connectionSb.Server = frmGetParamMySQL.Server;
+                connectionSb.UserID = frmGetParamMySQL.InicioDeSesion;
+                connectionSb.Password = frmGetParamMySQL.Password;
+
+                if (!string.IsNullOrEmpty(frmGetParamMySQL.BaseDeDatos.Trim()))
+                    connectionSb.Database= frmGetParamMySQL.BaseDeDatos;
+
+                if (!string.IsNullOrEmpty(frmGetParamMySQL.ConnectionString))
+                    connectionSb.ConnectionString = frmGetParamMySQL.ConnectionString;
+
+                if (frmGetParamMySQL.DialogResult == DialogResult.OK)
+                    hasConnectionSuccess = ConnectionSuccess(EDataBaseEngine.MySql, connectionSb.ConnectionString.ToString(), out mensajeError);
+                else
+                    hasConnectionSuccess = false;
+
+                needConnectionParameters = (!hasConnectionSuccess) && (frmGetParamMySQL.DialogResult == DialogResult.OK);
+            }
+
+            if (!hasConnectionSuccess)
+            {
+                return false;
+            }
+            else
+            {
+                if (!ExistsConnectionString(connectionStringName))
+                {
+                    Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                    ConnectionStringSettings connectionStringSettings = new ConnectionStringSettings(connectionStringName, connectionSb.ToString());
+                    config.ConnectionStrings.ConnectionStrings.Add(connectionStringSettings);
+
+                    config.Save(ConfigurationSaveMode.Modified, true);
+                    ConfigurationManager.RefreshSection("connectionStrings");
+                }
+                else
+                {
+                    if (userGotParameters)
+                    {
+                        Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                        config.ConnectionStrings.ConnectionStrings[connectionStringName].ConnectionString = connectionSb.ToString();
+                        config.Save(ConfigurationSaveMode.Modified, true);
+                        ConfigurationManager.RefreshSection("connectionStrings");
+                    }
+                }
+            }
+
+            return true;
+        }
+
+
         public static bool VerifySQLiteConnectionStringOrGetParams(string connectionStringName, string defaultConnectionString)
         {
             SQLiteConnectionStringBuilder connectionSb = new SQLiteConnectionStringBuilder();

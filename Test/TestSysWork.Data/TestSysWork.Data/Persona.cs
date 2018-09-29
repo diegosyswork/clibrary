@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SysWork.Data.DaoModel.Attributes;
 namespace GerdannaDataManager.Entities
 {
-	[DbTable (Name = "Personas")]
+	[DbTable (Name = "personas")]
 	public class Persona
 	{
 		/// <summary>

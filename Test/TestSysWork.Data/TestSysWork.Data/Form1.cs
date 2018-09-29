@@ -15,6 +15,7 @@ using SysWork.Data.Common.Utilities;
 using Microsoft.VisualBasic;
 using SysWork.Data.DaoModel;
 using SysWork.Data.Common.DbConnectionUtilities;
+using SysWork.Data.Logger;
 
 namespace TestDaoModelDataCommon
 {
@@ -22,18 +23,40 @@ namespace TestDaoModelDataCommon
     {
         const string ConnectionStringSQL = @"Data Source =NT-SYSWORK\SQLEXPRESS; Initial Catalog=TEST; User ID=TEST; Password=TEST";
         const string ConnectionStringOleDb = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\SWSISTEMAS\C#Library\Test\TestSysWork.Data\TestSysWork.Data\Data\TEST.accdb;Persist Security Info=False";
+        const string ConnectionStringMySql = @"Server=localhost;Database=test;Uid=root;Pwd=@#!Sw58125812;persistsecurityinfo=True;";
 
         private DaoPersonaSqlite _daoPersonaSQLite;
         private DaoPersonaSql _daoPersonaSQL;
-
+        private DaoPersonaMySql _daoPersonaMySql;
         private DaoPersonaOleDb _daoPersonaOleDb;
 
         public Form1()
         {
             InitializeComponent();
+            /*
             _daoPersonaSQLite = new DaoPersonaSqlite(GetSqliteConnectionString());
             _daoPersonaSQL = new DaoPersonaSql(ConnectionStringSQL);
             _daoPersonaOleDb = new DaoPersonaOleDb(ConnectionStringOleDb);
+            _daoPersonaMySql = new DaoPersonaMySql(ConnectionStringMySql);
+            */
+
+            DataManagerSQLite.ConnectionString = GetSqliteConnectionString();
+            DataManagerSQLite.DatabaseEngine = EDataBaseEngine.SqLite; 
+
+            DataManagerSQL.ConnectionString = ConnectionStringSQL;
+            DataManagerSQL.DatabaseEngine= EDataBaseEngine.MSSqlServer;
+
+            DataManagerOleDb.ConnectionString = ConnectionStringOleDb;
+            DataManagerOleDb.DatabaseEngine = EDataBaseEngine.OleDb;
+
+            DataManagerMySQL.ConnectionString = ConnectionStringMySql;
+            DataManagerMySQL.DatabaseEngine = EDataBaseEngine.MySql;
+
+            _daoPersonaSQLite = DataManagerSQLite.GetInstance().DaoPersonaSqlite;
+            _daoPersonaSQL = DataManagerSQL.GetInstance().DaoPersonaSql;
+            _daoPersonaOleDb = DataManagerOleDb.GetInstance().DaoPersonaOleDb;
+            _daoPersonaMySql= DataManagerMySQL.GetInstance().DaoPersonaMySql;
+
         }
         private static Random random = new Random();
 
@@ -248,7 +271,6 @@ namespace TestDaoModelDataCommon
 
             existe = (DbUtil.ExistsTable(EDataBaseEngine.OleDb, ConnectionStringOleDb, "UnaQueNoExiste"));
             MessageBox.Show("Existe Tabla UnaQueNoExiste: " + existe);
-
         }
         private void BtnExistsColumnSQLite_Click(object sender, EventArgs e)
         {
@@ -392,38 +414,18 @@ namespace TestDaoModelDataCommon
 
         private void BtnDeleteAllSQLite_Click(object sender, EventArgs e)
         {
-            DbConnection conn = _daoPersonaSQLite.GetConnection();
-            conn.Open();
-
-            DbCommand dBcommand = conn.CreateCommand();
-            dBcommand.CommandText = "DELETE FROM personas";
-            dBcommand.ExecuteNonQuery();
-
-            MessageBox.Show("consulta ejecutada con Exito");
-
+            long recordsAffecteds = _daoPersonaSQLite.DeleteAll();
+            MessageBox.Show($"consulta ejecutada con Exito se eliminaron {recordsAffecteds} registros");
         }
         private void BtnDeleteAllSQL_Click(object sender, EventArgs e)
         {
-            DbConnection conn = _daoPersonaSQL.GetConnection();
-            conn.Open();
-
-            DbCommand dBcommand = conn.CreateCommand();
-            dBcommand.CommandText = "DELETE FROM personas";
-            dBcommand.ExecuteNonQuery();
-
-            MessageBox.Show("consulta ejecutada con Exito");
-
+            long recordsAffecteds = _daoPersonaSQL.DeleteAll();
+            MessageBox.Show($"consulta ejecutada con Exito se eliminaron {recordsAffecteds} registros");
         }
         private void BtnDeleteAllOleDb_Click(object sender, EventArgs e)
         {
-            DbConnection conn = _daoPersonaOleDb.GetConnection();
-            conn.Open();
-
-            DbCommand dBcommand = conn.CreateCommand();
-            dBcommand.CommandText = "DELETE FROM personas";
-            dBcommand.ExecuteNonQuery();
-
-            MessageBox.Show("consulta ejecutada con Exito");
+            long recordsAffecteds = _daoPersonaOleDb.DeleteAll();
+            MessageBox.Show($"consulta ejecutada con Exito se eliminaron {recordsAffecteds} registros");
 
         }
 
@@ -536,37 +538,6 @@ namespace TestDaoModelDataCommon
             listaPersona.Add(new Persona(RandomString(50), RandomString(50), "00000000", (DateTime.Today), "11" + RandomNumber(8)));
             listaPersona.Add(new Persona(RandomString(50), RandomString(50), "00000000", (DateTime.Today), "11" + RandomNumber(8)));
 
-
-            DbConnection connPersistent = _daoPersonaOleDb.Get_PersistentConnection();
-            connPersistent.Open();
-
-            DbTransaction tt = connPersistent.BeginTransaction();
-            try
-            {
-                _daoPersonaOleDb.AddRange(listaPersona,connPersistent,tt);
-                tt.Commit();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("sin transaction ocurrio el siguiente error" + ex.Message);
-                tt.Rollback();
-            }
-
-
-            IDbConnection oleDbConn = _daoPersonaOleDb.Get_IDBConnection();
-            oleDbConn.Open();
-
-            IDbTransaction transaction = oleDbConn.BeginTransaction();
-            try
-            {
-                
-                _daoPersonaOleDb.AddRange(listaPersona, oleDbConn, transaction);
-                transaction.Commit();
-            }
-            catch(Exception exx)
-            {
-                transaction.Rollback();
-            }
         }
 
         private void BtnAddRangeCRepetidosSQL_Click(object sender, EventArgs e)
@@ -576,28 +547,27 @@ namespace TestDaoModelDataCommon
 
         private void BtnExecuteNonQuery_Click(object sender, EventArgs e)
         {
-            long recordsAffected = _daoPersonaSQLite.GetDbConnectionExecute().SqlQuery(txtQuery.Text).ExecuteNonQuery(); 
+            long recordsAffected = DataManagerSQLite.GetInstance().GetDbExecute().Query(txtQuery.Text).ExecuteNonQuery(); 
             MessageBox.Show($"records affected = {recordsAffected}");
         }
 
         private void BtnExecuteNonQuerySQL_Click(object sender, EventArgs e)
         {
-            long recordsAffected = _daoPersonaSQL.GetDbConnectionExecute().SqlQuery(txtQuerySQL.Text).ExecuteNonQuery();
+            long recordsAffected = DataManagerSQL.GetInstance().GetDbExecute().Query(txtQuerySQL.Text).ExecuteNonQuery();
             MessageBox.Show($"records affected = {recordsAffected}");
         }
 
         private void BtnExecuteNonQueryOleDB_Click(object sender, EventArgs e)
         {
-            long recordsAffected = _daoPersonaOleDb.GetDbConnectionExecute().SqlQuery(txtQueryOleDb.Text).ExecuteNonQuery();
+            long recordsAffected = DataManagerOleDb.GetInstance().GetDbExecute().Query(txtQueryOleDb.Text).ExecuteNonQuery();
             MessageBox.Show($"records affected = {recordsAffected}");
 
         }
 
         private void BtnExecuteNonQueryWparam_Click(object sender, EventArgs e)
         {
-
-            DbConnectionExecute daoExecuteNonQuery = new DbConnectionExecute(GetSqliteConnectionString(), EDataBaseEngine.SqLite);
-            daoExecuteNonQuery.SqlQuery(txtQuery.Text);
+            DbExecute dbExecute = DataManagerSQLite.GetInstance().GetDbExecute() ;
+            dbExecute.Query(txtQuery.Text);
 
             string paramName;
             string paramValue;
@@ -610,14 +580,11 @@ namespace TestDaoModelDataCommon
 
                 if (seguir)
                 {
-                    daoExecuteNonQuery.AddParameters(paramName, paramValue);
+                    dbExecute.AddParameters(paramName, paramValue);
                 }
             }
-            long recordsAffected = daoExecuteNonQuery.ExecuteNonQuery();
+            long recordsAffected = dbExecute.ExecuteNonQuery();
             MessageBox.Show($"records affected = {recordsAffected}");
-
-            
-
         }
 
         private void btnVerificaSQLServer_Click(object sender, EventArgs e)
@@ -648,6 +615,290 @@ namespace TestDaoModelDataCommon
             {
                 MessageBox.Show("Conexion Correcta");
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+            Persona p = new Persona();
+            p.Apellido = "Martinez";
+            p.Nombre = "Diego";
+            p.Dni = "27926043222";
+            p.FechaNacimiento = DateTime.Parse("01/05/1980");
+            p.Telefono = "1151825180";
+
+            _daoPersonaMySql.Add(p);
+            _daoPersonaMySql.GetAll();
+
+        }
+
+        private void BtnAddMySQL_Click(object sender, EventArgs e)
+        {
+            Persona p;
+            long idGenerado;
+
+            p = new Persona();
+            p.Apellido = RandomString(20);
+            p.Nombre = RandomString(20);
+            p.Dni = RandomNumber(8);
+            p.FechaNacimiento = DateTime.Parse("24/05/1980");
+            p.Telefono = "11" + RandomNumber(8);
+            idGenerado = _daoPersonaMySql.Add(p);
+            MessageBox.Show("Inserto uno idGenerado : " + idGenerado);
+
+            p = new Persona();
+            p.Apellido = RandomString(500);
+            p.Nombre = RandomString(500);
+            p.Dni = RandomNumber(500);
+            p.FechaNacimiento = DateTime.Parse("24/05/1980");
+            p.Telefono = "11" + RandomNumber(500);
+            idGenerado = _daoPersonaMySql.Add(p);
+            MessageBox.Show("Inserto uno que Excede los maximos de los textos (para probar parametros) idGenerado : " + idGenerado);
+
+        }
+
+        private void BtnAddRangeMySQL_Click(object sender, EventArgs e)
+        {
+            List<Persona> listaPersona = new List<Persona>();
+            for (int i = 0; i < 100; i++)
+            {
+                listaPersona.Add(new Persona(RandomString(50), RandomString(50), RandomNumber(8), (DateTime.Today).AddDays(i), "11" + RandomNumber(8)));
+            }
+            _daoPersonaMySql.AddRange(listaPersona);
+            MessageBox.Show("Se han insertado " + listaPersona.Count + " Personas");
+
+        }
+
+        private void BtnUpdateMySQL_Click(object sender, EventArgs e)
+        {
+            Persona p;
+            long idGenerado;
+
+            p = new Persona();
+            p.Apellido = RandomString(20);
+            p.Nombre = RandomString(20);
+            p.Dni = RandomNumber(8);
+            p.FechaNacimiento = DateTime.Parse("24/05/1980");
+            p.Telefono = "11" + RandomNumber(8);
+            idGenerado = _daoPersonaMySql.Add(p);
+            MessageBox.Show("Genera una nueva Persona con el id: " + idGenerado);
+
+            p = _daoPersonaMySql.GetById(idGenerado);
+            p.Apellido = p.Apellido + " ** modificado";
+            p.Nombre = p.Nombre + " ** modificado";
+            p.Dni = p.Dni + " ** modificado ";
+            p.FechaNacimiento = DateTime.Parse("24/05/1980");
+            p.Telefono = p.Telefono + "** modificado";
+
+            bool correcto = _daoPersonaMySql.Update(p);
+            MessageBox.Show("La modifica correctamente " + correcto);
+        }
+
+        private void BtnUpdateRangeMySQL_Click(object sender, EventArgs e)
+        {
+            List<Persona> listaPersona = new List<Persona>();
+            foreach (var item in _daoPersonaMySql.GetAll().ToList())
+            {
+
+                listaPersona.Add(new Persona(item.IdPersona, "updateRANGE" + item.Apellido, "updateRANGE" + item.Nombre, item.Dni, item.FechaNacimiento, "updateRANGE" + item.Telefono));
+            }
+
+            _daoPersonaMySql.UpdateRange(listaPersona);
+            MessageBox.Show("Se han actualizado " + listaPersona.Count + " Personas");
+
+        }
+
+        private void BtnFind5MySQL_Click(object sender, EventArgs e)
+        {
+            List<Persona> lista = _daoPersonaMySql.GetAll().ToList();
+            if (lista.Count < 5)
+            {
+                MessageBox.Show("Hay menos de 5 items");
+                return;
+            }
+            List<object> ids = new List<object>();
+            for (int i = 0; i < 5; i++)
+                ids.Add(lista[i].IdPersona);
+
+            dataGridView1.DataSource = null;
+
+            dataGridView1.DataSource = _daoPersonaMySql.Find(ids);
+
+
+        }
+
+        private void DeleteByIDMySQL_Click(object sender, EventArgs e)
+        {
+            bool correcto = _daoPersonaMySql.DeleteById(long.Parse(txtDELIdMySQL.Text));
+            MessageBox.Show("Correcto + " + correcto);
+        }
+
+        private void BtnDeleteAllMySQL_Click(object sender, EventArgs e)
+        {
+            long recordsAffecteds = _daoPersonaMySql.DeleteAll();
+            MessageBox.Show($"consulta ejecutada con Exito se eliminaron {recordsAffecteds} registros");
+
+        }
+
+        private void BtnGetByIDMySQL_Click(object sender, EventArgs e)
+        {
+            Persona p = _daoPersonaMySql.GetById(long.Parse(txtGETIdMySQL.Text));
+            MessageBox.Show($" {p.Apellido}\r\n {p.Nombre}\r\n {p.Dni} ");
+        }
+
+        private void BtnGetByDniMySQL_Click(object sender, EventArgs e)
+        {
+            Persona p = _daoPersonaMySql.GetByDni(txtDNIMySQL.Text);
+            MessageBox.Show($" {p.Apellido}\r\n {p.Nombre}\r\n {p.Dni} ");
+        }
+
+        private void BtnExistsTableMySQL_Click(object sender, EventArgs e)
+        {
+            bool existe = (DbUtil.ExistsTable(EDataBaseEngine.MySql, ConnectionStringMySql, "Personas"));
+            MessageBox.Show("Existe Tabla Personas : " + existe);
+
+            existe = (DbUtil.ExistsTable(EDataBaseEngine.MySql, ConnectionStringMySql, "UnaQueNoExiste"));
+            MessageBox.Show("Existe Tabla UnaQueNoExiste: " + existe);
+        }
+
+        private void BtnExistsColumnMySQL_Click(object sender, EventArgs e)
+        {
+            bool existe = (DbUtil.ExistsColumn(EDataBaseEngine.MySql, ConnectionStringMySql, "Personas", "Dni"));
+            MessageBox.Show("Existe Personas DNI " + existe);
+
+            existe = (DbUtil.ExistsColumn(EDataBaseEngine.MySql, ConnectionStringMySql, "Personas", "mail"));
+            MessageBox.Show("Existe Personas mail " + existe);
+        }
+
+        private void BtnSimpleQueryMySQL_Click(object sender, EventArgs e)
+        {
+            var resut = SimpleQuery.Execute(EDataBaseEngine.MySql, ConnectionStringMySql, "SELECT * FROM PERSONAS");
+            dataGridView1.DataSource = null;
+
+            List<Persona> listaPersona = new List<Persona>();
+            foreach (var item in resut)
+            {
+                listaPersona.Add(new Persona((long)item.IdPersona, item.Apellido.ToString(), item.Nombre.ToString(), item.Dni.ToString(), DateTime.Parse(item.FechaNacimiento.ToString()), item.Telefono.ToString()));
+            }
+
+            dataGridView1.DataSource = listaPersona;
+            dataGridView1.Refresh();
+
+        }
+
+        private void BtnExecuteNonQueryMySQL_Click(object sender, EventArgs e)
+        {
+            long recordsAffected = DataManagerMySQL.GetInstance().GetDbExecute().Query(txtQueryMySQL.Text).ExecuteNonQuery();
+            MessageBox.Show($"records affected = {recordsAffected}");
+
+        }
+
+        private void BtnExecuteNonQueryWparamOleDb_Click(object sender, EventArgs e)
+        {
+            DbExecute dbExecute = DataManagerOleDb.GetInstance().GetDbExecute();
+            dbExecute.Query(txtQueryOleDb.Text);
+
+            string paramName;
+            string paramValue;
+            bool seguir = true;
+            while (seguir)
+            {
+                paramName = Interaction.InputBox("Ingrese el nombre del parametro", "Parametro");
+                paramValue = Interaction.InputBox("Ingrese el valor del parametro", "Parametro");
+                seguir = (!string.IsNullOrEmpty(paramName.Trim()) && !string.IsNullOrEmpty(paramValue.Trim()));
+
+                if (seguir)
+                {
+                    dbExecute.AddParameters(paramName, paramValue);
+                }
+            }
+            long recordsAffected = dbExecute.ExecuteNonQuery();
+            MessageBox.Show($"records affected = {recordsAffected}");
+
+        }
+
+        private void BtnExecuteNonQueryWparamSQL_Click(object sender, EventArgs e)
+        {
+            DbExecute dbExecute = DataManagerSQL.GetInstance().GetDbExecute();
+            dbExecute.Query(txtQuerySQL.Text);
+
+            string paramName;
+            string paramValue;
+            bool seguir = true;
+            while (seguir)
+            {
+                paramName = Interaction.InputBox("Ingrese el nombre del parametro", "Parametro");
+                paramValue = Interaction.InputBox("Ingrese el valor del parametro", "Parametro");
+                seguir = (!string.IsNullOrEmpty(paramName.Trim()) && !string.IsNullOrEmpty(paramValue.Trim()));
+
+                if (seguir)
+                {
+                    dbExecute.AddParameters(paramName, paramValue);
+                }
+            }
+            long recordsAffected = dbExecute.ExecuteNonQuery();
+            MessageBox.Show($"records affected = {recordsAffected}");
+        }
+
+        private void BtnExecuteNonQueryWparamMySQL_Click(object sender, EventArgs e)
+        {
+            DbExecute daoExecuteNonQuery = DataManagerMySQL.GetInstance().GetDbExecute();
+            daoExecuteNonQuery.Query(txtQueryMySQL.Text);
+
+            string paramName;
+            string paramValue;
+            bool seguir = true;
+            while (seguir)
+            {
+                paramName = Interaction.InputBox("Ingrese el nombre del parametro", "Parametro");
+                paramValue = Interaction.InputBox("Ingrese el valor del parametro", "Parametro");
+                seguir = (!string.IsNullOrEmpty(paramName.Trim()) && !string.IsNullOrEmpty(paramValue.Trim()));
+
+                if (seguir)
+                {
+                    daoExecuteNonQuery.AddParameters(paramName, paramValue);
+                }
+            }
+            long recordsAffected = daoExecuteNonQuery.ExecuteNonQuery();
+            MessageBox.Show($"records affected = {recordsAffected}");
+
+        }
+
+        private void btnVerifyMySQL_Click(object sender, EventArgs e)
+        {
+            if (DbUtil.VerifyMySQLConnectionStringOrGetParams("testMySql", @"LOCALHOST", "TEST", "TEST-MAL", "TEST"))
+            {
+                MessageBox.Show("Conexion Correcta");
+            }
+
+        }
+
+        private void BtnLoggerMySQL_Click(object sender, EventArgs e)
+        {
+            LoggerDb.ConnectionString = ConnectionStringMySql;
+            LoggerDb.DataBaseEngine = EDataBaseEngine.MySql;
+            LoggerDb.Log("Test MySQL");
+        }
+
+        private void BtnLoggerOleDb_Click(object sender, EventArgs e)
+        {
+            LoggerDb.ConnectionString = ConnectionStringOleDb;
+            LoggerDb.DataBaseEngine = EDataBaseEngine.OleDb;
+            LoggerDb.Log("Test OleDb");
+        }
+
+        private void BtnLoggerSQL_Click(object sender, EventArgs e)
+        {
+            LoggerDb.ConnectionString = ConnectionStringSQL;
+            LoggerDb.DataBaseEngine = EDataBaseEngine.MSSqlServer;
+            LoggerDb.Log("Test Sql");
+        }
+
+        private void BtnLogger_Click(object sender, EventArgs e)
+        {
+            LoggerDb.ConnectionString = GetSqliteConnectionString();
+            LoggerDb.DataBaseEngine = EDataBaseEngine.SqLite;
+            LoggerDb.Log("Test Sqlite");
         }
     }
 }

@@ -16,7 +16,7 @@ namespace SysWork.Data.Common.DbConnectionUtilities
     /// Author: Diego Javier Martinez
     /// Mail: dmartinez@syswork.com.ar
     /// </summary>
-    public class DbConnectionExecute
+    public class DbExecute
     {
         private EDataBaseEngine _dataBaseEngine;
         private string _connectionString;
@@ -24,12 +24,18 @@ namespace SysWork.Data.Common.DbConnectionUtilities
         private string _sqlQuery;
         private IDictionary<string, object> _queryParameters;
 
+        private DataObjectProvider _dataObjectProvider;
 
-        public DbConnectionExecute(string connectionString)
+        public string SqlQuery
+        {
+            get { return _sqlQuery; }
+            set { _sqlQuery = value; }
+        }
+        public DbExecute(string connectionString)
         {
             ConstructorResolver(connectionString, EDataBaseEngine.MSSqlServer);
         }
-        public DbConnectionExecute(string connectionString, EDataBaseEngine dataBaseEngine)
+        public DbExecute(string connectionString, EDataBaseEngine dataBaseEngine)
         {
             ConstructorResolver(connectionString, dataBaseEngine);
         }
@@ -38,19 +44,21 @@ namespace SysWork.Data.Common.DbConnectionUtilities
         {
             _connectionString = connectionString;
             _dataBaseEngine = dataBaseEngine;
-
+            _dataObjectProvider = new DataObjectProvider(dataBaseEngine);
             _queryParameters = new Dictionary<string, object>();
         }
 
-        public DbConnectionExecute SqlQuery(string sqlQuery)
+        public DbExecute Query(string commandText)
         {
-            _sqlQuery = sqlQuery;
+            _sqlQuery = commandText;
             return this;
         }
 
-        public DbConnectionExecute AddParameters(string name, object value)
+        public DbExecute AddParameters(string name, object value)
         {
-            _queryParameters.Add(name, value);
+            if (!_queryParameters.ContainsKey(name))
+                _queryParameters.Add(name, value);
+
             return this;
         }
 
@@ -76,7 +84,7 @@ namespace SysWork.Data.Common.DbConnectionUtilities
             IDbConnection dbConnection;
             if (paramConnection == null)
             {
-                dbConnection = DataObjectResolver.GetIDbConnection(_dataBaseEngine);
+                dbConnection = _dataObjectProvider.GetIDbConnection();
                 dbConnection.ConnectionString = _connectionString;
             }
             else
@@ -143,7 +151,7 @@ namespace SysWork.Data.Common.DbConnectionUtilities
             IDbConnection dbConnection;
             if (paramConnection == null)
             {
-                dbConnection = DataObjectResolver.GetIDbConnection(_dataBaseEngine);
+                dbConnection = _dataObjectProvider.GetIDbConnection();
                 dbConnection.ConnectionString = _connectionString;
             }
             else
@@ -208,7 +216,7 @@ namespace SysWork.Data.Common.DbConnectionUtilities
             IDbConnection dbConnection;
             if (paramConnection == null)
             {
-                dbConnection = DataObjectResolver.GetIDbConnection(_dataBaseEngine);
+                dbConnection = _dataObjectProvider.GetIDbConnection();
                 dbConnection.ConnectionString = _connectionString;
             }
             else
@@ -235,19 +243,17 @@ namespace SysWork.Data.Common.DbConnectionUtilities
                 if (_dataBaseEngine == EDataBaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
-                return dbCommand.ExecuteReader();
+                return dbCommand.ExecuteReader(closeConnection ? CommandBehavior.CloseConnection: CommandBehavior.Default);
             }
             catch (Exception exception)
             {
-                throw exception;
-            }
-            finally
-            {
-                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open))
                 {
                     dbConnection.Close();
                     dbConnection.Dispose();
                 }
+
+                throw exception;
             }
         }
     }

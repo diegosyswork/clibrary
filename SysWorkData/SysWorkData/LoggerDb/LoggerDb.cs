@@ -29,13 +29,31 @@ namespace SysWork.Data.Logger
             Info
         };
 
-        public static string ConnectionString { get; set; }
+        private static string _connectionString;
+
+        public static string ConnectionString
+        {
+            get{ return _connectionString; }
+            set
+            {
+                if (value != _connectionString)
+                    _loggerDbInstance = null;
+
+                _connectionString = value;
+            }
+        }
 
         private static EDataBaseEngine _dataBaseEngine;
         public static EDataBaseEngine DataBaseEngine
         {
             get { return _dataBaseEngine; }
-            set { _dataBaseEngine = value; }
+            set
+            {
+                if (value != _dataBaseEngine)
+                    _loggerDbInstance = null;
+
+                _dataBaseEngine = value;
+            }
         }
 
         private static LoggerDb _loggerDbInstance = null;
@@ -67,9 +85,32 @@ namespace SysWork.Data.Logger
                 return GetLogDbScriptSQLite();
             else if (_dataBaseEngine == EDataBaseEngine.OleDb)
                 return GetLogDbScriptOleDb();
+            else if (_dataBaseEngine == EDataBaseEngine.MySql)
+                return GetLogDbScriptMySql();
             else
                 throw new Exception("No se ha especificado un SCRIPT para el tipo de base de datos establecida");
 
+        }
+
+        private string GetLogDbScriptMySql()
+        {
+            StringBuilder logDbScript = new StringBuilder("");
+
+            logDbScript.AppendLine("   CREATE TABLE `logdb` (");
+            logDbScript.AppendLine("   `idlogdb` INT NOT NULL AUTO_INCREMENT,");
+            logDbScript.AppendLine("   `fechaHora` DATETIME NOT NULL,");
+            logDbScript.AppendLine("   `usuario` NVARCHAR(200) NULL,");
+            logDbScript.AppendLine("   `tag` NVARCHAR(200) NULL,");
+            logDbScript.AppendLine("   `mensaje` MEDIUMTEXT NOT NULL,");
+            logDbScript.AppendLine("   `modulo` NVARCHAR(200) NULL,");
+            logDbScript.AppendLine("   `metodo` NVARCHAR(200) NULL,");
+            logDbScript.AppendLine("   `sentenciaSQL` INT NULL,");
+            logDbScript.AppendLine("   `parametros` MEDIUMTEXT NULL,");
+            logDbScript.AppendLine("   `resultado` MEDIUMTEXT NULL,");
+            logDbScript.AppendLine("   `excepcion` MEDIUMTEXT NULL,");
+            logDbScript.AppendLine("   PRIMARY KEY(`idlogdb`));");
+
+            return logDbScript.ToString();
         }
 
         private string GetLogDbScriptOleDb()
@@ -171,17 +212,14 @@ namespace SysWork.Data.Logger
         {
             return Logger(DateTime.Now, mensaje: mensaje, tag: tag, usuario: usuario);
         }
-
         public static bool Log(string tag, string mensaje, string excepcion, string sentenciaSQL)
         {
             return Logger(DateTime.Now, mensaje: mensaje, tag: tag, excepcion: excepcion, sentenciaSQL: sentenciaSQL);
         }
-
         private static bool Log(DateTime fechaHora, string mensaje, string usuario = null, string tag = null, string modulo = null, string metodo = null, string sentenciaSQL = null, string parametros = null, string resultado = null, string excepcion = null)
         {
             return Logger(fechaHora, mensaje, usuario, tag, modulo, metodo, sentenciaSQL, parametros, resultado, excepcion);
         }
-
         public static bool Log(string tag, IDbCommand dbCommand)
         {
             string sentenciaSQL = (dbCommand == null) ? DbUtil.ConvertCommandParamatersToLiteralValues((dbCommand)) : null;

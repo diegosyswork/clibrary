@@ -15,6 +15,10 @@ namespace SysWork.Data.Common
         /// <summary>
         /// 
         /// </summary>
-        OleDb
+        OleDb,
+        /// <summary>
+        /// 
+        /// </summary>
+        MySql
     }
 }

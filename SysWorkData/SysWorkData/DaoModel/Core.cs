@@ -16,6 +16,8 @@ using SysWork.Data.Extensions.OleDbCommandExtensions;
 using SysWork.Data.DaoModel.Interfaces;
 using SysWork.Data.DaoModel.Exceptions;
 using SysWork.Data.Common.DbConnectionUtilities;
+using SysWork.Data.Syntax;
+using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 
 namespace SysWork.Data.DaoModel
 {
@@ -35,13 +37,16 @@ namespace SysWork.Data.DaoModel
     /// ======   ==========
     ///         Los metodos, permiten recibir una conexion externa, y soportan transacciones explicitas.
     /// 
-    public abstract class BaseDao<T>: IBaseDao<T> where T : class, new() 
+    public abstract class BaseDao<TEntity>: IBaseDao<TEntity> where TEntity : class, new() 
     {
         private EDataBaseEngine _dataBaseEngine;
-        private DbConnection _persistentConnection;
+
         private Hashtable ColumnListWithDbInfo = new Hashtable();
 
         public string ConnectionString { get; private set; }
+
+        protected DataObjectProvider _dataObjectProvider { get; private set; }
+        private SyntaxProvider _syntaxProvider;
 
         public string TableName { get; private set; }
         
@@ -103,8 +108,12 @@ namespace SysWork.Data.DaoModel
         private void BaseDaoConstructorResolver(string ConnectionString, EDataBaseEngine dataBaseEngine)
         {
             _dataBaseEngine = dataBaseEngine;
+            _dataObjectProvider = new DataObjectProvider(_dataBaseEngine);
+            _syntaxProvider = new SyntaxProvider(_dataBaseEngine);
 
-            T entity = new T();
+            SetSqlLamAdapter();
+
+            TEntity entity = new TEntity();
             ListObjectPropertyInfo = GetPropertyInfoList(entity);
 
             TableName = GetTableNameFromEntity(entity.GetType());
@@ -119,7 +128,21 @@ namespace SysWork.Data.DaoModel
             GetDbColumnsAndAtributes();
         }
 
-        private static string GetTableNameFromEntity(Type type)
+        private void SetSqlLamAdapter()
+        {
+            if (_dataBaseEngine == EDataBaseEngine.MSSqlServer)
+                SqlLam<TEntity>.SetAdapter(SqlAdapter.SqlServer2012);
+            else if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                SqlLam<TEntity>.SetAdapter(SqlAdapter.SqlServer2012);
+            else if (_dataBaseEngine == EDataBaseEngine.MySql)
+                SqlLam<TEntity>.SetAdapter(SqlAdapter.MySql);
+            else if (_dataBaseEngine == EDataBaseEngine.SqLite)
+                SqlLam<TEntity>.SetAdapter(SqlAdapter.SQLite);
+            else
+                throw new Exception("No se a definido un SqlLamAdapter para el tipo de Motor de Base de datos");
+        }
+
+        private string GetTableNameFromEntity(Type type)
         {
             var column = type.GetCustomAttributes(false).OfType<DbTableAttribute>().FirstOrDefault();
             if (column != null)
@@ -140,7 +163,7 @@ namespace SysWork.Data.DaoModel
         /// <param name="entity"></param>
         /// <param name="errMessage"></param>
         /// <returns></returns>
-        public long Add(T entity, out string errMessage)
+        public long Add(TEntity entity, out string errMessage)
         {
             errMessage = "";
             long identity = 0;
@@ -174,7 +197,7 @@ namespace SysWork.Data.DaoModel
         /// <param name="entity"></param>
         /// <exception cref="DaoModelException">Encapsula la excepcion original</exception>
         /// <returns></returns>
-        public long Add(T entity)
+        public long Add(TEntity entity)
         {
             return Add(entity, null, null);
         }
@@ -192,7 +215,7 @@ namespace SysWork.Data.DaoModel
         /// <param name="paramDbConnection">Esta conexion no se cerrará en el método</param>
         /// <exception cref="DaoModelException">Encapsula la excepcion original</exception>
         /// <returns></returns>
-        public long Add(T entity, IDbConnection paramDbConnection)
+        public long Add(TEntity entity, IDbConnection paramDbConnection)
         {
             return Add(entity, paramDbConnection, null);
         }
@@ -210,7 +233,7 @@ namespace SysWork.Data.DaoModel
         /// <param name="paramDbTransaction">Se toma como transaccion activa y se toma la conexion de la transaccion</param>
         /// <exception cref="DaoModelException">Encapsula la excepcion original</exception>
         /// <returns></returns>
-        public long Add(T entity, IDbTransaction paramDbTransaction)
+        public long Add(TEntity entity, IDbTransaction paramDbTransaction)
         {
             return Add(entity, null, paramDbTransaction);
         }
@@ -229,7 +252,7 @@ namespace SysWork.Data.DaoModel
         /// <param name="paramDbTransaction">Se toma como transaccion activa </param>
         /// <exception cref="DaoModelException">Encapsula la excepcion original</exception>
         /// <returns></returns>
-        public long Add(T entity, IDbConnection paramDbConnection,IDbTransaction paramDbTransaction)
+        public long Add(TEntity entity, IDbConnection paramDbConnection,IDbTransaction paramDbTransaction)
         {
             long identity = 0;
             bool hasIdentity = false;
@@ -267,7 +290,7 @@ namespace SysWork.Data.DaoModel
                 parameterList.Remove(parameterList.Length - 1, 1);
 
                 StringBuilder insertQuery = new StringBuilder();
-                insertQuery.Append(string.Format("INSERT INTO [{0}] ( {1} ) VALUES ( {2} ) {3}  ", TableName, ColumnsForInsert, parameterList, GetSubQueryGetIdentity()));
+                insertQuery.Append(string.Format("INSERT INTO {0} ( {1} ) VALUES ( {2} ) {3}  ", _syntaxProvider.GetTableName(TableName), ColumnsForInsert, parameterList, _syntaxProvider.GetSubQueryGetIdentity()));
                 try
                 {
                     if (dbConnection.State != ConnectionState.Open)
@@ -305,7 +328,7 @@ namespace SysWork.Data.DaoModel
                 }
                 catch (Exception exception)
                 {
-                    throw new DaoModelException(exception, dbCommand);
+                   throw new DaoModelException(exception, dbCommand);
                 }
                 finally
                 {
@@ -322,33 +345,13 @@ namespace SysWork.Data.DaoModel
 
         /// <summary>
         /// 
-        /// Dependiendo del motor de base de datos utilizado, devuelve la subconsulta que debe
-        /// realizarse para obtener la identidad insertada
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        private string GetSubQueryGetIdentity()
-        {
-            if (_dataBaseEngine == EDataBaseEngine.MSSqlServer)
-                return " SELECT SCOPE_IDENTITY()";
-            else if (_dataBaseEngine == EDataBaseEngine.OleDb)
-                // Hay que Ejecutar por separado otra consulta solicitando @@Identity
-                return "";
-            else if (_dataBaseEngine == EDataBaseEngine.SqLite)
-                return " ; SELECT last_insert_rowid()";
-
-            throw new ArgumentException("Es necesario revisar el metodo GetSubQueryScalar()");
-        }
-
-        /// <summary>
-        /// 
         /// Recibe una lista de entidades y las inserta.
         /// 
         /// </summary>
         /// <param name="entities"></param>
         /// <param name="errMessage">Parametro de salida, en caso de error muestra el mensaje de la excepcion</param>
         /// <returns>Devuelve true, si no ocurrieron errores.</returns>
-        public bool AddRange(IList<T> entities, out string errMessage)
+        public bool AddRange(IList<TEntity> entities, out string errMessage)
         {
             errMessage = "";
             bool result = false;
@@ -380,7 +383,7 @@ namespace SysWork.Data.DaoModel
         /// <param name="entities"></param>
         /// <exception cref="DaoModelException">Encapsula la excepcion original</exception>
         /// <returns>Devuelve true, si no ocurrieron errores</returns>
-        public bool AddRange(IList<T> entities)
+        public bool AddRange(IList<TEntity> entities)
         {
             return AddRange(entities, null,null);
         }
@@ -395,7 +398,7 @@ namespace SysWork.Data.DaoModel
         /// <param name="paramDbConnection">Esta conexion no se cerrará en el método</param>
         /// <exception cref="DaoModelException">Encapsula la excepcion original</exception>
         /// <returns>Devuelve true, si no ocurrieron errores</returns>
-        public bool AddRange(IList<T> entities, IDbConnection paramDbConnection)
+        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection)
         {
             return AddRange(entities, paramDbConnection, null);
         }
@@ -411,7 +414,7 @@ namespace SysWork.Data.DaoModel
         /// <param name="paramDbTransaction">Se toma como transaccion activa y se toma la conexion de la transaccion</param>
         /// <exception cref="DaoModelException">Encapsula la excepcion original</exception>
         /// <returns></returns>
-        public bool AddRange(IList<T> entities, IDbTransaction paramDbTransaction)
+        public bool AddRange(IList<TEntity> entities, IDbTransaction paramDbTransaction)
         {
             return AddRange(entities, null, paramDbTransaction);
         }
@@ -428,7 +431,7 @@ namespace SysWork.Data.DaoModel
         /// <param name="paramDbTransaction">Se toma como transaccion activa </param>
         /// <exception cref="DaoModelException">Encapsula la excepcion original</exception>
         /// <returns></returns>
-        public bool AddRange(IList<T> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
         {
             return AddRange(entities, paramDbConnection, paramDbTransaction, out long recordsAffected);
         }
@@ -445,7 +448,7 @@ namespace SysWork.Data.DaoModel
         /// <param name="recordsAffected">Devuelve la cantidad de registros que se actualizaron</param>
         /// <exception cref="DaoModelException">Encapsula la excepcion original</exception>
         /// <returns></returns>
-        public bool AddRange(IList<T> entities,IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
+        public bool AddRange(IList<TEntity> entities,IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
         {
             recordsAffected = 0;
 
@@ -467,7 +470,7 @@ namespace SysWork.Data.DaoModel
                 throw new DaoModelException(connectionException);
             }
 
-            foreach (T entity in entities)
+            foreach (TEntity entity in entities)
             {
                 string parameterList = "";
                 dbCommand = dbConnection.CreateCommand();
@@ -489,7 +492,7 @@ namespace SysWork.Data.DaoModel
                 if (parameterList != string.Empty)
                 {
                     parameterList = parameterList.Substring(0, parameterList.Length - 1);
-                    insertRangeQuery = (string.Format("INSERT INTO [{0}] ( {1} ) VALUES ( {2} );", TableName, ColumnsForInsert, parameterList));
+                    insertRangeQuery = (string.Format("INSERT INTO {0} ( {1} ) VALUES ( {2} );", _syntaxProvider.GetTableName(TableName), ColumnsForInsert, parameterList));
                 }
 
                 try
@@ -506,16 +509,20 @@ namespace SysWork.Data.DaoModel
                 }
                 catch (Exception commandException)
                 {
-                    throw new DaoModelException(commandException, dbCommand);
-                }
-                finally
-                {
                     if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
                     {
                         dbConnection.Close();
                         dbConnection.Dispose();
                     }
+
+                    throw new DaoModelException(commandException, dbCommand);
                 }
+            }
+
+            if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+            {
+                dbConnection.Close();
+                dbConnection.Dispose();
             }
 
             return true;
@@ -527,7 +534,7 @@ namespace SysWork.Data.DaoModel
         /// <param name="entity"></param>
         /// <param name="errMessage"></param>
         /// <returns></returns>
-        public bool Update(T entity, out string errMessage)
+        public bool Update(TEntity entity, out string errMessage)
         {
             errMessage = "";
             bool result = false;
@@ -549,23 +556,23 @@ namespace SysWork.Data.DaoModel
 
             return result;
         }
-        public bool Update(T entity)
+        public bool Update(TEntity entity)
         {
             return Update(entity, null, null);
         }
-        public bool Update(T entity, IDbConnection paramDbConnection)
+        public bool Update(TEntity entity, IDbConnection paramDbConnection)
         {
             return Update(entity, paramDbConnection, null);
         }
-        public bool Update(T entity, IDbTransaction paramDbTransaction)
+        public bool Update(TEntity entity, IDbTransaction paramDbTransaction)
         {
             return Update(entity, null, paramDbTransaction);
         }
-        public bool Update(T entity, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        public bool Update(TEntity entity, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
         {
             return Update(entity, paramDbConnection, paramDbTransaction, out long recordsAffected);
         }
-        public bool Update(T entity, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
+        public bool Update(TEntity entity, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
         {
             recordsAffected = 0;
 
@@ -590,7 +597,7 @@ namespace SysWork.Data.DaoModel
 
                 if (!customAttribute.IsPrimary)
                 {
-                    parameterList.Append(string.Format("[{0}] = {1},", i.Name, parameterName));
+                    parameterList.Append(string.Format("{0} = {1},", _syntaxProvider.GetColumnName(i.Name), parameterName));
                 }
                 else
                 {
@@ -599,7 +606,7 @@ namespace SysWork.Data.DaoModel
                     if (where.ToString() != String.Empty)
                         where.Append(" AND ");
 
-                    where.Append(string.Format("([{0}] = {1})", i.Name, parameterName));
+                    where.Append(string.Format("({0} = {1})", _syntaxProvider.GetColumnName(i.Name), parameterName));
                 }
 
                 ColumnDbInfo cdbi = (ColumnDbInfo)ColumnListWithDbInfo[i.Name];
@@ -615,7 +622,7 @@ namespace SysWork.Data.DaoModel
             {
                 parameterList.Remove(parameterList.Length - 1, 1);
                 StringBuilder updateQuery = new StringBuilder();
-                updateQuery.Append(string.Format("UPDATE  [{0}] SET {1} WHERE {2}", TableName, parameterList, where));
+                updateQuery.Append(string.Format("UPDATE  {0} SET {1} WHERE {2}", _syntaxProvider.GetTableName(TableName), parameterList, where));
 
                 try
                 {
@@ -648,7 +655,7 @@ namespace SysWork.Data.DaoModel
             }
             return true;
         }
-        public bool UpdateRange(IList<T> entities, out string errMessage)
+        public bool UpdateRange(IList<TEntity> entities, out string errMessage)
         {
             bool result = false;
             errMessage = "";
@@ -670,25 +677,25 @@ namespace SysWork.Data.DaoModel
 
             return result;
         }
-        public bool UpdateRange(IList<T> entities)
+        public bool UpdateRange(IList<TEntity> entities)
         {
             return UpdateRange(entities, null,null);
         }
 
-        private bool UpdateRange(IList<T> entities, IDbConnection paramDbConnection)
+        private bool UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection)
         {
             return UpdateRange(entities, paramDbConnection, null);
         }
-        private bool UpdateRange(IList<T> entities, IDbTransaction paramDbTransaction)
+        private bool UpdateRange(IList<TEntity> entities, IDbTransaction paramDbTransaction)
         {
             return UpdateRange(entities, null, paramDbTransaction);
         }
-        private bool UpdateRange(IList<T> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        private bool UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
         {
             return UpdateRange(entities, paramDbConnection, paramDbTransaction, out long recordsAffected);
         }
 
-        private bool UpdateRange(IList<T> entities,IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
+        private bool UpdateRange(IList<TEntity> entities,IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
         {
             recordsAffected = 0;
 
@@ -710,7 +717,7 @@ namespace SysWork.Data.DaoModel
                 throw new DaoModelException(exceptionDb);
             }
 
-            foreach (T entity in entities)
+            foreach (TEntity entity in entities)
             {
                 StringBuilder updateRangeQuery = new StringBuilder();
                 StringBuilder parameterList = new StringBuilder();
@@ -727,14 +734,14 @@ namespace SysWork.Data.DaoModel
 
                     if (!customAttibute.IsPrimary)
                     {
-                        parameterList.Append(string.Format("[{0}] = {1},", i.Name, parameterName));
+                        parameterList.Append(string.Format("{0} = {1},", _syntaxProvider.GetColumnName(i.Name), parameterName));
                     }
                     else
                     {
                         if (where.ToString() != String.Empty)
                             where.Append(" AND ");
 
-                        where.Append(string.Format("([{0}] = {1})", i.Name, parameterName));
+                        where.Append(string.Format("({0} = {1})", _syntaxProvider.GetColumnName(i.Name), parameterName));
                     }
                     ColumnDbInfo cdbi = (ColumnDbInfo)ColumnListWithDbInfo[i.Name];
                     dbCommand.Parameters.Add(CreateIDbDataParameter(parameterName, cdbi.DbType, i.GetValue(entity), cdbi.MaxLenght));
@@ -743,7 +750,7 @@ namespace SysWork.Data.DaoModel
                 if (parameterList.ToString() != string.Empty)
                 {
                     parameterList.Remove(parameterList.Length - 1, 1);
-                    updateRangeQuery.AppendLine(string.Format("UPDATE [{0}] SET {1} WHERE {2}; ", TableName, parameterList, where));
+                    updateRangeQuery.AppendLine(string.Format("UPDATE {0} SET {1} WHERE {2}; ", _syntaxProvider.GetTableName(TableName), parameterList, where));
                 }
 
                 try
@@ -760,16 +767,19 @@ namespace SysWork.Data.DaoModel
                 }
                 catch(Exception exceptionCommand)
                 {
-                    throw new DaoModelException(exceptionCommand, dbCommand);
-                }
-                finally
-                {
                     if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
                     {
                         dbConnection.Close();
                         dbConnection.Dispose();
                     }
+                    throw new DaoModelException(exceptionCommand, dbCommand);
                 }
+            }
+
+            if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+            {
+                dbConnection.Close();
+                dbConnection.Dispose();
             }
 
             return true;
@@ -813,7 +823,6 @@ namespace SysWork.Data.DaoModel
         {
             return DeleteById(Id, paramDbConnection, paramDbTransaction, out long recordsAffected);
         }
-
         public bool DeleteById(long Id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
         {
             recordsAffected = 0;
@@ -826,7 +835,7 @@ namespace SysWork.Data.DaoModel
             IDbConnection dbConnection = paramDbConnection ?? GetIDbConnection();
             IDbCommand dbCommand = dbConnection.CreateCommand();
 
-            T entity = new T();
+            TEntity entity = new TEntity();
             StringBuilder where = new StringBuilder();
 
             string parameterName;
@@ -841,7 +850,7 @@ namespace SysWork.Data.DaoModel
                     if (where.ToString() != String.Empty)
                         where.Append(" AND ");
 
-                    where.Append(string.Format("([{0}] = {1})", i.Name, parameterName));
+                    where.Append(string.Format("({0} = {1})", _syntaxProvider.GetColumnName(i.Name), parameterName));
 
                     ColumnDbInfo cdbi = (ColumnDbInfo)ColumnListWithDbInfo[i.Name];
                     dbCommand.Parameters.Add(CreateIDbDataParameter(parameterName, cdbi.DbType, Id, cdbi.MaxLenght));
@@ -852,7 +861,7 @@ namespace SysWork.Data.DaoModel
             if (where.ToString() != string.Empty)
             {
                 StringBuilder deleteQuery = new StringBuilder();
-                deleteQuery.Append(string.Format("DELETE FROM [{0}] WHERE {1}", TableName, where));
+                deleteQuery.Append(string.Format("DELETE FROM {0} WHERE {1}", _syntaxProvider.GetTableName(TableName), where));
 
                 try
                 {
@@ -886,22 +895,107 @@ namespace SysWork.Data.DaoModel
 
             return true;
         }
+        public bool DeleteAll(out string errMessage)
+        {
+            bool result = false;
+            errMessage = "";
 
-        public T GetById(object id)
+            try
+            {
+                DeleteAll();
+                result = true;
+            }
+            catch (DaoModelException daoModelException)
+            {
+                errMessage = daoModelException.OriginalException.Message;
+                result = false;
+            }
+            catch (Exception exception)
+            {
+                errMessage = exception.Message;
+                result = false;
+            }
+
+            return result;
+        }
+        public long DeleteAll()
+        {
+            return DeleteAll(null, null);
+        }
+        public long DeleteAll(IDbConnection paramDbConnection)
+        {
+            return DeleteAll(paramDbConnection, null);
+        }
+        public long DeleteAll(IDbTransaction paramDbTransaction)
+        {
+            return DeleteAll(null, paramDbTransaction);
+        }
+
+        public long DeleteAll(IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        {
+            long recordsAffected = 0;
+
+            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+            
+            if (paramDbConnection == null && paramDbTransaction != null)
+                paramDbConnection = paramDbTransaction.Connection;
+
+            IDbConnection dbConnection = paramDbConnection ?? GetIDbConnection();
+            IDbCommand dbCommand = dbConnection.CreateCommand();
+
+            if (paramDbTransaction != null)
+                dbCommand.Transaction = paramDbTransaction;
+
+            dbCommand.CommandText = string.Format("DELETE FROM {0}", _syntaxProvider.GetTableName(TableName));
+
+            try
+            {
+                if (dbConnection.State != ConnectionState.Open)
+                    dbConnection.Open();
+
+                recordsAffected = dbCommand.ExecuteNonQuery();
+            }
+            catch (Exception exception)
+            {
+                throw new DaoModelException(exception, dbCommand);
+            }
+            finally
+            {
+                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                {
+                    dbConnection.Close();
+                    dbConnection.Dispose();
+                }
+            }
+
+            return recordsAffected;
+        }
+
+
+
+
+
+
+
+
+
+
+
+        public TEntity GetById(object id)
         {
             return GetById(id, null,null);
         }
-        public T GetById(object id, IDbConnection paramDbConnection)
+        public TEntity GetById(object id, IDbConnection paramDbConnection)
         {
             return GetById(id,paramDbConnection, null);
         }
-        public T GetById(object id, IDbTransaction paramDbTransaction)
+        public TEntity GetById(object id, IDbTransaction paramDbTransaction)
         {
             return GetById(id, null, paramDbTransaction);
         }
-        public T GetById(object id,IDbConnection paramDbConnection,IDbTransaction paramDbTransaction)
+        public TEntity GetById(object id,IDbConnection paramDbConnection,IDbTransaction paramDbTransaction)
         {
-            T entity = new T();
+            TEntity entity = new TEntity();
 
             StringBuilder clause = new StringBuilder();
 
@@ -922,7 +1016,7 @@ namespace SysWork.Data.DaoModel
                 if (pk != null && pk.IsPrimary)
                 {
                     string parameterName = "@param_" + pi.Name;
-                    clause.Append(string.Format("[{0}]={1}", pi.Name, id));
+                    clause.Append(string.Format("{0}={1}", _syntaxProvider.GetColumnName(pi.Name), id));
 
                     ColumnDbInfo cdbi = (ColumnDbInfo)ColumnListWithDbInfo[pi.Name];
                     dbCommand.Parameters.Add(CreateIDbDataParameter(parameterName, cdbi.DbType, id, cdbi.MaxLenght));
@@ -935,7 +1029,7 @@ namespace SysWork.Data.DaoModel
             if (clause.ToString() != string.Empty)
             {
                 StringBuilder getQuery = new StringBuilder();
-                getQuery.Append(string.Format("SELECT {0} FROM [{1}] WHERE {2}", ColumnsForSelect, TableName, clause));
+                getQuery.Append(string.Format("SELECT {0} FROM {1} WHERE {2}", ColumnsForSelect, _syntaxProvider.GetTableName(TableName), clause));
 
                 dbCommand.CommandText = getQuery.ToString();
 
@@ -949,7 +1043,7 @@ namespace SysWork.Data.DaoModel
 
                     IDataReader reader = dbCommand.ExecuteReader(CommandBehavior.SingleRow);
                     if (reader.Read())
-                        entity = new IDataReaderToEntity().MapSingle<T>(reader, ListObjectPropertyInfo);
+                        entity = new IDataReaderToEntity().MapSingle<TEntity>(reader, ListObjectPropertyInfo);
 
 
                 }
@@ -973,15 +1067,15 @@ namespace SysWork.Data.DaoModel
         /// Obtiene todas las entidades
         /// </summary>
         /// <returns></returns>
-        public IList<T> GetAll()
+        public IList<TEntity> GetAll()
         {
             return GetAll(null,null);
         }
-        public IList<T> GetAll(IDbConnection paramDbConnection)
+        public IList<TEntity> GetAll(IDbConnection paramDbConnection)
         {
             return GetAll(paramDbConnection, null);
         }
-        public IList<T> GetAll(IDbTransaction paramDbTransaction)
+        public IList<TEntity> GetAll(IDbTransaction paramDbTransaction)
         {
             return GetAll(null, paramDbTransaction);
         }
@@ -991,9 +1085,9 @@ namespace SysWork.Data.DaoModel
         /// </summary>
         /// <param name="paramDbConnection"></param>
         /// <returns></returns>
-        public IList<T> GetAll(IDbConnection paramDbConnection,IDbTransaction paramDbTransaction)
+        public IList<TEntity> GetAll(IDbConnection paramDbConnection,IDbTransaction paramDbTransaction)
         {
-            IList<T> collection = new List<T>();
+            IList<TEntity> collection = new List<TEntity>();
 
             bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
 
@@ -1006,14 +1100,14 @@ namespace SysWork.Data.DaoModel
             if (paramDbTransaction != null)
                 dbCommand.Transaction = paramDbTransaction;
 
-            dbCommand.CommandText = string.Format("SELECT {0} FROM [{1}]", ColumnsForSelect, TableName);
+            dbCommand.CommandText = string.Format("SELECT {0} FROM {1}", ColumnsForSelect, _syntaxProvider.GetTableName(TableName));
 
             try
             {
                 if (dbConnection.State != ConnectionState.Open)
                     dbConnection.Open();
 
-                collection = new IDataReaderToEntity().Map<T>(dbCommand.ExecuteReader(), ListObjectPropertyInfo);
+                collection = new IDataReaderToEntity().Map<TEntity>(dbCommand.ExecuteReader(), ListObjectPropertyInfo);
             }
             catch (Exception exception)
             {
@@ -1035,23 +1129,23 @@ namespace SysWork.Data.DaoModel
         /// </summary>
         /// <param name="lambdaExpressionFilter"></param>
         /// <returns></returns>
-        public IList<T> GetListByLambdaExpressionFilter(Expression<Func<T, bool>> lambdaExpressionFilter)
+        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter)
         {
             return GetListByLambdaExpressionFilter(lambdaExpressionFilter, null,null);
         }
-        public IList<T> GetListByLambdaExpressionFilter(Expression<Func<T, bool>> lambdaExpressionFilter, IDbConnection dbConnection)
+        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection)
         {
             return GetListByLambdaExpressionFilter(lambdaExpressionFilter, dbConnection, null);
         }
-        public IList<T> GetListByLambdaExpressionFilter(Expression<Func<T, bool>> lambdaExpressionFilter, IDbTransaction paramDbTransaction)
+        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction paramDbTransaction)
         {
             return GetListByLambdaExpressionFilter(lambdaExpressionFilter, null, paramDbTransaction);
         }
 
-        public IList<T> GetListByLambdaExpressionFilter(Expression<Func<T, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection,IDbTransaction paramDbTransaction)
+        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection,IDbTransaction paramDbTransaction)
         {
-            IList<T> resultado = new List<T>();
-            var query = new SqlLam<T>(lambdaExpressionFilter);
+            IList<TEntity> resultado = new List<TEntity>();
+            var query = new SqlLam<TEntity>(lambdaExpressionFilter);
 
             bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
 
@@ -1072,14 +1166,12 @@ namespace SysWork.Data.DaoModel
                 dbCommand.CommandText = query.QueryString;
 
                 foreach (var parameters in query.QueryParameters)
-                {
                     dbCommand.Parameters.Add(CreateIDbDataParameter("@" + parameters.Key, parameters.Value));
-                }
 
                 if (_dataBaseEngine == EDataBaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
-                resultado = new IDataReaderToEntity().Map<T>(dbCommand.ExecuteReader(), ListObjectPropertyInfo);
+                resultado = new IDataReaderToEntity().Map<TEntity>(dbCommand.ExecuteReader(), ListObjectPropertyInfo);
 
             }
             catch (Exception exception)
@@ -1097,202 +1189,32 @@ namespace SysWork.Data.DaoModel
 
             return resultado;
         }
-        public object ExecScalar(string QueryString, IDictionary<string, object> QueryParameters)
+        protected DbExecute GetDbExecute()
         {
-            return ExecScalar(QueryString, QueryParameters, null, null);
+            return new DbExecute(ConnectionString, _dataBaseEngine);
         }
 
-        public object ExecScalar(string QueryString, IDictionary<string, object> QueryParameters, DbConnection paramDbConnection)
-        {
-            return ExecScalar(QueryString, QueryParameters, paramDbConnection, null);
-        }
-        public object ExecScalar(string QueryString, IDictionary<string, object> QueryParameters, DbTransaction paramDbTransaction)
-        {
-            return ExecScalar(QueryString, QueryParameters, null, paramDbTransaction);
-        }
-        public object ExecScalar(string QueryString, IDictionary<string, object> QueryParameters, DbConnection paramDbConnection, DbTransaction paramDbTransaction)
-        {
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
-
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
-
-            DbConnection dbConnection = paramDbConnection ?? GetDbConnection();
-            DbCommand dbCommand = dbConnection.CreateCommand();
-
-            object resultado;
-            try
-            {
-                if (dbConnection.State != ConnectionState.Open)
-                    dbConnection.Open();
-
-                dbCommand.CommandText = QueryString;
-
-                if (paramDbTransaction != null)
-                    dbCommand.Transaction = paramDbTransaction;
-
-                foreach (var parameters in QueryParameters)
-                    dbCommand.Parameters.Add(CreateIDbDataParameter((parameters.Key.StartsWith("@") ? "" : "@") + parameters.Key, parameters.Value));
-
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
-                    ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
-
-                resultado = dbCommand.ExecuteScalar();
-            }
-            catch (Exception exception)
-            {
-                throw new DaoModelException(exception, dbCommand);
-            }
-            finally
-            {
-                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
-                {
-                    dbConnection.Close();
-                    dbConnection.Dispose();
-                }
-            }
-
-            return resultado;
-        }
-
-        public long ExecNonQuery(string QueryString)
-        {
-            return ExecNonQuery(QueryString, null, null, null);
-        }
-        public long ExecNonQuery(string QueryString, DbConnection paramDbConnection)
-        {
-            return ExecNonQuery(QueryString, null, paramDbConnection, null);
-        }
-        public long ExecNonQuery(string QueryString, IDictionary<string, object> QueryParameters)
-        {
-            return ExecNonQuery(QueryString, QueryParameters, null, null);
-        }
-        public long ExecNonQuery(string QueryString, IDictionary<string, object> QueryParameters, DbConnection paramDbConnection)
-        {
-            return ExecNonQuery(QueryString, QueryParameters, paramDbConnection, null);
-        }
-        public long ExecNonQuery(string QueryString, DbTransaction paramDbTransaction)
-        {
-            return ExecNonQuery(QueryString, null, null, paramDbTransaction);
-        }
-        public long ExecNonQuery(string QueryString, IDictionary<string, object> QueryParameters, DbTransaction paramDbTransaction)
-        {
-            return ExecNonQuery(QueryString, QueryParameters, null, paramDbTransaction);
-        }
-        public long ExecNonQuery(string QueryString, IDictionary<string, object> QueryParameters, DbConnection paramDbConnection, DbTransaction paramDbTransaction)
-        {
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
-
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = (DbConnection)paramDbTransaction.Connection;
-
-            DbConnection dbConnection = paramDbConnection ?? GetDbConnection();
-            DbCommand dbCommand= dbConnection.CreateCommand();
-
-            long resultado;
-            try
-            {
-                if (dbConnection.State != ConnectionState.Open)
-                    dbConnection.Open();
-
-                dbCommand.CommandText = QueryString;
-
-                if (paramDbTransaction != null)
-                    dbCommand.Transaction = paramDbTransaction;
-
-                if (QueryParameters != null)
-                {
-                    foreach (var parameters in QueryParameters)
-                        dbCommand.Parameters.Add(CreateIDbDataParameter((parameters.Key.StartsWith("@") ? "" : "@") + parameters.Key, parameters.Value));
-
-                    if (_dataBaseEngine == EDataBaseEngine.OleDb)
-                        ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
-
-                }
-
-                resultado = dbCommand.ExecuteNonQuery();
-
-            }
-            catch (Exception exception)
-            {
-                throw new DaoModelException(exception, dbCommand);
-            }
-            finally
-            {
-                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
-                {
-                    dbConnection.Close();
-                    dbConnection.Dispose();
-                }
-            }
-
-            return resultado;
-        }
-
-        public DbConnectionExecute GetDbConnectionExecute()
-        {
-            return new DbConnectionExecute(ConnectionString, _dataBaseEngine);
-        }
-
-        public IEnumerable<T> SelectQuery(string QueryString, IDictionary<string, object> QueryParameters)
-        {
-            return SelectQuery(QueryString, QueryParameters, null, null);
-        }
-        public IEnumerable<T> SelectQuery(string QueryString, IDictionary<string, object> QueryParameters, DbConnection paramDbConnection)
-        {
-            return SelectQuery(QueryString, QueryParameters, paramDbConnection, null);
-        }
-        public IEnumerable<T> SelectQuery(string QueryString, IDictionary<string, object> QueryParameters, DbTransaction paramDbTransaction)
-        {
-            return SelectQuery(QueryString, QueryParameters, null, paramDbTransaction);
-        }
-
-        public IEnumerable<T> SelectQuery(string QueryString, IDictionary<string, object> QueryParameters,DbConnection paramDbConnection, DbTransaction paramDbTransaction)
-        {
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
-
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
-
-            DbConnection dbConnection = paramDbConnection ?? GetDbConnection();
-            if (dbConnection.State != ConnectionState.Open)
-                dbConnection.Open();
-
-            DbCommand dbCommand = dbConnection.CreateCommand();
-            dbCommand.CommandText = QueryString;
-
-
-            if (paramDbTransaction != null)
-                dbCommand.Transaction = paramDbTransaction;
-
-            foreach (var parameters in QueryParameters)
-                dbCommand.Parameters.Add(CreateIDbDataParameter((parameters.Key.StartsWith("@")?"":"@") + parameters.Key, parameters.Value));
-
-            foreach (IDataRecord dataRecord in dbCommand.ExecuteReader(closeConnection ? CommandBehavior.CloseConnection : CommandBehavior.Default))
-                yield return new IDataReaderToEntity().MapSingle<T>(dataRecord, ListObjectPropertyInfo);
-        }
-
-        public Dictionary<string, object> CreateQueryParametersList()
+        protected Dictionary<string, object> CreateQueryParametersList()
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             return parameters;
         }
 
-        public IList<T> Find(IEnumerable<object> ids)
+        public IList<TEntity> Find(IEnumerable<object> ids)
         {
             return Find(ids, null, null);
         }
-        public IList<T> Find(IEnumerable<object> ids, IDbConnection dbConnection)
+        public IList<TEntity> Find(IEnumerable<object> ids, IDbConnection dbConnection)
         {
             return Find(ids, dbConnection, null);
         }
-        public IList<T> Find(IEnumerable<object> ids, IDbTransaction paramDbTransaction)
+        public IList<TEntity> Find(IEnumerable<object> ids, IDbTransaction paramDbTransaction)
         {
             return Find(ids, null, paramDbTransaction);
         }
-        public IList<T> Find(IEnumerable<object> ids, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        public IList<TEntity> Find(IEnumerable<object> ids, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
         {
-            IList<T> entities = new List<T>();
+            IList<TEntity> entities = new List<TEntity>();
             StringBuilder clause = new StringBuilder();
 
             bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
@@ -1317,7 +1239,7 @@ namespace SysWork.Data.DaoModel
                         _ids = _ids + id.ToString();
                     }
 
-                    clause.Append(string.Format("[{0}] IN ({1})", pi.Name, _ids));
+                    clause.Append(string.Format("{0} IN ({1})", _syntaxProvider.GetColumnName(pi.Name), _ids));
                     break;
                 }
             }
@@ -1325,7 +1247,7 @@ namespace SysWork.Data.DaoModel
             if (clause.ToString() != string.Empty)
             {
                 StringBuilder findQuery = new StringBuilder();
-                findQuery.Append(string.Format("SELECT {0} FROM [{1}] WHERE {2}", ColumnsForSelect, TableName, clause));
+                findQuery.Append(string.Format("SELECT {0} FROM {1} WHERE {2}", ColumnsForSelect, _syntaxProvider.GetTableName(TableName), clause));
 
                 try
                 {
@@ -1336,7 +1258,7 @@ namespace SysWork.Data.DaoModel
                     if (paramDbTransaction != null)
                         dbCommand.Transaction = paramDbTransaction;
 
-                    entities = new IDataReaderToEntity().Map<T>(dbCommand.ExecuteReader(), ListObjectPropertyInfo);
+                    entities = new IDataReaderToEntity().Map<TEntity>(dbCommand.ExecuteReader(), ListObjectPropertyInfo);
 
                 }
                 catch (Exception exception)
@@ -1354,13 +1276,14 @@ namespace SysWork.Data.DaoModel
             }
             return entities;
         }
+
         /// <summary>
         /// Devuelve un *IDbConnection*, dependiendo del motor de base de datos del DAO
         /// </summary>
         /// <returns></returns>
         protected IDbConnection GetIDbConnection()
         {
-            return DataObjectResolver.GetIDbConnection(_dataBaseEngine, ConnectionString);
+            return _dataObjectProvider.GetIDbConnection(ConnectionString);
         }
         /// <summary>
         /// Devuelve un *DbConnection*, dependiendo del motor de base de datos del DAO
@@ -1368,68 +1291,16 @@ namespace SysWork.Data.DaoModel
         /// <returns></returns>
         protected DbConnection GetDbConnection()
         {
-            return DataObjectResolver.GetDbConnection(_dataBaseEngine, ConnectionString);
+            return _dataObjectProvider.GetDbConnection(ConnectionString);
         }
-        /// <summary>
-        /// A no ser que el Usuario Cierre esta DbConnection, la misma permanecerá activa.
-        /// </summary>
-        /// <returns></returns>
-        protected DbConnection GetPersistentDbConnection()
-        {
-            if (_persistentConnection == null)
-                _persistentConnection = DataObjectResolver.GetDbConnection(_dataBaseEngine, ConnectionString);
-
-            return _persistentConnection;
-        }
-        /// <summary>
-        /// Devuelve un *IDbCommand*, dependiendo del motor de base de datos del DAO
-        /// </summary>
-        /// <returns></returns>
-        protected IDbCommand GetIDbCommand()
-        {
-            return GetIDbCommandImplementation();
-        }
-        private IDbCommand GetIDbCommand(string commandText)
-        {
-            return GetIDbCommandImplementation(commandText);
-        }
-        private IDbCommand GetIDbCommand(string commandText, IDbConnection dbConnection)
-        {
-            return GetIDbCommandImplementation(commandText, dbConnection);
-        }
-        public IDbCommand GetIDbCommand(string commandText, IDbConnection dbConnection, IDbTransaction paramDbTransaction)
-        {
-            return GetIDbCommandImplementation(commandText, dbConnection, paramDbTransaction);
-        }
-        public IDbCommand GetIDbCommand(string commandText, IDbTransaction paramDbTransaction)
-        {
-            return GetIDbCommandImplementation(commandText,null, paramDbTransaction);
-        }
-        private IDbCommand GetIDbCommandImplementation(string commandText = null , IDbConnection dbConnection = null, IDbTransaction paramDbTransaction = null)
-        {
-            IDbCommand dbCommand = DataObjectResolver.GetIDbCommand(_dataBaseEngine);
-
-            if (commandText != null) dbCommand.CommandText = commandText;
-            if (dbConnection != null) dbCommand.Connection = dbConnection;
-
-            if (paramDbTransaction != null)
-            {
-                if (dbCommand.Connection == null)
-                    dbCommand.Connection = paramDbTransaction.Connection;
-
-                dbCommand.Transaction = paramDbTransaction;
-            }
-
-            return dbCommand ;
-        }
-
+        
         /// <summary>
         /// Devuelve un IDbParameter, dependiendo del motor de base de datos del DAO
         /// </summary>
         /// <returns></returns>
         protected IDbDataParameter GetIDbDataParameter()
         {
-            return DataObjectResolver.GetIDbDataParameter(_dataBaseEngine);
+            return _dataObjectProvider.GetIDbDataParameter();
         }
 
         /// <summary>
@@ -1439,31 +1310,31 @@ namespace SysWork.Data.DaoModel
         /// </summary>
         private void GetDbColumnsAndAtributes()
         {
-            T entity = new T();
+            TEntity entity = new TEntity();
 
-            StringBuilder columnsInsert = new StringBuilder();
-            StringBuilder columnsSelect = new StringBuilder();
+            StringBuilder sbColumnsInsert = new StringBuilder();
+            StringBuilder sbColumnsSelect = new StringBuilder();
 
             foreach (PropertyInfo i in ListObjectPropertyInfo)
             {
                 var customAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
 
                 if (!customAttribute.IsIdentity)
-                    columnsInsert.Append(string.Format("[{0}],", i.Name));
+                    sbColumnsInsert.Append(string.Format("{0},", _syntaxProvider.GetColumnName(i.Name)));
 
-                columnsSelect.Append(string.Format("[{0}],", i.Name));
+                sbColumnsSelect.Append(string.Format("{0},", _syntaxProvider.GetColumnName(i.Name)));
 
                 ColumnListWithDbInfo.Add(i.Name, GetColumnDbInfo(i.Name));
             }
 
-            if (columnsInsert.Length > 0)
-                columnsInsert.Remove(columnsInsert.Length - 1, 1);
+            if (sbColumnsInsert.Length > 0)
+                sbColumnsInsert.Remove(sbColumnsInsert.Length - 1, 1);
 
-            if (columnsSelect.Length > 0)
-                columnsSelect.Remove(columnsSelect.Length - 1, 1);
+            if (sbColumnsSelect.Length > 0)
+                sbColumnsSelect.Remove(sbColumnsSelect.Length - 1, 1);
 
-            ColumnsForInsert = columnsInsert.ToString();
-            ColumnsForSelect = columnsSelect.ToString();
+            ColumnsForInsert = sbColumnsInsert.ToString();
+            ColumnsForSelect = sbColumnsSelect.ToString();
         }
 
         private static readonly Dictionary<string, DbType> s_sqlTypeToDbType = new Dictionary<string, DbType>(StringComparer.OrdinalIgnoreCase)
@@ -1498,6 +1369,7 @@ namespace SysWork.Data.DaoModel
             { "nchar", DbType.String },
             { "char", DbType.AnsiStringFixedLength},
             { "ntext", DbType.String },
+            { "mediumtext", DbType.String },
             { "text", DbType.String },
             { "WChar", DbType.String },
             { "varwchar", DbType.String },
@@ -1512,7 +1384,7 @@ namespace SysWork.Data.DaoModel
                 dbConnection.Open();
 
                 DataTable columnProperty;
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                if (_dataBaseEngine == EDataBaseEngine.OleDb || _dataBaseEngine == EDataBaseEngine.MySql)
                     columnProperty = dbConnection.GetSchema("Columns", new[] { null, null, TableName, columnName });
                 else
                     columnProperty = dbConnection.GetSchema("Columns", new[] { dbConnection.Database, null, TableName,columnName});
@@ -1524,10 +1396,8 @@ namespace SysWork.Data.DaoModel
                 }
                 catch (Exception)
                 {
-
                     throw;
                 }
-
 
                 columnData.MaxLenght = null;
                 if (Int32.TryParse(dataRow["CHARACTER_MAXIMUM_LENGTH"].ToString(), out Int32 maxLength))
@@ -1596,42 +1466,11 @@ namespace SysWork.Data.DaoModel
             return dataParameter;
         }
 
-        private IList<PropertyInfo> GetPropertyInfoList(T entity)
+        private IList<PropertyInfo> GetPropertyInfoList(TEntity entity)
         {
             return entity.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
         }
 
-        public string GetNextCode(string field, int lenght)
-        {
-            string newCode = new string('0', lenght);
-            IDbCommand dbCommand = GetIDbCommand();
-            try
-            {
-                using (IDbConnection dbConnection = GetIDbConnection())
-                {
-                    string query = "SELECT ISNULL(MAX({0}),0) AS MAXIMO FROM {1} WHERE (ISNUMERIC({2}) = 1) AND LEN({3}) = {4}";
-                    query = string.Format(query, field, TableName, field, field, lenght);
-
-                    dbConnection.Open();
-
-                    dbCommand.CommandText = query;
-                    dbCommand.Connection = dbConnection;
-
-                    var value = dbCommand.ExecuteScalar();
-                    var numberValue = Int32.Parse(value.ToString()) + 1;
-                    newCode = string.Format("{0:" + new string('0', lenght) + "}", numberValue);
-
-                    dbCommand.Dispose();
-                    dbConnection.Close();
-                }
-            }
-            catch (Exception exception)
-            {
-                throw new DaoModelException(exception, dbCommand);
-            }
-
-            return newCode;
-        }
         protected long ParseToLong(object result)
         {
             if (result.GetType() == typeof(System.Int64))
@@ -1640,8 +1479,8 @@ namespace SysWork.Data.DaoModel
                 return (long)(Int32)result;
             else if (result.GetType() == typeof(System.Decimal))
                 return (long)(Decimal)result;
-            else
-                throw new ArgumentOutOfRangeException("El resultado obtenido no puede Parsearse");
+            else 
+                return long.Parse(result.ToString());
         }
     }
 
@@ -1721,18 +1560,18 @@ namespace SysWork.Data.DaoModel
         /// <summary>
         ///  Dado un IDataReader y el Tipo de Entidad devuelve una entidad mapeada.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TEntity"></typeparam>
         /// <param name="reader"></param>
         /// <param name="listObjectPropertyInfo"></param>
         /// <returns></returns>
-        public T MapSingle<T>(IDataReader reader) where T : class, new()
+        public TEntity MapSingle<TEntity>(IDataReader reader) where TEntity : class, new()
         {
-            return MapSingle<T>(reader, null);
+            return MapSingle<TEntity>(reader, null);
         }
 
-        public T MapSingle<T>(IDataReader reader, IList<PropertyInfo> listObjectPropertyInfo) where T : class, new()
+        public TEntity MapSingle<TEntity>(IDataReader reader, IList<PropertyInfo> listObjectPropertyInfo) where TEntity : class, new()
         {
-            T obj = new T();
+            TEntity obj = new TEntity();
 
             IList<PropertyInfo> _propertyInfo;
 
@@ -1741,7 +1580,7 @@ namespace SysWork.Data.DaoModel
             else
                 _propertyInfo = obj.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
 
-            obj = new T();
+            obj = new TEntity();
 
             foreach (PropertyInfo i in _propertyInfo)
             {
@@ -1773,13 +1612,13 @@ namespace SysWork.Data.DaoModel
             }
             return obj;
         }
-        public T MapSingle<T>(IDataRecord dataRecord) where T : class, new()
+        public TEntity MapSingle<TEntity>(IDataRecord dataRecord) where TEntity : class, new()
         {
-            return MapSingle<T>(dataRecord, null);
+            return MapSingle<TEntity>(dataRecord, null);
         }
-        public T MapSingle<T>(IDataRecord dataRecord, IList<PropertyInfo> listObjectPropertyInfo) where T : class, new()
+        public TEntity MapSingle<TEntity>(IDataRecord dataRecord, IList<PropertyInfo> listObjectPropertyInfo) where TEntity : class, new()
         {
-            T obj = new T();
+            TEntity obj = new TEntity();
 
             IList<PropertyInfo> _propertyInfo;
 
@@ -1788,7 +1627,7 @@ namespace SysWork.Data.DaoModel
             else
                 _propertyInfo = obj.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
 
-            obj = new T();
+            obj = new TEntity();
 
             foreach (PropertyInfo i in _propertyInfo)
             {
@@ -1820,6 +1659,181 @@ namespace SysWork.Data.DaoModel
             }
             return obj;
         }
-
     }
 }
+
+/*
+public object ExecScalar(string QueryString, IDictionary<string, object> QueryParameters)
+{
+    return ExecScalar(QueryString, QueryParameters, null, null);
+}
+
+public object ExecScalar(string QueryString, IDictionary<string, object> QueryParameters, DbConnection paramDbConnection)
+{
+    return ExecScalar(QueryString, QueryParameters, paramDbConnection, null);
+}
+public object ExecScalar(string QueryString, IDictionary<string, object> QueryParameters, DbTransaction paramDbTransaction)
+{
+    return ExecScalar(QueryString, QueryParameters, null, paramDbTransaction);
+}
+public object ExecScalar(string QueryString, IDictionary<string, object> QueryParameters, DbConnection paramDbConnection, DbTransaction paramDbTransaction)
+{
+    bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+
+    if (paramDbConnection == null && paramDbTransaction != null)
+        paramDbConnection = paramDbTransaction.Connection;
+
+    DbConnection dbConnection = paramDbConnection ?? GetDbConnection();
+    DbCommand dbCommand = dbConnection.CreateCommand();
+
+    object resultado;
+    try
+    {
+        if (dbConnection.State != ConnectionState.Open)
+            dbConnection.Open();
+
+        dbCommand.CommandText = QueryString;
+
+        if (paramDbTransaction != null)
+            dbCommand.Transaction = paramDbTransaction;
+
+        foreach (var parameters in QueryParameters)
+            dbCommand.Parameters.Add(CreateIDbDataParameter((parameters.Key.StartsWith("@") ? "" : "@") + parameters.Key, parameters.Value));
+
+        if (_dataBaseEngine == EDataBaseEngine.OleDb)
+            ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
+
+        resultado = dbCommand.ExecuteScalar();
+    }
+    catch (Exception exception)
+    {
+        throw new DaoModelException(exception, dbCommand);
+    }
+    finally
+    {
+        if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+        {
+            dbConnection.Close();
+            dbConnection.Dispose();
+        }
+    }
+
+    return resultado;
+}
+*/
+/*
+public long ExecNonQuery(string QueryString)
+{
+    return ExecNonQuery(QueryString, null, null, null);
+}
+public long ExecNonQuery(string QueryString, DbConnection paramDbConnection)
+{
+    return ExecNonQuery(QueryString, null, paramDbConnection, null);
+}
+public long ExecNonQuery(string QueryString, IDictionary<string, object> QueryParameters)
+{
+    return ExecNonQuery(QueryString, QueryParameters, null, null);
+}
+public long ExecNonQuery(string QueryString, IDictionary<string, object> QueryParameters, DbConnection paramDbConnection)
+{
+    return ExecNonQuery(QueryString, QueryParameters, paramDbConnection, null);
+}
+public long ExecNonQuery(string QueryString, DbTransaction paramDbTransaction)
+{
+    return ExecNonQuery(QueryString, null, null, paramDbTransaction);
+}
+public long ExecNonQuery(string QueryString, IDictionary<string, object> QueryParameters, DbTransaction paramDbTransaction)
+{
+    return ExecNonQuery(QueryString, QueryParameters, null, paramDbTransaction);
+}
+public long ExecNonQuery(string QueryString, IDictionary<string, object> QueryParameters, DbConnection paramDbConnection, DbTransaction paramDbTransaction)
+{
+    bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+
+    if (paramDbConnection == null && paramDbTransaction != null)
+        paramDbConnection = (DbConnection)paramDbTransaction.Connection;
+
+    DbConnection dbConnection = paramDbConnection ?? GetDbConnection();
+    DbCommand dbCommand= dbConnection.CreateCommand();
+
+    long resultado;
+    try
+    {
+        if (dbConnection.State != ConnectionState.Open)
+            dbConnection.Open();
+
+        dbCommand.CommandText = QueryString;
+
+        if (paramDbTransaction != null)
+            dbCommand.Transaction = paramDbTransaction;
+
+        if (QueryParameters != null)
+        {
+            foreach (var parameters in QueryParameters)
+                dbCommand.Parameters.Add(CreateIDbDataParameter((parameters.Key.StartsWith("@") ? "" : "@") + parameters.Key, parameters.Value));
+
+            if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
+
+        }
+
+        resultado = dbCommand.ExecuteNonQuery();
+
+    }
+    catch (Exception exception)
+    {
+        throw new DaoModelException(exception, dbCommand);
+    }
+    finally
+    {
+        if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+        {
+            dbConnection.Close();
+            dbConnection.Dispose();
+        }
+    }
+
+    return resultado;
+}
+*/
+
+
+/*
+public IEnumerable<T> SelectQuery(string QueryString, IDictionary<string, object> QueryParameters)
+{
+    return SelectQuery(QueryString, QueryParameters, null, null);
+}
+public IEnumerable<T> SelectQuery(string QueryString, IDictionary<string, object> QueryParameters, DbConnection paramDbConnection)
+{
+    return SelectQuery(QueryString, QueryParameters, paramDbConnection, null);
+}
+public IEnumerable<T> SelectQuery(string QueryString, IDictionary<string, object> QueryParameters, DbTransaction paramDbTransaction)
+{
+    return SelectQuery(QueryString, QueryParameters, null, paramDbTransaction);
+}
+
+public IEnumerable<T> SelectQuery(string QueryString, IDictionary<string, object> QueryParameters,DbConnection paramDbConnection, DbTransaction paramDbTransaction)
+{
+    bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+
+    if (paramDbConnection == null && paramDbTransaction != null)
+        paramDbConnection = paramDbTransaction.Connection;
+
+    DbConnection dbConnection = paramDbConnection ?? GetDbConnection();
+    if (dbConnection.State != ConnectionState.Open)
+        dbConnection.Open();
+
+    DbCommand dbCommand = dbConnection.CreateCommand();
+    dbCommand.CommandText = QueryString;
+
+
+    if (paramDbTransaction != null)
+        dbCommand.Transaction = paramDbTransaction;
+
+    foreach (var parameters in QueryParameters)
+        dbCommand.Parameters.Add(CreateIDbDataParameter((parameters.Key.StartsWith("@")?"":"@") + parameters.Key, parameters.Value));
+
+    foreach (IDataRecord dataRecord in dbCommand.ExecuteReader(closeConnection ? CommandBehavior.CloseConnection : CommandBehavior.Default))
+        yield return new IDataReaderToEntity().MapSingle<T>(dataRecord, ListObjectPropertyInfo);
+}
+*/

@@ -9,26 +9,16 @@ using SysWork.Data.DaoModel;
 using SysWork.Data.Common;
 using System.Data.Common;
 using System.Data;
+using SysWork.Data.Common.DbConnectionUtilities;
 
 namespace GerdannaDataManager.Daos
 {
     public class DaoPersonaSqlite : BaseDao<Persona>
     {
-        /// <summary>
-        /// **********************************************************************
-        /// 
-        /// Esta clase fue generada automaticamente por la clase DaoClassFromDb
-        /// 
-        /// Fecha: 14/08/2018 17:31:01
-        /// 
-        /// **********************************************************************
-        /// </summary>
-
         public DaoPersonaSqlite(string connectionString) : base(connectionString, EDataBaseEngine.SqLite)
         {
 
         }
-
         public Persona GetByDni(string Dni)
         {
             Persona persona = null;
@@ -38,23 +28,11 @@ namespace GerdannaDataManager.Daos
             return persona;
         }
 
-        public DbConnection GetConnection()
-        {
-            return GetDbConnection();
-        }
     }
+
     public class DaoPersonaSql : BaseDao<Persona>
     {
-        /// <summary>
-        /// **********************************************************************
-        /// 
-        /// Esta clase fue generada automaticamente por la clase DaoClassFromDb
-        /// 
-        /// Fecha: 14/08/2018 17:31:01
-        /// 
-        /// **********************************************************************
-        /// </summary>
-
+ 
         public DaoPersonaSql(string connectionString) : base(connectionString, EDataBaseEngine.MSSqlServer)
         {
 
@@ -68,24 +46,10 @@ namespace GerdannaDataManager.Daos
                 persona = resultado[0];
             return persona;
         }
-        public DbConnection GetConnection()
-        {
-            return GetDbConnection();
-        }
 
     }
-    public class DaoPersonaOleDb: BaseDao<Persona>
+    public class DaoPersonaOleDb : BaseDao<Persona>
     {
-        /// <summary>
-        /// **********************************************************************
-        /// 
-        /// Esta clase fue generada automaticamente por la clase DaoClassFromDb
-        /// 
-        /// Fecha: 14/08/2018 17:31:01
-        /// 
-        /// **********************************************************************
-        /// </summary>
-
         public DaoPersonaOleDb(string connectionString) : base(connectionString, EDataBaseEngine.OleDb)
         {
 
@@ -99,22 +63,21 @@ namespace GerdannaDataManager.Daos
                 persona = resultado[0];
             return persona;
         }
-        public DbConnection GetConnection()
+    }
+    public class DaoPersonaMySql : BaseDao<Persona>
+    {
+        public DaoPersonaMySql(string connectionString) : base(connectionString, EDataBaseEngine.MySql)
         {
-            return GetDbConnection();
-        }
-        public IDbConnection Get_IDBConnection()
-        {
-            return GetIDbConnection();
-        }
-        public IDbCommand Get_IDBCommand()
-        {
-            return GetIDbCommand();
+
         }
 
-        public DbConnection Get_PersistentConnection()
+        public Persona GetByDni(string Dni)
         {
-            return GetPersistentDbConnection();
+            Persona persona = null;
+            var resultado = GetListByLambdaExpressionFilter(entity => (entity.Dni == Dni));
+            if (resultado != null && resultado.Count > 0)
+                persona = resultado[0];
+            return persona;
         }
 
     }

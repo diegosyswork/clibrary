@@ -12,6 +12,8 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.ValueObjects
     public enum SqlAdapter
     {
         SqlServer2008,
-        SqlServer2012
+        SqlServer2012,
+        MySql,
+        SQLite
     }
 }

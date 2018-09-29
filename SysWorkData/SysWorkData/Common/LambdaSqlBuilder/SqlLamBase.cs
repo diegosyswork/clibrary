@@ -53,6 +53,10 @@ namespace SysWork.Data.Common.LambdaSqlBuilder
                     return new SqlServer2008Adapter();
                 case SqlAdapter.SqlServer2012:
                     return new SqlServer2012Adapter();
+                case SqlAdapter.MySql:
+                    return new MySQLAdapter();
+                case SqlAdapter.SQLite:
+                    return new SQLiteAdapter();
                 default:
                     throw new ArgumentException("The specified Sql Adapter was not recognized");
             }
