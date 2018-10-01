@@ -129,6 +129,7 @@
     <Compile Include="DaoModel\CodeWriter\DaoClassFromDb.cs" />
     <Compile Include="DaoModel\CodeWriter\EntityClassFromDb.cs" />
     <Compile Include="DaoModel\Core.cs" />
+    <Compile Include="DaoModel\DataManagerBase.cs" />
     <Compile Include="DaoModel\Exceptions\DaoModelException.cs" />
     <Compile Include="DaoModel\Extensions\DaoModelExtensions.cs" />
     <Compile Include="DaoModel\Interfaces\IBaseDao.cs" />

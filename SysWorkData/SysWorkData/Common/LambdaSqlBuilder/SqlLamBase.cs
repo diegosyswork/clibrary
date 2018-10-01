@@ -14,6 +14,7 @@ namespace SysWork.Data.Common.LambdaSqlBuilder
     /// </summary>
     public abstract class SqlLamBase
     {
+        //internal static ISqlAdapter _defaultAdapter = new SqlServer2012Adapter();
         internal static ISqlAdapter _defaultAdapter = new SqlServer2012Adapter();
         internal SqlQueryBuilder _builder;
         internal LambdaResolver _resolver;
@@ -23,6 +24,11 @@ namespace SysWork.Data.Common.LambdaSqlBuilder
         public string QueryString
         {
             get { return _builder.QueryString; }
+        }
+
+        public string QueryWhere
+        {
+            get { return _builder.Conditions; }
         }
 
         public string QueryStringPage(int pageSize, int? pageNumber = null)
@@ -40,6 +46,7 @@ namespace SysWork.Data.Common.LambdaSqlBuilder
             get { return _builder.SplitColumns.ToArray(); }
         }
 
+        
         public static void SetAdapter(SqlAdapter adapter)
         {
             _defaultAdapter = GetAdapterInstance(adapter);
@@ -61,5 +68,6 @@ namespace SysWork.Data.Common.LambdaSqlBuilder
                     throw new ArgumentException("The specified Sql Adapter was not recognized");
             }
         }
+        
     }
 }

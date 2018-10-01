@@ -13,30 +13,38 @@ namespace TestDaoModelDataCommon
     public class DataManagerOleDb
     {
         private static string _connectionString;
-        private static EDataBaseEngine _dataBaseEngine;
-
         public static string ConnectionString { get { return _connectionString; } set { _connectionString = value; } }
-        public static EDataBaseEngine DatabaseEngine { get { return _dataBaseEngine; } set { _dataBaseEngine = value; } }
+
+        private static EDataBaseEngine _dataBaseEngine;
+        public static EDataBaseEngine DataBaseEngine { get { return _dataBaseEngine; } set { _dataBaseEngine = value; } }
+
+        protected static void ValidacionesAlCrearLaInstancia()
+        {
+            if (string.IsNullOrEmpty(ConnectionString))
+                throw new ArgumentNullException("No se ha informado la cadena de conexion del DataManager");
+        }
 
         private static DataManagerOleDb _dataManagerInstance = null;
 
-        public DaoPersonaOleDb DaoPersonaOleDb { get; private set; }
+        public DaoPersona DaoPersonaOleDb { get; private set; }
 
         private DataManagerOleDb()
         {
-            DaoPersonaOleDb = new DaoPersonaOleDb(ConnectionString);
+            InstanciarDaos();
         }
 
         public static DataManagerOleDb GetInstance()
         {
-
-            if (string.IsNullOrEmpty(ConnectionString))
-                throw new ArgumentNullException("No se ha informado la cadena de conexion del DataManager");
+            ValidacionesAlCrearLaInstancia();
 
             if (_dataManagerInstance == null)
                 _dataManagerInstance = new DataManagerOleDb();
 
             return _dataManagerInstance;
+        }
+        public void InstanciarDaos()
+        {
+            DaoPersonaOleDb = new DaoPersona(ConnectionString, DataBaseEngine);
         }
         public DbExecute GetDbExecute()
         {

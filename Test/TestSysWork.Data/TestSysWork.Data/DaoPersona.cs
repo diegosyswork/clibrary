@@ -13,72 +13,15 @@ using SysWork.Data.Common.DbConnectionUtilities;
 
 namespace GerdannaDataManager.Daos
 {
-    public class DaoPersonaSqlite : BaseDao<Persona>
+    public class DaoPersona: BaseDao<Persona>
     {
-        public DaoPersonaSqlite(string connectionString) : base(connectionString, EDataBaseEngine.SqLite)
+        public DaoPersona(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         {
 
         }
         public Persona GetByDni(string Dni)
         {
-            Persona persona = null;
-            var resultado = GetListByLambdaExpressionFilter(entity => (entity.Dni == Dni));
-            if (resultado != null && resultado.Count > 0)
-                persona = resultado[0];
-            return persona;
+            return GetByLambdaExpressionFilter(entity => (entity.Dni == Dni));
         }
-
-    }
-
-    public class DaoPersonaSql : BaseDao<Persona>
-    {
- 
-        public DaoPersonaSql(string connectionString) : base(connectionString, EDataBaseEngine.MSSqlServer)
-        {
-
-        }
-
-        public Persona GetByDni(string Dni)
-        {
-            Persona persona = null;
-            var resultado = GetListByLambdaExpressionFilter(entity => (entity.Dni == Dni));
-            if (resultado != null && resultado.Count > 0)
-                persona = resultado[0];
-            return persona;
-        }
-
-    }
-    public class DaoPersonaOleDb : BaseDao<Persona>
-    {
-        public DaoPersonaOleDb(string connectionString) : base(connectionString, EDataBaseEngine.OleDb)
-        {
-
-        }
-
-        public Persona GetByDni(string Dni)
-        {
-            Persona persona = null;
-            var resultado = GetListByLambdaExpressionFilter(entity => (entity.Dni == Dni));
-            if (resultado != null && resultado.Count > 0)
-                persona = resultado[0];
-            return persona;
-        }
-    }
-    public class DaoPersonaMySql : BaseDao<Persona>
-    {
-        public DaoPersonaMySql(string connectionString) : base(connectionString, EDataBaseEngine.MySql)
-        {
-
-        }
-
-        public Persona GetByDni(string Dni)
-        {
-            Persona persona = null;
-            var resultado = GetListByLambdaExpressionFilter(entity => (entity.Dni == Dni));
-            if (resultado != null && resultado.Count > 0)
-                persona = resultado[0];
-            return persona;
-        }
-
     }
 }

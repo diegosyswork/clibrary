@@ -37,6 +37,4 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Adapter
             return "@" + parameterId;
         }
     }
-
-
 }

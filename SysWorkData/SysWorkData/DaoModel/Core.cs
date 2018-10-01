@@ -21,11 +21,6 @@ using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 
 namespace SysWork.Data.DaoModel
 {
-    internal class ColumnDbInfo
-    {
-        internal DbType DbType { get; set; }
-        internal Int32? MaxLenght { get; set; }
-    }
     /// <summary>
     /// Author : Diego Martinez
     /// Email : dmartinez@syswork.com.ar
@@ -39,14 +34,36 @@ namespace SysWork.Data.DaoModel
     /// 
     public abstract class BaseDao<TEntity>: IBaseDao<TEntity> where TEntity : class, new() 
     {
+        private string _connectionString;
+        public string ConnectionString
+        {
+            get
+            {
+                return _connectionString;
+            }
+            private set
+            {
+                _connectionString = value;
+            }
+        }
+
         private EDataBaseEngine _dataBaseEngine;
+        public EDataBaseEngine DataBaseEngine
+        {
+            get
+            {
+                return _dataBaseEngine;
+            }
+            private set
+            {
+                _dataBaseEngine = value;
+            }
+        }
 
         private Hashtable ColumnListWithDbInfo = new Hashtable();
 
-        public string ConnectionString { get; private set; }
-
         protected DataObjectProvider _dataObjectProvider { get; private set; }
-        private SyntaxProvider _syntaxProvider;
+        protected SyntaxProvider _syntaxProvider;
 
         public string TableName { get; private set; }
         
@@ -107,11 +124,10 @@ namespace SysWork.Data.DaoModel
 
         private void BaseDaoConstructorResolver(string ConnectionString, EDataBaseEngine dataBaseEngine)
         {
+            _connectionString = ConnectionString;
             _dataBaseEngine = dataBaseEngine;
             _dataObjectProvider = new DataObjectProvider(_dataBaseEngine);
             _syntaxProvider = new SyntaxProvider(_dataBaseEngine);
-
-            SetSqlLamAdapter();
 
             TEntity entity = new TEntity();
             ListObjectPropertyInfo = GetPropertyInfoList(entity);
@@ -123,23 +139,7 @@ namespace SysWork.Data.DaoModel
                 throw new Exception(string.Format("La entidad {0}, no tiene atributos vinculados a la tabla: {1}, Utilice el decorador DbColumn para vincular las propiedades a los campos de la tabla", entity.GetType().Name, TableName));
             }
 
-            this.ConnectionString = ConnectionString;
-
             GetDbColumnsAndAtributes();
-        }
-
-        private void SetSqlLamAdapter()
-        {
-            if (_dataBaseEngine == EDataBaseEngine.MSSqlServer)
-                SqlLam<TEntity>.SetAdapter(SqlAdapter.SqlServer2012);
-            else if (_dataBaseEngine == EDataBaseEngine.OleDb)
-                SqlLam<TEntity>.SetAdapter(SqlAdapter.SqlServer2012);
-            else if (_dataBaseEngine == EDataBaseEngine.MySql)
-                SqlLam<TEntity>.SetAdapter(SqlAdapter.MySql);
-            else if (_dataBaseEngine == EDataBaseEngine.SqLite)
-                SqlLam<TEntity>.SetAdapter(SqlAdapter.SQLite);
-            else
-                throw new Exception("No se a definido un SqlLamAdapter para el tipo de Motor de Base de datos");
         }
 
         private string GetTableNameFromEntity(Type type)
@@ -187,7 +187,7 @@ namespace SysWork.Data.DaoModel
 
         /// <summary>
         /// 
-        /// Agrega una entidad del tipo <T>
+        /// Agrega una entidad.
         /// 
         /// En caso de exito devuelve la identidad insertada. 
         /// En caso de no tener un campo tipo identity, devuelve 0
@@ -204,7 +204,7 @@ namespace SysWork.Data.DaoModel
 
         /// <summary>
         /// 
-        /// Agrega una entidad del tipo <T>
+        /// Agrega una entidad.
         /// 
         /// En caso de exito devuelve la identidad insertada. 
         /// En caso de no tener un campo tipo identity, devuelve 0
@@ -222,7 +222,7 @@ namespace SysWork.Data.DaoModel
 
         /// <summary>
         /// 
-        /// Agrega una entidad del tipo <T>
+        /// Agrega una entidad.
         /// 
         /// En caso de exito devuelve la identidad insertada. 
         /// En caso de no tener un campo tipo identity, devuelve 0
@@ -240,7 +240,7 @@ namespace SysWork.Data.DaoModel
 
         /// <summary>
         /// 
-        /// Agrega una entidad del tipo <T>
+        /// Agrega una entidad.
         /// 
         /// En caso de exito devuelve la identidad insertada.
         /// En caso de no tener un campo tipo identity, devuelve 0
@@ -324,6 +324,8 @@ namespace SysWork.Data.DaoModel
                         dbCommand.ExecuteNonQuery();
                         identity = 0;
                     }
+
+                    dbCommand.Dispose();
 
                 }
                 catch (Exception exception)
@@ -506,6 +508,8 @@ namespace SysWork.Data.DaoModel
                         dbCommand.Transaction = paramDbTransaction;
 
                     recordsAffected += dbCommand.ExecuteNonQuery();
+
+                    dbCommand.Dispose();
                 }
                 catch (Exception commandException)
                 {
@@ -638,7 +642,7 @@ namespace SysWork.Data.DaoModel
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                     recordsAffected = dbCommand.ExecuteNonQuery();
-
+                    dbCommand.Dispose();
                 }
                 catch (Exception exception)
                 {
@@ -764,6 +768,8 @@ namespace SysWork.Data.DaoModel
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                     recordsAffected += dbCommand.ExecuteNonQuery();
+                    dbCommand.Dispose();
+
                 }
                 catch(Exception exceptionCommand)
                 {
@@ -877,7 +883,7 @@ namespace SysWork.Data.DaoModel
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                     recordsAffected = dbCommand.ExecuteNonQuery();
-
+                    dbCommand.Dispose();
                 }
                 catch (Exception exception)
                 {
@@ -930,7 +936,6 @@ namespace SysWork.Data.DaoModel
         {
             return DeleteAll(null, paramDbTransaction);
         }
-
         public long DeleteAll(IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
         {
             long recordsAffected = 0;
@@ -954,6 +959,7 @@ namespace SysWork.Data.DaoModel
                     dbConnection.Open();
 
                 recordsAffected = dbCommand.ExecuteNonQuery();
+                dbCommand.Dispose();
             }
             catch (Exception exception)
             {
@@ -971,15 +977,64 @@ namespace SysWork.Data.DaoModel
             return recordsAffected;
         }
 
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter)
+        {
+            return DeleteByLambdaExpressionFilter(lambdaExpressionFilter, null, null);
+        }
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection)
+        {
+            return DeleteByLambdaExpressionFilter(lambdaExpressionFilter, paramDbConnection, null);
+        }
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction paramDbTransaction)
+        {
+            return DeleteByLambdaExpressionFilter(lambdaExpressionFilter, null, paramDbTransaction);
+        }
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter,IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        {
 
+            SetSqlLamAdapter();
+            var query = new SqlLam<TEntity>(lambdaExpressionFilter);
 
+            long recordsAffected = 0;
 
+            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
 
+            if (paramDbConnection == null && paramDbTransaction != null)
+                paramDbConnection = paramDbTransaction.Connection;
 
+            IDbConnection dbConnection = paramDbConnection ?? GetIDbConnection();
+            IDbCommand dbCommand = dbConnection.CreateCommand();
 
+            if (paramDbTransaction != null)
+                dbCommand.Transaction = paramDbTransaction;
 
+            dbCommand.CommandText = string.Format("DELETE FROM {0} {1}"  , _syntaxProvider.GetTableName(TableName),query.QueryWhere);
 
+            try
+            {
+                if (dbConnection.State != ConnectionState.Open)
+                    dbConnection.Open();
 
+                foreach (var parameters in query.QueryParameters)
+                    dbCommand.Parameters.Add(CreateIDbDataParameter("@" + parameters.Key, parameters.Value));
+
+                recordsAffected = dbCommand.ExecuteNonQuery();
+                dbCommand.Dispose();
+            }
+            catch (Exception exception)
+            {
+                throw new DaoModelException(exception, dbCommand);
+            }
+            finally
+            {
+                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                {
+                    dbConnection.Close();
+                    dbConnection.Dispose();
+                }
+            }
+            return recordsAffected;
+        }
 
         public TEntity GetById(object id)
         {
@@ -1041,10 +1096,13 @@ namespace SysWork.Data.DaoModel
                     if (_dataBaseEngine == EDataBaseEngine.OleDb)
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
-                    IDataReader reader = dbCommand.ExecuteReader(CommandBehavior.SingleRow);
-                    if (reader.Read())
-                        entity = new IDataReaderToEntity().MapSingle<TEntity>(reader, ListObjectPropertyInfo);
+                    IDataReader reader = dbCommand.ExecuteReader();
+                    entity = new IDataReaderToEntity().MapSingle<TEntity>(reader, ListObjectPropertyInfo);
 
+
+                    reader.Close();
+                    reader.Dispose();
+                    dbCommand.Dispose();
 
                 }
                 catch (Exception exception)
@@ -1060,9 +1118,77 @@ namespace SysWork.Data.DaoModel
                     }
                 }
             }
+            return entity;
+        }
+
+        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter)
+        {
+            return GetByLambdaExpressionFilter(lambdaExpressionFilter, null, null);
+        }
+        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection)
+        {
+            return GetByLambdaExpressionFilter(lambdaExpressionFilter, paramDbConnection, null);
+        }
+        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction paramDbTransaction)
+        {
+            return GetByLambdaExpressionFilter(lambdaExpressionFilter, null, paramDbTransaction);
+        }
+        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        {
+            TEntity entity = null;
+
+            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+
+            if (paramDbConnection == null && paramDbTransaction != null)
+                paramDbConnection = paramDbTransaction.Connection;
+
+            IDbConnection dbConnection = paramDbConnection ?? GetIDbConnection();
+            IDbCommand dbCommand = dbConnection.CreateCommand();
+
+            if (paramDbTransaction != null)
+                dbCommand.Transaction = paramDbTransaction;
+
+            SetSqlLamAdapter();
+            var query = new SqlLam<TEntity>(lambdaExpressionFilter);
+            
+            string getQuery = string.Format("SELECT {0} FROM {1} {2}", ColumnsForSelect, _syntaxProvider.GetTableName(TableName), query.QueryWhere);
+
+            dbCommand.CommandText = getQuery.ToString();
+            try
+            {
+                if (dbConnection.State != ConnectionState.Open)
+                    dbConnection.Open();
+
+                foreach (var parameters in query.QueryParameters)
+                    dbCommand.Parameters.Add(CreateIDbDataParameter("@" + parameters.Key, parameters.Value));
+
+                if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                    ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
+
+                IDataReader reader = dbCommand.ExecuteReader(CommandBehavior.SingleRow);
+                entity = new IDataReaderToEntity().MapSingle<TEntity>(reader, ListObjectPropertyInfo);
+
+                reader.Close();
+                reader.Dispose();
+
+                dbCommand.Dispose();
+            }
+            catch (Exception exception)
+            {
+                throw new DaoModelException(exception, dbCommand);
+            }
+            finally
+            {
+                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                {
+                    dbConnection.Close();
+                    dbConnection.Dispose();
+                }
+            }
 
             return entity;
         }
+
         /// <summary>
         /// Obtiene todas las entidades
         /// </summary>
@@ -1107,7 +1233,11 @@ namespace SysWork.Data.DaoModel
                 if (dbConnection.State != ConnectionState.Open)
                     dbConnection.Open();
 
-                collection = new IDataReaderToEntity().Map<TEntity>(dbCommand.ExecuteReader(), ListObjectPropertyInfo);
+                IDataReader reader = dbCommand.ExecuteReader();
+                collection = new IDataReaderToEntity().Map<TEntity>(reader, ListObjectPropertyInfo);
+
+                reader.Close();reader.Dispose();
+                dbCommand.Dispose();
             }
             catch (Exception exception)
             {
@@ -1145,8 +1275,9 @@ namespace SysWork.Data.DaoModel
         public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection,IDbTransaction paramDbTransaction)
         {
             IList<TEntity> resultado = new List<TEntity>();
+            SetSqlLamAdapter();
             var query = new SqlLam<TEntity>(lambdaExpressionFilter);
-
+            
             bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
 
             if (paramDbConnection == null && paramDbTransaction != null)
@@ -1171,7 +1302,12 @@ namespace SysWork.Data.DaoModel
                 if (_dataBaseEngine == EDataBaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
-                resultado = new IDataReaderToEntity().Map<TEntity>(dbCommand.ExecuteReader(), ListObjectPropertyInfo);
+                IDataReader reader = dbCommand.ExecuteReader();
+                resultado = new IDataReaderToEntity().Map<TEntity>(reader, ListObjectPropertyInfo);
+
+                reader.Close();
+                reader.Dispose();
+                dbCommand.Dispose();
 
             }
             catch (Exception exception)
@@ -1189,17 +1325,6 @@ namespace SysWork.Data.DaoModel
 
             return resultado;
         }
-        protected DbExecute GetDbExecute()
-        {
-            return new DbExecute(ConnectionString, _dataBaseEngine);
-        }
-
-        protected Dictionary<string, object> CreateQueryParametersList()
-        {
-            Dictionary<string, object> parameters = new Dictionary<string, object>();
-            return parameters;
-        }
-
         public IList<TEntity> Find(IEnumerable<object> ids)
         {
             return Find(ids, null, null);
@@ -1258,8 +1383,13 @@ namespace SysWork.Data.DaoModel
                     if (paramDbTransaction != null)
                         dbCommand.Transaction = paramDbTransaction;
 
-                    entities = new IDataReaderToEntity().Map<TEntity>(dbCommand.ExecuteReader(), ListObjectPropertyInfo);
+                    IDataReader reader = dbCommand.ExecuteReader();
+                    entities = new IDataReaderToEntity().Map<TEntity>(reader, ListObjectPropertyInfo);
 
+                    reader.Close();
+                    reader.Dispose();
+
+                    dbCommand.Dispose();
                 }
                 catch (Exception exception)
                 {
@@ -1283,7 +1413,7 @@ namespace SysWork.Data.DaoModel
         /// <returns></returns>
         protected IDbConnection GetIDbConnection()
         {
-            return _dataObjectProvider.GetIDbConnection(ConnectionString);
+            return _dataObjectProvider.GetIDbConnection(_connectionString);
         }
         /// <summary>
         /// Devuelve un *DbConnection*, dependiendo del motor de base de datos del DAO
@@ -1291,7 +1421,7 @@ namespace SysWork.Data.DaoModel
         /// <returns></returns>
         protected DbConnection GetDbConnection()
         {
-            return _dataObjectProvider.GetDbConnection(ConnectionString);
+            return _dataObjectProvider.GetDbConnection(_connectionString);
         }
         
         /// <summary>
@@ -1302,7 +1432,16 @@ namespace SysWork.Data.DaoModel
         {
             return _dataObjectProvider.GetIDbDataParameter();
         }
+        protected DbExecute GetDbExecute()
+        {
+            return new DbExecute(_connectionString, _dataBaseEngine);
+        }
 
+        protected Dictionary<string, object> CreateQueryParametersList()
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            return parameters;
+        }
         /// <summary>
         /// Obtiene la lista de Columnas para INSERT (No incluye las columnas con atributo IsIdentity) 
         /// Obtiene la lista de Columnas para SELECT.
@@ -1471,6 +1610,20 @@ namespace SysWork.Data.DaoModel
             return entity.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
         }
 
+        private void SetSqlLamAdapter()
+        {
+            if (_dataBaseEngine == EDataBaseEngine.MSSqlServer)
+                SqlLam<TEntity>.SetAdapter(SqlAdapter.SqlServer2012);
+            else if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                SqlLam<TEntity>.SetAdapter(SqlAdapter.SqlServer2012);
+            else if (_dataBaseEngine == EDataBaseEngine.MySql)
+                SqlLam<TEntity>.SetAdapter(SqlAdapter.MySql);
+            else if (_dataBaseEngine == EDataBaseEngine.SqLite)
+                SqlLam<TEntity>.SetAdapter(SqlAdapter.SQLite);
+            else
+                throw new Exception("No se a definido un SqlLamAdapter para el tipo de Motor de Base de datos");
+        }
+
         protected long ParseToLong(object result)
         {
             if (result.GetType() == typeof(System.Int64))
@@ -1482,6 +1635,11 @@ namespace SysWork.Data.DaoModel
             else 
                 return long.Parse(result.ToString());
         }
+    }
+    internal class ColumnDbInfo
+    {
+        internal DbType DbType { get; set; }
+        internal Int32? MaxLenght { get; set; }
     }
 
     /// <summary>
@@ -1572,7 +1730,6 @@ namespace SysWork.Data.DaoModel
         public TEntity MapSingle<TEntity>(IDataReader reader, IList<PropertyInfo> listObjectPropertyInfo) where TEntity : class, new()
         {
             TEntity obj = new TEntity();
-
             IList<PropertyInfo> _propertyInfo;
 
             if (listObjectPropertyInfo != null)
@@ -1580,34 +1737,37 @@ namespace SysWork.Data.DaoModel
             else
                 _propertyInfo = obj.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
 
-            obj = new TEntity();
-
-            foreach (PropertyInfo i in _propertyInfo)
+            obj = default(TEntity);
+            if (reader.Read())
             {
-                try
+                obj = new TEntity();
+                foreach (PropertyInfo i in _propertyInfo)
                 {
-                    var custumAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute));
+                    try
+                    {
+                        var custumAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute));
 
-                    if (((DbColumnAttribute)custumAttribute).Convert == true)
-                    {
-                        if (reader[i.Name] != DBNull.Value)
-                            i.SetValue(obj, Convert.ChangeType(reader[i.Name], i.PropertyType));
-                    }
-                    else
-                    {
-                        if (reader[i.Name] != DBNull.Value)
+                        if (((DbColumnAttribute)custumAttribute).Convert == true)
                         {
-                            var value = reader[i.Name];
-                            var type = Nullable.GetUnderlyingType(i.PropertyType) ?? i.PropertyType;
-                            var safeValue = (value == null) ? null : Convert.ChangeType(value, type);
+                            if (reader[i.Name] != DBNull.Value)
+                                i.SetValue(obj, Convert.ChangeType(reader[i.Name], i.PropertyType));
+                        }
+                        else
+                        {
+                            if (reader[i.Name] != DBNull.Value)
+                            {
+                                var value = reader[i.Name];
+                                var type = Nullable.GetUnderlyingType(i.PropertyType) ?? i.PropertyType;
+                                var safeValue = (value == null) ? null : Convert.ChangeType(value, type);
 
-                            i.SetValue(obj, safeValue);
+                                i.SetValue(obj, safeValue);
+                            }
                         }
                     }
-                }
-                catch (Exception exception)
-                {
-                    throw exception;
+                    catch (Exception exception)
+                    {
+                        throw exception;
+                    }
                 }
             }
             return obj;
@@ -1628,7 +1788,6 @@ namespace SysWork.Data.DaoModel
                 _propertyInfo = obj.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
 
             obj = new TEntity();
-
             foreach (PropertyInfo i in _propertyInfo)
             {
                 try

@@ -61,7 +61,8 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Builder
             }
         }
 
-        private string Conditions
+        //private string Conditions
+        public string Conditions
         {
             get
             {
@@ -111,6 +112,7 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Builder
         {
             get { return Adapter.QueryString(Selection, Source, Conditions, Grouping, Having, Order); }
         }
+        
 
         public string QueryStringPage(int pageSize, int? pageNumber = null)
         {

@@ -3,19 +3,15 @@ using GerdannaDataManager.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
-using System.Data.OleDb;
 using System.Linq;
-using System.Transactions;
 using System.Windows.Forms;
 using SysWork.Data.Common;
-using SysWork.Data.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.SimpleQuery;
 using SysWork.Data.Common.Utilities;
-using Microsoft.VisualBasic;
-using SysWork.Data.DaoModel;
 using SysWork.Data.Common.DbConnectionUtilities;
 using SysWork.Data.Logger;
+using Microsoft.VisualBasic;
+using SysWork.Data.DaoModel.Exceptions;
 
 namespace TestDaoModelDataCommon
 {
@@ -25,10 +21,10 @@ namespace TestDaoModelDataCommon
         const string ConnectionStringOleDb = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\SWSISTEMAS\C#Library\Test\TestSysWork.Data\TestSysWork.Data\Data\TEST.accdb;Persist Security Info=False";
         const string ConnectionStringMySql = @"Server=localhost;Database=test;Uid=root;Pwd=@#!Sw58125812;persistsecurityinfo=True;";
 
-        private DaoPersonaSqlite _daoPersonaSQLite;
-        private DaoPersonaSql _daoPersonaSQL;
-        private DaoPersonaMySql _daoPersonaMySql;
-        private DaoPersonaOleDb _daoPersonaOleDb;
+        private DaoPersona _daoPersonaSQLite;
+        private DaoPersona _daoPersonaSQL;
+        private DaoPersona _daoPersonaMySql;
+        private DaoPersona _daoPersonaOleDb;
 
         public Form1()
         {
@@ -41,21 +37,21 @@ namespace TestDaoModelDataCommon
             */
 
             DataManagerSQLite.ConnectionString = GetSqliteConnectionString();
-            DataManagerSQLite.DatabaseEngine = EDataBaseEngine.SqLite; 
+            DataManagerSQLite.DataBaseEngine = EDataBaseEngine.SqLite;
+            _daoPersonaSQLite = DataManagerSQLite.GetInstance().DaoPersonaSqlite;
 
             DataManagerSQL.ConnectionString = ConnectionStringSQL;
-            DataManagerSQL.DatabaseEngine= EDataBaseEngine.MSSqlServer;
+            DataManagerSQL.DataBaseEngine = EDataBaseEngine.MSSqlServer;
+            _daoPersonaSQL = DataManagerSQL.GetInstance().DaoPersonaSql;
 
             DataManagerOleDb.ConnectionString = ConnectionStringOleDb;
-            DataManagerOleDb.DatabaseEngine = EDataBaseEngine.OleDb;
+            DataManagerOleDb.DataBaseEngine = EDataBaseEngine.OleDb;
+            _daoPersonaOleDb = DataManagerOleDb.GetInstance().DaoPersonaOleDb;
 
             DataManagerMySQL.ConnectionString = ConnectionStringMySql;
-            DataManagerMySQL.DatabaseEngine = EDataBaseEngine.MySql;
+            DataManagerMySQL.DataBaseEngine = EDataBaseEngine.MySql;
+            _daoPersonaMySql = DataManagerMySQL.GetInstance().DaoPersonaMySql;
 
-            _daoPersonaSQLite = DataManagerSQLite.GetInstance().DaoPersonaSqlite;
-            _daoPersonaSQL = DataManagerSQL.GetInstance().DaoPersonaSql;
-            _daoPersonaOleDb = DataManagerOleDb.GetInstance().DaoPersonaOleDb;
-            _daoPersonaMySql= DataManagerMySQL.GetInstance().DaoPersonaMySql;
 
         }
         private static Random random = new Random();
@@ -86,6 +82,8 @@ namespace TestDaoModelDataCommon
             Persona p;
             long idGenerado;
 
+            MessageBox.Show("Inserto una nueva persona");
+
             p = new Persona();
             p.Apellido = RandomString(20);
             p.Nombre = RandomString(20);
@@ -93,7 +91,6 @@ namespace TestDaoModelDataCommon
             p.FechaNacimiento = DateTime.Parse("24/05/1980");
             p.Telefono = "11" + RandomNumber(8);
             idGenerado = _daoPersonaSQLite.Add(p);
-            MessageBox.Show("Inserto uno idGenerado : " + idGenerado);
 
             p = new Persona();
             p.Apellido = RandomString(500);
