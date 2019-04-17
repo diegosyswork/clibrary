@@ -586,7 +586,7 @@ namespace TestDaoModelDataCommon
 
         private void btnVerificaSQLServer_Click(object sender, EventArgs e)
         {
-            if (DbUtil.VerifySQLConnectionStringOrGetParams("testSqlServer",@"NT-SYSWORK\SQLEXPRESS", "TEST", "TEST-MAL", "TEST"))
+            if (DbUtil.VerifySQLConnectionStringOrGetParams("testSqlServer",@"NT-SYSWORK\SQLEXPRESS", "TEST", "TEST-MAL", "TEST",null,true))
             {
                 MessageBox.Show("Conexion Correcta");
             }
@@ -595,11 +595,11 @@ namespace TestDaoModelDataCommon
         private void btnVerificaSQLite_Click(object sender, EventArgs e)
         {
 
-            string _SqliteDbPath = @"C:\SWSISTEMAS\C#Library\Test\TestSysWork.Data\TestSysWork.Data\Data\TEST.sqlite";
+            string _SqliteDbPath = @"C:\SWSISTEMAS\C#Library\Test\TestSysWork.Data\TestSysWork.Data\Data\TEST-mall.sqlite";
             string _defaultSqliteConnectionString = "Data Source = {0}; Version = 3; New = {1}; Compress = True;";
             _defaultSqliteConnectionString = string.Format(_defaultSqliteConnectionString, _SqliteDbPath, "false");
 
-            if (DbUtil.VerifySQLiteConnectionStringOrGetParams("testSqlite3", _defaultSqliteConnectionString))
+            if (DbUtil.VerifySQLiteConnectionStringOrGetParams("testSqlite", _defaultSqliteConnectionString))
             {
                 MessageBox.Show("Conexion Correcta");
             }
@@ -863,7 +863,7 @@ namespace TestDaoModelDataCommon
 
         private void btnVerifyMySQL_Click(object sender, EventArgs e)
         {
-            if (DbUtil.VerifyMySQLConnectionStringOrGetParams("testMySql", @"LOCALHOST", "TEST", "TEST-MAL", "TEST"))
+            if (DbUtil.VerifyMySQLConnectionStringOrGetParams("testMySql", @"LOCALHOST", "TEST", "TEST-MAL", "TEST", null, true)) ;
             {
                 MessageBox.Show("Conexion Correcta");
             }

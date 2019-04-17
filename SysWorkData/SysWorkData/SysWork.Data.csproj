@@ -135,11 +135,11 @@
     <Compile Include="DaoModel\Interfaces\IBaseDao.cs" />
     <Compile Include="Common\DataRecordDynamicWrapper.cs" />
     <Compile Include="Extensions\OleDbCommandExtensions.cs" />
-    <Compile Include="Common\FormsGetParameters\FrmGetParamSQL.cs">
+    <Compile Include="Common\FormsGetParameters\FrmGetParamMSSQL.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\FormsGetParameters\FrmGetParamSQL.designer.cs">
-      <DependentUpon>FrmGetParamSQL.cs</DependentUpon>
+    <Compile Include="Common\FormsGetParameters\FrmGetParamMSSQL.designer.cs">
+      <DependentUpon>FrmGetParamMSSQL.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\FormsGetParameters\FrmGetParamSQLite.cs">
       <SubType>Form</SubType>
@@ -169,8 +169,8 @@
     <EmbeddedResource Include="Common\FormsGetParameters\FrmGetParamMySQL.resx">
       <DependentUpon>FrmGetParamMySQL.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\FormsGetParameters\FrmGetParamSQL.resx">
-      <DependentUpon>FrmGetParamSQL.cs</DependentUpon>
+    <EmbeddedResource Include="Common\FormsGetParameters\FrmGetParamMSSQL.resx">
+      <DependentUpon>FrmGetParamMSSQL.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\FormsGetParameters\FrmGetParamOleDb.resx">
       <DependentUpon>FrmGetParamOleDb.cs</DependentUpon>

@@ -78,7 +78,6 @@ namespace SysWork.Data.Logger
 
         private string GetLogDbScript()
         {
-
             if (_dataBaseEngine == EDataBaseEngine.MSSqlServer)
                 return GetLogDbScriptSQLServer();
             else if (_dataBaseEngine == EDataBaseEngine.SqLite)
@@ -89,7 +88,6 @@ namespace SysWork.Data.Logger
                 return GetLogDbScriptMySql();
             else
                 throw new Exception("No se ha especificado un SCRIPT para el tipo de base de datos establecida");
-
         }
 
         private string GetLogDbScriptMySql()
@@ -181,10 +179,10 @@ namespace SysWork.Data.Logger
             logDbScript.AppendLine(" [parametros] [nvarchar](max) NULL, ");
             logDbScript.AppendLine(" [resultado] [nvarchar] (max) NULL, ");
             logDbScript.AppendLine(" [excepcion] [nvarchar](max) NULL, ");
-            logDbScript.AppendLine(" CONSTRAINT[PK_Log] PRIMARY KEY CLUSTERED ");
+            logDbScript.AppendLine(" CONSTRAINT[PK_LogDb] PRIMARY KEY CLUSTERED ");
             logDbScript.AppendLine(" ( ");
             logDbScript.AppendLine("    [idLogDb] ASC ");
-            logDbScript.AppendLine(" ) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON[PRIMARY] ");
+            logDbScript.AppendLine(" )  ON[PRIMARY] ");
             logDbScript.AppendLine(" ) ON[PRIMARY] TEXTIMAGE_ON[PRIMARY] ");
             logDbScript.AppendLine(" GO ");
 

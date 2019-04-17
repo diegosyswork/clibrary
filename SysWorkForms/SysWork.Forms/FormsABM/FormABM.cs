@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 using SysWork.Controls.Toolbars;
-using SysWork.Data.DaoModel;
 using SysWork.Data.DaoModel.Exceptions;
 using SysWork.Data.DaoModel.Interfaces;
 using SysWork.Data.Logger;

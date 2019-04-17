@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using SysWork.Data.Common.Utilities;
 
 namespace SysWork.Data.Common.FormsGetParam
 {
@@ -50,11 +51,25 @@ namespace SysWork.Data.Common.FormsGetParam
 
             ConnectionString = txtConnectionString.Text;
 
-            if (rbtnConnectionString.Checked && string.IsNullOrEmpty(ConnectionString.Trim()))
+            if (rbtnConnectionString.Checked)
             {
-                MessageBox.Show("Se debe informar la cadena de conexion!!!","Aviso al operador",MessageBoxButtons.OK,MessageBoxIcon.Error);
-                return;
+                if (string.IsNullOrEmpty(ConnectionString.Trim()))
+                {
+                    MessageBox.Show("Se debe informar la cadena de conexion!!!", "Aviso al operador", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (!DbUtil.IsValidConnectionString(EDataBaseEngine.MSSqlServer, ConnectionString.Trim(), out string errMessage))
+                {
+                    MessageBox.Show($"Error en el formato de la cadena de conexion \r\n \r\n detalle del error: \r\n \r\n {errMessage} ", "Aviso al operador", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
             }
+            else
+            {
+                ConnectionString = "";
+            }
+
 
             this.DialogResult = DialogResult.OK;
             this.Close();

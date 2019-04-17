@@ -9,6 +9,8 @@ using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows.Forms;
 using SysWork.Data.Common.FormsGetParam;
 using SysWork.Data.Common.ObjectResolver;
@@ -17,7 +19,6 @@ namespace SysWork.Data.Common.Utilities
 {
     public static class DbUtil
     {
-        
         public static bool ExistsTable(EDataBaseEngine dataBaseEngine, string connectionString, string tableName)
         {
             bool exists = false;
@@ -204,6 +205,37 @@ namespace SysWork.Data.Common.Utilities
             }
         }
 
+        public static bool IsValidConnectionString(EDataBaseEngine dataBaseEngine, string connectionString, out string mensajeError)
+        {
+            bool valid = true;
+            mensajeError = "";
+            try
+            {
+                switch (dataBaseEngine)
+                {
+                    case EDataBaseEngine.MSSqlServer:
+                        var sbSql = new SqlConnectionStringBuilder(connectionString);
+                        break;
+                    case EDataBaseEngine.SqLite:
+                        var sbSqlite = new SQLiteConnectionStringBuilder(connectionString);
+                        break;
+                    case EDataBaseEngine.MySql:
+                        var sbMySql = new MySqlConnectionStringBuilder(connectionString);
+                        break;
+                    case EDataBaseEngine.OleDb:
+                        var sbOleDb = new OleDbConnectionStringBuilder(connectionString);
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                valid = false;
+                mensajeError = e.Message;
+            }
+
+            return valid;
+        }
+
         public static string ConvertCommandParamatersToLiteralValues(IDbCommand dbCommand)
         {
             string query;
@@ -276,7 +308,7 @@ namespace SysWork.Data.Common.Utilities
         }
 
 
-        public static bool VerifySQLConnectionStringOrGetParams(string connectionStringName, string defaultDataSource = null, string defaultUserId = null, string defaultPassWord = null, string defaultInitialCatalog = null, string defaultConnectionString = null)
+        public static bool VerifyMSSQLConnectionStringOrGetParams(string connectionStringName, string defaultDataSource = null, string defaultUserId = null, string defaultPassWord = null, string defaultInitialCatalog = null, string defaultConnectionString = null,bool encryptData = false)
         {
             SqlConnectionStringBuilder connectionSb = new SqlConnectionStringBuilder();
             bool userGotParameters = false;
@@ -292,6 +324,11 @@ namespace SysWork.Data.Common.Utilities
             else
             {
                 connectionSb.ConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+                if (encryptData)
+                {
+                    connectionSb.UserID = Decrypt(connectionSb.UserID);
+                    connectionSb.Password = Decrypt(connectionSb.Password);
+                }
             }
 
             bool hasConnectionSuccess = ConnectionSuccess(connectionSb.ConnectionString.ToString(), out string mensajeError);
@@ -315,23 +352,33 @@ namespace SysWork.Data.Common.Utilities
 
                 frmGetParamSQL.ShowDialog();
 
-                connectionSb.DataSource = frmGetParamSQL.Server;
-                connectionSb.UserID = frmGetParamSQL.InicioDeSesion;
-                connectionSb.Password = frmGetParamSQL.Password;
-
-                if (!string.IsNullOrEmpty(frmGetParamSQL.BaseDeDatos.Trim()))
-                    connectionSb.InitialCatalog = frmGetParamSQL.BaseDeDatos;
-
-                if (!string.IsNullOrEmpty(frmGetParamSQL.ConnectionString))
-                    connectionSb.ConnectionString = frmGetParamSQL.ConnectionString;
-
                 if (frmGetParamSQL.DialogResult == DialogResult.OK)
+                {
+                    if (!string.IsNullOrEmpty(frmGetParamSQL.ConnectionString))
+                    {
+                        defaultConnectionString = frmGetParamSQL.ConnectionString;
+                        connectionSb.ConnectionString = frmGetParamSQL.ConnectionString;
+
+                    }
+                    else
+                    {
+                        connectionSb.DataSource = frmGetParamSQL.Server;
+                        connectionSb.UserID = frmGetParamSQL.InicioDeSesion;
+                        connectionSb.Password = frmGetParamSQL.Password;
+                        if (!string.IsNullOrEmpty(frmGetParamSQL.BaseDeDatos.Trim()))
+                            connectionSb.InitialCatalog = frmGetParamSQL.BaseDeDatos;
+                    }
+
                     hasConnectionSuccess = ConnectionSuccess(connectionSb.ConnectionString.ToString(), out mensajeError);
+                }
                 else
+                {
                     hasConnectionSuccess = false;
+                }
 
                 needConnectionParameters = (!hasConnectionSuccess) && (frmGetParamSQL.DialogResult == DialogResult.OK);
             }
+
 
             if (!hasConnectionSuccess)
             {
@@ -339,6 +386,12 @@ namespace SysWork.Data.Common.Utilities
             }
             else
             {
+                if (encryptData)
+                {
+                    connectionSb.UserID = Encrypt(connectionSb.UserID);
+                    connectionSb.Password = Encrypt(connectionSb.Password);
+                }
+
                 if (!ExistsConnectionString(connectionStringName))
                 {
                     Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
@@ -362,7 +415,7 @@ namespace SysWork.Data.Common.Utilities
 
             return true;
         }
-        public static bool VerifyMySQLConnectionStringOrGetParams(string connectionStringName, string defaultServer = null, string defaultUserId = null, string defaultPassWord = null, string defaultDataBase = null, string defaultConnectionString = null)
+        public static bool VerifyMySQLConnectionStringOrGetParams(string connectionStringName, string defaultServer = null, string defaultUserId = null, string defaultPassWord = null, string defaultDataBase = null, string defaultConnectionString = null,bool encryptData = false)
         {
             MySqlConnectionStringBuilder connectionSb = new MySqlConnectionStringBuilder();
             bool userGotParameters = false;
@@ -378,6 +431,11 @@ namespace SysWork.Data.Common.Utilities
             else
             {
                 connectionSb.ConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+                if (encryptData)
+                {
+                    connectionSb.UserID = Decrypt(connectionSb.UserID);
+                    connectionSb.Password = Decrypt(connectionSb.Password);
+                }
             }
 
             bool hasConnectionSuccess = ConnectionSuccess(EDataBaseEngine.MySql, connectionSb.ConnectionString.ToString(), out string mensajeError);
@@ -400,21 +458,29 @@ namespace SysWork.Data.Common.Utilities
                 frmGetParamMySQL.MensajeError = "Ha ocurrido el siguiente error: \r\r" + mensajeError;
 
                 frmGetParamMySQL.ShowDialog();
-
-                connectionSb.Server = frmGetParamMySQL.Server;
-                connectionSb.UserID = frmGetParamMySQL.InicioDeSesion;
-                connectionSb.Password = frmGetParamMySQL.Password;
-
-                if (!string.IsNullOrEmpty(frmGetParamMySQL.BaseDeDatos.Trim()))
-                    connectionSb.Database= frmGetParamMySQL.BaseDeDatos;
-
-                if (!string.IsNullOrEmpty(frmGetParamMySQL.ConnectionString))
-                    connectionSb.ConnectionString = frmGetParamMySQL.ConnectionString;
-
                 if (frmGetParamMySQL.DialogResult == DialogResult.OK)
+                {
+                    if (!string.IsNullOrEmpty(frmGetParamMySQL.ConnectionString))
+                    {
+                        defaultConnectionString = frmGetParamMySQL.ConnectionString;
+                        connectionSb.ConnectionString = frmGetParamMySQL.ConnectionString;
+                    }
+                    else
+                    {
+                        connectionSb.Server = frmGetParamMySQL.Server;
+                        connectionSb.UserID = frmGetParamMySQL.InicioDeSesion;
+                        connectionSb.Password = frmGetParamMySQL.Password;
+
+                        if (!string.IsNullOrEmpty(frmGetParamMySQL.BaseDeDatos.Trim()))
+                            connectionSb.Database = frmGetParamMySQL.BaseDeDatos;
+                    }
+
                     hasConnectionSuccess = ConnectionSuccess(EDataBaseEngine.MySql, connectionSb.ConnectionString.ToString(), out mensajeError);
+                }
                 else
+                {
                     hasConnectionSuccess = false;
+                }
 
                 needConnectionParameters = (!hasConnectionSuccess) && (frmGetParamMySQL.DialogResult == DialogResult.OK);
             }
@@ -425,6 +491,13 @@ namespace SysWork.Data.Common.Utilities
             }
             else
             {
+
+                if (encryptData)
+                {
+                    connectionSb.UserID = Encrypt(connectionSb.UserID);
+                    connectionSb.Password = Encrypt(connectionSb.Password);
+                }
+
                 if (!ExistsConnectionString(connectionStringName))
                 {
                     Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
@@ -482,15 +555,20 @@ namespace SysWork.Data.Common.Utilities
 
                 frmGetParamSQLite.ShowDialog();
 
-                connectionSb.ConnectionString = frmGetParamSQLite.ConnectionString;
-
                 if (frmGetParamSQLite.DialogResult == DialogResult.OK)
                 {
+                    defaultConnectionString = frmGetParamSQLite.ConnectionString;
+                    connectionSb.ConnectionString = frmGetParamSQLite.ConnectionString;
+
                     hasConnectionSuccess = File.Exists(connectionSb.DataSource);
+                    if (!hasConnectionSuccess) mensajeError = "El archivo no existe";
+
                     hasConnectionSuccess = hasConnectionSuccess && ConnectionSuccess(EDataBaseEngine.SqLite, connectionSb.ConnectionString.ToString(), out mensajeError);
                 }
                 else
+                {
                     hasConnectionSuccess = false;
+                }
 
                 needConnectionParameters = (!hasConnectionSuccess) && (frmGetParamSQLite.DialogResult == DialogResult.OK);
             }
@@ -554,12 +632,16 @@ namespace SysWork.Data.Common.Utilities
 
                 frmGetParamOleDb.ShowDialog();
 
-                connectionSb.ConnectionString = frmGetParamOleDb.ConnectionString;
-
                 if (frmGetParamOleDb.DialogResult == DialogResult.OK)
+                {
+                    defaultConnectionString = frmGetParamOleDb.ConnectionString;
+                    connectionSb.ConnectionString = frmGetParamOleDb.ConnectionString;
                     hasConnectionSuccess = ConnectionSuccess(EDataBaseEngine.OleDb, connectionSb.ConnectionString.ToString(), out mensajeError);
+                }
                 else
+                {
                     hasConnectionSuccess = false;
+                }
 
                 needConnectionParameters = (!hasConnectionSuccess) && (frmGetParamOleDb.DialogResult == DialogResult.OK);
             }
@@ -617,6 +699,21 @@ namespace SysWork.Data.Common.Utilities
                 table.Rows.Add(values);
             }
             return table;
+        }
+        private static string Decrypt(string input)
+        {
+            string result = string.Empty;
+            byte[] decryted = Convert.FromBase64String(input);
+            //result = System.Text.Encoding.Unicode.GetString(decryted, 0, decryted.ToArray().Length);
+            result = System.Text.Encoding.Unicode.GetString(decryted);
+            return result;
+        }
+        private static string Encrypt(string input)
+        {
+            string result = string.Empty;
+            byte[] encryted = System.Text.Encoding.Unicode.GetBytes(input);
+            result = Convert.ToBase64String(encryted);
+            return result;
         }
     }
 }
