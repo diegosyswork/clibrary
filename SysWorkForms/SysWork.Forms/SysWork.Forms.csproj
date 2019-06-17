@@ -44,12 +44,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractCommunicatorProvider.cs" />
-    <Compile Include="Controls\BindableListView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\GridLineDataGridView.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="FormsABM\FormABM.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -73,13 +67,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SysWorkControls\SysWork.Controls\SysWork.Controls.csproj">
+      <Project>{A21FA2E6-2451-450F-AB10-E00C86A606DD}</Project>
+      <Name>SysWork.Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SysWorkData\SysWorkData\SysWork.Data.csproj">
       <Project>{885f2f8d-05a7-49dc-bc26-dcc00ca47c6e}</Project>
       <Name>SysWork.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SysWorkToolsBars\SysWork.ToolBars.csproj">
-      <Project>{3a644ee8-61e1-4ced-b7b9-6c06f05360a9}</Project>
-      <Name>SysWork.ToolBars</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +91,8 @@
   <ItemGroup>
     <None Include="Resources\consulta-48x48.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -79,7 +79,7 @@ namespace SysWork.Data.Logger
         private string GetLogDbScript()
         {
             if (_dataBaseEngine == EDataBaseEngine.MSSqlServer)
-                return GetLogDbScriptSQLServer();
+                return GetLogDbScriptMSSQLServer();
             else if (_dataBaseEngine == EDataBaseEngine.SqLite)
                 return GetLogDbScriptSQLite();
             else if (_dataBaseEngine == EDataBaseEngine.OleDb)
@@ -159,7 +159,7 @@ namespace SysWork.Data.Logger
             return logDbScript.ToString();
         }
 
-        private string GetLogDbScriptSQLServer()
+        private string GetLogDbScriptMSSQLServer()
         {
             StringBuilder logDbScript = new StringBuilder("");
 

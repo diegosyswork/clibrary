@@ -5,12 +5,12 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SysWork.Data.Common.ObjectResolver;
+using SysWork.Data.Common.DataObjectProvider;
+using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Extensions.OleDbCommandExtensions;
 
 namespace SysWork.Data.Common.DbConnectionUtilities
 {
-
     /// <summary>
     /// Date: 20/09/2018
     /// Author: Diego Javier Martinez
@@ -24,7 +24,7 @@ namespace SysWork.Data.Common.DbConnectionUtilities
         private string _sqlQuery;
         private IDictionary<string, object> _queryParameters;
 
-        private DataObjectProvider _dataObjectProvider;
+        private DbObjectProvider _dataObjectProvider;
 
         public string SqlQuery
         {
@@ -44,7 +44,7 @@ namespace SysWork.Data.Common.DbConnectionUtilities
         {
             _connectionString = connectionString;
             _dataBaseEngine = dataBaseEngine;
-            _dataObjectProvider = new DataObjectProvider(dataBaseEngine);
+            _dataObjectProvider = new DbObjectProvider(dataBaseEngine);
             _queryParameters = new Dictionary<string, object>();
         }
 
@@ -54,10 +54,18 @@ namespace SysWork.Data.Common.DbConnectionUtilities
             return this;
         }
 
-        public DbExecute AddParameters(string name, object value)
+        public DbExecute AddParameter(string name, object value)
         {
             if (!_queryParameters.ContainsKey(name))
                 _queryParameters.Add(name, value);
+
+            return this;
+        }
+
+        public DbExecute AddParameters(IDictionary<string, object> parameters)
+        {
+            foreach (var key in parameters.Keys)
+                _queryParameters.Add(key, parameters[key]);
 
             return this;
         }
@@ -141,6 +149,7 @@ namespace SysWork.Data.Common.DbConnectionUtilities
         {
             return ExecuteScalar(null, dbTransaction);
         }
+
         public object ExecuteScalar(IDbConnection paramConnection, IDbTransaction dbTransaction)
         {
             bool closeConnection = ((paramConnection == null) && (dbTransaction == null));

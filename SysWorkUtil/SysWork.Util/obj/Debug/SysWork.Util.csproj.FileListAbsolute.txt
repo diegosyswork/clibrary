@@ -24,9 +24,9 @@ C:\SWSISTEMAS\C#Library\SysWorkUtil\SysWork.Util\bin\Debug\pt\Microsoft.ReportVi
 C:\SWSISTEMAS\C#Library\SysWorkUtil\SysWork.Util\bin\Debug\ru\Microsoft.ReportViewer.DataVisualization.resources.dll
 C:\SWSISTEMAS\C#Library\SysWorkUtil\SysWork.Util\bin\Debug\zh-CHS\Microsoft.ReportViewer.DataVisualization.resources.dll
 C:\SWSISTEMAS\C#Library\SysWorkUtil\SysWork.Util\bin\Debug\zh-CHT\Microsoft.ReportViewer.DataVisualization.resources.dll
+C:\SWSISTEMAS\C#Library\SysWorkUtil\SysWork.Util\obj\Debug\SysWork.Util.csprojResolveAssemblyReference.cache
 C:\SWSISTEMAS\C#Library\SysWorkUtil\SysWork.Util\obj\Debug\SysWork.Util.Properties.Resources.resources
 C:\SWSISTEMAS\C#Library\SysWorkUtil\SysWork.Util\obj\Debug\SysWork.Util.csproj.GenerateResource.Cache
 C:\SWSISTEMAS\C#Library\SysWorkUtil\SysWork.Util\obj\Debug\SysWork.Util.csproj.CoreCompileInputs.cache
 C:\SWSISTEMAS\C#Library\SysWorkUtil\SysWork.Util\obj\Debug\SysWork.Util.dll
 C:\SWSISTEMAS\C#Library\SysWorkUtil\SysWork.Util\obj\Debug\SysWork.Util.pdb
-C:\SWSISTEMAS\C#Library\SysWorkUtil\SysWork.Util\obj\Debug\SysWork.Util.csprojResolveAssemblyReference.cache

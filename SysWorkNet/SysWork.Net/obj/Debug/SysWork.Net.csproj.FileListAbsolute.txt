@@ -1,6 +1,6 @@
 C:\SWSISTEMAS\C#Library\SysWorkNet\SysWork.Net\bin\Debug\SysWork.Net.dll
 C:\SWSISTEMAS\C#Library\SysWorkNet\SysWork.Net\bin\Debug\SysWork.Net.pdb
+C:\SWSISTEMAS\C#Library\SysWorkNet\SysWork.Net\obj\Debug\SysWork.Net.csprojResolveAssemblyReference.cache
 C:\SWSISTEMAS\C#Library\SysWorkNet\SysWork.Net\obj\Debug\SysWork.Net.csproj.CoreCompileInputs.cache
 C:\SWSISTEMAS\C#Library\SysWorkNet\SysWork.Net\obj\Debug\SysWork.Net.dll
 C:\SWSISTEMAS\C#Library\SysWorkNet\SysWork.Net\obj\Debug\SysWork.Net.pdb
-C:\SWSISTEMAS\C#Library\SysWorkNet\SysWork.Net\obj\Debug\SysWork.Net.csprojResolveAssemblyReference.cache

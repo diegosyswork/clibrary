@@ -117,12 +117,12 @@
     <Compile Include="Common\LambdaSqlBuilder\ValueObjects\LikeMethod.cs" />
     <Compile Include="Common\LambdaSqlBuilder\ValueObjects\SelectFunction.cs" />
     <Compile Include="Common\LambdaSqlBuilder\ValueObjects\SqlAdapter.cs" />
-    <Compile Include="Common\ObjectResolver\DataObjectCreator.cs" />
-    <Compile Include="Common\ObjectResolver\DataObjectCreatorMySql.cs" />
-    <Compile Include="Common\ObjectResolver\DataObjectProvider.cs" />
-    <Compile Include="Common\ObjectResolver\DataObjectCreatorOleDb.cs" />
-    <Compile Include="Common\ObjectResolver\DataObjectCreatorSQLite.cs" />
-    <Compile Include="Common\ObjectResolver\DataObjectCreatorSQLServer.cs" />
+    <Compile Include="Common\DataObjectProvider\AbstractDataObjectCreator.cs" />
+    <Compile Include="Common\DataObjectProvider\DataObjectCreatorMySql.cs" />
+    <Compile Include="Common\DataObjectProvider\DbObjectProvider.cs" />
+    <Compile Include="Common\DataObjectProvider\DataObjectCreatorOleDb.cs" />
+    <Compile Include="Common\DataObjectProvider\DataObjectCreatorSQLite.cs" />
+    <Compile Include="Common\DataObjectProvider\DataObjectCreatorSQLServer.cs" />
     <Compile Include="DaoModel\Attributes\DbColumnAttribute.cs" />
     <Compile Include="DaoModel\Attributes\DbTableAttribute.cs" />
     <Compile Include="DaoModel\CodeWriter\CodeWriterUtil.cs" />
@@ -147,7 +147,7 @@
     <Compile Include="Common\FormsGetParameters\FrmGetParamSQLite.Designer.cs">
       <DependentUpon>FrmGetParamSQLite.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\ObjectResolver\StaticDataObjectProvider.cs" />
+    <Compile Include="Common\DataObjectProvider\StaticDbObjectProvider.cs" />
     <Compile Include="Common\EDatabaseEngine.cs" />
     <Compile Include="LoggerDb\LoggerDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -111,6 +111,7 @@
             this.BtnLoggerOleDb = new System.Windows.Forms.Button();
             this.BtnLoggerSQL = new System.Windows.Forms.Button();
             this.BtnLogger = new System.Windows.Forms.Button();
+            this.btnSQLLAMTest = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -172,7 +173,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(15, 481);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(969, 37);
+            this.dataGridView1.Size = new System.Drawing.Size(1213, 37);
             this.dataGridView1.TabIndex = 5;
             // 
             // BtnAddRange
@@ -917,11 +918,22 @@
             this.BtnLogger.UseVisualStyleBackColor = true;
             this.BtnLogger.Click += new System.EventHandler(this.BtnLogger_Click);
             // 
+            // btnSQLLAMTest
+            // 
+            this.btnSQLLAMTest.Location = new System.Drawing.Point(995, 10);
+            this.btnSQLLAMTest.Name = "btnSQLLAMTest";
+            this.btnSQLLAMTest.Size = new System.Drawing.Size(169, 21);
+            this.btnSQLLAMTest.TabIndex = 83;
+            this.btnSQLLAMTest.Text = "SQLLam Test";
+            this.btnSQLLAMTest.UseVisualStyleBackColor = true;
+            this.btnSQLLAMTest.Click += new System.EventHandler(this.btnSQLLAMTest_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(996, 530);
+            this.ClientSize = new System.Drawing.Size(1240, 530);
+            this.Controls.Add(this.btnSQLLAMTest);
             this.Controls.Add(this.BtnLogger);
             this.Controls.Add(this.BtnLoggerSQL);
             this.Controls.Add(this.BtnLoggerOleDb);
@@ -1099,6 +1111,7 @@
         private System.Windows.Forms.Button BtnLoggerOleDb;
         private System.Windows.Forms.Button BtnLoggerSQL;
         private System.Windows.Forms.Button BtnLogger;
+        private System.Windows.Forms.Button btnSQLLAMTest;
     }
 }
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using SysWork.Data.Common.ObjectResolver;
+using SysWork.Data.Common.DataObjectProvider;
 
 namespace SysWork.Data.Common.SimpleQuery
 {
@@ -20,12 +20,12 @@ namespace SysWork.Data.Common.SimpleQuery
         /// <returns>IEnumerable dinamico</returns>
         public static IEnumerable<dynamic> Execute(DbConnection dbConnection, string commandText)
         {
-            return Execute(StaticDataObjectProvider.GetDataBaseEngineFromDbConnection(dbConnection), dbConnection, commandText,false);
+            return Execute(StaticDbObjectProvider.GetDataBaseEngineFromDbConnection(dbConnection), dbConnection, commandText,false);
         }
 
         public static IEnumerable<dynamic> Execute(EDataBaseEngine dataBaseEngine, string connectionString, string commandText,bool closeConnection = true)
         {
-            DbConnection dbConnection = StaticDataObjectProvider.GetDbConnection(dataBaseEngine,connectionString);
+            DbConnection dbConnection = StaticDbObjectProvider.GetDbConnection(dataBaseEngine,connectionString);
             return Execute(dataBaseEngine, dbConnection, commandText,closeConnection);
         }
         /// <summary>
@@ -37,7 +37,7 @@ namespace SysWork.Data.Common.SimpleQuery
         /// <returns></returns>
         public static IEnumerable<dynamic> Execute(string connectionString, string commandText,bool closeConnection = true)
         {
-            DbConnection dbConnection = StaticDataObjectProvider.GetDbConnection(EDataBaseEngine.MSSqlServer);
+            DbConnection dbConnection = StaticDbObjectProvider.GetDbConnection(EDataBaseEngine.MSSqlServer);
             dbConnection.ConnectionString = connectionString;
 
             return Execute(EDataBaseEngine.MSSqlServer, dbConnection, commandText, closeConnection);

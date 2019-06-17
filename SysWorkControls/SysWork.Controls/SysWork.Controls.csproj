@@ -43,12 +43,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BindableListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DataGridViewDecimalColumn.cs" />
     <Compile Include="DataGridViewNumericColumn.cs" />
     <Compile Include="DataGridViewNumericColumn.designer.cs">
       <DependentUpon>DataGridViewNumericColumn.cs</DependentUpon>
     </Compile>
     <Compile Include="Extensions\GUIExtensions.cs" />
+    <Compile Include="GridLineDataGridView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="InputBox\FrmInputBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,6 +64,11 @@
     <Compile Include="InputBox\InputBox.cs" />
     <Compile Include="ListViewColumnSorter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="TextBoxNumeric.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -67,11 +78,155 @@
     <Compile Include="TextBoxWithHint.Designer.cs">
       <DependentUpon>TextBoxWithHint.cs</DependentUpon>
     </Compile>
+    <Compile Include="ToolBars\ToolBarABM.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToolBars\ToolBarABM.Designer.cs">
+      <DependentUpon>ToolBarABM.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ToolBars\ToolBarReport.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToolBars\ToolBarReport.Designer.cs">
+      <DependentUpon>ToolBarReport.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="InputBox\FrmInputBox.resx">
       <DependentUpon>FrmInputBox.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolBars\ToolBarABM.resx">
+      <DependentUpon>ToolBarABM.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolBars\ToolBarReport.resx">
+      <DependentUpon>ToolBarReport.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\agregar-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\borrar-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\buscar-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\buscar-editablepng.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Button - Shutdown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cancelarEdicion2-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cancelarEdicion-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\carga_datos.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\carga_mediciones.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\confirmar-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\consulta-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Crystal_Clear_action_fileprint.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Crystal_Clear_app_mycomputer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\export.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\export-48x48.fw.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\file_export.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gnome-keyring-manager.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\impresora_48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\impresora_48x482.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\impresoraModelo2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo_artecola.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\monitor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pantalla_48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\printer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\protocolo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\quimica.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\quimica2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\quimica3.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\quimica4.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\quimica5.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\refresh-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\report.fw.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\salir.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\salir-48x48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Symbol-Add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Symbol-Check.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Symbol-Delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Symbol-Error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Symbol-Refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Undo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

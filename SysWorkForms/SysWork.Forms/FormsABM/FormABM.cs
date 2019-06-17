@@ -138,19 +138,19 @@ namespace SysWork.Forms.FormsABM
 
         private void FormABM_KeyDown(object sender, KeyEventArgs e)
         {
-            _toolBarABM.analizaTecla(e.KeyCode);
+            _toolBarABM.AnalizaTecla(e.KeyCode);
         }
 
         private void _toolBarABM_ToolBarABMClick(object sender, ToolBarABMClickEventArgs e)
         {
             switch (e.opcion)
             {
-                case EOpcionToolBarABM.nuevo:
+                case EOpcionToolBarABM.NUEVO:
 
                     BuscaNuevoCodigo();
                     break;
 
-                case EOpcionToolBarABM.eliminar:
+                case EOpcionToolBarABM.ELIMINAR:
 
                     if (MessageBox.Show("¿Realmente desea dar de baja el registro seleccionado?", "Aviso al operador", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
@@ -160,17 +160,17 @@ namespace SysWork.Forms.FormsABM
                     }
                     break;
 
-                case EOpcionToolBarABM.refresh:
+                case EOpcionToolBarABM.REFRESH:
 
                     InicializarFormulario();
                     break;
 
-                case EOpcionToolBarABM.consultar:
+                case EOpcionToolBarABM.CONSULTAR:
 
                     Consulta();
                     break;
 
-                case EOpcionToolBarABM.cancelar:
+                case EOpcionToolBarABM.CANCELAR:
 
                     _noValidarFormulario = true;
                     if (MessageBox.Show("¿Realmente desea abandonar la carga de datos?", "Aviso al operador", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -178,11 +178,11 @@ namespace SysWork.Forms.FormsABM
 
                     break;
 
-                case EOpcionToolBarABM.reporte:
+                case EOpcionToolBarABM.REPORTE:
                     LlamarReporte();
                     break;
 
-                case EOpcionToolBarABM.grabar:
+                case EOpcionToolBarABM.GRABAR:
 
                     if (DatosValidos())
                         if (ActualizarRegistro())
@@ -190,7 +190,7 @@ namespace SysWork.Forms.FormsABM
 
                     break;
 
-                case EOpcionToolBarABM.salir:
+                case EOpcionToolBarABM.SALIR:
 
                     _noValidarFormulario = true;
                     this.Dispose();
@@ -315,10 +315,10 @@ namespace SysWork.Forms.FormsABM
         {
             FormUtil.EditModeControls(this, permiteEdicion, "", UniqueKeyControls);
 
-            _toolBarABM.setModo(modo: permiteEdicion ? ToolBarABM.eModo.edicion : ToolBarABM.eModo.normal);
-            _toolBarABM.btnEliminarHabilitado = (_entity != null);
-            _toolBarABM.btnConsultarHabilitado = (!permiteEdicion);
-            _toolBarABM.btnReporteHabilitado = true;
+            _toolBarABM.SetModo(modo: permiteEdicion ? ToolBarABM.EModoToolBar.EDICION: ToolBarABM.EModoToolBar.NORMAL);
+            _toolBarABM.BtnEliminarHabilitado = (_entity != null);
+            _toolBarABM.BtnConsultarHabilitado = (!permiteEdicion);
+            _toolBarABM.BtnReporteHabilitado = true;
         }
 
         protected virtual bool EliminarRegistro()

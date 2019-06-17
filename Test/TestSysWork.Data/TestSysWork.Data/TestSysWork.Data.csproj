@@ -67,10 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DaoPersona.cs" />
-    <Compile Include="DataManagerOleDb.cs" />
-    <Compile Include="DataManagerMySQL.cs" />
-    <Compile Include="DataManagerSQLite.cs" />
-    <Compile Include="DataManagerSQL.cs" />
+    <Compile Include="DataManagerTest.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

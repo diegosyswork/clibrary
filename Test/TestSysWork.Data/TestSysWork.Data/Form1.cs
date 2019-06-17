@@ -12,6 +12,8 @@ using SysWork.Data.Common.DbConnectionUtilities;
 using SysWork.Data.Logger;
 using Microsoft.VisualBasic;
 using SysWork.Data.DaoModel.Exceptions;
+using SysWork.Data.Common.LambdaSqlBuilder;
+using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 
 namespace TestDaoModelDataCommon
 {
@@ -22,35 +24,38 @@ namespace TestDaoModelDataCommon
         const string ConnectionStringMySql = @"Server=localhost;Database=test;Uid=root;Pwd=@#!Sw58125812;persistsecurityinfo=True;";
 
         private DaoPersona _daoPersonaSQLite;
-        private DaoPersona _daoPersonaSQL;
+        private DaoPersona _daoPersonaMSSQL;
         private DaoPersona _daoPersonaMySql;
         private DaoPersona _daoPersonaOleDb;
 
         public Form1()
         {
             InitializeComponent();
-            /*
-            _daoPersonaSQLite = new DaoPersonaSqlite(GetSqliteConnectionString());
-            _daoPersonaSQL = new DaoPersonaSql(ConnectionStringSQL);
-            _daoPersonaOleDb = new DaoPersonaOleDb(ConnectionStringOleDb);
-            _daoPersonaMySql = new DaoPersonaMySql(ConnectionStringMySql);
-            */
+            
+            _daoPersonaSQLite = new DaoPersona ( GetSqliteConnectionString(), EDataBaseEngine.SqLite);
+            _daoPersonaMSSQL = new DaoPersona(ConnectionStringSQL, EDataBaseEngine.MSSqlServer);
+            _daoPersonaOleDb = new DaoPersona(ConnectionStringOleDb,EDataBaseEngine.OleDb);
+            _daoPersonaMySql = new DaoPersona(ConnectionStringMySql,EDataBaseEngine.MySql);
+            
 
+            /*
             DataManagerSQLite.ConnectionString = GetSqliteConnectionString();
             DataManagerSQLite.DataBaseEngine = EDataBaseEngine.SqLite;
             _daoPersonaSQLite = DataManagerSQLite.GetInstance().DaoPersonaSqlite;
 
-            DataManagerSQL.ConnectionString = ConnectionStringSQL;
-            DataManagerSQL.DataBaseEngine = EDataBaseEngine.MSSqlServer;
-            _daoPersonaSQL = DataManagerSQL.GetInstance().DaoPersonaSql;
 
             DataManagerOleDb.ConnectionString = ConnectionStringOleDb;
             DataManagerOleDb.DataBaseEngine = EDataBaseEngine.OleDb;
             _daoPersonaOleDb = DataManagerOleDb.GetInstance().DaoPersonaOleDb;
-
+            
             DataManagerMySQL.ConnectionString = ConnectionStringMySql;
             DataManagerMySQL.DataBaseEngine = EDataBaseEngine.MySql;
             _daoPersonaMySql = DataManagerMySQL.GetInstance().DaoPersonaMySql;
+
+            DataManagerMSSQL.ConnectionString = ConnectionStringSQL;
+            DataManagerMSSQL.DataBaseEngine = EDataBaseEngine.MSSqlServer;
+            _daoPersonaSQL = DataManagerMSSQL.GetInstance().DaoPersonaMSSql;
+            */
 
 
         }
@@ -112,7 +117,7 @@ namespace TestDaoModelDataCommon
             p.Dni = RandomNumber(8);
             p.FechaNacimiento = DateTime.Parse("24/05/1980");
             p.Telefono = "11" + RandomNumber(8);
-            idGenerado = _daoPersonaSQL.Add(p);
+            idGenerado = _daoPersonaMSSQL.Add(p);
             MessageBox.Show("Inserto uno idGenerado : " + idGenerado);
 
             p = new Persona();
@@ -121,7 +126,7 @@ namespace TestDaoModelDataCommon
             p.Dni = RandomNumber(500);
             p.FechaNacimiento = DateTime.Parse("24/05/1980");
             p.Telefono = "11" + RandomNumber(500);
-            idGenerado = _daoPersonaSQL.Add(p);
+            idGenerado = _daoPersonaMSSQL.Add(p);
             MessageBox.Show("Inserto uno que Excede los maximos de los textos (para probar parametros) idGenerado : " + idGenerado);
 
             try
@@ -132,8 +137,8 @@ namespace TestDaoModelDataCommon
                 p.Dni = RandomNumber(500);
                 p.FechaNacimiento = DateTime.Parse("24/05/1980");
                 p.Telefono = "11" + RandomNumber(500);
-                idGenerado = _daoPersonaSQL.Add(p);
-                idGenerado = _daoPersonaSQL.Add(p);
+                idGenerado = _daoPersonaMSSQL.Add(p);
+                idGenerado = _daoPersonaMSSQL.Add(p);
                 MessageBox.Show("Inserto repetido: " + idGenerado);
 
             }
@@ -205,17 +210,17 @@ namespace TestDaoModelDataCommon
             p.Dni = RandomNumber(8);
             p.FechaNacimiento = DateTime.Parse("24/05/1980");
             p.Telefono = "11" + RandomNumber(8);
-            idGenerado = _daoPersonaSQL.Add(p);
+            idGenerado = _daoPersonaMSSQL.Add(p);
             MessageBox.Show("Genera una nueva Persona con el id: " + idGenerado);
 
-            p = _daoPersonaSQL.GetById(idGenerado);
+            p = _daoPersonaMSSQL.GetById(idGenerado);
             p.Apellido = p.Apellido + " ** modificado";
             p.Nombre = p.Nombre + " ** modificado";
             p.Dni = p.Dni + " ** modificado ";
             p.FechaNacimiento = DateTime.Parse("24/05/1980");
             p.Telefono = p.Telefono + "** modificado";
 
-            bool correcto = _daoPersonaSQL.Update(p);
+            bool correcto = _daoPersonaMSSQL.Update(p);
             MessageBox.Show("La modifica correctamente " + correcto);
         }
         private void BtnUpdateOleDb_Click(object sender, EventArgs e)
@@ -354,7 +359,7 @@ namespace TestDaoModelDataCommon
             {
                 listaPersona.Add(new Persona(RandomString(50), RandomString(50), RandomNumber(8), (DateTime.Today).AddDays(i), "11" + RandomNumber(8)));
             }
-            _daoPersonaSQL.AddRange(listaPersona);
+            _daoPersonaMSSQL.AddRange(listaPersona);
             MessageBox.Show("Se han insertado " + listaPersona.Count + " Personas");
         }
         private void BtnAddRangeOleDb_Click(object sender, EventArgs e)
@@ -384,13 +389,13 @@ namespace TestDaoModelDataCommon
         private void BtnUpdateRangeSQL_Click(object sender, EventArgs e)
         {
             List<Persona> listaPersona = new List<Persona>();
-            foreach (var item in _daoPersonaSQL.GetAll().ToList())
+            foreach (var item in _daoPersonaMSSQL.GetAll().ToList())
             {
 
                 listaPersona.Add(new Persona(item.IdPersona, "updateRANGE" + item.Apellido, "updateRANGE" + item.Nombre, item.Dni, item.FechaNacimiento, "updateRANGE" + item.Telefono));
             }
 
-            _daoPersonaSQL.UpdateRange(listaPersona);
+            _daoPersonaMSSQL.UpdateRange(listaPersona);
             MessageBox.Show("Se han actualizado " + listaPersona.Count + " Personas");
 
         }
@@ -416,7 +421,7 @@ namespace TestDaoModelDataCommon
         }
         private void BtnDeleteAllSQL_Click(object sender, EventArgs e)
         {
-            long recordsAffecteds = _daoPersonaSQL.DeleteAll();
+            long recordsAffecteds = _daoPersonaMSSQL.DeleteAll();
             MessageBox.Show($"consulta ejecutada con Exito se eliminaron {recordsAffecteds} registros");
         }
         private void BtnDeleteAllOleDb_Click(object sender, EventArgs e)
@@ -445,7 +450,7 @@ namespace TestDaoModelDataCommon
         }
         private void BtnFind5SQL_Click(object sender, EventArgs e)
         {
-            List<Persona> lista = _daoPersonaSQL.GetAll().ToList();
+            List<Persona> lista = _daoPersonaMSSQL.GetAll().ToList();
             if (lista.Count < 5)
             {
                 MessageBox.Show("Hay menos de 5 items");
@@ -456,7 +461,7 @@ namespace TestDaoModelDataCommon
                 ids.Add(lista[i].IdPersona);
 
             dataGridView1.DataSource = null;
-            dataGridView1.DataSource = _daoPersonaSQL.Find(ids);
+            dataGridView1.DataSource = _daoPersonaMSSQL.Find(ids);
 
         }
         private void BtnFind5OleDb_Click(object sender, EventArgs e)
@@ -483,7 +488,7 @@ namespace TestDaoModelDataCommon
         }
         private void BtnDeleteByIDSQL_Click(object sender, EventArgs e)
         {
-            bool correcto = _daoPersonaSQL.DeleteById(long.Parse(txtDELSQLId.Text));
+            bool correcto = _daoPersonaMSSQL.DeleteById(long.Parse(txtDELSQLId.Text));
             MessageBox.Show("Correcto + " + correcto);
         }
         private void BtnDeleteByIDOleDb_Click(object sender, EventArgs e)
@@ -499,7 +504,7 @@ namespace TestDaoModelDataCommon
         }
         private void BtnGetByIDSQL_Click(object sender, EventArgs e)
         {
-            Persona p = _daoPersonaSQL.GetById(long.Parse(txtGETSQLId.Text));
+            Persona p = _daoPersonaMSSQL.GetById(long.Parse(txtGETSQLId.Text));
             MessageBox.Show($" {p.Apellido}\r\n {p.Nombre}\r\n {p.Dni} ");
         }
         private void BtnGetByIDOleDb_Click(object sender, EventArgs e)
@@ -515,7 +520,7 @@ namespace TestDaoModelDataCommon
         }
         private void BtnGetByDniSQL_Click(object sender, EventArgs e)
         {
-            Persona p = _daoPersonaSQL.GetByDni(txtDNISQL.Text);
+            Persona p = _daoPersonaMSSQL.GetByDni(txtDNISQL.Text);
             MessageBox.Show($" {p.Apellido}\r\n {p.Nombre}\r\n {p.Dni} ");
         }
         private void BtnGetByDniOleDb_Click(object sender, EventArgs e)
@@ -544,26 +549,26 @@ namespace TestDaoModelDataCommon
 
         private void BtnExecuteNonQuery_Click(object sender, EventArgs e)
         {
-            long recordsAffected = DataManagerSQLite.GetInstance().GetDbExecute().Query(txtQuery.Text).ExecuteNonQuery(); 
+            long recordsAffected = _daoPersonaSQLite.GetExecute().Query(txtQuery.Text).ExecuteNonQuery(); 
             MessageBox.Show($"records affected = {recordsAffected}");
         }
 
         private void BtnExecuteNonQuerySQL_Click(object sender, EventArgs e)
         {
-            long recordsAffected = DataManagerSQL.GetInstance().GetDbExecute().Query(txtQuerySQL.Text).ExecuteNonQuery();
+            long recordsAffected = _daoPersonaMSSQL.GetExecute().Query(txtQuerySQL.Text).ExecuteNonQuery();
             MessageBox.Show($"records affected = {recordsAffected}");
         }
 
         private void BtnExecuteNonQueryOleDB_Click(object sender, EventArgs e)
         {
-            long recordsAffected = DataManagerOleDb.GetInstance().GetDbExecute().Query(txtQueryOleDb.Text).ExecuteNonQuery();
+            long recordsAffected = _daoPersonaOleDb.GetExecute().Query(txtQueryOleDb.Text).ExecuteNonQuery();
             MessageBox.Show($"records affected = {recordsAffected}");
 
         }
 
         private void BtnExecuteNonQueryWparam_Click(object sender, EventArgs e)
         {
-            DbExecute dbExecute = DataManagerSQLite.GetInstance().GetDbExecute() ;
+            DbExecute dbExecute = _daoPersonaSQLite.GetExecute() ;
             dbExecute.Query(txtQuery.Text);
 
             string paramName;
@@ -577,7 +582,7 @@ namespace TestDaoModelDataCommon
 
                 if (seguir)
                 {
-                    dbExecute.AddParameters(paramName, paramValue);
+                    dbExecute.AddParameter(paramName, paramValue);
                 }
             }
             long recordsAffected = dbExecute.ExecuteNonQuery();
@@ -586,7 +591,7 @@ namespace TestDaoModelDataCommon
 
         private void btnVerificaSQLServer_Click(object sender, EventArgs e)
         {
-            if (DbUtil.VerifySQLConnectionStringOrGetParams("testSqlServer",@"NT-SYSWORK\SQLEXPRESS", "TEST", "TEST-MAL", "TEST",null,true))
+            if (DbUtil.VerifyMSSQLConnectionStringOrGetParams("testSqlServer",@"NT-SYSWORK\SQLEXPRESS", "TEST", "TEST-MAL", "TEST",null,true))
             {
                 MessageBox.Show("Conexion Correcta");
             }
@@ -785,14 +790,14 @@ namespace TestDaoModelDataCommon
 
         private void BtnExecuteNonQueryMySQL_Click(object sender, EventArgs e)
         {
-            long recordsAffected = DataManagerMySQL.GetInstance().GetDbExecute().Query(txtQueryMySQL.Text).ExecuteNonQuery();
+            long recordsAffected = _daoPersonaMySql.GetExecute().Query(txtQueryMySQL.Text).ExecuteNonQuery();
             MessageBox.Show($"records affected = {recordsAffected}");
 
         }
 
         private void BtnExecuteNonQueryWparamOleDb_Click(object sender, EventArgs e)
         {
-            DbExecute dbExecute = DataManagerOleDb.GetInstance().GetDbExecute();
+            DbExecute dbExecute = _daoPersonaOleDb.GetExecute();
             dbExecute.Query(txtQueryOleDb.Text);
 
             string paramName;
@@ -806,7 +811,7 @@ namespace TestDaoModelDataCommon
 
                 if (seguir)
                 {
-                    dbExecute.AddParameters(paramName, paramValue);
+                    dbExecute.AddParameter(paramName, paramValue);
                 }
             }
             long recordsAffected = dbExecute.ExecuteNonQuery();
@@ -816,7 +821,7 @@ namespace TestDaoModelDataCommon
 
         private void BtnExecuteNonQueryWparamSQL_Click(object sender, EventArgs e)
         {
-            DbExecute dbExecute = DataManagerSQL.GetInstance().GetDbExecute();
+            DbExecute dbExecute = _daoPersonaMSSQL.GetExecute();
             dbExecute.Query(txtQuerySQL.Text);
 
             string paramName;
@@ -830,7 +835,7 @@ namespace TestDaoModelDataCommon
 
                 if (seguir)
                 {
-                    dbExecute.AddParameters(paramName, paramValue);
+                    dbExecute.AddParameter(paramName, paramValue);
                 }
             }
             long recordsAffected = dbExecute.ExecuteNonQuery();
@@ -839,7 +844,7 @@ namespace TestDaoModelDataCommon
 
         private void BtnExecuteNonQueryWparamMySQL_Click(object sender, EventArgs e)
         {
-            DbExecute daoExecuteNonQuery = DataManagerMySQL.GetInstance().GetDbExecute();
+            DbExecute daoExecuteNonQuery = _daoPersonaMySql.GetExecute();
             daoExecuteNonQuery.Query(txtQueryMySQL.Text);
 
             string paramName;
@@ -853,7 +858,7 @@ namespace TestDaoModelDataCommon
 
                 if (seguir)
                 {
-                    daoExecuteNonQuery.AddParameters(paramName, paramValue);
+                    daoExecuteNonQuery.AddParameter(paramName, paramValue);
                 }
             }
             long recordsAffected = daoExecuteNonQuery.ExecuteNonQuery();
@@ -863,7 +868,7 @@ namespace TestDaoModelDataCommon
 
         private void btnVerifyMySQL_Click(object sender, EventArgs e)
         {
-            if (DbUtil.VerifyMySQLConnectionStringOrGetParams("testMySql", @"LOCALHOST", "TEST", "TEST-MAL", "TEST", null, true)) ;
+            if (DbUtil.VerifyMySQLConnectionStringOrGetParams("testMySql", @"LOCALHOST", "TEST", "TEST-MAL", "TEST", null, true))
             {
                 MessageBox.Show("Conexion Correcta");
             }
@@ -896,6 +901,34 @@ namespace TestDaoModelDataCommon
             LoggerDb.ConnectionString = GetSqliteConnectionString();
             LoggerDb.DataBaseEngine = EDataBaseEngine.SqLite;
             LoggerDb.Log("Test Sqlite");
+        }
+
+        private void btnSQLLAMTest_Click(object sender, EventArgs e)
+        {
+            SqlLam<Persona>.SetAdapter(SqlAdapter.MySql);
+            var querySelectCountMySQL = new SqlLam<Persona>().SelectCount(p => p.IdPersona);//.Where(p => p.Dni == "27926043");
+            // Obtiene la cantidad
+            var cantMySQL = _daoPersonaMySql.GetExecute()
+                            .Query(querySelectCountMySQL.QueryString)
+                            .AddParameters(querySelectCountMySQL.QueryParameters)
+                            .ExecuteScalar();
+
+            SqlLam<Persona>.SetAdapter(SqlAdapter.SqlServer2012);
+            var querySelectCountMSSql = new SqlLam<Persona>().SelectCount(p => p.IdPersona);//.Where(p => p.Dni == "27926043");
+            // Obtiene la cantidad
+            var cantMSSql = _daoPersonaMSSQL.GetExecute()
+                            .Query(querySelectCountMSSql.QueryString)
+                            .AddParameters(querySelectCountMSSql.QueryParameters)
+                            .ExecuteScalar();
+
+            SqlLam<Persona>.SetAdapter(SqlAdapter.SQLite);
+            var querySelectCountSQLite = new SqlLam<Persona>().SelectCount(p => p.IdPersona);//.Where(p => p.Dni == "27926043");
+            // Obtiene la cantidad
+            var cantSQLite = _daoPersonaSQLite.GetExecute()
+                            .Query(querySelectCountSQLite.QueryString)
+                            .AddParameters(querySelectCountSQLite.QueryParameters)
+                            .ExecuteScalar();
+
         }
     }
 }

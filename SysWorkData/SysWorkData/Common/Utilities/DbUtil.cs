@@ -9,11 +9,9 @@ using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.IO;
-using System.Security.Cryptography;
-using System.Text;
 using System.Windows.Forms;
+using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.FormsGetParam;
-using SysWork.Data.Common.ObjectResolver;
 
 namespace SysWork.Data.Common.Utilities
 {
@@ -23,7 +21,7 @@ namespace SysWork.Data.Common.Utilities
         {
             bool exists = false;
 
-            using (DbConnection dbConnection = StaticDataObjectProvider.GetDbConnection(dataBaseEngine, connectionString))
+            using (DbConnection dbConnection = StaticDbObjectProvider.GetDbConnection(dataBaseEngine, connectionString))
             {
                 dbConnection.Open();
                 if (dataBaseEngine == EDataBaseEngine.MSSqlServer)
@@ -48,7 +46,7 @@ namespace SysWork.Data.Common.Utilities
 
         public static List<string> GetListTables(EDataBaseEngine dataBaseEngine, string connectionString)
         {
-            using (DbConnection connection = StaticDataObjectProvider.GetDbConnection(dataBaseEngine,connectionString))
+            using (DbConnection connection = StaticDbObjectProvider.GetDbConnection(dataBaseEngine,connectionString))
             {
                 connection.Open();
                 DataTable schema = null;
@@ -80,7 +78,7 @@ namespace SysWork.Data.Common.Utilities
         public static bool ExistsColumn(EDataBaseEngine dataBaseEngine, string connectionString, string tableName, string columnName)
         {
             bool exists = false;
-            using (DbConnection dbConnection = StaticDataObjectProvider.GetDbConnection(dataBaseEngine, connectionString))
+            using (DbConnection dbConnection = StaticDbObjectProvider.GetDbConnection(dataBaseEngine, connectionString))
             {
                 dbConnection.Open();
                 DataTable dtColumns = null;
@@ -117,7 +115,7 @@ namespace SysWork.Data.Common.Utilities
         {
             bool result = false;
 
-            result = ExecuteBatchNonQuery(dataBaseEngine, query, StaticDataObjectProvider.GetIDbConnection(dataBaseEngine, ConnectionString));
+            result = ExecuteBatchNonQuery(dataBaseEngine, query, StaticDbObjectProvider.GetIDbConnection(dataBaseEngine, ConnectionString));
 
             return result;
         }
@@ -191,7 +189,7 @@ namespace SysWork.Data.Common.Utilities
             mensajeError = "";
             try
             {
-                using (IDbConnection dbConnection = StaticDataObjectProvider.GetIDbConnection(dataBaseEngine, connectionString))
+                using (IDbConnection dbConnection = StaticDbObjectProvider.GetIDbConnection(dataBaseEngine, connectionString))
                 {
                     dbConnection.Open();
                     dbConnection.Close();
@@ -315,7 +313,6 @@ namespace SysWork.Data.Common.Utilities
 
             if (!ExistsConnectionString(connectionStringName))
             {
-                //ASIGNO DATOS DEFAULT
                 connectionSb.DataSource = defaultDataSource ?? "LOCALHOST";
                 connectionSb.UserID = defaultUserId ?? "SA";
                 connectionSb.Password = defaultPassWord ?? "";
@@ -328,6 +325,8 @@ namespace SysWork.Data.Common.Utilities
                 {
                     connectionSb.UserID = Decrypt(connectionSb.UserID);
                     connectionSb.Password = Decrypt(connectionSb.Password);
+                    connectionSb.DataSource = Decrypt(connectionSb.DataSource);
+                    connectionSb.InitialCatalog = Decrypt(connectionSb.InitialCatalog);
                 }
             }
 
@@ -390,6 +389,8 @@ namespace SysWork.Data.Common.Utilities
                 {
                     connectionSb.UserID = Encrypt(connectionSb.UserID);
                     connectionSb.Password = Encrypt(connectionSb.Password);
+                    connectionSb.DataSource = Encrypt(connectionSb.DataSource);
+                    connectionSb.InitialCatalog = Encrypt(connectionSb.InitialCatalog);
                 }
 
                 if (!ExistsConnectionString(connectionStringName))
@@ -435,6 +436,10 @@ namespace SysWork.Data.Common.Utilities
                 {
                     connectionSb.UserID = Decrypt(connectionSb.UserID);
                     connectionSb.Password = Decrypt(connectionSb.Password);
+                    connectionSb.Server = Decrypt(connectionSb.Server);
+
+                    if (!string.IsNullOrEmpty(connectionSb.Database.Trim()))
+                        connectionSb.Database = Decrypt(connectionSb.Database);
                 }
             }
 
@@ -496,6 +501,10 @@ namespace SysWork.Data.Common.Utilities
                 {
                     connectionSb.UserID = Encrypt(connectionSb.UserID);
                     connectionSb.Password = Encrypt(connectionSb.Password);
+                    connectionSb.Server = Encrypt(connectionSb.Server);
+
+                    if (!string.IsNullOrEmpty(connectionSb.Database.Trim()))
+                        connectionSb.Database = Encrypt(connectionSb.Database);
                 }
 
                 if (!ExistsConnectionString(connectionStringName))
@@ -521,8 +530,6 @@ namespace SysWork.Data.Common.Utilities
 
             return true;
         }
-
-
         public static bool VerifySQLiteConnectionStringOrGetParams(string connectionStringName, string defaultConnectionString)
         {
             SQLiteConnectionStringBuilder connectionSb = new SQLiteConnectionStringBuilder();
@@ -672,10 +679,8 @@ namespace SysWork.Data.Common.Utilities
                     }
                 }
             }
-
             return true;
         }
-
         public static DataTable ConvertToDatatable<T>(List<T> data)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(T));
@@ -704,7 +709,6 @@ namespace SysWork.Data.Common.Utilities
         {
             string result = string.Empty;
             byte[] decryted = Convert.FromBase64String(input);
-            //result = System.Text.Encoding.Unicode.GetString(decryted, 0, decryted.ToArray().Length);
             result = System.Text.Encoding.Unicode.GetString(decryted);
             return result;
         }
@@ -714,6 +718,60 @@ namespace SysWork.Data.Common.Utilities
             byte[] encryted = System.Text.Encoding.Unicode.GetBytes(input);
             result = Convert.ToBase64String(encryted);
             return result;
+        }
+        public static string DecryptedConnectionString(string encryptedConnectionString)
+        {
+            return DecryptedConnectionString(EDataBaseEngine.MSSqlServer, encryptedConnectionString);
+        }
+        public static string DecryptedConnectionString(EDataBaseEngine dataBaseEngine, string encryptedConnectionString)
+        {
+            string response = "";
+
+            switch (dataBaseEngine)
+            {
+                case EDataBaseEngine.MSSqlServer:
+                    var connectionSb = new SqlConnectionStringBuilder();
+                    connectionSb.ConnectionString = encryptedConnectionString;
+
+                    connectionSb.UserID = Decrypt(connectionSb.UserID);
+                    connectionSb.Password = Decrypt(connectionSb.Password);
+                    connectionSb.DataSource = Decrypt(connectionSb.DataSource);
+                    connectionSb.InitialCatalog = Decrypt(connectionSb.InitialCatalog);
+
+                    response = connectionSb.ConnectionString;
+                    break;
+
+                case EDataBaseEngine.MySql:
+                    var connectionSbMySql = new MySqlConnectionStringBuilder();
+                    connectionSbMySql.ConnectionString = encryptedConnectionString;
+
+                    connectionSbMySql.UserID = Decrypt(connectionSbMySql.UserID);
+                    connectionSbMySql.Password = Decrypt(connectionSbMySql.Password);
+                    connectionSbMySql.Server = Decrypt(connectionSbMySql.Server);
+
+                    if (!string.IsNullOrEmpty(connectionSbMySql.Database.Trim()))
+                        connectionSbMySql.Database = Decrypt(connectionSbMySql.Database);
+
+                    response = connectionSbMySql.ConnectionString;
+                    break;
+
+                default:
+                    response = encryptedConnectionString;
+                    break;
+            }
+
+            return response;
+        }
+        public static  long ParseToLong(object result)
+        {
+            if (result.GetType() == typeof(System.Int64))
+                return (long)result;
+            if (result.GetType() == typeof(System.Int32))
+                return (long)(Int32)result;
+            else if (result.GetType() == typeof(System.Decimal))
+                return (long)(Decimal)result;
+            else
+                return long.Parse(result.ToString());
         }
     }
 }

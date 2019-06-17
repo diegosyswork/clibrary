@@ -123,7 +123,5 @@ namespace SysWork.Data.DaoModel.CodeWriter
 
             return retorno;
         }
-
-
     }
 }
