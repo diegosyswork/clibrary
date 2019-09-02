@@ -293,6 +293,24 @@ namespace SysWork.Data.Common.Utilities
             return ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
         }
 
+        public static void EditConnectionString(string connectionStringName,string connectionString)
+        {
+            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+            config.ConnectionStrings.ConnectionStrings[connectionStringName].ConnectionString = connectionString;
+            config.Save(ConfigurationSaveMode.Modified, true);
+            ConfigurationManager.RefreshSection("connectionStrings");
+        }
+
+        public static void SaveConnectionString(string connectionStringName, string connectionString)
+        {
+            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+            ConnectionStringSettings connectionStringSettings = new ConnectionStringSettings(connectionStringName, connectionString);
+            config.ConnectionStrings.ConnectionStrings.Add(connectionStringSettings);
+            config.Save(ConfigurationSaveMode.Modified, true);
+            ConfigurationManager.RefreshSection("connectionStrings");
+        }
+
+
         public static string AddPrefixTableNameToFieldList(string fieldList, string tableName)
         {
             string[] splitList = fieldList.Split(',');
@@ -304,8 +322,150 @@ namespace SysWork.Data.Common.Utilities
 
             return string.Join(",", splitList); ;
         }
+        /// <summary>
+        /// Dada una cadena de conexion, la valida, o solicita parametros al usuario
+        /// </summary>
+        /// <param name="userGotParameters">Retorna si el usuario ingreso los datos</param>
+        /// <param name="defaultConnectionString"></param>
+        /// <param name="defaultDataSource"></param>
+        /// <param name="defaultUserId"></param>
+        /// <param name="defaultPassWord"></param>
+        /// <param name="defaultInitialCatalog"></param>
+        /// <returns>Una ConnectionString cunando logra conectarse con los parametros default, o, los ingresados por el usuario. NULL en el caso de no lograr conectarse o el usuario cancelar la solicitud de parametros.</returns>
+        public static string VerifyMSSQLConnectionStringOrGetParams(out bool userGotParameters,string defaultConnectionString = null, string defaultDataSource = null, string defaultUserId = null, string defaultPassWord = null, string defaultInitialCatalog = null)
+        {
+            SqlConnectionStringBuilder connectionSb = new SqlConnectionStringBuilder();
+            userGotParameters = false;
 
+            if (string.IsNullOrEmpty(defaultConnectionString))
+            {
+                connectionSb.DataSource = defaultDataSource ?? "";
+                connectionSb.UserID = defaultUserId ?? "";
+                connectionSb.Password = defaultPassWord ?? "";
+                connectionSb.InitialCatalog = defaultInitialCatalog ?? "";
+            }
+            else
+            {
+                connectionSb.ConnectionString = defaultConnectionString;
+            }
 
+            bool hasConnectionSuccess = ConnectionSuccess(connectionSb.ConnectionString.ToString(), out string mensajeError);
+
+            bool needConnectionParameters = (!hasConnectionSuccess);
+
+            while (needConnectionParameters)
+            {
+                userGotParameters = true;
+
+                FrmGetParamSQL frmGetParamSQL;
+                frmGetParamSQL = new FrmGetParamSQL();
+
+                frmGetParamSQL.Server = connectionSb.DataSource;
+                frmGetParamSQL.InicioDeSesion = connectionSb.UserID;
+                frmGetParamSQL.Password = connectionSb.Password;
+                frmGetParamSQL.BaseDeDatos = connectionSb.InitialCatalog;
+                frmGetParamSQL.ConnectionString = defaultConnectionString;
+
+                frmGetParamSQL.MensajeError = "Ha ocurrido el siguiente error: \r\r" + mensajeError;
+
+                frmGetParamSQL.ShowDialog();
+
+                if (frmGetParamSQL.DialogResult == DialogResult.OK)
+                {
+                    if (!string.IsNullOrEmpty(frmGetParamSQL.ConnectionString))
+                    {
+                        defaultConnectionString = frmGetParamSQL.ConnectionString;
+                        connectionSb.ConnectionString = frmGetParamSQL.ConnectionString;
+
+                    }
+                    else
+                    {
+                        connectionSb.DataSource = frmGetParamSQL.Server;
+                        connectionSb.UserID = frmGetParamSQL.InicioDeSesion;
+                        connectionSb.Password = frmGetParamSQL.Password;
+                        if (!string.IsNullOrEmpty(frmGetParamSQL.BaseDeDatos.Trim()))
+                            connectionSb.InitialCatalog = frmGetParamSQL.BaseDeDatos;
+                    }
+
+                    hasConnectionSuccess = ConnectionSuccess(connectionSb.ConnectionString.ToString(), out mensajeError);
+                }
+                else
+                {
+                    hasConnectionSuccess = false;
+                }
+
+                needConnectionParameters = (!hasConnectionSuccess) && (frmGetParamSQL.DialogResult == DialogResult.OK);
+            }
+
+            if (hasConnectionSuccess)
+            {
+                return connectionSb.ConnectionString;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public static bool VerifyMSSQLConnectionStringOrGetParams(string connectionStringName, string defaultDataSource = null, string defaultUserId = null, string defaultPassWord = null, string defaultInitialCatalog = null, string defaultConnectionString = null, bool encryptData = false)
+        {
+            SqlConnectionStringBuilder connectionSb = new SqlConnectionStringBuilder();
+
+            if (ExistsConnectionString(connectionStringName))
+            {
+                connectionSb.ConnectionString = GetConnectionString(connectionStringName);
+                if (encryptData)
+                {
+                    connectionSb.UserID = Decrypt(connectionSb.UserID);
+                    connectionSb.Password = Decrypt(connectionSb.Password);
+                    connectionSb.DataSource = Decrypt(connectionSb.DataSource);
+                    connectionSb.InitialCatalog = Decrypt(connectionSb.InitialCatalog);
+                }
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(defaultConnectionString))
+                {
+                    connectionSb.DataSource = defaultDataSource ?? "";
+                    connectionSb.UserID = defaultUserId ?? "";
+                    connectionSb.Password = defaultPassWord ?? "";
+                    connectionSb.InitialCatalog = defaultInitialCatalog ?? "";
+                }
+                else
+                {
+                    connectionSb.ConnectionString = defaultConnectionString;
+                }
+            }
+
+            string resultConnectionString = VerifyMSSQLConnectionStringOrGetParams(out bool userGotParameters, connectionSb.ConnectionString);
+
+            bool hasConnectionSuccess = resultConnectionString != null;
+
+            if (hasConnectionSuccess)
+            {
+                connectionSb.ConnectionString = resultConnectionString;
+                if (encryptData)
+                {
+                    connectionSb.UserID = Encrypt(connectionSb.UserID);
+                    connectionSb.Password = Encrypt(connectionSb.Password);
+                    connectionSb.DataSource = Encrypt(connectionSb.DataSource);
+                    connectionSb.InitialCatalog = Encrypt(connectionSb.InitialCatalog);
+                }
+
+                if (!ExistsConnectionString(connectionStringName))
+                    SaveConnectionString(connectionStringName, connectionSb.ToString());
+                else
+                    if (userGotParameters)
+                        EditConnectionString(connectionStringName, connectionSb.ToString());
+            }
+            else
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /*
         public static bool VerifyMSSQLConnectionStringOrGetParams(string connectionStringName, string defaultDataSource = null, string defaultUserId = null, string defaultPassWord = null, string defaultInitialCatalog = null, string defaultConnectionString = null,bool encryptData = false)
         {
             SqlConnectionStringBuilder connectionSb = new SqlConnectionStringBuilder();
@@ -313,10 +473,17 @@ namespace SysWork.Data.Common.Utilities
 
             if (!ExistsConnectionString(connectionStringName))
             {
-                connectionSb.DataSource = defaultDataSource ?? "LOCALHOST";
-                connectionSb.UserID = defaultUserId ?? "SA";
-                connectionSb.Password = defaultPassWord ?? "";
-                connectionSb.InitialCatalog = defaultInitialCatalog ?? "master";
+                if (string.IsNullOrEmpty(defaultConnectionString))
+                {
+                    connectionSb.DataSource = defaultDataSource ?? "";
+                    connectionSb.UserID = defaultUserId ?? "";
+                    connectionSb.Password = defaultPassWord ?? "";
+                    connectionSb.InitialCatalog = defaultInitialCatalog ?? "";
+                }
+                else
+                {
+                    connectionSb.ConnectionString = defaultConnectionString;
+                }
             }
             else
             {
@@ -393,29 +560,34 @@ namespace SysWork.Data.Common.Utilities
                     connectionSb.InitialCatalog = Encrypt(connectionSb.InitialCatalog);
                 }
 
-                if (!ExistsConnectionString(connectionStringName))
+                if (!string.IsNullOrEmpty(connectionStringName))
                 {
-                    Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-                    ConnectionStringSettings connectionStringSettings = new ConnectionStringSettings(connectionStringName, connectionSb.ToString());
-                    config.ConnectionStrings.ConnectionStrings.Add(connectionStringSettings);
-
-                    config.Save(ConfigurationSaveMode.Modified, true);
-                    ConfigurationManager.RefreshSection("connectionStrings");
-                }
-                else
-                {
-                    if (userGotParameters)
+                    if (!ExistsConnectionString(connectionStringName))
                     {
                         Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-                        config.ConnectionStrings.ConnectionStrings[connectionStringName].ConnectionString = connectionSb.ToString();
+                        ConnectionStringSettings connectionStringSettings = new ConnectionStringSettings(connectionStringName, connectionSb.ToString());
+                        config.ConnectionStrings.ConnectionStrings.Add(connectionStringSettings);
+
                         config.Save(ConfigurationSaveMode.Modified, true);
                         ConfigurationManager.RefreshSection("connectionStrings");
                     }
+                    else
+                    {
+                        if (userGotParameters)
+                        {
+                            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
+                            config.ConnectionStrings.ConnectionStrings[connectionStringName].ConnectionString = connectionSb.ToString();
+                            config.Save(ConfigurationSaveMode.Modified, true);
+                            ConfigurationManager.RefreshSection("connectionStrings");
+                        }
+                    }
                 }
-            }
 
+            }
             return true;
         }
+        */
+
         public static bool VerifyMySQLConnectionStringOrGetParams(string connectionStringName, string defaultServer = null, string defaultUserId = null, string defaultPassWord = null, string defaultDataBase = null, string defaultConnectionString = null,bool encryptData = false)
         {
             MySqlConnectionStringBuilder connectionSb = new MySqlConnectionStringBuilder();

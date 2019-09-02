@@ -1098,8 +1098,11 @@ namespace SysWork.Data.DaoModel
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                     IDataReader reader = dbCommand.ExecuteReader();
-                    entity = new IDataReaderToEntity().MapSingle<TEntity>(reader, ListObjectPropertyInfo);
 
+                    if (reader.Read())
+                        entity = new IDataReaderToEntity().MapSingle<TEntity>(reader, ListObjectPropertyInfo);
+                    else
+                        entity = default(TEntity);
 
                     reader.Close();
                     reader.Dispose();
@@ -1167,7 +1170,10 @@ namespace SysWork.Data.DaoModel
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                 IDataReader reader = dbCommand.ExecuteReader(CommandBehavior.SingleRow);
-                entity = new IDataReaderToEntity().MapSingle<TEntity>(reader, ListObjectPropertyInfo);
+                if (reader.Read())
+                    entity = new IDataReaderToEntity().MapSingle<TEntity>(reader, ListObjectPropertyInfo);
+                else
+                    entity = default(TEntity);
 
                 reader.Close();
                 reader.Dispose();
@@ -1707,6 +1713,8 @@ namespace SysWork.Data.DaoModel
 
         /// <summary>
         ///  Dado un IDataReader y el Tipo de Entidad devuelve una entidad mapeada.
+        ///  NO es responsabilidad de esta clase validar el avance del datareader por medio del metodo .Read()
+        ///  Debera validarse antes de llamarla.
         /// </summary>
         /// <typeparam name="TEntity"></typeparam>
         /// <param name="reader"></param>
@@ -1727,39 +1735,39 @@ namespace SysWork.Data.DaoModel
             else
                 _propertyInfo = obj.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
 
-            obj = default(TEntity);
-            if (reader.Read())
+            //obj = default(TEntity);
+            //if (reader.Read())
+            //{
+            obj = new TEntity();
+            foreach (PropertyInfo i in _propertyInfo)
             {
-                obj = new TEntity();
-                foreach (PropertyInfo i in _propertyInfo)
+                try
                 {
-                    try
+                    var custumAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute));
+
+                    if (((DbColumnAttribute)custumAttribute).Convert == true)
                     {
-                        var custumAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute));
-
-                        if (((DbColumnAttribute)custumAttribute).Convert == true)
-                        {
-                            if (reader[i.Name] != DBNull.Value)
-                                i.SetValue(obj, Convert.ChangeType(reader[i.Name], i.PropertyType));
-                        }
-                        else
-                        {
-                            if (reader[i.Name] != DBNull.Value)
-                            {
-                                var value = reader[i.Name];
-                                var type = Nullable.GetUnderlyingType(i.PropertyType) ?? i.PropertyType;
-                                var safeValue = (value == null) ? null : Convert.ChangeType(value, type);
-
-                                i.SetValue(obj, safeValue);
-                            }
-                        }
+                        if (reader[i.Name] != DBNull.Value)
+                            i.SetValue(obj, Convert.ChangeType(reader[i.Name], i.PropertyType));
                     }
-                    catch (Exception exception)
+                    else
                     {
-                        throw exception;
+                        if (reader[i.Name] != DBNull.Value)
+                        {
+                            var value = reader[i.Name];
+                            var type = Nullable.GetUnderlyingType(i.PropertyType) ?? i.PropertyType;
+                            var safeValue = (value == null) ? null : Convert.ChangeType(value, type);
+
+                            i.SetValue(obj, safeValue);
+                        }
                     }
                 }
+                catch (Exception exception)
+                {
+                    throw exception;
+                }
             }
+            //}
             return obj;
         }
         public TEntity MapSingle<TEntity>(IDataRecord dataRecord) where TEntity : class, new()
