@@ -16,7 +16,7 @@ namespace GerdannaDataManager.Daos
             return GetByLambdaExpressionFilter(entity => (entity.Dni == Dni));
         }
 
-        public DbExecute GetExecute()
+        public DbExecute GetDBExecute()
         {
             return GetDbExecute();
         }

@@ -6,13 +6,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-/// <summary>
-///  This class handles fixed length files.
-/// </summary>
 namespace SysWork.IO
 {
+    /// <summary>
+    ///  This class handles fixed length files.
+    /// </summary>
     public class FixedLengthFileReader
     {
+        /// <summary>
+        /// Gets the index of the current line.
+        /// </summary>
+        /// <returns></returns>
+        public long CurrentLineIndex { get { return _currentlLineIndex; } private set { } }
+
+        /// <summary>
+        /// Determines whether [is file open].
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if [is file open]; otherwise, <c>false</c>.
+        /// </returns>
+        public bool IsFileOpen { get { return _fileOpen; } private set { } }
+
+        /// <summary>
+        /// Gets the record count.
+        /// </summary>
+        /// <value>
+        /// The record count.
+        /// </value>
+        public long RecordCount
+        {
+            get
+            {
+                if (_lines == null)
+                    return 0;
+
+                return _lines.Count();
+            }
+            private set { }
+        }
+
+
         private string _fileName;
 
         private string[] _lines = null;
@@ -61,7 +94,6 @@ namespace SysWork.IO
             {
                 throw ex;
             }
-
         }
 
         /// <summary>
@@ -69,15 +101,14 @@ namespace SysWork.IO
         /// <param name="initField">Initial position of the field</param>
         /// <param name="endField">Final position of the field</param>
         /// </summary>
-
         public void AddField(string fieldName, int initField, int endField)
         {
             // TODO: validar que inicio o fin no esten dentro de otro campo
-
             _lastFixedFieldCreated = new FixedFields(initField, endField);
 
             _hashFixedFields.Add(fieldName, _lastFixedFieldCreated);
         }
+        
         /// <summary>
         /// <param name="fieldName">Name of the field</param>
         /// <param name="lenght">Lenght of the field. The initial and final position is calculated based on the final position of the previous field</param>
@@ -93,6 +124,16 @@ namespace SysWork.IO
             AddField(fieldName, pos, pos + lenght - 1);
         }
 
+        /// <summary>
+        /// Gets the field value.
+        /// </summary>
+        /// <param name="fieldName">Name of the field.</param>
+        /// <param name="lineNumber">The line number.</param>
+        /// <returns></returns>
+        /// <exception cref="SysWork.IO.NoFieldsSetException">No fields Set</exception>
+        /// <exception cref="IndexOutOfRangeException"></exception>
+        /// <exception cref="SysWork.IO.FileNotOpenException"></exception>
+        /// <exception cref="SysWork.IO.LineLenghException"></exception>
         public string GetFieldValue(string fieldName, long lineNumber)
         {
             if (_hashFixedFields.Count == 0)
@@ -102,7 +143,7 @@ namespace SysWork.IO
                 throw new IndexOutOfRangeException();
 
             if (!_fileOpen)
-                throw new FileNoOpenException();
+                throw new FileNotOpenException();
 
             FixedFields ff = (FixedFields)_hashFixedFields[fieldName];
             string lineValue = _lines[lineNumber - 1];
@@ -118,15 +159,25 @@ namespace SysWork.IO
 
             return _lines[lineNumber - 1].Substring(initField - 1, endField - initField + 1);
         }
+        /// <summary>
+        /// Gets the field value.
+        /// </summary>
+        /// <param name="fieldName">Name of the field.</param>
+        /// <returns></returns>
         public string GetFieldValue(string fieldName)
         {
             return GetFieldValue(fieldName, _currentlLineIndex + 1);
         }
 
+        /// <summary>
+        /// Gets the current line value.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="SysWork.IO.FileNotOpenException"></exception>
         public string GetCurrentLineValue()
         {
             if (!_fileOpen)
-                throw new FileNoOpenException();
+                throw new FileNotOpenException();
 
             if (_lines != null)
             {
@@ -139,15 +190,18 @@ namespace SysWork.IO
                 return null;
         }
 
-        public long GetCurrentLineIndex()
-        {
-            return _currentlLineIndex;
-        }
 
+        /// <summary>
+        ///     Determines whether [has next line].
+        /// </summary>
+        /// <returns>
+        ///     <c>true</c> if [has next line]; otherwise, <c>false</c>.
+        /// </returns>
+        /// <exception cref="SysWork.IO.FileNotOpenException"></exception>
         public bool HasNextLine()
         {
             if (!_fileOpen)
-                throw new FileNoOpenException();
+                throw new FileNotOpenException();
 
             if (_flag)
             {
@@ -166,6 +220,11 @@ namespace SysWork.IO
 
             return false;
         }
+        /// <summary>
+        /// Gets the length of the record.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="SysWork.IO.NoFieldsSetException"></exception>
         public int GetRecordLength()
         {
             int length = 0;
@@ -180,19 +239,6 @@ namespace SysWork.IO
             }
 
             return length;
-        }
-
-        public bool IsFileOpen()
-        {
-            return _fileOpen;
-        }
-
-        public long GetRecordsCount()
-        {
-            if (_lines == null)
-                return 0;
-
-            return _lines.Count();
         }
 
     }
@@ -218,12 +264,12 @@ namespace SysWork.IO
         {
         }
     }
-    class FileNoOpenException : Exception
+    class FileNotOpenException : Exception
     {
-        public FileNoOpenException() : base()
+        public FileNotOpenException() : base()
         {
         }
-        public FileNoOpenException(string message) : base(message)
+        public FileNotOpenException(string message) : base(message)
         {
         }
     }

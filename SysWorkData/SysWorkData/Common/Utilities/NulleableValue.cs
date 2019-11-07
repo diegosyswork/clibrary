@@ -2,26 +2,30 @@
 
 namespace SysWork.Data.Common.Utilities
 {
+    /// <summary>
+    /// Helper to handle nulleables values.
+    /// </summary>
     public class NulleableValue
     {
+
         /// <summary>
-        /// Valida si la cadena recibida es un DateTime valido, y en caso que 
-        /// si castea, sino devuelve NULL
+        /// Validate if the received string is a valid DateTime value, if not, return null.
         /// </summary>
-        /// <param name="dateTime"></param>
+        /// <param name="dateTime">The date time.</param>
         /// <returns></returns>
         public static DateTime? NulleableDateTime(string dateTime)
         {
             DateTime? retorno = null;
-            DateTime resultado;
 
-            if (DateTime.TryParse(dateTime, out resultado))
+            if (DateTime.TryParse(dateTime, out DateTime resultado))
                 retorno = resultado;
 
             return retorno;
         }
+
         /// <summary>
-        /// Util para cuando se desea tomar el SelectedValue de un comboBox por ejemplo
+        /// Validate if the received object is a valid nulleable long. if not, return null.
+        /// Util to get SelectedValue form comboBox. 
         /// </summary>
         /// <param name="valor"></param>
         /// <returns></returns>
@@ -34,7 +38,5 @@ namespace SysWork.Data.Common.Utilities
 
             return retorno;
         }
-
-
     }
 }

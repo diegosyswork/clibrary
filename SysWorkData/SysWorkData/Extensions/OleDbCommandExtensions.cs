@@ -8,11 +8,16 @@ using System.Threading.Tasks;
 /*
     Existe un tema en OleDb(y Odbc también) no admite parámetros con nombre.
     Solo admite lo que se llama parámetros posicionales.
-    En otras palabras: el nombre que le da a un parámetro cuando lo agrega a la lista de parámetros de comandos no importa. Solo se usa internamente por la clase OleDbCommand para que pueda distinguir y hacer referencia a los parámetros.
-    Lo que importa es el orden en el que agrega los parámetros a la lista.Debe ser el mismo orden en que se hace referencia a los parámetros en la declaración de SQL a través del carácter de signo de interrogación (?).
+    En otras palabras: el nombre que le da a un parámetro cuando lo agrega a la lista de parámetros de comandos no importa. 
+    Solo se usa internamente por la clase OleDbCommand para que pueda distinguir y hacer referencia a los parámetros.
+    Lo que importa es el orden en el que agrega los parámetros a la lista.
+    Debe ser el mismo orden en que se hace referencia a los parámetros en la declaración de SQL 
+    a través del carácter de signo de interrogación (?).
 
     Pero aquí hay una solución que le permite usar parámetros con nombre en la declaración de SQL.
-    Básicamente reemplaza todas las referencias de parámetros en la declaración de SQL con signos de interrogación y reordena la lista de parámetros en consecuencia. Funciona de la misma manera para la clase OdbcCommand, solo necesita reemplazar "OleDb" con "Odbc" en el código.
+    Básicamente reemplaza todas las referencias de parámetros en la declaración de SQL con signos de interrogación y 
+    reordena la lista de parámetros en consecuencia. 
+    Funciona de la misma manera para la clase OdbcCommand, solo necesita reemplazar "OleDb" con "Odbc" en el código.
 
     Gloria a DIOS por StackOverflow
     https://stackoverflow.com/questions/2407685/oledbparameters-and-parameter-names

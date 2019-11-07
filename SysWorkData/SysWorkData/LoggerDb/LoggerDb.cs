@@ -4,15 +4,20 @@ using System.Diagnostics;
 using System.Text;
 using SysWork.Data.Common;
 using SysWork.Data.Common.Utilities;
-using SysWork.Data.DaoModel;
-using SysWork.Data.DaoModel.Attributes;
+using SysWork.Data.GenericRepostory;
+using SysWork.Data.GenericRepostory.Attributes;
 
 namespace SysWork.Data.Logger
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class LoggerDb
     {
+        /// <summary></summary>
         public enum ELoggerDbTagError
         {
+            /// <summary>The error intentando abrir conexion</summary>
             ErrorIntentandoAbrirConexion,
             ErrorDeInsercion,
             ErrorDeActualizacion,
@@ -31,6 +36,15 @@ namespace SysWork.Data.Logger
 
         private static string _connectionString;
 
+        /// <summary>
+        /// Gets or sets the connection string.
+        /// </summary>
+        /// <remarks>
+        /// If Change the ConnecionString value, create a new internal instance of DbUtil. 
+        /// </remarks>
+        /// <value>
+        /// The connection string.
+        /// </value>
         public static string ConnectionString
         {
             get{ return _connectionString; }
@@ -44,6 +58,13 @@ namespace SysWork.Data.Logger
         }
 
         private static EDataBaseEngine _dataBaseEngine;
+        
+        /// <summary>
+        /// Gets or sets the data base engine.
+        /// </summary>
+        /// <value>
+        /// The data base engine.
+        /// </value>
         public static EDataBaseEngine DataBaseEngine
         {
             get { return _dataBaseEngine; }
@@ -62,7 +83,7 @@ namespace SysWork.Data.Logger
         private LoggerDb()
         {
             if (string.IsNullOrEmpty(ConnectionString))
-                throw new ArgumentException("No se ha informado el connectionString del LoggerDB");
+                throw new ArgumentException("The ConnectionString is not set.");
 
             if (!DbUtil.ConnectionSuccess(_dataBaseEngine, ConnectionString, out string mensajeError))
             {
@@ -87,7 +108,7 @@ namespace SysWork.Data.Logger
             else if (_dataBaseEngine == EDataBaseEngine.MySql)
                 return GetLogDbScriptMySql();
             else
-                throw new Exception("No se ha especificado un SCRIPT para el tipo de base de datos establecida");
+                throw new ArgumentOutOfRangeException("No se ha especificado un SCRIPT para el tipo de base de datos establecida");
         }
 
         private string GetLogDbScriptMySql()
@@ -194,6 +215,7 @@ namespace SysWork.Data.Logger
             if (_loggerDbInstance == null)
                 _loggerDbInstance = new LoggerDb();
         }
+
         public static bool Log(string mensaje)
         {
             return Logger(DateTime.Now, mensaje);
@@ -272,7 +294,7 @@ namespace SysWork.Data.Logger
             return _daoLogDb.Add(logDb) != -1;
         }
     }
-    internal class DaoLogDb : BaseDao<LogDb>
+    internal class DaoLogDb : BaseGenericRepository<LogDb>
     {
         public DaoLogDb(string ConnectionString) : base(ConnectionString)
         {

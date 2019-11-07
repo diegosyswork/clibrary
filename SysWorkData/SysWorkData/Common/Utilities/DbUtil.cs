@@ -1,5 +1,4 @@
-﻿using MySql.Data.MySqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -8,15 +7,43 @@ using System.Data.Common;
 using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Data.SQLite;
-using System.IO;
+using MySql.Data.MySqlClient;
 using System.Windows.Forms;
 using SysWork.Data.Common.DataObjectProvider;
-using SysWork.Data.Common.FormsGetParam;
+using System.Text;
 
 namespace SysWork.Data.Common.Utilities
 {
+    /// <summary>
+    /// Database Utilities
+    /// </summary>
+    /// <remarks>
+    /// All methods are "multi" Database Engine
+    /// </remarks>
     public static class DbUtil
     {
+
+        /// <summary>
+        /// Given a connectionString and the name of a table determines if the table exists. The default DatabaseEngine is MSSqlServer
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="tableName">Name of the table.</param>
+        /// <returns>
+        ///     <c>true</c> if the table exists, or <c>false</c> if not.
+        /// </returns>
+        public static bool ExistsTable(string connectionString, string tableName)
+        {
+            return ExistsTable(EDataBaseEngine.MSSqlServer, connectionString, tableName);
+        }
+
+        /// <summary>
+        /// Given a connectionString, the name of a table and DatabaseEngine, determines if the table exists. 
+        /// </summary>
+        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="tableName">Name of the table.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
         public static bool ExistsTable(EDataBaseEngine dataBaseEngine, string connectionString, string tableName)
         {
             bool exists = false;
@@ -32,18 +59,31 @@ namespace SysWork.Data.Common.Utilities
                     exists = dbConnection.GetSchema("Tables", new string[4] { null, null, tableName, "TABLE" }).Rows.Count > 0;
                 else if (dataBaseEngine == EDataBaseEngine.SqLite)
                     exists = dbConnection.GetSchema("Tables", new string[4] { null, null, tableName, "TABLE" }).Rows.Count > 0;
+                else
+                    throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
 
                 dbConnection.Close();
             }
-
             return exists;
         }
 
-        public static bool ExistsTable(string connectionString, string tableName)
+        /// <summary>
+        /// Given a connectionString return a list of tables in the Database. The default DatabaseEngine is MSSqlServer
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        /// <returns>List of tables in string format.</returns>
+        public static List<string> GetListTables(string connectionString)
         {
-            return ExistsTable(EDataBaseEngine.MSSqlServer, connectionString, tableName);
+            return GetListTables(EDataBaseEngine.MSSqlServer, connectionString);
         }
 
+        /// <summary>
+        /// Given a connectionString and DatabaseEngine, return a list of tables in the Database.
+        /// </summary>
+        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="connectionString">The connection string.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
         public static List<string> GetListTables(EDataBaseEngine dataBaseEngine, string connectionString)
         {
             using (DbConnection connection = StaticDbObjectProvider.GetDbConnection(dataBaseEngine,connectionString))
@@ -59,22 +99,40 @@ namespace SysWork.Data.Common.Utilities
                     schema=connection.GetSchema("Tables", new string[] { null, null, null, "TABLE" });
                 else if (dataBaseEngine == EDataBaseEngine.SqLite)
                     schema = connection.GetSchema("Tables", new string[] { null, null, null, "TABLE" });
+                else
+                    throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
 
-                List<string> TableNames = new List<string>();
+                List<string> tables = new List<string>();
                 foreach (DataRow row in schema.Rows)
                 {
-                    TableNames.Add(row[2].ToString());
+                    tables.Add(row[2].ToString());
                 }
                 connection.Close();
 
-                return TableNames;
+                return tables;
             }
         }
-        public static List<string> GetListTables(string connectionString)
+
+        /// <summary>
+        /// Given an connectionString, an table name and a column name determines if the column exists. The default DatabaseEngine is MSSqlServer</summary>
+        /// <param name="connectionString"></param>
+        /// <param name="tableName"></param>
+        /// <param name="columnName"></param>
+        /// <returns></returns>
+        public static bool ExistsColumn(string connectionString, string tableName, string columnName)
         {
-            return GetListTables(EDataBaseEngine.MSSqlServer, connectionString);
+            return ExistsColumn(EDataBaseEngine.MSSqlServer, connectionString, tableName, columnName);
         }
 
+        /// <summary>
+        /// Given an connectionString, an datase engine, an table name and a column name determines if the column exists.
+        /// </summary>
+        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="tableName">Name of the table.</param>
+        /// <param name="columnName">Name of the column.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
         public static bool ExistsColumn(EDataBaseEngine dataBaseEngine, string connectionString, string tableName, string columnName)
         {
             bool exists = false;
@@ -91,6 +149,8 @@ namespace SysWork.Data.Common.Utilities
                     dtColumns = dbConnection.GetSchema("Columns", new[] { null, null, tableName, null });
                 else if (dataBaseEngine == EDataBaseEngine.SqLite)
                     dtColumns = dbConnection.GetSchema("Columns", new[] { null, tableName, null });
+                else
+                    throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
 
                 DataView dv = new DataView(dtColumns);
 
@@ -102,15 +162,25 @@ namespace SysWork.Data.Common.Utilities
             }
             return exists;
         }
-        public static bool ExistsColumn(string connectionString, string tableName, string columnName)
-        {
-            return ExistsColumn(EDataBaseEngine.MSSqlServer, connectionString, tableName, columnName);
-        }
 
+        /// <summary>
+        /// Execute a list of sentences separated by the GO clause.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="ConnectionString">The connection string.</param>
+        /// <returns></returns>
         public static bool ExecuteBatchNonQuery(string query, string ConnectionString)
         {
             return ExecuteBatchNonQuery(EDataBaseEngine.MSSqlServer, query, ConnectionString);
         }
+
+        /// <summary>
+        /// Execute a list of sentences separated by the GO clause.
+        /// </summary>
+        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="query">The query.</param>
+        /// <param name="ConnectionString">The connection string.</param>
+        /// <returns></returns>
         public static bool ExecuteBatchNonQuery(EDataBaseEngine dataBaseEngine, string query, string ConnectionString)
         {
             bool result = false;
@@ -119,7 +189,13 @@ namespace SysWork.Data.Common.Utilities
 
             return result;
         }
-
+        /// <summary>
+        /// Execute a list of sentences separated by the GO clause.
+        /// </summary>
+        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="query">The query.</param>
+        /// <param name="connection">The connection.</param>
+        /// <returns></returns>
         public static bool ExecuteBatchNonQuery(EDataBaseEngine dataBaseEngine, string query, IDbConnection connection)
         {
             string sqlBatch = string.Empty;
@@ -163,13 +239,12 @@ namespace SysWork.Data.Common.Utilities
             }
             return true;
         }
+
         /// <summary>
-        /// Verifica si una Connection se puede abrir correctamente, por default 
-        /// el motor de base de datos es SqlServer
-        /// 
+        /// Try to open an DbConnection with the ConnectionString provided. The DatabaseEngine is MSSqlServer.
         /// </summary>
-        /// <param name="connectionString"></param>
-        /// <param name="mensajeError"></param>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="mensajeError">The mensaje error.</param>
         /// <returns></returns>
         public static bool ConnectionSuccess(string connectionString, out string mensajeError)
         {
@@ -177,16 +252,15 @@ namespace SysWork.Data.Common.Utilities
         }
 
         /// <summary>
-        /// Verifica si una Connection se puede abrir correctamente,  
-        /// Debe especificarse el motor de base de datos.
-        /// 
+        /// Try opening a DbConnection with the ConnectionString provided. The databaseEngine must be set.  
         /// </summary>
-        /// <param name="connectionString"></param>
-        /// <param name="mensajeError"></param>
+        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="errMessage">The mensaje error.</param>
         /// <returns></returns>
-        public static bool ConnectionSuccess(EDataBaseEngine dataBaseEngine, string connectionString, out string mensajeError)
+        public static bool ConnectionSuccess(EDataBaseEngine dataBaseEngine, string connectionString, out string errMessage)
         {
-            mensajeError = "";
+            errMessage = "";
             try
             {
                 using (IDbConnection dbConnection = StaticDbObjectProvider.GetIDbConnection(dataBaseEngine, connectionString))
@@ -198,15 +272,25 @@ namespace SysWork.Data.Common.Utilities
             }
             catch (Exception e)
             {
-                mensajeError = e.Message;
+                errMessage = e.Message;
                 return false;
             }
         }
 
-        public static bool IsValidConnectionString(EDataBaseEngine dataBaseEngine, string connectionString, out string mensajeError)
+
+        /// <summary>
+        /// Determines whether is valid connection string  for the specified data base engine.
+        /// </summary>
+        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="errMessage">The error message.</param>
+        /// <returns>
+        ///   <c>true</c> if [is valid connection string] [the specified data base engine]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsValidConnectionString(EDataBaseEngine dataBaseEngine, string connectionString, out string errMessage)
         {
             bool valid = true;
-            mensajeError = "";
+            errMessage = "";
             try
             {
                 switch (dataBaseEngine)
@@ -223,17 +307,24 @@ namespace SysWork.Data.Common.Utilities
                     case EDataBaseEngine.OleDb:
                         var sbOleDb = new OleDbConnectionStringBuilder(connectionString);
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
                 }
             }
             catch (Exception e)
             {
                 valid = false;
-                mensajeError = e.Message;
+                errMessage = e.Message;
             }
 
             return valid;
         }
 
+        /// <summary>
+        /// Converts the command paramaters to literal values.
+        /// </summary>
+        /// <param name="dbCommand">The database command.</param>
+        /// <returns></returns>
         public static string ConvertCommandParamatersToLiteralValues(IDbCommand dbCommand)
         {
             string query;
@@ -266,14 +357,18 @@ namespace SysWork.Data.Common.Utilities
             }
             catch (Exception e)
             {
-                query = "ERROR EN convertCommandParamatersToLiteralValues : " + e.Message;
+                query = "ERROR in convertCommandParamatersToLiteralValues : " + e.Message;
             }
 
             return query;
         }
 
-
-        public static bool ExistsConnectionString(string connectionStringName)
+        /// <summary>
+        /// Verify the existence of a ConnectionString in app Configuration File.
+        /// </summary>
+        /// <param name="connectionStringName">Name of the connection string.</param>
+        /// <returns></returns>
+        public static bool ExistsConnectionStringInConfig(string connectionStringName)
         {
             String conectionString = "";
             try
@@ -288,12 +383,22 @@ namespace SysWork.Data.Common.Utilities
             return true;
         }
 
-        public static string GetConnectionString(string connectionStringName)
+        /// <summary>
+        /// Gets the connection string from app configuration file.
+        /// </summary>
+        /// <param name="connectionStringName">Name of the connection string.</param>
+        /// <returns></returns>
+        public static string GetConnectionStringFromConfig(string connectionStringName)
         {
             return ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
         }
 
-        public static void EditConnectionString(string connectionStringName,string connectionString)
+        /// <summary>
+        /// Edits the connectionString in app configuration file.
+        /// </summary>
+        /// <param name="connectionStringName">Name of the connection string.</param>
+        /// <param name="connectionString">The connection string.</param>
+        public static void EditConnectionStringInConfig(string connectionStringName,string connectionString)
         {
             Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
             config.ConnectionStrings.ConnectionStrings[connectionStringName].ConnectionString = connectionString;
@@ -301,7 +406,12 @@ namespace SysWork.Data.Common.Utilities
             ConfigurationManager.RefreshSection("connectionStrings");
         }
 
-        public static void SaveConnectionString(string connectionStringName, string connectionString)
+        /// <summary>
+        /// Saves the new connection string in app configuration file.
+        /// </summary>
+        /// <param name="connectionStringName">Name of the connection string.</param>
+        /// <param name="connectionString">The connection string.</param>
+        public static void SaveConnectionStringInConfig(string connectionStringName, string connectionString)
         {
             Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
             ConnectionStringSettings connectionStringSettings = new ConnectionStringSettings(connectionStringName, connectionString);
@@ -310,7 +420,12 @@ namespace SysWork.Data.Common.Utilities
             ConfigurationManager.RefreshSection("connectionStrings");
         }
 
-
+        /// <summary>
+        /// Adds the prefix table name to a field list.
+        /// </summary>
+        /// <param name="fieldList">The field list.</param>
+        /// <param name="tableName">Name of the table.</param>
+        /// <returns></returns>
         public static string AddPrefixTableNameToFieldList(string fieldList, string tableName)
         {
             string[] splitList = fieldList.Split(',');
@@ -322,537 +437,14 @@ namespace SysWork.Data.Common.Utilities
 
             return string.Join(",", splitList); ;
         }
+
         /// <summary>
-        /// Dada una cadena de conexion, la valida, o solicita parametros al usuario
+        /// Converts an generic list T to datatable. 
         /// </summary>
-        /// <param name="userGotParameters">Retorna si el usuario ingreso los datos</param>
-        /// <param name="defaultConnectionString"></param>
-        /// <param name="defaultDataSource"></param>
-        /// <param name="defaultUserId"></param>
-        /// <param name="defaultPassWord"></param>
-        /// <param name="defaultInitialCatalog"></param>
-        /// <returns>Una ConnectionString cunando logra conectarse con los parametros default, o, los ingresados por el usuario. NULL en el caso de no lograr conectarse o el usuario cancelar la solicitud de parametros.</returns>
-        public static string VerifyMSSQLConnectionStringOrGetParams(out bool userGotParameters,string defaultConnectionString = null, string defaultDataSource = null, string defaultUserId = null, string defaultPassWord = null, string defaultInitialCatalog = null)
-        {
-            SqlConnectionStringBuilder connectionSb = new SqlConnectionStringBuilder();
-            userGotParameters = false;
-
-            if (string.IsNullOrEmpty(defaultConnectionString))
-            {
-                connectionSb.DataSource = defaultDataSource ?? "";
-                connectionSb.UserID = defaultUserId ?? "";
-                connectionSb.Password = defaultPassWord ?? "";
-                connectionSb.InitialCatalog = defaultInitialCatalog ?? "";
-            }
-            else
-            {
-                connectionSb.ConnectionString = defaultConnectionString;
-            }
-
-            bool hasConnectionSuccess = ConnectionSuccess(connectionSb.ConnectionString.ToString(), out string mensajeError);
-
-            bool needConnectionParameters = (!hasConnectionSuccess);
-
-            while (needConnectionParameters)
-            {
-                userGotParameters = true;
-
-                FrmGetParamSQL frmGetParamSQL;
-                frmGetParamSQL = new FrmGetParamSQL();
-
-                frmGetParamSQL.Server = connectionSb.DataSource;
-                frmGetParamSQL.InicioDeSesion = connectionSb.UserID;
-                frmGetParamSQL.Password = connectionSb.Password;
-                frmGetParamSQL.BaseDeDatos = connectionSb.InitialCatalog;
-                frmGetParamSQL.ConnectionString = defaultConnectionString;
-
-                frmGetParamSQL.MensajeError = "Ha ocurrido el siguiente error: \r\r" + mensajeError;
-
-                frmGetParamSQL.ShowDialog();
-
-                if (frmGetParamSQL.DialogResult == DialogResult.OK)
-                {
-                    if (!string.IsNullOrEmpty(frmGetParamSQL.ConnectionString))
-                    {
-                        defaultConnectionString = frmGetParamSQL.ConnectionString;
-                        connectionSb.ConnectionString = frmGetParamSQL.ConnectionString;
-
-                    }
-                    else
-                    {
-                        connectionSb.DataSource = frmGetParamSQL.Server;
-                        connectionSb.UserID = frmGetParamSQL.InicioDeSesion;
-                        connectionSb.Password = frmGetParamSQL.Password;
-                        if (!string.IsNullOrEmpty(frmGetParamSQL.BaseDeDatos.Trim()))
-                            connectionSb.InitialCatalog = frmGetParamSQL.BaseDeDatos;
-                    }
-
-                    hasConnectionSuccess = ConnectionSuccess(connectionSb.ConnectionString.ToString(), out mensajeError);
-                }
-                else
-                {
-                    hasConnectionSuccess = false;
-                }
-
-                needConnectionParameters = (!hasConnectionSuccess) && (frmGetParamSQL.DialogResult == DialogResult.OK);
-            }
-
-            if (hasConnectionSuccess)
-            {
-                return connectionSb.ConnectionString;
-            }
-            else
-            {
-                return null;
-            }
-        }
-        public static bool VerifyMSSQLConnectionStringOrGetParams(string connectionStringName, string defaultDataSource = null, string defaultUserId = null, string defaultPassWord = null, string defaultInitialCatalog = null, string defaultConnectionString = null, bool encryptData = false)
-        {
-            SqlConnectionStringBuilder connectionSb = new SqlConnectionStringBuilder();
-
-            if (ExistsConnectionString(connectionStringName))
-            {
-                connectionSb.ConnectionString = GetConnectionString(connectionStringName);
-                if (encryptData)
-                {
-                    connectionSb.UserID = Decrypt(connectionSb.UserID);
-                    connectionSb.Password = Decrypt(connectionSb.Password);
-                    connectionSb.DataSource = Decrypt(connectionSb.DataSource);
-                    connectionSb.InitialCatalog = Decrypt(connectionSb.InitialCatalog);
-                }
-            }
-            else
-            {
-                if (string.IsNullOrEmpty(defaultConnectionString))
-                {
-                    connectionSb.DataSource = defaultDataSource ?? "";
-                    connectionSb.UserID = defaultUserId ?? "";
-                    connectionSb.Password = defaultPassWord ?? "";
-                    connectionSb.InitialCatalog = defaultInitialCatalog ?? "";
-                }
-                else
-                {
-                    connectionSb.ConnectionString = defaultConnectionString;
-                }
-            }
-
-            string resultConnectionString = VerifyMSSQLConnectionStringOrGetParams(out bool userGotParameters, connectionSb.ConnectionString);
-
-            bool hasConnectionSuccess = resultConnectionString != null;
-
-            if (hasConnectionSuccess)
-            {
-                connectionSb.ConnectionString = resultConnectionString;
-                if (encryptData)
-                {
-                    connectionSb.UserID = Encrypt(connectionSb.UserID);
-                    connectionSb.Password = Encrypt(connectionSb.Password);
-                    connectionSb.DataSource = Encrypt(connectionSb.DataSource);
-                    connectionSb.InitialCatalog = Encrypt(connectionSb.InitialCatalog);
-                }
-
-                if (!ExistsConnectionString(connectionStringName))
-                    SaveConnectionString(connectionStringName, connectionSb.ToString());
-                else
-                    if (userGotParameters)
-                        EditConnectionString(connectionStringName, connectionSb.ToString());
-            }
-            else
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        /*
-        public static bool VerifyMSSQLConnectionStringOrGetParams(string connectionStringName, string defaultDataSource = null, string defaultUserId = null, string defaultPassWord = null, string defaultInitialCatalog = null, string defaultConnectionString = null,bool encryptData = false)
-        {
-            SqlConnectionStringBuilder connectionSb = new SqlConnectionStringBuilder();
-            bool userGotParameters = false;
-
-            if (!ExistsConnectionString(connectionStringName))
-            {
-                if (string.IsNullOrEmpty(defaultConnectionString))
-                {
-                    connectionSb.DataSource = defaultDataSource ?? "";
-                    connectionSb.UserID = defaultUserId ?? "";
-                    connectionSb.Password = defaultPassWord ?? "";
-                    connectionSb.InitialCatalog = defaultInitialCatalog ?? "";
-                }
-                else
-                {
-                    connectionSb.ConnectionString = defaultConnectionString;
-                }
-            }
-            else
-            {
-                connectionSb.ConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
-                if (encryptData)
-                {
-                    connectionSb.UserID = Decrypt(connectionSb.UserID);
-                    connectionSb.Password = Decrypt(connectionSb.Password);
-                    connectionSb.DataSource = Decrypt(connectionSb.DataSource);
-                    connectionSb.InitialCatalog = Decrypt(connectionSb.InitialCatalog);
-                }
-            }
-
-            bool hasConnectionSuccess = ConnectionSuccess(connectionSb.ConnectionString.ToString(), out string mensajeError);
-
-            bool needConnectionParameters = (!hasConnectionSuccess);
-
-            while (needConnectionParameters)
-            {
-                userGotParameters = true;
-
-                FrmGetParamSQL frmGetParamSQL;
-                frmGetParamSQL = new FrmGetParamSQL();
-
-                frmGetParamSQL.Server = connectionSb.DataSource;
-                frmGetParamSQL.InicioDeSesion = connectionSb.UserID;
-                frmGetParamSQL.Password = connectionSb.Password;
-                frmGetParamSQL.BaseDeDatos = connectionSb.InitialCatalog;
-                frmGetParamSQL.ConnectionString = defaultConnectionString;
-
-                frmGetParamSQL.MensajeError = "Ha ocurrido el siguiente error: \r\r" + mensajeError;
-
-                frmGetParamSQL.ShowDialog();
-
-                if (frmGetParamSQL.DialogResult == DialogResult.OK)
-                {
-                    if (!string.IsNullOrEmpty(frmGetParamSQL.ConnectionString))
-                    {
-                        defaultConnectionString = frmGetParamSQL.ConnectionString;
-                        connectionSb.ConnectionString = frmGetParamSQL.ConnectionString;
-
-                    }
-                    else
-                    {
-                        connectionSb.DataSource = frmGetParamSQL.Server;
-                        connectionSb.UserID = frmGetParamSQL.InicioDeSesion;
-                        connectionSb.Password = frmGetParamSQL.Password;
-                        if (!string.IsNullOrEmpty(frmGetParamSQL.BaseDeDatos.Trim()))
-                            connectionSb.InitialCatalog = frmGetParamSQL.BaseDeDatos;
-                    }
-
-                    hasConnectionSuccess = ConnectionSuccess(connectionSb.ConnectionString.ToString(), out mensajeError);
-                }
-                else
-                {
-                    hasConnectionSuccess = false;
-                }
-
-                needConnectionParameters = (!hasConnectionSuccess) && (frmGetParamSQL.DialogResult == DialogResult.OK);
-            }
-
-
-            if (!hasConnectionSuccess)
-            {
-                return false;
-            }
-            else
-            {
-                if (encryptData)
-                {
-                    connectionSb.UserID = Encrypt(connectionSb.UserID);
-                    connectionSb.Password = Encrypt(connectionSb.Password);
-                    connectionSb.DataSource = Encrypt(connectionSb.DataSource);
-                    connectionSb.InitialCatalog = Encrypt(connectionSb.InitialCatalog);
-                }
-
-                if (!string.IsNullOrEmpty(connectionStringName))
-                {
-                    if (!ExistsConnectionString(connectionStringName))
-                    {
-                        Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-                        ConnectionStringSettings connectionStringSettings = new ConnectionStringSettings(connectionStringName, connectionSb.ToString());
-                        config.ConnectionStrings.ConnectionStrings.Add(connectionStringSettings);
-
-                        config.Save(ConfigurationSaveMode.Modified, true);
-                        ConfigurationManager.RefreshSection("connectionStrings");
-                    }
-                    else
-                    {
-                        if (userGotParameters)
-                        {
-                            Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-                            config.ConnectionStrings.ConnectionStrings[connectionStringName].ConnectionString = connectionSb.ToString();
-                            config.Save(ConfigurationSaveMode.Modified, true);
-                            ConfigurationManager.RefreshSection("connectionStrings");
-                        }
-                    }
-                }
-
-            }
-            return true;
-        }
-        */
-
-        public static bool VerifyMySQLConnectionStringOrGetParams(string connectionStringName, string defaultServer = null, string defaultUserId = null, string defaultPassWord = null, string defaultDataBase = null, string defaultConnectionString = null,bool encryptData = false)
-        {
-            MySqlConnectionStringBuilder connectionSb = new MySqlConnectionStringBuilder();
-            bool userGotParameters = false;
-
-            if (!ExistsConnectionString(connectionStringName))
-            {
-                //ASIGNO DATOS DEFAULT
-                connectionSb.Server = defaultServer ?? "localhost";
-                connectionSb.UserID = defaultUserId ?? "root";
-                connectionSb.Password = defaultPassWord ?? "root";
-                connectionSb.Database = defaultDataBase ?? "";
-            }
-            else
-            {
-                connectionSb.ConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
-                if (encryptData)
-                {
-                    connectionSb.UserID = Decrypt(connectionSb.UserID);
-                    connectionSb.Password = Decrypt(connectionSb.Password);
-                    connectionSb.Server = Decrypt(connectionSb.Server);
-
-                    if (!string.IsNullOrEmpty(connectionSb.Database.Trim()))
-                        connectionSb.Database = Decrypt(connectionSb.Database);
-                }
-            }
-
-            bool hasConnectionSuccess = ConnectionSuccess(EDataBaseEngine.MySql, connectionSb.ConnectionString.ToString(), out string mensajeError);
-
-            bool needConnectionParameters = (!hasConnectionSuccess);
-
-            while (needConnectionParameters)
-            {
-                userGotParameters = true;
-
-                FrmGetParamMySQL frmGetParamMySQL;
-                frmGetParamMySQL = new FrmGetParamMySQL();
-
-                frmGetParamMySQL.Server = connectionSb.Server;
-                frmGetParamMySQL.InicioDeSesion = connectionSb.UserID;
-                frmGetParamMySQL.Password = connectionSb.Password;
-                frmGetParamMySQL.BaseDeDatos = connectionSb.Database;
-                frmGetParamMySQL.ConnectionString = defaultConnectionString;
-
-                frmGetParamMySQL.MensajeError = "Ha ocurrido el siguiente error: \r\r" + mensajeError;
-
-                frmGetParamMySQL.ShowDialog();
-                if (frmGetParamMySQL.DialogResult == DialogResult.OK)
-                {
-                    if (!string.IsNullOrEmpty(frmGetParamMySQL.ConnectionString))
-                    {
-                        defaultConnectionString = frmGetParamMySQL.ConnectionString;
-                        connectionSb.ConnectionString = frmGetParamMySQL.ConnectionString;
-                    }
-                    else
-                    {
-                        connectionSb.Server = frmGetParamMySQL.Server;
-                        connectionSb.UserID = frmGetParamMySQL.InicioDeSesion;
-                        connectionSb.Password = frmGetParamMySQL.Password;
-
-                        if (!string.IsNullOrEmpty(frmGetParamMySQL.BaseDeDatos.Trim()))
-                            connectionSb.Database = frmGetParamMySQL.BaseDeDatos;
-                    }
-
-                    hasConnectionSuccess = ConnectionSuccess(EDataBaseEngine.MySql, connectionSb.ConnectionString.ToString(), out mensajeError);
-                }
-                else
-                {
-                    hasConnectionSuccess = false;
-                }
-
-                needConnectionParameters = (!hasConnectionSuccess) && (frmGetParamMySQL.DialogResult == DialogResult.OK);
-            }
-
-            if (!hasConnectionSuccess)
-            {
-                return false;
-            }
-            else
-            {
-
-                if (encryptData)
-                {
-                    connectionSb.UserID = Encrypt(connectionSb.UserID);
-                    connectionSb.Password = Encrypt(connectionSb.Password);
-                    connectionSb.Server = Encrypt(connectionSb.Server);
-
-                    if (!string.IsNullOrEmpty(connectionSb.Database.Trim()))
-                        connectionSb.Database = Encrypt(connectionSb.Database);
-                }
-
-                if (!ExistsConnectionString(connectionStringName))
-                {
-                    Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-                    ConnectionStringSettings connectionStringSettings = new ConnectionStringSettings(connectionStringName, connectionSb.ToString());
-                    config.ConnectionStrings.ConnectionStrings.Add(connectionStringSettings);
-
-                    config.Save(ConfigurationSaveMode.Modified, true);
-                    ConfigurationManager.RefreshSection("connectionStrings");
-                }
-                else
-                {
-                    if (userGotParameters)
-                    {
-                        Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-                        config.ConnectionStrings.ConnectionStrings[connectionStringName].ConnectionString = connectionSb.ToString();
-                        config.Save(ConfigurationSaveMode.Modified, true);
-                        ConfigurationManager.RefreshSection("connectionStrings");
-                    }
-                }
-            }
-
-            return true;
-        }
-        public static bool VerifySQLiteConnectionStringOrGetParams(string connectionStringName, string defaultConnectionString)
-        {
-            SQLiteConnectionStringBuilder connectionSb = new SQLiteConnectionStringBuilder();
-            bool userGotParameters = false;
-
-            if (!ExistsConnectionString(connectionStringName))
-            {
-                connectionSb.ConnectionString = defaultConnectionString ?? "";
-            }
-            else
-            {
-                connectionSb.ConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
-            }
-
-            string mensajeError = "";
-            bool hasConnectionSuccess = File.Exists(connectionSb.DataSource);
-            hasConnectionSuccess = hasConnectionSuccess && ConnectionSuccess(EDataBaseEngine.SqLite,connectionSb.ConnectionString.ToString(), out mensajeError);
-
-            bool needConnectionParameters = (!hasConnectionSuccess);
-
-            while (needConnectionParameters)
-            {
-                userGotParameters = true;
-
-                FrmGetParamSQLite frmGetParamSQLite;
-                frmGetParamSQLite = new FrmGetParamSQLite();
-                frmGetParamSQLite.ConnectionString = defaultConnectionString;
-
-                frmGetParamSQLite.MensajeError = "Ha ocurrido el siguiente error: \r\r" + mensajeError;
-
-                frmGetParamSQLite.ShowDialog();
-
-                if (frmGetParamSQLite.DialogResult == DialogResult.OK)
-                {
-                    defaultConnectionString = frmGetParamSQLite.ConnectionString;
-                    connectionSb.ConnectionString = frmGetParamSQLite.ConnectionString;
-
-                    hasConnectionSuccess = File.Exists(connectionSb.DataSource);
-                    if (!hasConnectionSuccess) mensajeError = "El archivo no existe";
-
-                    hasConnectionSuccess = hasConnectionSuccess && ConnectionSuccess(EDataBaseEngine.SqLite, connectionSb.ConnectionString.ToString(), out mensajeError);
-                }
-                else
-                {
-                    hasConnectionSuccess = false;
-                }
-
-                needConnectionParameters = (!hasConnectionSuccess) && (frmGetParamSQLite.DialogResult == DialogResult.OK);
-            }
-
-            if (!hasConnectionSuccess)
-            {
-                return false;
-            }
-            else
-            {
-                if (!ExistsConnectionString(connectionStringName))
-                {
-                    Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-                    ConnectionStringSettings connectionStringSettings = new ConnectionStringSettings(connectionStringName, connectionSb.ToString());
-                    config.ConnectionStrings.ConnectionStrings.Add(connectionStringSettings);
-
-                    config.Save(ConfigurationSaveMode.Modified, true);
-                    ConfigurationManager.RefreshSection("connectionStrings");
-                }
-                else
-                {
-                    if (userGotParameters)
-                    {
-                        Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-                        config.ConnectionStrings.ConnectionStrings[connectionStringName].ConnectionString = connectionSb.ToString();
-                        config.Save(ConfigurationSaveMode.Modified, true);
-                        ConfigurationManager.RefreshSection("connectionStrings");
-                    }
-                }
-            }
-
-            return true;
-        }
-        public static bool VerifyOleDbConnectionStringOrGetParams(string connectionStringName, string defaultConnectionString)
-        {
-            OleDbConnectionStringBuilder connectionSb = new OleDbConnectionStringBuilder();
-            bool userGotParameters = false;
-
-            if (!ExistsConnectionString(connectionStringName))
-            {
-                connectionSb.ConnectionString = defaultConnectionString ?? "";
-            }
-            else
-            {
-                connectionSb.ConnectionString = ConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
-            }
-
-            bool hasConnectionSuccess = ConnectionSuccess(EDataBaseEngine.OleDb, connectionSb.ConnectionString.ToString(), out string mensajeError);
-
-            bool needConnectionParameters = (!hasConnectionSuccess);
-
-            while (needConnectionParameters)
-            {
-                userGotParameters = true;
-
-                FrmGetParamOleDb frmGetParamOleDb;
-                frmGetParamOleDb = new FrmGetParamOleDb();
-                frmGetParamOleDb.ConnectionString = defaultConnectionString;
-
-                frmGetParamOleDb.MensajeError = "Ha ocurrido el siguiente error: \r\r" + mensajeError;
-
-                frmGetParamOleDb.ShowDialog();
-
-                if (frmGetParamOleDb.DialogResult == DialogResult.OK)
-                {
-                    defaultConnectionString = frmGetParamOleDb.ConnectionString;
-                    connectionSb.ConnectionString = frmGetParamOleDb.ConnectionString;
-                    hasConnectionSuccess = ConnectionSuccess(EDataBaseEngine.OleDb, connectionSb.ConnectionString.ToString(), out mensajeError);
-                }
-                else
-                {
-                    hasConnectionSuccess = false;
-                }
-
-                needConnectionParameters = (!hasConnectionSuccess) && (frmGetParamOleDb.DialogResult == DialogResult.OK);
-            }
-
-            if (!hasConnectionSuccess)
-            {
-                return false;
-            }
-            else
-            {
-                if (!ExistsConnectionString(connectionStringName))
-                {
-                    Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-                    ConnectionStringSettings connectionStringSettings = new ConnectionStringSettings(connectionStringName, connectionSb.ToString());
-                    config.ConnectionStrings.ConnectionStrings.Add(connectionStringSettings);
-
-                    config.Save(ConfigurationSaveMode.Modified, true);
-                    ConfigurationManager.RefreshSection("connectionStrings");
-                }
-                else
-                {
-                    if (userGotParameters)
-                    {
-                        Configuration config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
-                        config.ConnectionStrings.ConnectionStrings[connectionStringName].ConnectionString = connectionSb.ToString();
-                        config.Save(ConfigurationSaveMode.Modified, true);
-                        ConfigurationManager.RefreshSection("connectionStrings");
-                    }
-                }
-            }
-            return true;
-        }
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data">The data.</param>
+        /// <returns>
+        /// </returns>
         public static DataTable ConvertToDatatable<T>(List<T> data)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(T));
@@ -877,24 +469,70 @@ namespace SysWork.Data.Common.Utilities
             }
             return table;
         }
-        private static string Decrypt(string input)
+
+        /// <summary>
+        /// Decrypts the specified input.
+        /// </summary>
+        /// <remarks>
+        /// This method is used to dencrypt values of ConnectionsString.
+        /// </remarks>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
+        public static string Decrypt(string input)
         {
             string result = string.Empty;
-            byte[] decryted = Convert.FromBase64String(input);
-            result = System.Text.Encoding.Unicode.GetString(decryted);
+            string temp = string.Empty;
+            byte[] decryted = null;
+
+            // In case of the input are non "Encrypted" (Base64), return the same input parameter.
+            try
+            {
+                decryted = Convert.FromBase64String(input);
+            }
+            catch (FormatException fe)
+            {
+
+                decryted = Encoding.Unicode.GetBytes(input);
+            }
+
+            result = Encoding.Unicode.GetString(decryted);
             return result;
         }
-        private static string Encrypt(string input)
+
+        /// <summary>
+        /// Encrypts the specified input.
+        /// </summary>
+        /// <remarks>
+        /// This method is used to encrypt values of ConnectionsString.
+        /// </remarks>
+        /// <param name="input">The input.</param>
+        /// <returns></returns>
+        public static string Encrypt(string input)
         {
             string result = string.Empty;
             byte[] encryted = System.Text.Encoding.Unicode.GetBytes(input);
             result = Convert.ToBase64String(encryted);
             return result;
         }
+
+        /// <summary>
+        /// Decrypteds the an MSSqlServer connection string.
+        /// </summary>
+        /// <param name="encryptedConnectionString">The encrypted connection string.</param>
+        /// <returns></returns>
         public static string DecryptedConnectionString(string encryptedConnectionString)
         {
             return DecryptedConnectionString(EDataBaseEngine.MSSqlServer, encryptedConnectionString);
         }
+
+
+        /// <summary>
+        /// Decrypteds an connection string.
+        /// </summary>
+        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="encryptedConnectionString">The encrypted connection string.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method</exception>
         public static string DecryptedConnectionString(EDataBaseEngine dataBaseEngine, string encryptedConnectionString)
         {
             string response = "";
@@ -927,14 +565,43 @@ namespace SysWork.Data.Common.Utilities
                     response = connectionSbMySql.ConnectionString;
                     break;
 
-                default:
-                    response = encryptedConnectionString;
+                case EDataBaseEngine.SqLite:
+                    var connectionSbSqlite = new SQLiteConnectionStringBuilder();
+                    connectionSbSqlite.ConnectionString = encryptedConnectionString;
+
+                    connectionSbSqlite.Password = Decrypt(connectionSbSqlite.Password);
+                    response = connectionSbSqlite.ConnectionString;
+
                     break;
+
+                case EDataBaseEngine.OleDb:
+                    var connectionSbOleDb = new OleDbConnectionStringBuilder();
+                    connectionSbOleDb.ConnectionString = encryptedConnectionString;
+
+                    foreach (var key in connectionSbOleDb.Keys)
+                    {
+                        if (connectionSbOleDb.ContainsKey(key.ToString()))
+                            if (connectionSbOleDb[key.ToString()].GetType() == typeof(string))
+                                connectionSbOleDb[key.ToString()] = DbUtil.Decrypt(connectionSbOleDb[key.ToString()].ToString());
+                    }
+
+                    response = connectionSbOleDb.ConnectionString;
+
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method");
             }
 
             return response;
         }
-        public static  long ParseToLong(object result)
+
+        /// <summary>
+        /// Try to Parse from multiple Types to Long.
+        /// </summary>
+        /// <param name="result">The result.</param>
+        /// <returns></returns>
+        public static long ParseToLong(object result)
         {
             if (result.GetType() == typeof(System.Int64))
                 return (long)result;

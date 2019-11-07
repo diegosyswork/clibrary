@@ -112,6 +112,8 @@
             this.BtnLoggerSQL = new System.Windows.Forms.Button();
             this.BtnLogger = new System.Windows.Forms.Button();
             this.btnSQLLAMTest = new System.Windows.Forms.Button();
+            this.btnTestMSSqlServerConnector = new System.Windows.Forms.Button();
+            this.btnOleDbConnector = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -928,11 +930,33 @@
             this.btnSQLLAMTest.UseVisualStyleBackColor = true;
             this.btnSQLLAMTest.Click += new System.EventHandler(this.btnSQLLAMTest_Click);
             // 
+            // btnTestMSSqlServerConnector
+            // 
+            this.btnTestMSSqlServerConnector.Location = new System.Drawing.Point(995, 66);
+            this.btnTestMSSqlServerConnector.Name = "btnTestMSSqlServerConnector";
+            this.btnTestMSSqlServerConnector.Size = new System.Drawing.Size(169, 21);
+            this.btnTestMSSqlServerConnector.TabIndex = 84;
+            this.btnTestMSSqlServerConnector.Text = "Test MSSqlServerConnector";
+            this.btnTestMSSqlServerConnector.UseVisualStyleBackColor = true;
+            this.btnTestMSSqlServerConnector.Click += new System.EventHandler(this.btnTestMSSqlServerConnector_Click);
+            // 
+            // btnOleDbConnector
+            // 
+            this.btnOleDbConnector.Location = new System.Drawing.Point(995, 91);
+            this.btnOleDbConnector.Name = "btnOleDbConnector";
+            this.btnOleDbConnector.Size = new System.Drawing.Size(169, 21);
+            this.btnOleDbConnector.TabIndex = 85;
+            this.btnOleDbConnector.Text = "Test OleDb Connector";
+            this.btnOleDbConnector.UseVisualStyleBackColor = true;
+            this.btnOleDbConnector.Click += new System.EventHandler(this.btnOleDbConnector_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1240, 530);
+            this.Controls.Add(this.btnOleDbConnector);
+            this.Controls.Add(this.btnTestMSSqlServerConnector);
             this.Controls.Add(this.btnSQLLAMTest);
             this.Controls.Add(this.BtnLogger);
             this.Controls.Add(this.BtnLoggerSQL);
@@ -1112,6 +1136,8 @@
         private System.Windows.Forms.Button BtnLoggerSQL;
         private System.Windows.Forms.Button BtnLogger;
         private System.Windows.Forms.Button btnSQLLAMTest;
+        private System.Windows.Forms.Button btnTestMSSqlServerConnector;
+        private System.Windows.Forms.Button btnOleDbConnector;
     }
 }
 

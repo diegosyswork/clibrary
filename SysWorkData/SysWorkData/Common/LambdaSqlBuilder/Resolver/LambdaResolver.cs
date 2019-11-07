@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using SysWork.Data.Common.LambdaSqlBuilder.Builder;
-using SysWork.Data.DaoModel.Attributes;
+using SysWork.Data.GenericRepostory.Attributes;
 
 namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
 {
@@ -41,11 +41,13 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
         {
             var member = GetMemberExpression(expression);
             var column = member.Member.GetCustomAttributes(false).OfType<DbColumnAttribute>().FirstOrDefault();
+            var columnName = column.ColumnName ?? member.Member.Name;
             // TODO: 
             //if (column != null)
             //    return column.Name;
             //else
-                return member.Member.Name;
+            //    return member.Member.Name;
+            return columnName;
         }
 
         public static string GetTableName<T>()

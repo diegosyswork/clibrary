@@ -7,6 +7,7 @@ using SysWork.Data.DaoModel;
 using GerdannaDataManager.Daos;
 using SysWork.Data.Common;
 using SysWork.Data.Common.DbConnectionUtilities;
+using System.Data.SqlClient;
 
 namespace TestDaoModelDataCommon
 {
@@ -18,22 +19,22 @@ namespace TestDaoModelDataCommon
 
         private DataManagerTest()
         {
-            InstanciarDaos();
+            InitDAOS();
         }
 
         public static DataManagerTest GetInstance()
         {
-            ValidacionesAlCrearLaInstancia();
+            ValidateInstanceCreation();
 
             if (_dataManagerInstance == null)
                 _dataManagerInstance = new DataManagerTest();
 
             return _dataManagerInstance;
         }
-        public override void InstanciarDaos()
+
+        public override void InitDAOS()
         {
             DaoPersona = new DaoPersona(ConnectionString, DataBaseEngine);
         }
-
     }
 }

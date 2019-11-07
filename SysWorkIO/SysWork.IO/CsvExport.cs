@@ -9,64 +9,78 @@ using System.Threading.Tasks;
 
 namespace SysWork.IO
 {
+    /// <summary>
+    /// Simple CSV Export
+    /// </summary>
+    /// <remarks>
+    /// This CSV Exporter, 
+    /// </remarks>
+    /// <example>
+    /// <code>
+    ///   CsvExport myExport = new CsvExport();
+    ///
+    ///   myExport.AddRow();
+    ///   myExport["Region"] = "New York, USA";
+    ///   myExport["Sales"] = 100000;
+    ///   myExport["Date Opened"] = new DateTime(2003, 12, 31);
+    ///
+    ///   myExport.AddRow();
+    ///   myExport["Region"] = "Sydney \"in\" Australia";
+    ///   myExport["Sales"] = 50000;
+    ///   myExport["Date Opened"] = new DateTime(2005, 1, 1, 9, 30, 0);
+    ///
+    ///   //Then you can do any of the following three output options:
+    ///   
+    ///   string myCsv = myExport.Export();
+    ///   myExport.ExportToFile("Somefile.csv");
+    ///   byte[] myCsvData = myExport.ExportToBytes();
+    /// 
+    /// </code>
+    /// </example>
     public class CsvExport
     {
         /// <summary>
-        /// Simple CSV export
-        /// Example:
-        ///   CsvExport myExport = new CsvExport();
-        ///
-        ///   myExport.AddRow();
-        ///   myExport["Region"] = "New York, USA";
-        ///   myExport["Sales"] = 100000;
-        ///   myExport["Date Opened"] = new DateTime(2003, 12, 31);
-        ///
-        ///   myExport.AddRow();
-        ///   myExport["Region"] = "Sydney \"in\" Australia";
-        ///   myExport["Sales"] = 50000;
-        ///   myExport["Date Opened"] = new DateTime(2005, 1, 1, 9, 30, 0);
-        ///
-        /// Then you can do any of the following three output options:
-        ///   string myCsv = myExport.Export();
-        ///   myExport.ExportToFile("Somefile.csv");
-        ///   byte[] myCsvData = myExport.ExportToBytes();
+        /// Gets or sets the delimitator.
         /// </summary>
-        /// 
-        public char delim = ';';
+        /// <value>
+        /// The delimitator.
+        /// </value>
+        public char FieldDelimiter { get; set; } = ';';
+        
         /// <summary>
-        /// To keep the ordered list of column names
+        /// To keep the ordered list of column names.
         /// </summary>
-        List<string> fields = new List<string>();
+        private List<string> _fields = new List<string>();
 
         /// <summary>
         /// The list of rows
         /// </summary>
-        List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+        private List<Dictionary<string, object>> _rows = new List<Dictionary<string, object>>();
 
         /// <summary>
         /// The current row
         /// </summary>
-        Dictionary<string, object> currentRow { get { return rows[rows.Count - 1]; } }
+        private Dictionary<string, object> _currentRow { get { return _rows[_rows.Count - 1]; } }
 
         /// <summary>
-        /// Set a value on this column
+        /// Set the value to a column.
         /// </summary>
         public object this[string field]
         {
             set
             {
                 // Keep track of the field names, because the dictionary loses the ordering
-                if (!fields.Contains(field)) fields.Add(field);
-                currentRow[field] = value;
+                if (!_fields.Contains(field)) _fields.Add(field);
+                _currentRow[field] = value;
             }
         }
 
         /// <summary>
-        /// Call this before setting any fields on a row
+        /// Create a new row, call this before setting any fields on a row.
         /// </summary>
         public void AddRow()
         {
-            rows.Add(new Dictionary<string, object>());
+            _rows.Add(new Dictionary<string, object>());
         }
 
         /// <summary>
@@ -76,7 +90,7 @@ namespace SysWork.IO
         /// Also if it contains any double quotes ("), then they need to be replaced with quad quotes[sic] ("")
         /// Eg "Dangerous Dan" McGrew -> """Dangerous Dan"" McGrew"
         /// </summary>
-        string MakeValueCsvFriendly(object value)
+        private string MakeValueCsvFriendly(object value)
         {
             if (value == null) return "";
             if (value is INullable && ((INullable)value).IsNull) return "";
@@ -87,7 +101,7 @@ namespace SysWork.IO
                 return ((DateTime)value).ToString("yyyy-MM-dd HH:mm:ss");
             }
             string output = value.ToString();
-            if (output.Contains(delim) || output.Contains("\""))
+            if (output.Contains(FieldDelimiter) || output.Contains("\""))
                 output = '"' + output.Replace("\"", "\"\"") + '"';
             if (Regex.IsMatch(output, @"(?:\r\n|\n|\r)"))
                 output = string.Join(" ", Regex.Split(output, @"(?:\r\n|\n|\r)"));
@@ -95,7 +109,7 @@ namespace SysWork.IO
         }
 
         /// <summary>
-        /// Output all rows as a CSV returning a string
+        /// Output all rows as a CSV returning a string.
         /// </summary>
         public string Export(bool includeHeader)
         {
@@ -104,16 +118,16 @@ namespace SysWork.IO
             // The header
             if (includeHeader)
             {
-                foreach (string field in fields)
-                    sb.Append(field).Append(delim);
+                foreach (string field in _fields)
+                    sb.Append(field).Append(FieldDelimiter);
                 sb.AppendLine();
             }
 
             // The rows
-            foreach (Dictionary<string, object> row in rows)
+            foreach (Dictionary<string, object> row in _rows)
             {
-                foreach (string field in fields)
-                    sb.Append(MakeValueCsvFriendly(row[field])).Append(delim);
+                foreach (string field in _fields)
+                    sb.Append(MakeValueCsvFriendly(row[field])).Append(FieldDelimiter);
                 sb.AppendLine();
             }
 

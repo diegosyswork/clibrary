@@ -5,36 +5,43 @@ using SysWork.Data.Common.DataObjectProvider;
 
 namespace SysWork.Data.Common.SimpleQuery
 {
+    /// <summary>
+    /// Static class to Read Data Quickly.
+    /// </summary>
     public static class SimpleQuery
     {
         /// <summary>
-        /// 
-        /// Dado un DbConnection instanciado y un commandText
-        /// ejecuta una consulta de devuelve un IEnumerable dinamico.
-        /// En caso que la conexion este cerrada, intenta abrirla.
-        /// *NO Cierra* la conexion al finalizar el metodo
-        /// 
+        /// Executes the specified commandText in a DbConnection (MSSqlServer).
         /// </summary>
-        /// <param name="dbConnection"></param>
-        /// <param name="commandText"></param>
-        /// <returns>IEnumerable dinamico</returns>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <param name="commandText">The command text.</param>
+        /// <returns>An dynamic IEnumerable.</returns>
         public static IEnumerable<dynamic> Execute(DbConnection dbConnection, string commandText)
         {
             return Execute(StaticDbObjectProvider.GetDataBaseEngineFromDbConnection(dbConnection), dbConnection, commandText,false);
         }
 
+        /// <summary>
+        /// Executes the specified commandText in a DbConnection.
+        /// </summary>
+        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="commandText">The command text.</param>
+        /// <param name="closeConnection">if set to <c>true</c> [close connection].</param>
+        /// <returns>An dynamic IEnumerable</returns>
         public static IEnumerable<dynamic> Execute(EDataBaseEngine dataBaseEngine, string connectionString, string commandText,bool closeConnection = true)
         {
             DbConnection dbConnection = StaticDbObjectProvider.GetDbConnection(dataBaseEngine,connectionString);
             return Execute(dataBaseEngine, dbConnection, commandText,closeConnection);
         }
+
         /// <summary>
-        /// Dado un connectionString y un commandText intentará crear una
-        /// SqlConnection, ejecutara la consulta que devuelve un IEnumerable dinamico.
+        /// Executes the specified commandText in a DbConnection(MSSqlServer).
         /// </summary>
-        /// <param name="connectionString"></param>
-        /// <param name="commandText"></param>
-        /// <returns></returns>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="commandText">The command text.</param>
+        /// <param name="closeConnection">if set to <c>true</c> [close connection].</param>
+        /// <returns>An dynamic IEnumerable</returns>
         public static IEnumerable<dynamic> Execute(string connectionString, string commandText,bool closeConnection = true)
         {
             DbConnection dbConnection = StaticDbObjectProvider.GetDbConnection(EDataBaseEngine.MSSqlServer);
@@ -42,6 +49,15 @@ namespace SysWork.Data.Common.SimpleQuery
 
             return Execute(EDataBaseEngine.MSSqlServer, dbConnection, commandText, closeConnection);
         }
+
+        /// <summary>
+        /// Executes the specified commandText in a DbConnection.
+        /// </summary>
+        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <param name="commandText">The command text.</param>
+        /// <param name="closeConnection">if set to <c>true</c> [close connection].</param>
+        /// <returns></returns>
         private static IEnumerable<dynamic> Execute(EDataBaseEngine dataBaseEngine, DbConnection dbConnection, string commandText,bool closeConnection = true)
         {
             using (var connection = dbConnection)
@@ -62,13 +78,13 @@ namespace SysWork.Data.Common.SimpleQuery
                 }
             }
         }
+
         /// <summary>
-        /// Dado un IEnumerableDinamico y una posicion, devuelve el dinamico
-        /// que corresponde con dicha posicion
+        /// gets an elements at the position.
         /// </summary>
-        /// <typeparam name="dynamic"></typeparam>
-        /// <param name="items"></param>
-        /// <param name="index"></param>
+        /// <typeparam name="dynamic">The type of the ynamic.</typeparam>
+        /// <param name="items">The items.</param>
+        /// <param name="index">The index.</param>
         /// <returns></returns>
         public static dynamic ElementAt<dynamic>(IEnumerable<dynamic> items, int index)
         {

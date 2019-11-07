@@ -14,6 +14,7 @@ using Microsoft.VisualBasic;
 using SysWork.Data.DaoModel.Exceptions;
 using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
+using SysWork.Data.Common.DbConnector;
 
 namespace TestDaoModelDataCommon
 {
@@ -32,10 +33,13 @@ namespace TestDaoModelDataCommon
         {
             InitializeComponent();
             
-            _daoPersonaSQLite = new DaoPersona ( GetSqliteConnectionString(), EDataBaseEngine.SqLite);
+            _daoPersonaSQLite = new DaoPersona (GetSqliteConnectionString(), EDataBaseEngine.SqLite);
+
             _daoPersonaMSSQL = new DaoPersona(ConnectionStringSQL, EDataBaseEngine.MSSqlServer);
+
             _daoPersonaOleDb = new DaoPersona(ConnectionStringOleDb,EDataBaseEngine.OleDb);
-            _daoPersonaMySql = new DaoPersona(ConnectionStringMySql,EDataBaseEngine.MySql);
+
+            //_daoPersonaMySql = new DaoPersona(ConnectionStringMySql,EDataBaseEngine.MySql);
             
 
             /*
@@ -95,7 +99,7 @@ namespace TestDaoModelDataCommon
             p.Dni = RandomNumber(8);
             p.FechaNacimiento = DateTime.Parse("24/05/1980");
             p.Telefono = "11" + RandomNumber(8);
-            idGenerado = _daoPersonaSQLite.Add(p);
+            idGenerado = _daoPersonaSQLite.Add(p,out string errMessage);
 
             p = new Persona();
             p.Apellido = RandomString(500);
@@ -549,26 +553,26 @@ namespace TestDaoModelDataCommon
 
         private void BtnExecuteNonQuery_Click(object sender, EventArgs e)
         {
-            long recordsAffected = _daoPersonaSQLite.GetExecute().Query(txtQuery.Text).ExecuteNonQuery(); 
+            long recordsAffected = _daoPersonaSQLite.GetDBExecute().Query(txtQuery.Text).ExecuteNonQuery(); 
             MessageBox.Show($"records affected = {recordsAffected}");
         }
 
         private void BtnExecuteNonQuerySQL_Click(object sender, EventArgs e)
         {
-            long recordsAffected = _daoPersonaMSSQL.GetExecute().Query(txtQuerySQL.Text).ExecuteNonQuery();
+            long recordsAffected = _daoPersonaMSSQL.GetDBExecute().Query(txtQuerySQL.Text).ExecuteNonQuery();
             MessageBox.Show($"records affected = {recordsAffected}");
         }
 
         private void BtnExecuteNonQueryOleDB_Click(object sender, EventArgs e)
         {
-            long recordsAffected = _daoPersonaOleDb.GetExecute().Query(txtQueryOleDb.Text).ExecuteNonQuery();
+            long recordsAffected = _daoPersonaOleDb.GetDBExecute().Query(txtQueryOleDb.Text).ExecuteNonQuery();
             MessageBox.Show($"records affected = {recordsAffected}");
 
         }
 
         private void BtnExecuteNonQueryWparam_Click(object sender, EventArgs e)
         {
-            DbExecute dbExecute = _daoPersonaSQLite.GetExecute() ;
+            DbExecute dbExecute = _daoPersonaSQLite.GetDBExecute() ;
             dbExecute.Query(txtQuery.Text);
 
             string paramName;
@@ -591,7 +595,18 @@ namespace TestDaoModelDataCommon
 
         private void btnVerificaSQLServer_Click(object sender, EventArgs e)
         {
-            if (DbUtil.VerifyMSSQLConnectionStringOrGetParams("testSqlServer",@"NT-SYSWORK\SQLEXPRESS", "TEST", "TEST-MAL", "TEST",null,true))
+
+            var DataBaseConnector = new DataBaseConnector();
+            DataBaseConnector.ConnectionStringName = "testSqlServer";
+            DataBaseConnector.DefaultDataSource = @"NT-SYSWORK\SQLEXPRESS";
+            DataBaseConnector.DefaultUser = "TEST";
+            DataBaseConnector.DefaultPassword = "TEST-MAL";
+            DataBaseConnector.DefaultDatabase = "TEST";
+            DataBaseConnector.PromptUser = true;
+            DataBaseConnector.IsEncryptedData = true;
+            DataBaseConnector.Connect();
+
+            if (DataBaseConnector.IsConnectionSuccess)
             {
                 MessageBox.Show("Conexion Correcta");
             }
@@ -604,16 +619,32 @@ namespace TestDaoModelDataCommon
             string _defaultSqliteConnectionString = "Data Source = {0}; Version = 3; New = {1}; Compress = True;";
             _defaultSqliteConnectionString = string.Format(_defaultSqliteConnectionString, _SqliteDbPath, "false");
 
+            /*
             if (DbUtil.VerifySQLiteConnectionStringOrGetParams("testSqlite", _defaultSqliteConnectionString))
             {
                 MessageBox.Show("Conexion Correcta");
             }
+            */
         }
 
         private void btnVerifyOleDb_Click(object sender, EventArgs e)
         {
+            /*
             string _defaultOleDbConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\SWSISTEMAS\C#Library\Test\TestSysWork.Data\TestSysWork.Data\Data\TEST-mal.accdb;Persist Security Info=False;";
             if (DbUtil.VerifyOleDbConnectionStringOrGetParams("TestOleDb", _defaultOleDbConnectionString))
+            {
+                MessageBox.Show("Conexion Correcta");
+            }
+            */
+
+            var DataBaseConnector = new DataBaseConnector(EDataBaseEngine.OleDb );
+            DataBaseConnector.ConnectionStringName = "TestOleDbNew";
+            DataBaseConnector.ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\SWSISTEMAS\C#Library\Test\TestSysWork.Data\TestSysWork.Data\Data\TEST-mal.accdb;Persist Security Info=False;";
+            DataBaseConnector.PromptUser = true;
+            DataBaseConnector.IsEncryptedData = true;
+            DataBaseConnector.Connect();
+
+            if (DataBaseConnector.IsConnectionSuccess)
             {
                 MessageBox.Show("Conexion Correcta");
             }
@@ -790,14 +821,14 @@ namespace TestDaoModelDataCommon
 
         private void BtnExecuteNonQueryMySQL_Click(object sender, EventArgs e)
         {
-            long recordsAffected = _daoPersonaMySql.GetExecute().Query(txtQueryMySQL.Text).ExecuteNonQuery();
+            long recordsAffected = _daoPersonaMySql.GetDBExecute().Query(txtQueryMySQL.Text).ExecuteNonQuery();
             MessageBox.Show($"records affected = {recordsAffected}");
 
         }
 
         private void BtnExecuteNonQueryWparamOleDb_Click(object sender, EventArgs e)
         {
-            DbExecute dbExecute = _daoPersonaOleDb.GetExecute();
+            DbExecute dbExecute = _daoPersonaOleDb.GetDBExecute();
             dbExecute.Query(txtQueryOleDb.Text);
 
             string paramName;
@@ -821,7 +852,7 @@ namespace TestDaoModelDataCommon
 
         private void BtnExecuteNonQueryWparamSQL_Click(object sender, EventArgs e)
         {
-            DbExecute dbExecute = _daoPersonaMSSQL.GetExecute();
+            DbExecute dbExecute = _daoPersonaMSSQL.GetDBExecute();
             dbExecute.Query(txtQuerySQL.Text);
 
             string paramName;
@@ -838,13 +869,14 @@ namespace TestDaoModelDataCommon
                     dbExecute.AddParameter(paramName, paramValue);
                 }
             }
+
             long recordsAffected = dbExecute.ExecuteNonQuery();
             MessageBox.Show($"records affected = {recordsAffected}");
         }
 
         private void BtnExecuteNonQueryWparamMySQL_Click(object sender, EventArgs e)
         {
-            DbExecute daoExecuteNonQuery = _daoPersonaMySql.GetExecute();
+            DbExecute daoExecuteNonQuery = _daoPersonaMySql.GetDBExecute();
             daoExecuteNonQuery.Query(txtQueryMySQL.Text);
 
             string paramName;
@@ -868,11 +900,20 @@ namespace TestDaoModelDataCommon
 
         private void btnVerifyMySQL_Click(object sender, EventArgs e)
         {
-            if (DbUtil.VerifyMySQLConnectionStringOrGetParams("testMySql", @"LOCALHOST", "TEST", "TEST-MAL", "TEST", null, true))
+            var DataBaseConnector = new DataBaseConnector(EDataBaseEngine.MySql);
+            DataBaseConnector.ConnectionStringName = "testMySql";
+            DataBaseConnector.DefaultDataSource = @"LOCALHOST";
+            DataBaseConnector.DefaultUser = "TEST";
+            DataBaseConnector.DefaultPassword = "TEST-MAL";
+            DataBaseConnector.DefaultDatabase = "TEST";
+            DataBaseConnector.PromptUser = true;
+            DataBaseConnector.IsEncryptedData = true;
+            DataBaseConnector.Connect();
+
+            if (DataBaseConnector.IsConnectionSuccess)
             {
                 MessageBox.Show("Conexion Correcta");
             }
-
         }
 
         private void BtnLoggerMySQL_Click(object sender, EventArgs e)
@@ -908,7 +949,7 @@ namespace TestDaoModelDataCommon
             SqlLam<Persona>.SetAdapter(SqlAdapter.MySql);
             var querySelectCountMySQL = new SqlLam<Persona>().SelectCount(p => p.IdPersona);//.Where(p => p.Dni == "27926043");
             // Obtiene la cantidad
-            var cantMySQL = _daoPersonaMySql.GetExecute()
+            var cantMySQL = _daoPersonaMySql.GetDBExecute()
                             .Query(querySelectCountMySQL.QueryString)
                             .AddParameters(querySelectCountMySQL.QueryParameters)
                             .ExecuteScalar();
@@ -916,7 +957,7 @@ namespace TestDaoModelDataCommon
             SqlLam<Persona>.SetAdapter(SqlAdapter.SqlServer2012);
             var querySelectCountMSSql = new SqlLam<Persona>().SelectCount(p => p.IdPersona);//.Where(p => p.Dni == "27926043");
             // Obtiene la cantidad
-            var cantMSSql = _daoPersonaMSSQL.GetExecute()
+            var cantMSSql = _daoPersonaMSSQL.GetDBExecute()
                             .Query(querySelectCountMSSql.QueryString)
                             .AddParameters(querySelectCountMSSql.QueryParameters)
                             .ExecuteScalar();
@@ -924,10 +965,85 @@ namespace TestDaoModelDataCommon
             SqlLam<Persona>.SetAdapter(SqlAdapter.SQLite);
             var querySelectCountSQLite = new SqlLam<Persona>().SelectCount(p => p.IdPersona);//.Where(p => p.Dni == "27926043");
             // Obtiene la cantidad
-            var cantSQLite = _daoPersonaSQLite.GetExecute()
+            var cantSQLite = _daoPersonaSQLite.GetDBExecute()
                             .Query(querySelectCountSQLite.QueryString)
                             .AddParameters(querySelectCountSQLite.QueryParameters)
                             .ExecuteScalar();
+
+        }
+
+        private void btnTestMSSqlServerConnector_Click(object sender, EventArgs e)
+        {
+            var MsSqlConn = new DbConnectorMSSqlServer();
+            MsSqlConn.TryGetConnectionStringFromConfig = true;
+            MsSqlConn.WriteInConfigFile = true;
+            MsSqlConn.ConnectionStringName = "SyworkTestDbModel";
+
+            MsSqlConn.DefaultDatabase = "SysworkDbModel";
+            MsSqlConn.DefaultDataSource = "NT-SYSWORK\\SQLEXPRESS";
+            MsSqlConn.DefaultUser = "SA";
+            MsSqlConn.IsEncryptedData = true;
+            MsSqlConn.DefaultPassword = "Dm58125812";
+
+            MsSqlConn.PromptUser = true;
+
+            MsSqlConn.Connect();
+
+
+            
+            var MsSqlConn2 = new DbConnectorMSSqlServer();
+            MsSqlConn2.TryGetConnectionStringFromConfig = true;
+            MsSqlConn2.WriteInConfigFile = true;
+            MsSqlConn2.ConnectionStringName = "SyworkTestDbModelMA2L";
+
+            MsSqlConn2.DefaultDatabase = "SysworkDbModel";
+            MsSqlConn2.DefaultDataSource = "MAL";
+            MsSqlConn2.DefaultUser = "MAL";
+            MsSqlConn2.DefaultPassword = "MAL";
+
+            MsSqlConn2.PromptUser = true;
+
+            MsSqlConn2.Connect();
+
+
+            var MsSqlConn3 = new DbConnectorMSSqlServer();
+            MsSqlConn3.DefaultDatabase = "SysworkDbModel";
+
+            MsSqlConn3.PromptUser = false;
+
+            MsSqlConn3.Connect();
+            if (!MsSqlConn3.IsConnectionSuccess)
+            {
+                MessageBox.Show($"{MsSqlConn3.ConnectionError}");
+            }
+
+
+            var MsSqlConn4 = new DbConnectorMSSqlServer();
+
+            MsSqlConn4.DefaultDatabase = "SysworkDbModel";
+            MsSqlConn4.DefaultDataSource = "NT-SYSWORK\\SQLEXPRESS";
+            MsSqlConn4.DefaultUser = "SA";
+            MsSqlConn4.IsEncryptedData = true;
+            MsSqlConn4.DefaultPassword = "Dm58125812";
+            MsSqlConn4.PromptUser = true;
+
+            MsSqlConn4.Connect();
+
+
+
+        }
+
+        private void btnOleDbConnector_Click(object sender, EventArgs e)
+        {
+            var oleDbConn = new DbConnectorOleDb();
+            //@"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\SWSISTEMAS\C#Library\Test\TestSysWork.Data\TestSysWork.Data\Data\TEST-mal.accdb;Persist Security Info=False;"
+            oleDbConn.WriteInConfigFile = true;
+            oleDbConn.TryGetConnectionStringFromConfig = true;
+            oleDbConn.ConnectionStringName = "TestOldDbOk";
+            oleDbConn.IsEncryptedData = true;
+            oleDbConn.PromptUser = true;
+
+            oleDbConn.Connect(); 
 
         }
     }

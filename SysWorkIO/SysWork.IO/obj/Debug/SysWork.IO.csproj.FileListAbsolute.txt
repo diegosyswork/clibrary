@@ -1,5 +1,6 @@
 C:\SWSISTEMAS\C#Library\SysWorkIO\SysWork.IO\bin\Debug\SysWork.IO.dll
 C:\SWSISTEMAS\C#Library\SysWorkIO\SysWork.IO\bin\Debug\SysWork.IO.pdb
+C:\SWSISTEMAS\C#Library\SysWorkIO\SysWork.IO\obj\Debug\SysWork.IO.csprojAssemblyReference.cache
 C:\SWSISTEMAS\C#Library\SysWorkIO\SysWork.IO\obj\Debug\SysWork.IO.csproj.CoreCompileInputs.cache
 C:\SWSISTEMAS\C#Library\SysWorkIO\SysWork.IO\obj\Debug\SysWork.IO.dll
 C:\SWSISTEMAS\C#Library\SysWorkIO\SysWork.IO\obj\Debug\SysWork.IO.pdb

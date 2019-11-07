@@ -11,9 +11,8 @@ namespace SysWork.IO
     public class FixedLenghtFileWriter
     {
         private string _fileName;
-        List<Record> _recordList;
+        private List<Record> _recordList;
         private string _caracterCR = System.Environment.NewLine;
-
 
         public FixedLenghtFileWriter()
         {
@@ -518,19 +517,6 @@ namespace SysWork.IO
         }
         private void CreateRecordValueFieldsAndCompleteWithEmptyValues()
         {
-            /*
-            foreach (string fieldName in recordDefinition.getFieldDefinition().Keys)
-            {
-                FieldDefinition fieldDefinition = (FieldDefinition) recordDefinition.getFieldDefinition()[fieldName];
-                recordValues.Add(fieldName, defaultFieldValue(fieldDefinition));
-            } 
-
-            foreach (KeyValuePair<string, FieldDefinition> kv in recordDefinition.getFieldDefinition())
-            {
-                recordValues.Add(kv.Key, defaultFieldValue(kv.Value));
-            }
-            */
-
             foreach (string key in recordDefinition.GetFieldsDefinition().Keys)
             {
                 FieldDefinition fieldDefinition = recordDefinition.GetFieldsDefinition()[key];

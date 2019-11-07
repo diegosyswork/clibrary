@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\SysWork.Data.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,8 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>bin\Release\SysWork.Data.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -79,6 +79,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\DbConnectionUtilities\DbExecute.cs" />
+    <Compile Include="Common\DbConnector\AbstractDbConnector.cs" />
+    <Compile Include="Common\DbConnector\DataBaseConnector.cs" />
+    <Compile Include="Common\DbConnector\DbConnectorMSSqlServer.cs" />
+    <Compile Include="Common\DbConnector\DbConnectorMySql.cs" />
+    <Compile Include="Common\DbConnector\DbConnectorOleDb.cs" />
+    <Compile Include="Common\DbConnector\DbConnectorSqLite.cs" />
     <Compile Include="Common\FormsGetParameters\FrmGetParamOleDb.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,17 +128,17 @@
     <Compile Include="Common\DataObjectProvider\DbObjectProvider.cs" />
     <Compile Include="Common\DataObjectProvider\DataObjectCreatorOleDb.cs" />
     <Compile Include="Common\DataObjectProvider\DataObjectCreatorSQLite.cs" />
-    <Compile Include="Common\DataObjectProvider\DataObjectCreatorSQLServer.cs" />
-    <Compile Include="DaoModel\Attributes\DbColumnAttribute.cs" />
-    <Compile Include="DaoModel\Attributes\DbTableAttribute.cs" />
-    <Compile Include="DaoModel\CodeWriter\CodeWriterUtil.cs" />
-    <Compile Include="DaoModel\CodeWriter\DaoClassFromDb.cs" />
-    <Compile Include="DaoModel\CodeWriter\EntityClassFromDb.cs" />
-    <Compile Include="DaoModel\Core.cs" />
-    <Compile Include="DaoModel\DataManagerBase.cs" />
-    <Compile Include="DaoModel\Exceptions\DaoModelException.cs" />
-    <Compile Include="DaoModel\Extensions\DaoModelExtensions.cs" />
-    <Compile Include="DaoModel\Interfaces\IBaseDao.cs" />
+    <Compile Include="Common\DataObjectProvider\DataObjectCreatorMSSqlServer.cs" />
+    <Compile Include="GenericRepository\Attributes\DbColumnAttribute.cs" />
+    <Compile Include="GenericRepository\Attributes\DbTableAttribute.cs" />
+    <Compile Include="GenericRepository\CodeWriter\CodeWriterUtil.cs" />
+    <Compile Include="GenericRepository\CodeWriter\DaoClassFromDb.cs" />
+    <Compile Include="GenericRepository\CodeWriter\EntityClassFromDb.cs" />
+    <Compile Include="GenericRepository\Core.cs" />
+    <Compile Include="GenericRepository\BaseDataManager.cs" />
+    <Compile Include="GenericRepository\Exceptions\GenericRepositoryException.cs" />
+    <Compile Include="GenericRepository\Extensions\DaoModelExtensions.cs" />
+    <Compile Include="GenericRepository\Interfaces\IBaseGenericRepository.cs" />
     <Compile Include="Common\DataRecordDynamicWrapper.cs" />
     <Compile Include="Extensions\OleDbCommandExtensions.cs" />
     <Compile Include="Common\FormsGetParameters\FrmGetParamMSSQL.cs">

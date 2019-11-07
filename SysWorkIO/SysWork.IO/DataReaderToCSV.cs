@@ -7,9 +7,22 @@ using System.Threading.Tasks;
 
 namespace SysWork.IO
 {
+    /// <summary>
+    /// Export IDataReader to CSV.
+    /// </summary>
+    /// <remarks>
+    /// 
+    /// </remarks>
     public class DataReaderToCSV
     {
-        public static string Export(IDataReader dataReader, bool includeHeaderAsFirstRow = true, string separator = ",")
+        /// <summary>
+        /// Exports the specified data reader.
+        /// </summary>
+        /// <param name="dataReader">The data reader.</param>
+        /// <param name="includeHeaderAsFirstRow">if set to <c>true</c> [include header as first row].</param>
+        /// <param name="fieldDelimiter">Character Delimiter.</param>
+        /// <returns></returns>
+        public static string Export(IDataReader dataReader, bool includeHeaderAsFirstRow = true, string fieldDelimiter = ";")
         {
             DataTable dataTable = new DataTable();
             StringBuilder csvRows = new StringBuilder();
@@ -26,9 +39,9 @@ namespace SysWork.IO
                 {
                     for (int index = 0; index < columns; index++)
                     {
-                        row += (dataTable.Columns[index].ToString().Replace(separator,""));
+                        row += (dataTable.Columns[index].ToString().Replace(fieldDelimiter,""));
                         if (index < columns - 1)
-                            row += (separator);
+                            row += (fieldDelimiter);
                     }
                     row += (Environment.NewLine);
                 }
@@ -52,7 +65,7 @@ namespace SysWork.IO
                                 value = value.Replace("\"", "\"\"");
 
                             //If separtor are is in value, ensure it is put in double quotes.
-                            if (value.IndexOf(separator) >= 0)
+                            if (value.IndexOf(fieldDelimiter) >= 0)
                                 value = "\"" + value + "\"";
 
                             //If string contain new line character
@@ -67,9 +80,9 @@ namespace SysWork.IO
                         }
                         row += value;
                         if (index < columns - 1)
-                            row += separator;
+                            row += fieldDelimiter;
                     }
-                    dataTable.Rows[rowIndex][columns - 1].ToString().ToString().Replace(separator, " ");
+                    dataTable.Rows[rowIndex][columns - 1].ToString().ToString().Replace(fieldDelimiter, " ");
                     row += Environment.NewLine;
                     csvRows.Append(row);
                 }
@@ -78,6 +91,7 @@ namespace SysWork.IO
             {
                 throw ex;
             }
+
             return csvRows.ToString();
         }
     }

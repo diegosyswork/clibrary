@@ -2,23 +2,26 @@ using System;
 
 namespace SysWork.Data.Common
 {
+    /// <summary>
+    /// Supported Database Engines
+    /// </summary>
     public enum EDataBaseEngine
     {
         /// <summary>
-        /// 
+        /// Microsoft SQL Server
         /// </summary>
         MSSqlServer = 0,
         /// <summary>
-        /// 
+        /// SQLite V3
         /// </summary>
-        SqLite,
+        SqLite = 1,
         /// <summary>
-        /// 
+        /// OleDb
         /// </summary>
-        OleDb,
+        OleDb = 2,
         /// <summary>
-        /// 
+        /// MySql
         /// </summary>
-        MySql
+        MySql = 3
     }
 }
