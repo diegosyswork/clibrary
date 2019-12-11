@@ -9,22 +9,45 @@ using SysWork.Data.Syntax;
 
 namespace SysWork.Data.GenericRepository.Mapper
 {
+    ///TODO: Revisar la documentacion y crear ejemplo del uso de los metodos.
     /// <summary>
-    /// 
+    /// Class to map entities from a datareader. 
+    /// To perform the mapping use the DbColumn <see cref="DbColumnAttribute"/>decorator.
     /// </summary>
     public class MapDataReaderToEntity
     {
-        SyntaxProvider _syntaxProvider;
+        private SyntaxProvider _syntaxProvider;
 
+        /// <summary>
+        /// Maps the specified reader.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="reader">The reader.</param>
+        /// <returns></returns>
         public IList<T> Map<T>(IDataReader reader) where T : class, new()
         {
             return Map<T>(reader, null, EDataBaseEngine.MSSqlServer);
         }
+        /// <summary>
+        /// Maps the specified reader.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="reader">The reader.</param>
+        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <returns></returns>
         public IList<T> Map<T>(IDataReader reader, EDataBaseEngine dataBaseEngine) where T : class, new()
         {
             return Map<T>(reader, null, dataBaseEngine);
         }
 
+        /// <summary>
+        /// Maps the specified reader.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="reader">The reader.</param>
+        /// <param name="listObjectPropertyInfo">The list object property information.</param>
+        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <returns></returns>
         public IList<T> Map<T>(IDataReader reader, IList<PropertyInfo> listObjectPropertyInfo, EDataBaseEngine dataBaseEngine) where T : class, new()
         {
             _syntaxProvider = new SyntaxProvider(dataBaseEngine);
@@ -77,16 +100,37 @@ namespace SysWork.Data.GenericRepository.Mapper
             }
             return collection;
         }
-
+        /// <summary>
+        /// Maps the single.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="reader">The reader.</param>
+        /// <returns></returns>
         public TEntity MapSingle<TEntity>(IDataReader reader) where TEntity : class, new()
         {
             return MapSingle<TEntity>(reader, null, EDataBaseEngine.MSSqlServer);
         }
+
+        /// <summary>
+        /// Maps the single.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="reader">The reader.</param>
+        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <returns></returns>
         public TEntity MapSingle<TEntity>(IDataReader reader, EDataBaseEngine dataBaseEngine) where TEntity : class, new()
         {
             return MapSingle<TEntity>(reader, null, dataBaseEngine);
         }
 
+        /// <summary>
+        /// Maps the single.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="reader">The reader.</param>
+        /// <param name="listObjectPropertyInfo">The list object property information.</param>
+        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <returns></returns>
         public TEntity MapSingle<TEntity>(IDataReader reader, IList<PropertyInfo> listObjectPropertyInfo, EDataBaseEngine dataBaseEngine) where TEntity : class, new()
         {
             _syntaxProvider = new SyntaxProvider(dataBaseEngine);
@@ -136,11 +180,24 @@ namespace SysWork.Data.GenericRepository.Mapper
             return obj;
         }
 
+        /// <summary>
+        /// Maps the single.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="dataRecord">The data record.</param>
+        /// <returns></returns>
         public TEntity MapSingle<TEntity>(IDataRecord dataRecord) where TEntity : class, new()
         {
             return MapSingle<TEntity>(dataRecord, null);
         }
 
+        /// <summary>
+        /// Maps the single.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="dataRecord">The data record.</param>
+        /// <param name="listObjectPropertyInfo">The list object property information.</param>
+        /// <returns></returns>
         public TEntity MapSingle<TEntity>(IDataRecord dataRecord, IList<PropertyInfo> listObjectPropertyInfo) where TEntity : class, new()
         {
             TEntity obj = new TEntity();

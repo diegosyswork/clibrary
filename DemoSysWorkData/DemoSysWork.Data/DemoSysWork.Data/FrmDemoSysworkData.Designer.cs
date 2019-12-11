@@ -37,8 +37,15 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.GrpDetails = new System.Windows.Forms.GroupBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.btnSQLLAMTest = new System.Windows.Forms.Button();
+            this.BtnEntityClassFromDb = new System.Windows.Forms.Button();
+            this.BtnGetByLambdaExpression = new System.Windows.Forms.Button();
+            this.BtnGetAll = new System.Windows.Forms.Button();
+            this.BtnDeleteByLambdaExpression = new System.Windows.Forms.Button();
+            this.BtnCLearLog = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.TxtLog = new System.Windows.Forms.TextBox();
+            this.BtnTestGenericViewManager = new System.Windows.Forms.Button();
+            this.BtnSqlLAMTest = new System.Windows.Forms.Button();
             this.BtnLogger = new System.Windows.Forms.Button();
             this.BtnExecuteNonQueryWparam = new System.Windows.Forms.Button();
             this.BtnExecuteNonQuery = new System.Windows.Forms.Button();
@@ -47,7 +54,7 @@
             this.BtnGetByPassport = new System.Windows.Forms.Button();
             this.TxtId = new System.Windows.Forms.TextBox();
             this.BtnGetByID = new System.Windows.Forms.Button();
-            this.txtDELId = new System.Windows.Forms.TextBox();
+            this.TxtDelId = new System.Windows.Forms.TextBox();
             this.DeleteByID = new System.Windows.Forms.Button();
             this.BtnFind5 = new System.Windows.Forms.Button();
             this.BtnUpdateRange = new System.Windows.Forms.Button();
@@ -59,6 +66,7 @@
             this.BtnExistsTable = new System.Windows.Forms.Button();
             this.BtnUpdate = new System.Windows.Forms.Button();
             this.BtnAdd = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.GrpParameters.SuspendLayout();
             this.GrpDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -77,7 +85,7 @@
             this.GrpParameters.Controls.Add(this.label1);
             this.GrpParameters.Location = new System.Drawing.Point(9, 1);
             this.GrpParameters.Name = "GrpParameters";
-            this.GrpParameters.Size = new System.Drawing.Size(630, 107);
+            this.GrpParameters.Size = new System.Drawing.Size(877, 107);
             this.GrpParameters.TabIndex = 92;
             this.GrpParameters.TabStop = false;
             this.GrpParameters.Text = "DB Parameters";
@@ -85,7 +93,7 @@
             // BtnUnconnect
             // 
             this.BtnUnconnect.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.BtnUnconnect.Location = new System.Drawing.Point(378, 78);
+            this.BtnUnconnect.Location = new System.Drawing.Point(501, 78);
             this.BtnUnconnect.Name = "BtnUnconnect";
             this.BtnUnconnect.Size = new System.Drawing.Size(129, 21);
             this.BtnUnconnect.TabIndex = 6;
@@ -96,7 +104,7 @@
             // BtnConnect
             // 
             this.BtnConnect.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.BtnConnect.Location = new System.Drawing.Point(198, 78);
+            this.BtnConnect.Location = new System.Drawing.Point(321, 78);
             this.BtnConnect.Name = "BtnConnect";
             this.BtnConnect.Size = new System.Drawing.Size(129, 21);
             this.BtnConnect.TabIndex = 5;
@@ -107,7 +115,7 @@
             // BtnGetParameters
             // 
             this.BtnGetParameters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnGetParameters.Location = new System.Drawing.Point(603, 49);
+            this.BtnGetParameters.Location = new System.Drawing.Point(850, 49);
             this.BtnGetParameters.Name = "BtnGetParameters";
             this.BtnGetParameters.Size = new System.Drawing.Size(18, 20);
             this.BtnGetParameters.TabIndex = 4;
@@ -121,7 +129,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TxtConnectionString.Location = new System.Drawing.Point(105, 49);
             this.TxtConnectionString.Name = "TxtConnectionString";
-            this.TxtConnectionString.Size = new System.Drawing.Size(492, 20);
+            this.TxtConnectionString.Size = new System.Drawing.Size(739, 20);
             this.TxtConnectionString.TabIndex = 3;
             // 
             // CmbDataBaseEngine
@@ -131,7 +139,7 @@
             this.CmbDataBaseEngine.FormattingEnabled = true;
             this.CmbDataBaseEngine.Location = new System.Drawing.Point(107, 19);
             this.CmbDataBaseEngine.Name = "CmbDataBaseEngine";
-            this.CmbDataBaseEngine.Size = new System.Drawing.Size(514, 21);
+            this.CmbDataBaseEngine.Size = new System.Drawing.Size(761, 21);
             this.CmbDataBaseEngine.TabIndex = 2;
             this.CmbDataBaseEngine.SelectedValueChanged += new System.EventHandler(this.CmbDataBaseEngine_SelectedValueChanged);
             // 
@@ -158,8 +166,16 @@
             this.GrpDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.GrpDetails.Controls.Add(this.button3);
-            this.GrpDetails.Controls.Add(this.btnSQLLAMTest);
+            this.GrpDetails.Controls.Add(this.button1);
+            this.GrpDetails.Controls.Add(this.BtnEntityClassFromDb);
+            this.GrpDetails.Controls.Add(this.BtnGetByLambdaExpression);
+            this.GrpDetails.Controls.Add(this.BtnGetAll);
+            this.GrpDetails.Controls.Add(this.BtnDeleteByLambdaExpression);
+            this.GrpDetails.Controls.Add(this.BtnCLearLog);
+            this.GrpDetails.Controls.Add(this.label3);
+            this.GrpDetails.Controls.Add(this.TxtLog);
+            this.GrpDetails.Controls.Add(this.BtnTestGenericViewManager);
+            this.GrpDetails.Controls.Add(this.BtnSqlLAMTest);
             this.GrpDetails.Controls.Add(this.BtnLogger);
             this.GrpDetails.Controls.Add(this.BtnExecuteNonQueryWparam);
             this.GrpDetails.Controls.Add(this.BtnExecuteNonQuery);
@@ -168,7 +184,7 @@
             this.GrpDetails.Controls.Add(this.BtnGetByPassport);
             this.GrpDetails.Controls.Add(this.TxtId);
             this.GrpDetails.Controls.Add(this.BtnGetByID);
-            this.GrpDetails.Controls.Add(this.txtDELId);
+            this.GrpDetails.Controls.Add(this.TxtDelId);
             this.GrpDetails.Controls.Add(this.DeleteByID);
             this.GrpDetails.Controls.Add(this.BtnFind5);
             this.GrpDetails.Controls.Add(this.BtnUpdateRange);
@@ -182,27 +198,98 @@
             this.GrpDetails.Controls.Add(this.BtnAdd);
             this.GrpDetails.Location = new System.Drawing.Point(9, 114);
             this.GrpDetails.Name = "GrpDetails";
-            this.GrpDetails.Size = new System.Drawing.Size(629, 411);
+            this.GrpDetails.Size = new System.Drawing.Size(876, 438);
             this.GrpDetails.TabIndex = 93;
             this.GrpDetails.TabStop = false;
             // 
-            // button3
+            // BtnEntityClassFromDb
             // 
-            this.button3.Location = new System.Drawing.Point(250, 146);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(238, 21);
-            this.button3.TabIndex = 133;
-            this.button3.Text = "Test generic View";
-            this.button3.UseVisualStyleBackColor = true;
+            this.BtnEntityClassFromDb.Location = new System.Drawing.Point(250, 173);
+            this.BtnEntityClassFromDb.Name = "BtnEntityClassFromDb";
+            this.BtnEntityClassFromDb.Size = new System.Drawing.Size(238, 19);
+            this.BtnEntityClassFromDb.TabIndex = 94;
+            this.BtnEntityClassFromDb.Text = "Test EntityClassFromDb";
+            this.BtnEntityClassFromDb.UseVisualStyleBackColor = true;
+            this.BtnEntityClassFromDb.Click += new System.EventHandler(this.BtnTestEntityClassFromDb_Click);
             // 
-            // btnSQLLAMTest
+            // BtnGetByLambdaExpression
             // 
-            this.btnSQLLAMTest.Location = new System.Drawing.Point(250, 119);
-            this.btnSQLLAMTest.Name = "btnSQLLAMTest";
-            this.btnSQLLAMTest.Size = new System.Drawing.Size(238, 21);
-            this.btnSQLLAMTest.TabIndex = 132;
-            this.btnSQLLAMTest.Text = "SQLLam Test";
-            this.btnSQLLAMTest.UseVisualStyleBackColor = true;
+            this.BtnGetByLambdaExpression.Location = new System.Drawing.Point(88, 198);
+            this.BtnGetByLambdaExpression.Name = "BtnGetByLambdaExpression";
+            this.BtnGetByLambdaExpression.Size = new System.Drawing.Size(156, 21);
+            this.BtnGetByLambdaExpression.TabIndex = 139;
+            this.BtnGetByLambdaExpression.Text = "Get List By Lambda Expression";
+            this.BtnGetByLambdaExpression.UseVisualStyleBackColor = true;
+            this.BtnGetByLambdaExpression.Click += new System.EventHandler(this.BtnGetByLambdaExpression_Click);
+            // 
+            // BtnGetAll
+            // 
+            this.BtnGetAll.Location = new System.Drawing.Point(6, 198);
+            this.BtnGetAll.Name = "BtnGetAll";
+            this.BtnGetAll.Size = new System.Drawing.Size(76, 21);
+            this.BtnGetAll.TabIndex = 138;
+            this.BtnGetAll.Text = "Get All ";
+            this.BtnGetAll.UseVisualStyleBackColor = true;
+            this.BtnGetAll.Click += new System.EventHandler(this.BtnGetAll_Click);
+            // 
+            // BtnDeleteByLambdaExpression
+            // 
+            this.BtnDeleteByLambdaExpression.Location = new System.Drawing.Point(88, 171);
+            this.BtnDeleteByLambdaExpression.Name = "BtnDeleteByLambdaExpression";
+            this.BtnDeleteByLambdaExpression.Size = new System.Drawing.Size(156, 21);
+            this.BtnDeleteByLambdaExpression.TabIndex = 137;
+            this.BtnDeleteByLambdaExpression.Text = "Delete By Lambda Expression";
+            this.BtnDeleteByLambdaExpression.UseVisualStyleBackColor = true;
+            this.BtnDeleteByLambdaExpression.Click += new System.EventHandler(this.BtnDeleteByLambdaExpression_Click);
+            // 
+            // BtnCLearLog
+            // 
+            this.BtnCLearLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.BtnCLearLog.Location = new System.Drawing.Point(815, 10);
+            this.BtnCLearLog.Name = "BtnCLearLog";
+            this.BtnCLearLog.Size = new System.Drawing.Size(53, 20);
+            this.BtnCLearLog.TabIndex = 136;
+            this.BtnCLearLog.Text = "&Clear";
+            this.BtnCLearLog.UseVisualStyleBackColor = true;
+            this.BtnCLearLog.Click += new System.EventHandler(this.BtnCLearLog_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(568, 13);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(25, 13);
+            this.label3.TabIndex = 135;
+            this.label3.Text = "Log";
+            // 
+            // TxtLog
+            // 
+            this.TxtLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.TxtLog.Location = new System.Drawing.Point(571, 34);
+            this.TxtLog.Multiline = true;
+            this.TxtLog.Name = "TxtLog";
+            this.TxtLog.Size = new System.Drawing.Size(297, 237);
+            this.TxtLog.TabIndex = 134;
+            // 
+            // BtnTestGenericViewManager
+            // 
+            this.BtnTestGenericViewManager.Location = new System.Drawing.Point(250, 146);
+            this.BtnTestGenericViewManager.Name = "BtnTestGenericViewManager";
+            this.BtnTestGenericViewManager.Size = new System.Drawing.Size(238, 21);
+            this.BtnTestGenericViewManager.TabIndex = 133;
+            this.BtnTestGenericViewManager.Text = "Test generic View";
+            this.BtnTestGenericViewManager.UseVisualStyleBackColor = true;
+            // 
+            // BtnSqlLAMTest
+            // 
+            this.BtnSqlLAMTest.Location = new System.Drawing.Point(250, 119);
+            this.BtnSqlLAMTest.Name = "BtnSqlLAMTest";
+            this.BtnSqlLAMTest.Size = new System.Drawing.Size(238, 21);
+            this.BtnSqlLAMTest.TabIndex = 132;
+            this.BtnSqlLAMTest.Text = "SQLLam Test";
+            this.BtnSqlLAMTest.UseVisualStyleBackColor = true;
+            this.BtnSqlLAMTest.Click += new System.EventHandler(this.BtnSqlLAMTest_Click);
             // 
             // BtnLogger
             // 
@@ -215,7 +302,7 @@
             // 
             // BtnExecuteNonQueryWparam
             // 
-            this.BtnExecuteNonQueryWparam.Location = new System.Drawing.Point(113, 252);
+            this.BtnExecuteNonQueryWparam.Location = new System.Drawing.Point(113, 279);
             this.BtnExecuteNonQueryWparam.Name = "BtnExecuteNonQueryWparam";
             this.BtnExecuteNonQueryWparam.Size = new System.Drawing.Size(131, 21);
             this.BtnExecuteNonQueryWparam.TabIndex = 129;
@@ -224,27 +311,28 @@
             // 
             // BtnExecuteNonQuery
             // 
-            this.BtnExecuteNonQuery.Location = new System.Drawing.Point(6, 252);
+            this.BtnExecuteNonQuery.Location = new System.Drawing.Point(6, 279);
             this.BtnExecuteNonQuery.Name = "BtnExecuteNonQuery";
             this.BtnExecuteNonQuery.Size = new System.Drawing.Size(105, 21);
             this.BtnExecuteNonQuery.TabIndex = 128;
             this.BtnExecuteNonQuery.Text = "ExecuteNonQuery";
             this.BtnExecuteNonQuery.UseVisualStyleBackColor = true;
+            this.BtnExecuteNonQuery.Click += new System.EventHandler(this.BtnExecuteNonQuery_Click);
             // 
             // txtQuery
             // 
             this.txtQuery.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtQuery.Location = new System.Drawing.Point(6, 277);
+            this.txtQuery.Location = new System.Drawing.Point(6, 308);
             this.txtQuery.Multiline = true;
             this.txtQuery.Name = "txtQuery";
             this.txtQuery.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtQuery.Size = new System.Drawing.Size(615, 82);
+            this.txtQuery.Size = new System.Drawing.Size(862, 80);
             this.txtQuery.TabIndex = 127;
             // 
             // TxtPassport
             // 
-            this.TxtPassport.Location = new System.Drawing.Point(142, 224);
+            this.TxtPassport.Location = new System.Drawing.Point(142, 251);
             this.TxtPassport.Name = "TxtPassport";
             this.TxtPassport.Size = new System.Drawing.Size(102, 20);
             this.TxtPassport.TabIndex = 126;
@@ -252,16 +340,16 @@
             // 
             // BtnGetByPassport
             // 
-            this.BtnGetByPassport.Location = new System.Drawing.Point(6, 225);
+            this.BtnGetByPassport.Location = new System.Drawing.Point(6, 252);
             this.BtnGetByPassport.Name = "BtnGetByPassport";
             this.BtnGetByPassport.Size = new System.Drawing.Size(130, 21);
             this.BtnGetByPassport.TabIndex = 125;
-            this.BtnGetByPassport.Text = "Get By DNI ";
+            this.BtnGetByPassport.Text = "Get By Passport";
             this.BtnGetByPassport.UseVisualStyleBackColor = true;
             // 
             // TxtId
             // 
-            this.TxtId.Location = new System.Drawing.Point(196, 199);
+            this.TxtId.Location = new System.Drawing.Point(196, 226);
             this.TxtId.Name = "TxtId";
             this.TxtId.Size = new System.Drawing.Size(48, 20);
             this.TxtId.TabIndex = 124;
@@ -269,20 +357,20 @@
             // 
             // BtnGetByID
             // 
-            this.BtnGetByID.Location = new System.Drawing.Point(6, 198);
+            this.BtnGetByID.Location = new System.Drawing.Point(6, 225);
             this.BtnGetByID.Name = "BtnGetByID";
             this.BtnGetByID.Size = new System.Drawing.Size(184, 21);
             this.BtnGetByID.TabIndex = 123;
             this.BtnGetByID.Text = "Get By Id";
             this.BtnGetByID.UseVisualStyleBackColor = true;
             // 
-            // txtDELId
+            // TxtDelId
             // 
-            this.txtDELId.Location = new System.Drawing.Point(196, 145);
-            this.txtDELId.Name = "txtDELId";
-            this.txtDELId.Size = new System.Drawing.Size(48, 20);
-            this.txtDELId.TabIndex = 122;
-            this.txtDELId.Text = "0";
+            this.TxtDelId.Location = new System.Drawing.Point(196, 145);
+            this.TxtDelId.Name = "TxtDelId";
+            this.TxtDelId.Size = new System.Drawing.Size(48, 20);
+            this.TxtDelId.TabIndex = 122;
+            this.TxtDelId.Text = "0";
             // 
             // DeleteByID
             // 
@@ -292,6 +380,7 @@
             this.DeleteByID.TabIndex = 121;
             this.DeleteByID.Text = "Delete By Id";
             this.DeleteByID.UseVisualStyleBackColor = true;
+            this.DeleteByID.Click += new System.EventHandler(this.DeleteByID_Click);
             // 
             // BtnFind5
             // 
@@ -301,6 +390,7 @@
             this.BtnFind5.TabIndex = 120;
             this.BtnFind5.Text = "Find 5 ";
             this.BtnFind5.UseVisualStyleBackColor = true;
+            this.BtnFind5.Click += new System.EventHandler(this.BtnFind5_Click);
             // 
             // BtnUpdateRange
             // 
@@ -310,15 +400,17 @@
             this.BtnUpdateRange.TabIndex = 119;
             this.BtnUpdateRange.Text = "UpdateRange ";
             this.BtnUpdateRange.UseVisualStyleBackColor = true;
+            this.BtnUpdateRange.Click += new System.EventHandler(this.BtnUpdateRange_Click);
             // 
             // BtnDeleteAll
             // 
             this.BtnDeleteAll.Location = new System.Drawing.Point(6, 171);
             this.BtnDeleteAll.Name = "BtnDeleteAll";
-            this.BtnDeleteAll.Size = new System.Drawing.Size(238, 21);
+            this.BtnDeleteAll.Size = new System.Drawing.Size(76, 21);
             this.BtnDeleteAll.TabIndex = 118;
             this.BtnDeleteAll.Text = "Delete All ";
             this.BtnDeleteAll.UseVisualStyleBackColor = true;
+            this.BtnDeleteAll.Click += new System.EventHandler(this.BtnDeleteAll_Click);
             // 
             // BtnAddRange
             // 
@@ -336,9 +428,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(6, 365);
+            this.dataGridView1.Location = new System.Drawing.Point(6, 394);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(615, 37);
+            this.dataGridView1.Size = new System.Drawing.Size(862, 35);
             this.dataGridView1.TabIndex = 116;
             // 
             // BtnSimpleQuery
@@ -376,6 +468,7 @@
             this.BtnUpdate.TabIndex = 112;
             this.BtnUpdate.Text = "Update";
             this.BtnUpdate.UseVisualStyleBackColor = true;
+            this.BtnUpdate.Click += new System.EventHandler(this.BtnUpdate_Click);
             // 
             // BtnAdd
             // 
@@ -387,14 +480,24 @@
             this.BtnAdd.UseVisualStyleBackColor = true;
             this.BtnAdd.Click += new System.EventHandler(this.BtnAdd_Click);
             // 
-            // FrmTestDataV2
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(295, 226);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(50, 26);
+            this.button1.TabIndex = 140;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // FrmDemoSysworkData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(647, 530);
+            this.ClientSize = new System.Drawing.Size(894, 557);
             this.Controls.Add(this.GrpDetails);
             this.Controls.Add(this.GrpParameters);
-            this.Name = "FrmTestDataV2";
+            this.Name = "FrmDemoSysworkData";
             this.Text = "Test SysWork.Data";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmTestDataV2_FormClosing);
@@ -418,8 +521,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox GrpDetails;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button btnSQLLAMTest;
+        private System.Windows.Forms.Button BtnTestGenericViewManager;
+        private System.Windows.Forms.Button BtnSqlLAMTest;
         private System.Windows.Forms.Button BtnLogger;
         private System.Windows.Forms.Button BtnExecuteNonQueryWparam;
         private System.Windows.Forms.Button BtnExecuteNonQuery;
@@ -428,7 +531,7 @@
         private System.Windows.Forms.Button BtnGetByPassport;
         private System.Windows.Forms.TextBox TxtId;
         private System.Windows.Forms.Button BtnGetByID;
-        private System.Windows.Forms.TextBox txtDELId;
+        private System.Windows.Forms.TextBox TxtDelId;
         private System.Windows.Forms.Button DeleteByID;
         private System.Windows.Forms.Button BtnFind5;
         private System.Windows.Forms.Button BtnUpdateRange;
@@ -440,6 +543,14 @@
         private System.Windows.Forms.Button BtnExistsTable;
         private System.Windows.Forms.Button BtnUpdate;
         private System.Windows.Forms.Button BtnAdd;
+        private System.Windows.Forms.Button BtnCLearLog;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox TxtLog;
+        private System.Windows.Forms.Button BtnDeleteByLambdaExpression;
+        private System.Windows.Forms.Button BtnGetByLambdaExpression;
+        private System.Windows.Forms.Button BtnGetAll;
+        private System.Windows.Forms.Button BtnEntityClassFromDb;
+        private System.Windows.Forms.Button button1;
     }
 }
 

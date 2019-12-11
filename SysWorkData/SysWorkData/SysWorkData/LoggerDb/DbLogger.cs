@@ -278,7 +278,7 @@ namespace SysWork.Data.LoggerDb
             logDbScript.AppendLine("   `class` NVARCHAR(200) NULL,");
             logDbScript.AppendLine("   `sqlstatement` MEDIUMTEXT NULL,");
             logDbScript.AppendLine("   `parameters` MEDIUMTEXT NULL,");
-            logDbScript.AppendLine("   `excepcion` MEDIUMTEXT NULL,");
+            logDbScript.AppendLine("   `exception` MEDIUMTEXT NULL,");
             logDbScript.AppendLine("   `result` MEDIUMTEXT NULL,");
             logDbScript.AppendLine("   `dbUser` NVARCHAR(200) NULL,");
             logDbScript.AppendLine("   `osUser` NVARCHAR(200) NULL,");
@@ -601,6 +601,7 @@ namespace SysWork.Data.LoggerDb
             }
             catch (Exception e)
             {
+                Console.WriteLine(e.Message);
                 return false;
             }
             return true;

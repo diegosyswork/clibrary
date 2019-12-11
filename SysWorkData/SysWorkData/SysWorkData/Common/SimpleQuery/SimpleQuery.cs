@@ -78,11 +78,10 @@ namespace SysWork.Data.Common.SimpleQuery
                 }
             }
         }
-
         /// <summary>
-        /// gets an elements at the position.
+        /// Gets an element at the specify index.
         /// </summary>
-        /// <typeparam name="dynamic">The type of the ynamic.</typeparam>
+        /// <typeparam name="dynamic">The type of the Dynamic.</typeparam>
         /// <param name="items">The items.</param>
         /// <param name="index">The index.</param>
         /// <returns></returns>
@@ -94,6 +93,8 @@ namespace SysWork.Data.Common.SimpleQuery
                 return iter.Current;
             }
         }
+        
+        /// TODO: Crear Ejemplos del uso de los metodos de esta clase.
 
     }
 }

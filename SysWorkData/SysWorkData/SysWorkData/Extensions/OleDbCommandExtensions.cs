@@ -21,8 +21,15 @@ using System.Text.RegularExpressions;
 */
 namespace SysWork.Data.Extensions.OleDbCommandExtensions
 {
+    /// <summary>
+    /// Extensions for OleDbCommand's
+    /// </summary>
     public static class OleDbCommandExtensions
     {
+        /// <summary>
+        /// Converts the named parameters to positional parameters.
+        /// </summary>
+        /// <param name="command">The command.</param>
         public static void ConvertNamedParametersToPositionalParameters(this OleDbCommand command)
         {
             //1. Find all occurrences of parameter references in the SQL statement (such as @MyParameter).

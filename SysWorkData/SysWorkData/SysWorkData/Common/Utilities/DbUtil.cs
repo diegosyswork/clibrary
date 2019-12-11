@@ -18,7 +18,7 @@ namespace SysWork.Data.Common.Utilities
     /// Database Utilities
     /// </summary>
     /// <remarks>
-    /// All methods are "multi" Database Engine
+    /// Database Utilities. All methods are "multi" Database Engine
     /// </remarks>
     public static class DbUtil
     {
@@ -248,7 +248,6 @@ namespace SysWork.Data.Common.Utilities
         {
             return ConnectionSuccess(EDataBaseEngine.MSSqlServer, connectionString, out string errMessage);
         }
-
 
         /// <summary>
         /// Try to open an DbConnection with the ConnectionString provided. The DatabaseEngine is MSSqlServer.

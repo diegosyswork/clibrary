@@ -1,32 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using SysWork.Data.Common.Utilities;
 
 namespace SysWork.Data.Common.FormsGetParam
 {
+    /// <summary>
+    /// Form to Get Data Parameters for SQLite
+    /// </summary>
+    /// <seealso cref="System.Windows.Forms.Form" />
     public partial class FrmGetParamSQLite : Form
     {
+        /// <summary>
+        /// Gets or sets the connection string.
+        /// </summary>
+        /// <value>
+        /// The connection string.
+        /// </value>
         public string ConnectionString { get; set; }
-        public string MensajeError { get; set; }
+        /// <summary>
+        /// Gets or sets the error message.
+        /// </summary>
+        /// <value>
+        /// The error message.
+        /// </value>
+        public string ErrMessage { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FrmGetParamSQLite"/> class.
+        /// </summary>
         public FrmGetParamSQLite()
         {
             InitializeComponent();
         }
+
         private void FrmGetParamSQLite_Load(object sender, EventArgs e)
         {
             txtConnectionString.Text = ConnectionString;
 
-            txtErrMessage.Text = MensajeError;
+            txtErrMessage.Text = ErrMessage;
             txtErrMessage.Refresh();
-            if (!string.IsNullOrEmpty(MensajeError))
+            if (!string.IsNullOrEmpty(ErrMessage))
             {
                 this.Height = this.Height + txtErrMessage.Height;
             }
@@ -36,7 +49,7 @@ namespace SysWork.Data.Common.FormsGetParam
             }
         }
 
-        private void btnAceptar_Click(object sender, EventArgs e)
+        private void BtnAceptar_Click(object sender, EventArgs e)
         {
 
             if (string.IsNullOrEmpty(txtConnectionString.Text))
@@ -56,7 +69,7 @@ namespace SysWork.Data.Common.FormsGetParam
             this.Close();
         }
 
-        private void btnCancelar_Click(object sender, EventArgs e)
+        private void BtnCancelar_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             this.Close();

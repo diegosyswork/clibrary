@@ -4,9 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
 using SysWork.Data.Common.LambdaSqlBuilder.Builder;
 using SysWork.Data.GenericRepostory.Attributes;
 

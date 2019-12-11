@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\SysWork.Data.xml</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Common\Utilities\DbExecutor.cs" />
     <Compile Include="Common\DbConnector\AbstractDbConnector.cs" />
@@ -93,8 +96,8 @@
     <Compile Include="GenericRepository\Attributes\DbColumnAttribute.cs" />
     <Compile Include="GenericRepository\Attributes\DbTableAttribute.cs" />
     <Compile Include="GenericRepository\Attributes\DbViewAttribute.cs" />
-    <Compile Include="GenericRepository\CodeWriter\CodeWriterUtil.cs" />
-    <Compile Include="GenericRepository\CodeWriter\DaoClassFromDb.cs" />
+    <Compile Include="GenericRepository\CodeWriter\CodeWriterHelper.cs" />
+    <Compile Include="GenericRepository\CodeWriter\RepositoryClassFromDb.cs" />
     <Compile Include="GenericRepository\CodeWriter\EntityClassFromDb.cs" />
     <Compile Include="GenericRepository\Core.cs" />
     <Compile Include="GenericRepositoryManager\BaseGenericRepositoryManager.cs" />
@@ -155,6 +158,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Resources\675171-data_database_paradox_sqlite_db-512.png" />
   </ItemGroup>

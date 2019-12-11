@@ -59,7 +59,7 @@
             this.btnOk.TabIndex = 21;
             this.btnOk.Text = "&Aceptar";
             this.btnOk.UseVisualStyleBackColor = true;
-            this.btnOk.Click += new System.EventHandler(this.btnAceptar_Click);
+            this.btnOk.Click += new System.EventHandler(this.BtnAceptar_Click);
             // 
             // btnCancel
             // 
@@ -71,7 +71,7 @@
             this.btnCancel.TabIndex = 20;
             this.btnCancel.Text = "&Cancelar";
             this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.btnCancelar_Click);
+            this.btnCancel.Click += new System.EventHandler(this.BtnCancelar_Click);
             // 
             // pictureBox1
             // 

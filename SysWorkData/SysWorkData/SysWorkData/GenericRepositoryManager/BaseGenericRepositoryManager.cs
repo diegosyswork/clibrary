@@ -44,7 +44,6 @@ namespace SysWork.Data.GenericRepostoryManager
     ///        PersonRepository = new PersonRepository(ConnectionString, DataBaseEngine);
     ///    }
     ///}
-
     /// ]]>
     /// </example>
     public abstract class BaseGenericRepositoryManager<T> where T: class, IRepositoryManager

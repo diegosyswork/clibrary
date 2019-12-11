@@ -5,12 +5,12 @@ using System.Data;
 namespace SysWork.Data.Common.Dictionarys
 {
     /// <summary>
-    /// 
+    /// Dictionary of equivalences between database data types and DbType
     /// </summary>
     public static class DbTypeDictionary
     {
         /// <summary>
-        /// The data base type to database type enum
+        /// Dictionary of equivalences between database data types and DbType
         /// </summary>
         public static readonly Dictionary<string, DbType> DbColumnTypeToDbTypeEnum = new Dictionary<string, DbType>(StringComparer.OrdinalIgnoreCase)
         {

@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using SysWork.Data.Common.Utilities;
 
 namespace SysWork.Data.Common.FormsGetParam
 {
     /// <summary>
-    /// 
+    /// Form to Get Data Parameters for OleDb.
     /// </summary>
     /// <seealso cref="System.Windows.Forms.Form" />
     public partial class FrmGetParamOleDb : Form
@@ -57,7 +50,7 @@ namespace SysWork.Data.Common.FormsGetParam
             }
         }
 
-        private void btnAceptar_Click(object sender, EventArgs e)
+        private void BtnAceptar_Click(object sender, EventArgs e)
         {
 
             if (string.IsNullOrEmpty( txtConnectionString.Text))
@@ -78,7 +71,7 @@ namespace SysWork.Data.Common.FormsGetParam
             this.Close();
         }
 
-        private void btnCancelar_Click(object sender, EventArgs e)
+        private void BtnCancelar_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             this.Close();

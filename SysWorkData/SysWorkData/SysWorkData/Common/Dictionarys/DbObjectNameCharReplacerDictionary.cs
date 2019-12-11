@@ -3,12 +3,12 @@
 namespace SysWork.Data.Common.Dictionarys
 {
     /// <summary>
-    /// 
+    /// Dictionary to replace special characters in database object names.
     /// </summary>
     public static class DbObjectNameCharReplacerDictionary
     {
         /// <summary>
-        /// The character equivalence/
+        /// Character equivalence.
         /// </summary>
         public static readonly Dictionary<string, string> CharacterEquivalence = new Dictionary<string, string>()
         {

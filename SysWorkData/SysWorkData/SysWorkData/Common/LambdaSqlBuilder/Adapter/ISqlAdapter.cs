@@ -1,8 +1,4 @@
 ﻿/* License: http://www.apache.org/licenses/LICENSE-2.0 */
-
-using System;
-using System.Collections.Generic;
-
 namespace SysWork.Data.Common.LambdaSqlBuilder.Adapter
 {
     /// <summary>

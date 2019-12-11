@@ -3,12 +3,16 @@
 namespace SysWork.Data.Common.Dictionarys
 {
     /// <summary>
-    /// 
+    /// Character dictionary with which the names of database objects 
+    /// should start and end, according to the DatabaseEngine. 
+    /// For example "[" "], for MSSqlserver
     /// </summary>
     public static class DbObjectNameStartsEnders
     {
         /// <summary>
-        /// The start end characters/
+        /// Character dictionary with which the names of database objects 
+        /// should start and end, according to the DatabaseEngine. 
+        /// For example "[" "], for MSSqlserver
         /// </summary>
         public static readonly Dictionary<EDataBaseEngine, Dictionary<string, string>> StartEndCharacters = new Dictionary<EDataBaseEngine, Dictionary<string, string>>()
         {

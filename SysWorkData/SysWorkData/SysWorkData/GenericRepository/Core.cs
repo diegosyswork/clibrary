@@ -30,7 +30,7 @@ namespace SysWork.Data.GenericRepostory
     /// entities represented by classes (classes must implement DbTableAttribute and DbColumnAttribute attributes). 
     /// Implementing this class allows: 
     /// Add, AddRange, Update, UpdateRange, GetById, GetByLambdaExpressionFilter, GetAll, GetListByLambdaExpressionFilter, 
-    /// DeleteById, Find .
+    /// DeleteByLambdaExpressionFilter, DeleteById, Find .
     /// <seealso cref="SysWork.Data.GenericRepostory.Attributes"/>
     /// </summary>
     /// <remarks>
@@ -171,9 +171,9 @@ namespace SysWork.Data.GenericRepostory
         ///     public string Passport { get; set; }
         ///}
         ///
-        ///public class DaoPerson: BaseGenericRepository<Person>
+        ///public class PersonRepository: BaseGenericRepository<Person>
         ///{
-        ///     public DaoPerson(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
         ///     
         ///     }
@@ -191,13 +191,13 @@ namespace SysWork.Data.GenericRepostory
         ///         // MSSqlServer connectionString.
         ///         var myConnectionString = "MyConnectionString";
         ///      
-        ///         var DaoPerson = new DaoPerson<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
         ///         var p = new Person();
         ///         p.LastName = "Martinez";
         ///         p.FirstName = "Diego";
         ///         p.Passport = "AR00127296";
         ///
-        ///         long id = DaoPerson.Add(p,out string errMessage);
+        ///         long id = PersonRepository.Add(p,out string errMessage);
         ///         if (id==-1)
         ///         {
         ///             Console.WriteLine ($"Ocurrs this error:{errMessage}");
@@ -221,9 +221,9 @@ namespace SysWork.Data.GenericRepostory
             {
                 identity = Add(entity);
             }
-            catch (GenericRepositoryException daoModelException)
+            catch (GenericRepositoryException genericRepositoryException)
             {
-                errMessage = daoModelException.OriginalException.Message;
+                errMessage = genericRepositoryException.OriginalException.Message;
                 identity = -1;
             }
             catch (Exception exception)
@@ -266,9 +266,9 @@ namespace SysWork.Data.GenericRepostory
         ///     public string Passport { get; set; }
         ///}
         ///
-        ///public class DaoPerson: BaseGenericRepository<Person>
+        ///public class PersonRepository: BaseGenericRepository<Person>
         ///{
-        ///     public DaoPerson(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
         ///     
         ///     }
@@ -286,7 +286,7 @@ namespace SysWork.Data.GenericRepostory
         ///         // MSSqlServer connectionString.
         ///         var myConnectionString = "MyConnectionString";
         ///      
-        ///         var DaoPerson = new DaoPerson<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
         ///         var p = new Person();
         ///         p.LastName = "Martinez";
         ///         p.FirstName = "Diego";
@@ -294,7 +294,7 @@ namespace SysWork.Data.GenericRepostory
         ///         
         ///         try
         ///         {
-        ///             long id = DaoPerson.Add(p);
+        ///             long id = PersonRepository.Add(p);
         ///             Console.WriteLine ($"inserted id is: {id}");
         ///         }
         ///         catch(GenericRepositoryExpception gre)
@@ -345,9 +345,9 @@ namespace SysWork.Data.GenericRepostory
         ///     public string Passport { get; set; }
         ///}
         ///
-        ///public class DaoPerson: BaseGenericRepository<Person>
+        ///public class PersonRepository: BaseGenericRepository<Person>
         ///{
-        ///     public DaoPerson(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
         ///     
         ///     }
@@ -365,19 +365,19 @@ namespace SysWork.Data.GenericRepostory
         ///         // MSSqlServer connectionString.
         ///         var myConnectionString = "MyConnectionString";
         ///      
-        ///         var DaoPerson = new DaoPerson<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
         ///         var p = new Person();
         ///         p.LastName = "Martinez";
         ///         p.FirstName = "Diego";
         ///         p.Passport = "AR00127296";
         ///         
         ///         // Get new Connection.
-        ///         var extConnection = DaoPerson.GetDbConnection();
+        ///         var extConnection = PersonRepository.GetDbConnection();
         ///         extConnection.Open();
         ///         
         ///         try
         ///         {
-        ///             long id = DaoPerson.Add(p,extConnection);
+        ///             long id = PersonRepository.Add(p,extConnection);
         ///             Console.WriteLine ($"inserted id is: {id}");
         ///         }
         ///         catch(GenericRepositoryExpception gre)
@@ -428,9 +428,9 @@ namespace SysWork.Data.GenericRepostory
         ///     public string Passport { get; set; }
         ///}
         ///
-        ///public class DaoPerson: BaseGenericRepository<Person>
+        ///public class PersonRepository: BaseGenericRepository<Person>
         ///{
-        ///     public DaoPerson(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
         ///     
         ///     }
@@ -448,20 +448,20 @@ namespace SysWork.Data.GenericRepostory
         ///         // MSSqlServer connectionString.
         ///         var myConnectionString = "MyConnectionString";
         ///      
-        ///         var DaoPerson = new DaoPerson<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
         ///         var p = new Person();
         ///         p.LastName = "Martinez";
         ///         p.FirstName = "Diego";
         ///         p.Passport = "AR00127296";
         ///         
         ///         // Get new Connection.
-        ///         var extConnection = DaoPerson.GetDbConnection();
+        ///         var extConnection = PersonRepository.GetDbConnection();
         ///         extConnection.Open();
         ///         
         ///         var extTransaction = extConnection.BeginTransaction();
         ///         try
         ///         {
-        ///             long id = DaoPerson.Add(p,extTransaction);
+        ///             long id = PersonRepository.Add(p,extTransaction);
         ///             extTransaction.Commit();
         ///             Console.WriteLine ($"inserted id is: {id}");
         ///         }
@@ -515,9 +515,9 @@ namespace SysWork.Data.GenericRepostory
         ///     public string Passport { get; set; }
         ///}
         ///
-        ///public class DaoPerson: BaseGenericRepository<Person>
+        ///public class PersonRepository: BaseGenericRepository<Person>
         ///{
-        ///     public DaoPerson(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
         ///     
         ///     }
@@ -535,20 +535,20 @@ namespace SysWork.Data.GenericRepostory
         ///         // MSSqlServer connectionString.
         ///         var myConnectionString = "MyConnectionString";
         ///      
-        ///         var DaoPerson = new DaoPerson<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
         ///         var p = new Person();
         ///         p.LastName = "Martinez";
         ///         p.FirstName = "Diego";
         ///         p.Passport = "AR00127296";
         ///         
         ///         // Get new Connection.
-        ///         var extConnection = DaoPerson.GetDbConnection();
+        ///         var extConnection = PersonRepository.GetDbConnection();
         ///         extConnection.Open();
         ///         
         ///         var extTransaction = extConnection.BeginTransaction();
         ///         try
         ///         {
-        ///             long id = DaoPerson.Add(p,extConnection,extTransaction);
+        ///             long id = PersonRepository.Add(p,extConnection,extTransaction);
         ///             extTransaction.Commit();
         ///             Console.WriteLine ($"inserted id is: {id}");
         ///         }
@@ -656,6 +656,7 @@ namespace SysWork.Data.GenericRepostory
             return identity;
         }
 
+
         #region DOCUMENTATION AddRange(IList<TEntity> entities, out string errMessage)
         /// <summary>
         /// Add a list of entities to the database. No throw exceptions.
@@ -686,9 +687,9 @@ namespace SysWork.Data.GenericRepostory
         ///     public string Passport { get; set; }
         ///}
         ///
-        ///public class DaoPerson: BaseGenericRepository<Person>
+        ///public class PersonRepository: BaseGenericRepository<Person>
         ///{
-        ///     public DaoPerson(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
         ///     
         ///     }
@@ -706,7 +707,7 @@ namespace SysWork.Data.GenericRepostory
         ///         // MSSqlServer connectionString.
         ///         var myConnectionString = "MyConnectionString";
         ///      
-        ///         var DaoPerson = new DaoPerson<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
         ///         
         ///         var listEntities = new List<Person>();
         ///        
@@ -714,7 +715,7 @@ namespace SysWork.Data.GenericRepostory
         ///         listEntities.Add(new Person { LastName = "Perez", FirstName = "Juan", Passport = "AR00012224" });
         ///         listEntities.Add(new Person { LastName = "Fulanito", FirstName = "Cosme", Passport = "AR99999987" });
         ///          
-        ///          var result = DaoPerson.AddRange(listEntities, out string errMessage);
+        ///          var result = PersonRepository.AddRange(listEntities, out string errMessage);
         ///          if (result)
         ///          {
         ///              Console.WriteLine ("List inserted succefully");
@@ -731,16 +732,94 @@ namespace SysWork.Data.GenericRepostory
         #endregion
         public bool AddRange(IList<TEntity> entities, out string errMessage)
         {
+            return AddRange(entities,out errMessage,out IEnumerable<object> listIds);
+        }
+        #region DOCUMENTATION AddRange(IList<TEntity> entities, out string errMessage, out IEnumerable<object> listIds)
+        /// <summary>
+        /// Add a list of entities to the database. No throw exceptions. Return an IEnumerable with added ids.
+        /// </summary>
+        /// <remarks>
+        /// Add a IList of entities in the database. 
+        /// If successful, it returns <c>true</c>.
+        /// In case of Exception trows new GenericRepositoryException.
+        /// </remarks>
+        /// <param name="entities">IList of entities.</param>
+        /// <param name="errMessage">In case of exception the error message</param>
+        /// <param name="listIds"></param>
+        /// <returns>
+        /// Returns <c>true</c>, if all entities were inserted correctly, else return <c>false</c>. 
+        /// </returns>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseGenericRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         var listEntities = new List<Person>();
+        ///        
+        ///         listEntities.Add(new Person { LastName = "Martinez", FirstName = "Diego", Passport = "AR00127296" });
+        ///         listEntities.Add(new Person { LastName = "Perez", FirstName = "Juan", Passport = "AR00012224" });
+        ///         listEntities.Add(new Person { LastName = "Fulanito", FirstName = "Cosme", Passport = "AR99999987" });
+        ///          
+        ///          var result = PersonRepository.AddRange(listEntities, out string errMessage,out IEnumerable<object> listIds);
+        ///          if (result)
+        ///          {
+        ///              Console.WriteLine ("List inserted succefully");
+        ///          }
+        ///          else
+        ///          {
+        ///              Console.WriteLine ($"Error: {errMessage} ");
+        ///          }
+        ///     }
+        ///}
+        /// ]]>
+        /// </code>
+        /// </example>
+        #endregion
+        public bool AddRange(IList<TEntity> entities, out string errMessage, out IEnumerable<object> listIds)
+        {
             errMessage = "";
             bool result = false;
-
+            listIds = new List<object>();
             try
             {
-                result = AddRange(entities);
+                result = AddRange(entities, out listIds);
             }
-            catch (GenericRepositoryException daoModelException)
+            catch (GenericRepositoryException genericRepositoryException)
             {
-                errMessage = daoModelException.OriginalException.Message;
+                errMessage = genericRepositoryException.OriginalException.Message;
                 result = false;
             }
             catch (Exception exception)
@@ -783,9 +862,9 @@ namespace SysWork.Data.GenericRepostory
         ///     public string Passport { get; set; }
         ///}
         ///
-        ///public class DaoPerson: BaseGenericRepository<Person>
+        ///public class PersonRepository: BaseGenericRepository<Person>
         ///{
-        ///     public DaoPerson(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
         ///     
         ///     }
@@ -803,7 +882,7 @@ namespace SysWork.Data.GenericRepostory
         ///         // MSSqlServer connectionString.
         ///         var myConnectionString = "MyConnectionString";
         ///      
-        ///         var DaoPerson = new DaoPerson<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
         ///         
         ///         var listEntities = new List<Person>();
         ///        
@@ -813,7 +892,7 @@ namespace SysWork.Data.GenericRepostory
         ///          
         ///          try
         ///          {
-        ///              DaoPerson.AddRange(listEntities);
+        ///              PersonRepository.AddRange(listEntities);
         ///              Console.WriteLine ("List inserted succefully");
         ///          }
         ///          catch(GenericRepositoryExpception gre)
@@ -828,7 +907,89 @@ namespace SysWork.Data.GenericRepostory
         #endregion
         public bool AddRange(IList<TEntity> entities)
         {
-            return AddRange(entities, null,null);
+            return AddRange(entities, null, null,out long recordsAffected,out IEnumerable<object> listIds);
+        }
+
+        #region DOCUMENTATION AddRange(IList<TEntity> entities, out IEnumerable<object> ListIds)
+        /// <summary>
+        /// Add a list of entities to the database and return the ID's inserted.
+        /// </summary>
+        /// <remarks>
+        /// Add a IList of entities in the database. 
+        /// If successful, it returns <c>true</c> and a IEnumerable with the inserted ids .
+        /// In case of Exception trows new GenericRepositoryException.
+        /// </remarks>
+        /// <param name="entities">IList of entities.</param>
+        /// <param name="listIds">Out Return a IEnumerable with the ids added.</param>
+        /// <exception cref="GenericRepositoryException">
+        /// </exception>
+        /// <returns>
+        /// Returns <c>true</c>, if all entities were inserted correctly, else return <c>false</c>. 
+        /// </returns>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseGenericRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         var listEntities = new List<Person>();
+        ///        
+        ///         listEntities.Add(new Person { LastName = "Martinez", FirstName = "Diego", Passport = "AR00127296" });
+        ///         listEntities.Add(new Person { LastName = "Perez", FirstName = "Juan", Passport = "AR00012224" });
+        ///         listEntities.Add(new Person { LastName = "Fulanito", FirstName = "Cosme", Passport = "AR99999987" });
+        ///          
+        ///          try
+        ///          {
+        ///              
+        ///              PersonRepository.AddRange(listEntities, out IEnumerable<object> listIds);
+        ///              
+        ///              Console.WriteLine ("List inserted succefully");
+        ///          }
+        ///          catch(GenericRepositoryExpception gre)
+        ///          {
+        ///              Console.WriteLine ("Error ");
+        ///          }
+        ///     }
+        ///}
+        /// ]]>
+        /// </code>
+        /// </example>
+        #endregion
+        public bool AddRange(IList<TEntity> entities, out IEnumerable<object> listIds)
+        {
+            return AddRange(entities, null, null,out long recordsAffected,out listIds);
         }
 
         #region DOCUMENTATION AddRange(IList<TEntity> entities, IDbConnection paramDbConnection)
@@ -863,9 +1024,9 @@ namespace SysWork.Data.GenericRepostory
         ///     public string Passport { get; set; }
         ///}
         ///
-        ///public class DaoPerson: BaseGenericRepository<Person>
+        ///public class PersonRepository: BaseGenericRepository<Person>
         ///{
-        ///     public DaoPerson(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
         ///     
         ///     }
@@ -883,7 +1044,7 @@ namespace SysWork.Data.GenericRepostory
         ///         // MSSqlServer connectionString.
         ///         var myConnectionString = "MyConnectionString";
         ///      
-        ///         var DaoPerson = new DaoPerson<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
         ///         
         ///         var listEntities = new List<Person>();
         ///        
@@ -892,12 +1053,12 @@ namespace SysWork.Data.GenericRepostory
         ///         listEntities.Add(new Person { LastName = "Fulanito", FirstName = "Cosme", Passport = "AR99999987" });
         ///         
         ///          // Get new Connection.
-        ///          var extConnection = DaoPerson.GetDbConnection();
+        ///          var extConnection = PersonRepository.GetDbConnection();
         ///          extConnection.Open();
         ///          
         ///          try
         ///          {
-        ///              DaoPerson.AddRange(listEntities,extConnection);
+        ///              PersonRepository.AddRange(listEntities,extConnection);
         ///              extTransaction.Commit();
         ///              Console.WriteLine ("List inserted succefully");
         ///          }
@@ -913,7 +1074,92 @@ namespace SysWork.Data.GenericRepostory
         #endregion
         public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection)
         {
-            return AddRange(entities, paramDbConnection, null);
+            return AddRange(entities, paramDbConnection, null,out long recordsAffected,out IEnumerable<object> listIds);
+        }
+
+        #region DOCUMENTATION AddRange(IList<TEntity> entities, IDbConnection paramDbConnection,out IEnumerable<object> listIds)
+        /// <summary>
+        /// Add a list of entities to the database using a connection provided, and return an IEnumerable with the ids addeds.
+        /// </summary>
+        /// <remarks>
+        /// Add a IList of entities in the database. 
+        /// If successful, it returns <c>true</c>.
+        /// In case of Exception trows new GenericRepositoryException.
+        /// </remarks>
+        /// <param name="entities">IList of entities.</param>
+        /// <param name="paramDbConnection">The database connection.</param>
+        /// <param name="listIds">OUT returns a IEnumerable with de Ids addeds</param>
+        /// <exception cref="GenericRepositoryException">
+        /// </exception>
+        /// <returns>
+        /// Returns <c>true</c>, if all entities were inserted correctly, else return <c>false</c>. 
+        /// </returns>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseGenericRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         var listEntities = new List<Person>();
+        ///        
+        ///         listEntities.Add(new Person { LastName = "Martinez", FirstName = "Diego", Passport = "AR00127296" });
+        ///         listEntities.Add(new Person { LastName = "Perez", FirstName = "Juan", Passport = "AR00012224" });
+        ///         listEntities.Add(new Person { LastName = "Fulanito", FirstName = "Cosme", Passport = "AR99999987" });
+        ///         
+        ///          // Get new Connection.
+        ///          var extConnection = PersonRepository.GetDbConnection();
+        ///          extConnection.Open();
+        ///          
+        ///          try
+        ///          {
+        ///              PersonRepository.AddRange(listEntities,extConnection,out IEnumerable<object> listIds);
+        ///              Console.WriteLine ("List inserted succefully");
+        ///          }
+        ///          catch(GenericRepositoryExpception gre)
+        ///          {
+        ///              Console.WriteLine ("Error ");
+        ///          }
+        ///     }
+        ///}
+        /// ]]>
+        /// </code>
+        /// </example>
+        #endregion
+        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection,out IEnumerable<object> listIds)
+        {
+            return AddRange(entities, paramDbConnection, null,out long recordsAffected,out listIds);
         }
 
         #region DOCUMENTATION AddRange(IList<TEntity> entities,IDbTransaction paramDbTransaction)
@@ -948,9 +1194,9 @@ namespace SysWork.Data.GenericRepostory
         ///     public string Passport { get; set; }
         ///}
         ///
-        ///public class DaoPerson: BaseGenericRepository<Person>
+        ///public class PersonRepository: BaseGenericRepository<Person>
         ///{
-        ///     public DaoPerson(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
         ///     
         ///     }
@@ -968,7 +1214,7 @@ namespace SysWork.Data.GenericRepostory
         ///         // MSSqlServer connectionString.
         ///         var myConnectionString = "MyConnectionString";
         ///      
-        ///         var DaoPerson = new DaoPerson<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
         ///         
         ///         var listEntities = new List<Person>();
         ///        
@@ -977,14 +1223,14 @@ namespace SysWork.Data.GenericRepostory
         ///         listEntities.Add(new Person { LastName = "Fulanito", FirstName = "Cosme", Passport = "AR99999987" });
         ///         
         ///          // Get new Connection.
-        ///          var extConnection = DaoPerson.GetDbConnection();
+        ///          var extConnection = PersonRepository.GetDbConnection();
         ///          extConnection.Open();
         ///         
         ///          var extTransaction = extConnection.BeginTransaction();
         ///          
         ///          try
         ///          {
-        ///              DaoPerson.AddRange(listEntities,extTransaction);
+        ///              PersonRepository.AddRange(listEntities,extTransaction);
         ///              extTransaction.Commit();
         ///              Console.WriteLine ("List inserted succefully");
         ///          }
@@ -1001,7 +1247,95 @@ namespace SysWork.Data.GenericRepostory
         #endregion
         public bool AddRange(IList<TEntity> entities, IDbTransaction paramDbTransaction)
         {
-            return AddRange(entities, null, paramDbTransaction);
+            return AddRange(entities, null, paramDbTransaction,out long recordsAffected,out IEnumerable<object> listIds);
+        }
+        #region DOCUMENTATION AddRange(IList<TEntity> entities, IDbTransaction paramDbTransaction,IEnumerable<object> listIds)
+        /// <summary>
+        /// Add a list of entities to the database using a transaction provided, and return an IEnumerable with de ids added.
+        /// </summary>
+        /// <remarks>
+        /// Add a IList of entities in the database. 
+        /// If successful, it returns <c>true</c>.
+        /// In case of Exception trows new GenericRepositoryException.
+        /// </remarks>
+        /// <param name="entities">IList of entities.</param>
+        /// <param name="paramDbTransaction">The database transaction.</param>
+        /// <param name="listIds">An IEnumerable with the ids added</param>
+        /// <exception cref="GenericRepositoryException">
+        /// </exception>
+        /// <returns>
+        /// Returns <c>true</c>, if all entities were inserted correctly, else return <c>false</c>. 
+        /// </returns>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseGenericRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         var listEntities = new List<Person>();
+        ///        
+        ///         listEntities.Add(new Person { LastName = "Martinez", FirstName = "Diego", Passport = "AR00127296" });
+        ///         listEntities.Add(new Person { LastName = "Perez", FirstName = "Juan", Passport = "AR00012224" });
+        ///         listEntities.Add(new Person { LastName = "Fulanito", FirstName = "Cosme", Passport = "AR99999987" });
+        ///         
+        ///          // Get new Connection.
+        ///          var extConnection = PersonRepository.GetDbConnection();
+        ///          extConnection.Open();
+        ///         
+        ///          var extTransaction = extConnection.BeginTransaction();
+        ///          
+        ///          try
+        ///          {
+        ///              PersonRepository.AddRange(listEntities,extTransaction,out IEnumerable<object> listIds);
+        ///              extTransaction.Commit();
+        ///              Console.WriteLine ("List inserted succefully");
+        ///          }
+        ///          catch(GenericRepositoryExpception gre)
+        ///          {
+        ///              extTransaction.RollBack();
+        ///              Console.WriteLine ("Error ");
+        ///          }
+        ///     }
+        ///}
+        /// ]]>
+        /// </code>
+        /// </example>
+        #endregion
+        public bool AddRange(IList<TEntity> entities, IDbTransaction paramDbTransaction,out IEnumerable<object> listIds)
+        {
+            return AddRange(entities, null, paramDbTransaction,out long recordsAffected, out listIds);
         }
 
         #region DOCUMENTATION AddRange(IList<TEntity> entities,IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
@@ -1037,9 +1371,9 @@ namespace SysWork.Data.GenericRepostory
         ///     public string Passport { get; set; }
         ///}
         ///
-        ///public class DaoPerson: BaseGenericRepository<Person>
+        ///public class PersonRepository: BaseGenericRepository<Person>
         ///{
-        ///     public DaoPerson(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
         ///     
         ///     }
@@ -1057,7 +1391,7 @@ namespace SysWork.Data.GenericRepostory
         ///         // MSSqlServer connectionString.
         ///         var myConnectionString = "MyConnectionString";
         ///      
-        ///         var DaoPerson = new DaoPerson<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
         ///         
         ///         var listEntities = new List<Person>();
         ///        
@@ -1066,14 +1400,14 @@ namespace SysWork.Data.GenericRepostory
         ///         listEntities.Add(new Person { LastName = "Fulanito", FirstName = "Cosme", Passport = "AR99999987" });
         ///         
         ///          // Get new Connection.
-        ///          var extConnection = DaoPerson.GetDbConnection();
+        ///          var extConnection = PersonRepository.GetDbConnection();
         ///          extConnection.Open();
         ///         
         ///          var extTransaction = extConnection.BeginTransaction();
         ///          
         ///          try
         ///          {
-        ///              DaoPerson.AddRange(listEntities,extConnection,extTransaction);
+        ///              PersonRepository.AddRange(listEntities,extConnection,extTransaction);
         ///              extTransaction.Commit();
         ///              Console.WriteLine ("List inserted succefully");
         ///          }
@@ -1090,12 +1424,193 @@ namespace SysWork.Data.GenericRepostory
         #endregion
         public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
         {
-            return AddRange(entities, paramDbConnection, paramDbTransaction, out long recordsAffected);
+            return AddRange(entities, paramDbConnection, paramDbTransaction, out long recordsAffected, out IEnumerable<object> listIds);
         }
 
-        #region DOCUMENTATION AddRange(IList<TEntity> entities,IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
+        #region DOCUMENTATION AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction,IEnumerable<object> listIds)
         /// <summary>
-        /// Add a list of entities to the database using a connection and transaction provided.
+        /// Add a list of entities to the database using a connection and a transaction provided, and return an IEnumerable with added ids.
+        /// </summary>
+        /// <remarks>
+        /// Add a IList of entities in the database. 
+        /// If successful, it returns <c>true</c>.
+        /// In case of Exception trows new GenericRepositoryException.
+        /// </remarks>
+        /// <param name="entities">IList of entities.</param>
+        /// <param name="paramDbConnection">The database connection.</param>
+        /// <param name="paramDbTransaction">The database transaction.</param>
+        /// <param name="listIds">OUT IEnumerable with added ids</param>
+        /// <exception cref="GenericRepositoryException">
+        /// </exception>
+        /// <returns>
+        /// Returns <c>true</c>, if all entities were inserted correctly, else return <c>false</c>. 
+        /// </returns>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseGenericRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         var listEntities = new List<Person>();
+        ///        
+        ///         listEntities.Add(new Person { LastName = "Martinez", FirstName = "Diego", Passport = "AR00127296" });
+        ///         listEntities.Add(new Person { LastName = "Perez", FirstName = "Juan", Passport = "AR00012224" });
+        ///         listEntities.Add(new Person { LastName = "Fulanito", FirstName = "Cosme", Passport = "AR99999987" });
+        ///         
+        ///          // Get new Connection.
+        ///          var extConnection = PersonRepository.GetDbConnection();
+        ///          extConnection.Open();
+        ///         
+        ///          var extTransaction = extConnection.BeginTransaction();
+        ///          
+        ///          try
+        ///          {
+        ///              PersonRepository.AddRange(listEntities,extConnection,extTransaction,out IEnumerable<object> listIds);
+        ///              extTransaction.Commit();
+        ///              Console.WriteLine ("List inserted succefully");
+        ///          }
+        ///          catch(GenericRepositoryExpception gre)
+        ///          {
+        ///              extTransaction.RollBack();
+        ///              Console.WriteLine ("Error ");
+        ///          }
+        ///     }
+        ///}
+        /// ]]>
+        /// </code>
+        /// </example>
+        #endregion
+        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction,out IEnumerable<object> listIds)
+        {
+            return AddRange(entities, paramDbConnection, paramDbTransaction, out long recordsAffected, out listIds);
+        }
+
+        #region DOCUMENTATION AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction,out long recordsAffected)
+        /// <summary>
+        /// Add a list of entities to the database using a connection and a transaction provided, and return an IEnumerable with added ids.
+        /// </summary>
+        /// <remarks>
+        /// Add a IList of entities in the database. 
+        /// If successful, it returns <c>true</c>.
+        /// In case of Exception trows new GenericRepositoryException.
+        /// </remarks>
+        /// <param name="entities">IList of entities.</param>
+        /// <param name="paramDbConnection">The database connection.</param>
+        /// <param name="paramDbTransaction">The database transaction.</param>
+        /// <param name="recordsAffected">Return records affected</param>
+        /// <exception cref="GenericRepositoryException">
+        /// </exception>
+        /// <returns>
+        /// Returns <c>true</c>, if all entities were inserted correctly, else return <c>false</c>. 
+        /// </returns>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseGenericRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         var listEntities = new List<Person>();
+        ///        
+        ///         listEntities.Add(new Person { LastName = "Martinez", FirstName = "Diego", Passport = "AR00127296" });
+        ///         listEntities.Add(new Person { LastName = "Perez", FirstName = "Juan", Passport = "AR00012224" });
+        ///         listEntities.Add(new Person { LastName = "Fulanito", FirstName = "Cosme", Passport = "AR99999987" });
+        ///         
+        ///          // Get new Connection.
+        ///          var extConnection = PersonRepository.GetDbConnection();
+        ///          extConnection.Open();
+        ///         
+        ///          var extTransaction = extConnection.BeginTransaction();
+        ///          
+        ///          try
+        ///          {
+        ///              PersonRepository.AddRange(listEntities,extConnection,extTransaction,out long recordsAffected);
+        ///              extTransaction.Commit();
+        ///              Console.WriteLine ("List inserted succefully");
+        ///          }
+        ///          catch(GenericRepositoryExpception gre)
+        ///          {
+        ///              extTransaction.RollBack();
+        ///              Console.WriteLine ("Error ");
+        ///          }
+        ///     }
+        ///}
+        /// ]]>
+        /// </code>
+        /// </example>
+        #endregion
+
+        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
+        {
+            return AddRange(entities, paramDbConnection, paramDbTransaction, out recordsAffected, out IEnumerable<object> listIDs);
+        }
+
+        #region DOCUMENTATION AddRange(IList<TEntity> entities,IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected, out IEnumerable<object> listIDs)
+        /// <summary>
+        /// Add a list of entities to the database using a connection and transaction provided and return an IEnumerable with added ids.
         /// </summary>
         /// <remarks>
         /// Add a IList of entities in the database. 
@@ -1106,6 +1621,7 @@ namespace SysWork.Data.GenericRepostory
         /// <param name="paramDbConnection">The database connection.</param>
         /// <param name="paramDbTransaction">The database transaction.</param>
         /// <param name="recordsAffected">OUT The records affected.</param>
+        /// <param name="listIDs">OUT IEnumerable with added ids</param>
         /// <exception cref="GenericRepositoryException">
         /// </exception>
         /// <returns>
@@ -1128,9 +1644,9 @@ namespace SysWork.Data.GenericRepostory
         ///     public string Passport { get; set; }
         ///}
         ///
-        ///public class DaoPerson: BaseGenericRepository<Person>
+        ///public class PersonRepository: BaseGenericRepository<Person>
         ///{
-        ///     public DaoPerson(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
         ///     
         ///     }
@@ -1148,7 +1664,7 @@ namespace SysWork.Data.GenericRepostory
         ///         // MSSqlServer connectionString.
         ///         var myConnectionString = "MyConnectionString";
         ///      
-        ///         var DaoPerson = new DaoPerson<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
         ///         
         ///         var listEntities = new List<Person>();
         ///        
@@ -1157,14 +1673,14 @@ namespace SysWork.Data.GenericRepostory
         ///         listEntities.Add(new Person { LastName = "Fulanito", FirstName = "Cosme", Passport = "AR99999987" });
         ///         
         ///          // Get new Connection.
-        ///          var extConnection = DaoPerson.GetDbConnection();
+        ///          var extConnection = PersonRepository.GetDbConnection();
         ///          extConnection.Open();
         ///         
         ///          var extTransaction = extConnection.BeginTransaction();
         ///          
         ///          try
         ///          {
-        ///              DaoPerson.AddRange(listEntities,extConnection,extTransaction,out long recordsAffected);
+        ///              PersonRepository.AddRange(listEntities,extConnection,extTransaction,out long recordsAffected,out IEnumerable<object> listIds);
         ///              extTransaction.Commit();
         ///              Console.WriteLine ($"RecordsAffecteds{recordsAffected}");
         ///          }
@@ -1179,9 +1695,12 @@ namespace SysWork.Data.GenericRepostory
         /// </code>
         /// </example>
         #endregion
-        public bool AddRange(IList<TEntity> entities,IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
+        public bool AddRange(IList<TEntity> entities,IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected, out IEnumerable<object> listIDs)
         {
             recordsAffected = 0;
+            var idList = new List<object>();
+            bool hasIdentity = false;
+            listIDs = null;
 
             bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
 
@@ -1212,6 +1731,8 @@ namespace SysWork.Data.GenericRepostory
                     var customAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
                     if (!customAttribute.IsIdentity)
                     {
+                        hasIdentity = true;
+
                         string parameterName = "@param_" + i.Name ;
                         parameterList += string.Format("{0},", parameterName);
 
@@ -1223,20 +1744,39 @@ namespace SysWork.Data.GenericRepostory
                 if (parameterList != string.Empty)
                 {
                     parameterList = parameterList.Substring(0, parameterList.Length - 1);
-                    insertRangeQuery = (string.Format("INSERT INTO {0} ( {1} ) VALUES ( {2} );", _syntaxProvider.GetSecureTableName(TableName), ColumnsForInsert, parameterList));
+                    insertRangeQuery = (string.Format("INSERT INTO {0} ( {1} ) VALUES ( {2} ) {3};", _syntaxProvider.GetSecureTableName(TableName), ColumnsForInsert, parameterList, _syntaxProvider.GetSubQueryGetIdentity()));
                 }
 
                 try
                 {
                     dbCommand.CommandText = insertRangeQuery;
+                    if (paramDbTransaction != null)
+                        dbCommand.Transaction = paramDbTransaction;
 
                     if (_dataBaseEngine == EDataBaseEngine.OleDb)
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
-                    if (paramDbTransaction != null)
-                        dbCommand.Transaction = paramDbTransaction;
+                    if (hasIdentity)
+                    {
+                        if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                        {
+                            // In case of OleDbConnection, exec the command and immediately, 
+                            // exec new query to obtain the identity;
+                            dbCommand.ExecuteNonQuery();
 
-                    recordsAffected += dbCommand.ExecuteNonQuery();
+                            dbCommand.CommandText = "Select @@Identity";
+                            idList.Add(dbCommand.ExecuteScalar());
+                        }
+                        else
+                        {
+                            idList.Add(dbCommand.ExecuteScalar());
+                        }
+                        recordsAffected++;
+                    }
+                    else
+                    {
+                        recordsAffected+=dbCommand.ExecuteNonQuery();
+                    }
 
                     dbCommand.Dispose();
                 }
@@ -1254,6 +1794,8 @@ namespace SysWork.Data.GenericRepostory
                     throw new GenericRepositoryException(commandException, dbCommand);
                 }
             }
+
+            listIDs = idList;
 
             if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
             {
@@ -1298,9 +1840,9 @@ namespace SysWork.Data.GenericRepostory
         ///     public string Passport { get; set; }
         ///}
         ///
-        ///public class DaoPerson: BaseGenericRepository<Person>
+        ///public class PersonRepository: BaseGenericRepository<Person>
         ///{
-        ///     public DaoPerson(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
         ///     
         ///     }
@@ -1323,13 +1865,13 @@ namespace SysWork.Data.GenericRepostory
         ///         // MSSqlServer connectionString.
         ///         var myConnectionString = "MyConnectionString";
         ///      
-        ///         var DaoPerson = new DaoPerson<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
         /// 
-        ///         var person = DaoPerson.GetByFirstNameLastName("Diego", "Martinez");
+        ///         var person = PersonRepository.GetByFirstNameLastName("Diego", "Martinez");
         ///         if (person != null)
         ///         {
         ///             person.Passport = "AR27026754";
-        ///             var result = DaoPerson.Update(person, out string errMessage);
+        ///             var result = PersonRepository.Update(person, out string errMessage);
         ///                 
         ///             if (result )
         ///                 Console.WriteLine($"The passport of {person.FirstName} was updated correctly.");
@@ -1352,9 +1894,9 @@ namespace SysWork.Data.GenericRepostory
             {
                 result = Update(entity);
             }
-            catch (GenericRepositoryException daoModelException)
+            catch (GenericRepositoryException genericRepositoryException)
             {
-                errMessage = daoModelException.OriginalException.Message;
+                errMessage = genericRepositoryException.OriginalException.Message;
                 result = false;
             }
             catch (Exception exception)
@@ -1397,9 +1939,9 @@ namespace SysWork.Data.GenericRepostory
         ///     public string Passport { get; set; }
         ///}
         ///
-        ///public class DaoPerson: BaseGenericRepository<Person>
+        ///public class PersonRepository: BaseGenericRepository<Person>
         ///{
-        ///     public DaoPerson(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
         ///     
         ///     }
@@ -1422,15 +1964,15 @@ namespace SysWork.Data.GenericRepostory
         ///         // MSSqlServer connectionString.
         ///         var myConnectionString = "MyConnectionString";
         ///      
-        ///         var DaoPerson = new DaoPerson<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
         /// 
         ///         try
         ///         {
-        ///             var person = DaoPerson.GetByFirstNameLastName("Diego", "Martinez");
+        ///             var person = PersonRepository.GetByFirstNameLastName("Diego", "Martinez");
         ///             if (person != null)
         ///             {
         ///                 person.Passport = "AR27026754";
-        ///                 var result = DaoPerson.Update(person);
+        ///                 var result = PersonRepository.Update(person);
         ///                 
         ///                 if (result )
         ///                     Console.WriteLine($"The passport of {person.FirstName} was updated correctly. {recordsAffected} was affected");
@@ -1488,9 +2030,9 @@ namespace SysWork.Data.GenericRepostory
         ///     public string Passport { get; set; }
         ///}
         ///
-        ///public class DaoPerson: BaseGenericRepository<Person>
+        ///public class PersonRepository: BaseGenericRepository<Person>
         ///{
-        ///     public DaoPerson(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
         ///     
         ///     }
@@ -1513,20 +2055,20 @@ namespace SysWork.Data.GenericRepostory
         ///         // MSSqlServer connectionString.
         ///         var myConnectionString = "MyConnectionString";
         ///      
-        ///         var DaoPerson = new DaoPerson<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
         ///         
         ///         // Get new Connection.
-        ///         var extConnection = DaoPerson.GetDbConnection();
+        ///         var extConnection = PersonRepository.GetDbConnection();
         ///         extConnection.Open();
         /// 
         ///         try
         ///         {
         ///             
-        ///             var person = DaoPerson.GetByFirstNameLastName("Diego" , "Martinez");
+        ///             var person = PersonRepository.GetByFirstNameLastName("Diego" , "Martinez");
         ///             if (person != null)
         ///             {
         ///                 person.Passport = "AR27026754";
-        ///                 var result = DaoPerson.Update(person, extConnection);
+        ///                 var result = PersonRepository.Update(person, extConnection);
         ///                 
         ///                 if (result )
         ///                     Console.WriteLine($"The passport of {person.FirstName} was updated correctly.");
@@ -1584,9 +2126,9 @@ namespace SysWork.Data.GenericRepostory
         ///     public string Passport { get; set; }
         ///}
         ///
-        ///public class DaoPerson: BaseGenericRepository<Person>
+        ///public class PersonRepository: BaseGenericRepository<Person>
         ///{
-        ///     public DaoPerson(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
         ///     
         ///     }
@@ -1609,21 +2151,21 @@ namespace SysWork.Data.GenericRepostory
         ///         // MSSqlServer connectionString.
         ///         var myConnectionString = "MyConnectionString";
         ///      
-        ///         var DaoPerson = new DaoPerson<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
         ///         
         ///         // Get new Connection.
-        ///         var extConnection = DaoPerson.GetDbConnection();
+        ///         var extConnection = PersonRepository.GetDbConnection();
         ///         extConnection.Open();
         ///         var extTransaction = extConnection.BeginTransaction();
         /// 
         ///         try
         ///         {
         ///             
-        ///             var person = DaoPerson.GetByFirstNameLastName("Diego" , "Martinez");
+        ///             var person = PersonRepository.GetByFirstNameLastName("Diego" , "Martinez");
         ///             if (person != null)
         ///             {
         ///                 person.Passport = "AR27026754";
-        ///                 var result = DaoPerson.Update(person, extTransaction);
+        ///                 var result = PersonRepository.Update(person, extTransaction);
         ///                 extTransaction.Commit();
         ///                 
         ///                 if (result )
@@ -1685,9 +2227,9 @@ namespace SysWork.Data.GenericRepostory
         ///     public string Passport { get; set; }
         ///}
         ///
-        ///public class DaoPerson: BaseGenericRepository<Person>
+        ///public class PersonRepository: BaseGenericRepository<Person>
         ///{
-        ///     public DaoPerson(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
         ///     
         ///     }
@@ -1710,21 +2252,21 @@ namespace SysWork.Data.GenericRepostory
         ///         // MSSqlServer connectionString.
         ///         var myConnectionString = "MyConnectionString";
         ///      
-        ///         var DaoPerson = new DaoPerson<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
         ///         
         ///         // Get new Connection.
-        ///         var extConnection = DaoPerson.GetDbConnection();
+        ///         var extConnection = PersonRepository.GetDbConnection();
         ///         extConnection.Open();
         ///         var extTransaction = extConnection.BeginTransaction();
         /// 
         ///         try
         ///         {
         ///             
-        ///             var person = DaoPerson.GetByFirstNameLastName("Diego", "Martinez");
+        ///             var person = PersonRepository.GetByFirstNameLastName("Diego", "Martinez");
         ///             if (person != null)
         ///             {
         ///                 person.Passport = "AR27026754";
-        ///                 var result = DaoPerson.Update(person, extConnection, extTransaction);
+        ///                 var result = PersonRepository.Update(person, extConnection, extTransaction);
         ///                 extTransaction.Commit();
         ///                 
         ///                 if (result )
@@ -1787,9 +2329,9 @@ namespace SysWork.Data.GenericRepostory
         ///     public string Passport { get; set; }
         ///}
         ///
-        ///public class DaoPerson: BaseGenericRepository<Person>
+        ///public class PersonRepository: BaseGenericRepository<Person>
         ///{
-        ///     public DaoPerson(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
         ///     
         ///     }
@@ -1812,21 +2354,21 @@ namespace SysWork.Data.GenericRepostory
         ///         // MSSqlServer connectionString.
         ///         var myConnectionString = "MyConnectionString";
         ///      
-        ///         var DaoPerson = new DaoPerson<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
         ///         
         ///         // Get new Connection.
-        ///         var extConnection = DaoPerson.GetDbConnection();
+        ///         var extConnection = PersonRepository.GetDbConnection();
         ///         extConnection.Open();
         ///         var extTransaction = extConnection.BeginTransaction();
         /// 
         ///         try
         ///         {
         ///             
-        ///             var person = DaoPerson.GetByFirstNameLastName("Diego" , "Martinez");
+        ///             var person = PersonRepository.GetByFirstNameLastName("Diego" , "Martinez");
         ///             if (person != null)
         ///             {
         ///                 person.Passport = "AR27026754";
-        ///                 var result = DaoPerson.Update(person, extConnection, extTransaction, out long recordsAffected);
+        ///                 var result = PersonRepository.Update(person, extConnection, extTransaction, out long recordsAffected);
         ///                 extTransaction.Commit();
         ///                 
         ///                 if (result )
@@ -1943,9 +2485,9 @@ namespace SysWork.Data.GenericRepostory
             {
                 result = UpdateRange(entities);
             }
-            catch (GenericRepositoryException daoModelException)
+            catch (GenericRepositoryException genericRepositoryException)
             {
-                errMessage = daoModelException.OriginalException.Message;
+                errMessage = genericRepositoryException.OriginalException.Message;
                 result = false;
             }
             catch (Exception exception)
@@ -1962,21 +2504,20 @@ namespace SysWork.Data.GenericRepostory
             return UpdateRange(entities, null,null);
         }
 
-        private bool UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection)
+        public bool UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection)
         {
             return UpdateRange(entities, paramDbConnection, null);
         }
 
-        private bool UpdateRange(IList<TEntity> entities, IDbTransaction paramDbTransaction)
+        public bool UpdateRange(IList<TEntity> entities, IDbTransaction paramDbTransaction)
         {
             return UpdateRange(entities, null, paramDbTransaction);
         }
 
-        private bool UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        public bool UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
         {
             return UpdateRange(entities, paramDbConnection, paramDbTransaction, out long recordsAffected);
         }
-
         /// <summary>
         /// Updates the range.
         /// </summary>
@@ -1987,7 +2528,7 @@ namespace SysWork.Data.GenericRepostory
         /// <returns></returns>
         /// <exception cref="GenericRepositoryException">
         /// </exception>
-        private bool UpdateRange(IList<TEntity> entities,IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
+        public bool UpdateRange(IList<TEntity> entities,IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
         {
             recordsAffected = 0;
 
@@ -2089,9 +2630,9 @@ namespace SysWork.Data.GenericRepostory
             {
                 result = DeleteById(Id);
             }
-            catch (GenericRepositoryException daoModelException)
+            catch (GenericRepositoryException genericRepositoryException)
             {
-                errMessage = daoModelException.OriginalException.Message;
+                errMessage = genericRepositoryException.OriginalException.Message;
                 result = false;
             }
             catch (Exception exception)
@@ -2201,9 +2742,9 @@ namespace SysWork.Data.GenericRepostory
                 DeleteAll();
                 result = true;
             }
-            catch (GenericRepositoryException daoModelException)
+            catch (GenericRepositoryException genericRepositoryException)
             {
-                errMessage = daoModelException.OriginalException.Message;
+                errMessage = genericRepositoryException.OriginalException.Message;
                 result = false;
             }
             catch (Exception exception)

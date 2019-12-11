@@ -10,42 +10,60 @@ using SysWork.Data.GenericRepostory.Attributes;
 namespace SysWork.Data.Logger
 {
     /// <summary>
-    /// 
+    /// Logger ** DEPRECATED ** ONLY FOR RETROCOMPATIBILITY
     /// </summary>
     public class LoggerDb
     {
         /// <summary></summary>
         public enum ELoggerDbTagError
         {
-            /// <summary>The error intentando abrir conexion</summary>
+            /// <summary>
+            /// </summary>
             ErrorIntentandoAbrirConexion,
+            /// <summary>
+            /// </summary>
             ErrorDeInsercion,
+            /// <summary>
+            /// </summary>
             ErrorDeActualizacion,
+            /// <summary>
+            /// </summary>
             ErrorDeEliminacion,
+            /// <summary>
+            /// </summary>
             ErrorReaderToEntity,
+            /// <summary>
+            /// </summary>
             ErrorActualizandoEstructuraBaseDatos,
+            /// <summary>
+            /// </summary>
             ErrorDeLectura
         }
 
+        /// <summary>
+        /// </summary>
         public enum ELoggerDbTagInfo
         {
+            /// <summary>
+            /// </summary>
             InfoSeAgregoUnRegistro,
+            /// <summary>
+            /// </summary>
             InfoSeModificoUnRegistro,
+            /// <summary>
+            /// </summary>
+            /// <summary>
+            /// </summary>
             InfoSeEliminoUnRegistro,
+            /// <summary>
+            /// </summary>
             Info
         }
 
         private static string _connectionString;
 
         /// <summary>
-        /// Gets or sets the connection string.
         /// </summary>
-        /// <remarks>
-        /// If Change the ConnecionString value, create a new internal instance of DbUtil. 
-        /// </remarks>
-        /// <value>
-        /// The connection string.
-        /// </value>
         public static string ConnectionString
         {
             get { return _connectionString; }
@@ -61,11 +79,7 @@ namespace SysWork.Data.Logger
         private static EDataBaseEngine _dataBaseEngine;
 
         /// <summary>
-        /// Gets or sets the data base engine.
         /// </summary>
-        /// <value>
-        /// The data base engine.
-        /// </value>
         public static EDataBaseEngine DataBaseEngine
         {
             get { return _dataBaseEngine; }
@@ -217,52 +231,73 @@ namespace SysWork.Data.Logger
                 _loggerDbInstance = new LoggerDb();
         }
 
+        /// <summary>
+        /// </summary>
         public static bool Log(string mensaje)
         {
             return Logger(DateTime.Now, mensaje);
         }
+        /// <summary>
+        /// </summary>
         public static bool Log(string tag, string mensaje)
         {
             return Logger(DateTime.Now, mensaje: mensaje, tag: tag);
         }
+        /// <summary>
+        /// </summary>
         public static bool Log(string tag, string mensaje, Exception excepcion)
         {
             return Logger(DateTime.Now, mensaje: mensaje, tag: tag, excepcion: excepcion.ToString());
         }
+        /// <summary>
+        /// </summary>
         public static bool Log(string tag, string mensaje, string usuario)
         {
             return Logger(DateTime.Now, mensaje: mensaje, tag: tag, usuario: usuario);
         }
+        /// <summary>
+        /// </summary>
         public static bool Log(string tag, string mensaje, string excepcion, string sentenciaSQL)
         {
             return Logger(DateTime.Now, mensaje: mensaje, tag: tag, excepcion: excepcion, sentenciaSQL: sentenciaSQL);
         }
+        /// <summary>
+        /// </summary>
         private static bool Log(DateTime fechaHora, string mensaje, string usuario = null, string tag = null, string modulo = null, string metodo = null, string sentenciaSQL = null, string parametros = null, string resultado = null, string excepcion = null)
         {
             return Logger(fechaHora, mensaje, usuario, tag, modulo, metodo, sentenciaSQL, parametros, resultado, excepcion);
         }
+        /// <summary>
+        /// </summary>
         public static bool Log(string tag, IDbCommand dbCommand)
         {
             string sentenciaSQL = (dbCommand == null) ? DbUtil.ConvertCommandParamatersToLiteralValues((dbCommand)) : null;
             return Logger(DateTime.Now, tag: tag, mensaje: "", sentenciaSQL: sentenciaSQL);
         }
+        /// <summary>
+        /// </summary>
         public static bool Log(string tag, string mensaje, IDbCommand dbCommand)
         {
             string sentenciaSQL = (dbCommand == null) ? DbUtil.ConvertCommandParamatersToLiteralValues((dbCommand)) : null;
             return Logger(DateTime.Now, mensaje: mensaje, sentenciaSQL: sentenciaSQL, tag: tag);
         }
-
+        /// <summary>
+        /// </summary>
         public static bool Log(string tag, IDbCommand dbCommand, Exception exception)
         {
 
             string sentenciaSQL = (dbCommand == null) ? DbUtil.ConvertCommandParamatersToLiteralValues((dbCommand)) : null;
             return Logger(DateTime.Now, tag: tag, mensaje: "", sentenciaSQL: sentenciaSQL, excepcion: exception.ToString());
         }
+        /// <summary>
+        /// </summary>
         public static bool Log(string tag, Exception exception)
         {
             return Logger(DateTime.Now, tag: tag, mensaje: "", sentenciaSQL: "", excepcion: exception.ToString());
         }
 
+        /// <summary>
+        /// </summary>
         private static bool Logger(DateTime fechaHora, string mensaje, string usuario = null, string tag = null, string modulo = null, string metodo = null, string sentenciaSQL = null, string parametros = null, string resultado = null, string excepcion = null)
         {
             VerifyInstance();
@@ -295,6 +330,8 @@ namespace SysWork.Data.Logger
             return _daoLogDb.Add(logDb) != -1;
         }
     }
+    /// <summary>
+    /// </summary>
     internal class DaoLogDb : BaseGenericRepository<LogDb>
     {
         public DaoLogDb(string ConnectionString) : base(ConnectionString)
