@@ -544,7 +544,7 @@ namespace SysWork.Data.Common.Utilities
             {
                 decryted = Convert.FromBase64String(input);
             }
-            catch (FormatException fe)
+            catch (FormatException)
             {
 
                 decryted = Encoding.Unicode.GetBytes(input);

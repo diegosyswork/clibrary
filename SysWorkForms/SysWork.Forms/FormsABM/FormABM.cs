@@ -2,11 +2,10 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 using SysWork.Controls.Toolbars;
-using SysWork.Data.DaoModel.Exceptions;
-using SysWork.Data.DaoModel.Interfaces;
-using SysWork.Data.Logger;
+using SysWork.Data.GenericRepository.Exceptions;
+using SysWork.Data.GenericRepository.Interfaces;
+using SysWork.Data.LoggerDb;
 using SysWork.Forms.FormsABM.FormsUtil;
-using static SysWork.Data.Logger.LoggerDb;
 
 namespace SysWork.Forms.FormsABM
 {
@@ -17,22 +16,24 @@ namespace SysWork.Forms.FormsABM
         /// 
         /// 
         /// </summary>
-        private bool _validacionFinal;
-        public bool ValidacionFinal
+        private bool _isFinalValidation;
+        public bool IsFinalValidation
         {
-            get { return _validacionFinal; }
-            set { _validacionFinal = value; }
+            get { return _isFinalValidation; }
+            set { _isFinalValidation = value; }
         }
+        
         /// <summary>
         /// 
         /// 
         /// </summary>
-        private bool _noLanzarEventosCombos;
-        public bool NoLanzarEventosCombos
+        private bool _noThrowComboEvents;
+        public bool NoThrowComboEvents
         {
-            get { return _noLanzarEventosCombos; }
-            set { _noLanzarEventosCombos = value; }
+            get { return _noThrowComboEvents; }
+            set { _noThrowComboEvents = value; }
         }
+        
         /// <summary>
         /// 
         /// 
@@ -43,16 +44,18 @@ namespace SysWork.Forms.FormsABM
             get { return _entity; }
             set { _entity = value; }
         }
+        
         /// <summary>
         /// 
         /// 
         /// </summary>
-        private IBaseDao<T> _daoEntity = null;
-        public IBaseDao<T> DaoEntity
+        private IBaseRepository<T> _repository = null;
+        public IBaseRepository<T> Repository
         {
-            get { return _daoEntity; }
-            set { _daoEntity = value; }
+            get { return _repository; }
+            set { _repository = value; }
         }
+        
         /// <summary>
         /// 
         /// 
@@ -76,25 +79,26 @@ namespace SysWork.Forms.FormsABM
         }
 
         private bool _noValidarFormulario;
-
         public bool NoValidarFormulario
         {
             get { return _noValidarFormulario; }
             set { _noValidarFormulario = value; }
         }
+
         /// <summary>
         /// 
         /// 
         /// </summary>
         public string UniqueKeyControls { get; set; }
 
-        private bool _ABMloggerHabilitado = false;
-        public bool ABMLoggerHabilitado
+        private bool _ABMloggerEnabled = false;
+        public bool ABMLoggerEnabled
         {
-            get { return _ABMloggerHabilitado; }
-            set { _ABMloggerHabilitado = value; }
+            get { return _ABMloggerEnabled; }
+            set { _ABMloggerEnabled = value; }
         }
-        public LoggerDb ABMLoggerDb { get; private set; }
+
+        public DbLogger ABMDbLogger { get; private set; }
 
         public void InitFormABM()
         {
@@ -104,14 +108,16 @@ namespace SysWork.Forms.FormsABM
             if (_toolBarABM == null)
                 throw new NullReferenceException("No se ha referenciado un control del tipo ToolBarABM");
 
-            if (_daoEntity== null)
+            if (_repository== null)
                 throw new NullReferenceException("No se ha referenciado un IBaseDao<T>");
 
-            if (_ABMloggerHabilitado)
-                if (string.IsNullOrEmpty(LoggerDb.ConnectionString) )
+            if (_ABMloggerEnabled)
+            {
+                if (string.IsNullOrEmpty(DbLogger.ConnectionString))
                     throw new ArgumentException("No se ha Informado la cadena de conexion del Logger");
+            }
 
-            SetearPosicion();
+            SetPosition();
 
             this.KeyPreview = true;
             this.KeyDown += FormABM_KeyDown;
@@ -121,24 +127,23 @@ namespace SysWork.Forms.FormsABM
             _toolBarABM.ToolBarABMClick += _toolBarABM_ToolBarABMClick;
         }
 
-        private void FormABM_Shown(object sender, EventArgs e)
-        {
-            SetearFocoUniqueControl();
-        }
-
-        private void SetearPosicion()
-        {
-            StartPosition = FormStartPosition.CenterScreen;
-        }
-
         private void FormABM_Load(object sender, EventArgs e)
         {
-            InicializarFormulario();
+            InitFormControls();
         }
 
+        private void FormABM_Shown(object sender, EventArgs e)
+        {
+            SetFocusUniqueControl();
+        }
         private void FormABM_KeyDown(object sender, KeyEventArgs e)
         {
             _toolBarABM.AnalizaTecla(e.KeyCode);
+        }
+
+        private void SetPosition()
+        {
+            StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void _toolBarABM_ToolBarABMClick(object sender, ToolBarABMClickEventArgs e)
@@ -147,46 +152,46 @@ namespace SysWork.Forms.FormsABM
             {
                 case EOpcionToolBarABM.NUEVO:
 
-                    BuscaNuevoCodigo();
+                    GetNewCode();
                     break;
 
                 case EOpcionToolBarABM.ELIMINAR:
 
                     if (MessageBox.Show("¿Realmente desea dar de baja el registro seleccionado?", "Aviso al operador", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                     {
-                        if (DatosValidosEliminacion())
-                            if (EliminarRegistro())
-                                InicializarFormulario();
+                        if (IsValidDataForDelete())
+                            if (DeleteRecord())
+                                InitFormControls();
                     }
                     break;
 
                 case EOpcionToolBarABM.REFRESH:
 
-                    InicializarFormulario();
+                    InitFormControls();
                     break;
 
                 case EOpcionToolBarABM.CONSULTAR:
 
-                    Consulta();
+                    QueryData();
                     break;
 
                 case EOpcionToolBarABM.CANCELAR:
 
                     _noValidarFormulario = true;
                     if (MessageBox.Show("¿Realmente desea abandonar la carga de datos?", "Aviso al operador", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                        InicializarFormulario();
+                        InitFormControls();
 
                     break;
 
                 case EOpcionToolBarABM.REPORTE:
-                    LlamarReporte();
+                    Report();
                     break;
 
                 case EOpcionToolBarABM.GRABAR:
 
-                    if (DatosValidos())
-                        if (ActualizarRegistro())
-                            InicializarFormulario();
+                    if (IsValidData())
+                        if (AddEditRecord())
+                            InitFormControls();
 
                     break;
 
@@ -198,31 +203,31 @@ namespace SysWork.Forms.FormsABM
             }
         }
 
-        protected virtual bool ActualizarRegistro()
+        protected virtual bool AddEditRecord()
         {
-            bool esAlta = false;
+            bool isNewRecord = false;
 
             if (_entity == null)
             {
-                esAlta = true;
+                isNewRecord = true;
                 _entity = new T();
             }
 
             ControlsValuesToEntity();
 
-            if (esAlta)
+            if (isNewRecord)
             {
                 try
                 {
-                    long id = _daoEntity.Add(_entity);
+                    long id = _repository.Add(_entity);
                 }
-                catch (DaoModelException daoModelException)
+                catch (RepositoryException repositoryException)
                 {
                     _entity = default(T);
-                    if (_ABMloggerHabilitado)
-                        LoggerDb.Log(ELoggerDbTagError.ErrorDeInsercion.ToString(), daoModelException.DbCommand, daoModelException.OriginalException);
+                    if (_ABMloggerEnabled)
+                        DbLogger.LogError(EDbErrorTag.InsertError , "", repositoryException.DbCommand, repositoryException.OriginalException);
 
-                    MessageBox.Show("No pudo grabarse el registro correctamente, intentenlo nuevamente por favor.\r\n\r\n " + daoModelException.Message, "Aviso al operador", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                    MessageBox.Show("No pudo grabarse el registro correctamente, intentenlo nuevamente por favor.\r\n\r\n " + repositoryException.Message, "Aviso al operador", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                     return false;
                 }
             }
@@ -231,12 +236,12 @@ namespace SysWork.Forms.FormsABM
                 bool resultadoOk = false;
                 try
                 {
-                    resultadoOk = _daoEntity.Update(_entity);
+                    resultadoOk = _repository.Update(_entity);
                 }
-                catch (DaoModelException daoModelException)
+                catch (RepositoryException repositoryException)
                 {
-                    if (_ABMloggerHabilitado)
-                        LoggerDb.Log(ELoggerDbTagError.ErrorDeActualizacion.ToString(), daoModelException.DbCommand, daoModelException.OriginalException);
+                    if (_ABMloggerEnabled)
+                        DbLogger.LogError(EDbErrorTag.UpdateError, "", repositoryException.DbCommand, repositoryException.OriginalException);
                 }
 
                 if (!resultadoOk)
@@ -258,41 +263,41 @@ namespace SysWork.Forms.FormsABM
             throw new NotImplementedException();
         }
 
-        protected virtual bool DatosValidos()
+        protected virtual bool IsValidData()
         {
             throw new NotImplementedException();
         }
 
-        protected virtual void LlamarReporte()
+        protected virtual void Report()
         {
             throw new NotImplementedException();
         }
 
-        protected virtual void  Consulta()
+        protected virtual void  QueryData()
         {
             throw new NotImplementedException();
         }
 
-        protected virtual void InicializarFormulario()
+        protected virtual void InitFormControls()
         {
             _entity = default(T);
 
-            _validacionFinal = false;
-            _noLanzarEventosCombos = true;
+            _isFinalValidation = false;
+            _noThrowComboEvents = true;
             _noValidarFormulario = true;
 
             FormUtil.CleanControls(this);
             
-            ModoEdicion(false);
+            SetEditMode(false);
 
-            SetearFocoUniqueControl();
+            SetFocusUniqueControl();
 
             _errorProvider.Clear();
-            _noLanzarEventosCombos = false;
+            _noThrowComboEvents = false;
             _noValidarFormulario = false;
         }
 
-        protected virtual void SetearFocoUniqueControl()
+        protected virtual void SetFocusUniqueControl()
         {
             if (!string.IsNullOrEmpty(UniqueKeyControls))
             {
@@ -301,17 +306,17 @@ namespace SysWork.Forms.FormsABM
             }
         }
 
-        protected virtual void AsignarDatos()
+        protected virtual void AssignData()
         {
-            _noLanzarEventosCombos = true;
+            _noThrowComboEvents = true;
 
             EntityValuesToControls();
 
-            _noLanzarEventosCombos = false;
+            _noThrowComboEvents = false;
         }
 
 
-        protected virtual void ModoEdicion(bool permiteEdicion)
+        protected virtual void SetEditMode(bool permiteEdicion)
         {
             FormUtil.EditModeControls(this, permiteEdicion, "", UniqueKeyControls);
 
@@ -321,19 +326,19 @@ namespace SysWork.Forms.FormsABM
             _toolBarABM.BtnReporteHabilitado = true;
         }
 
-        protected virtual bool EliminarRegistro()
+        protected virtual bool DeleteRecord()
         {
             bool result = false;
             try
             {
-                result = _daoEntity.DeleteById(GetIdEntity());
+                result = _repository.DeleteById(GetIdEntity());
             }
-            catch (DaoModelException daoModelException)
+            catch (RepositoryException repositoryException)
             {
-                if (_ABMloggerHabilitado)
-                    LoggerDb.Log(ELoggerDbTagError.ErrorDeEliminacion.ToString(), daoModelException.DbCommand, daoModelException.OriginalException);
+                if (_ABMloggerEnabled)
+                    DbLogger.LogError(EDbErrorTag.DeleteError, "",repositoryException.DbCommand, repositoryException.OriginalException);
 
-                MessageBox.Show("No pudo eliminarse el registro correctamente, ocurrio el siguiente error: \r\n\r\n" + daoModelException.Message, "Aviso al operador", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("No pudo eliminarse el registro correctamente, ocurrio el siguiente error: \r\n\r\n" + repositoryException.Message, "Aviso al operador", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
 
             return result;
@@ -344,12 +349,12 @@ namespace SysWork.Forms.FormsABM
             throw new NotImplementedException();
         }
 
-        public virtual bool DatosValidosEliminacion()
+        public virtual bool IsValidDataForDelete()
         {
             return true;
         }
 
-        protected virtual void BuscaNuevoCodigo()
+        protected virtual void GetNewCode()
         {
             throw new NotImplementedException();
         }
@@ -379,5 +384,6 @@ namespace SysWork.Forms.FormsABM
             this.Name = "FormABM";
             this.ResumeLayout(false);
         }
+
     }
 }

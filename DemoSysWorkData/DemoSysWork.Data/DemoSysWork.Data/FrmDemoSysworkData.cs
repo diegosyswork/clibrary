@@ -3,7 +3,6 @@ using Demo.SysWork.Data.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.OleDb;
 using System.Linq;
 using System.Windows.Forms;
 using SysWork.Data.Common;
@@ -11,10 +10,11 @@ using SysWork.Data.Common.DbConnector;
 using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 using SysWork.Data.Common.Utilities;
-using SysWork.Data.GenericRepostory.CodeWriter;
-using SysWork.Data.GenericRepostory.Exceptions;
+using SysWork.Data.GenericRepository.Mapper;
+using SysWork.Data.GenericRepository.CodeWriter;
+using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.LoggerDb;
-using SysWork.Data.Syntax;
+using SysWork.Data.Common.Syntax;
 
 namespace Demo.SysWork.Data
 {
@@ -34,18 +34,19 @@ namespace Demo.SysWork.Data
 
             return SqLiteConnectionString;
         }
-
         public FrmDemoSysworkData()
         {
             InitializeComponent();
         }
-        private void FrmTestDataV2_Load(object sender, EventArgs e)
+
+        private void FrmDemoSysworkData_Load(object sender, EventArgs e)
         {
             CmbDataBaseEngine.DataSource = Enum.GetValues(typeof(EDataBaseEngine));
             ControlFormState(EState.Unconnected);
             LoadConfig();
         }
-        private void FrmTestDataV2_FormClosing(object sender, FormClosingEventArgs e)
+
+        private void FrmDemoSysworkData_FormClosing(object sender, FormClosingEventArgs e)
         {
             SaveConfig();
         }
@@ -70,19 +71,15 @@ namespace Demo.SysWork.Data
             Properties.Settings.Default.Save();
         }
 
-
         private void BtnConnect_Click(object sender, EventArgs e)
         {
-            if (!DbUtil.ConnectionSuccess((EDataBaseEngine)CmbDataBaseEngine.SelectedValue, TxtConnectionString.Text, out string errMessage))
-            {
-                MessageBox.Show($"Ha ocurrido el siguiente error {errMessage}", "Aviso al operador", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            else
-            {
-                ControlFormState(EState.Connected);
-            }
-
             var databaseEngine = (EDataBaseEngine)CmbDataBaseEngine.SelectedValue;
+
+            if (!DbUtil.ConnectionSuccess(databaseEngine, TxtConnectionString.Text, out string errMessage))
+                MessageBox.Show($"Ha ocurrido el siguiente error {errMessage}", "Aviso al operador", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            else
+                ControlFormState(EState.Connected);
+
             switch (databaseEngine)
             {
                 case EDataBaseEngine.MSSqlServer:
@@ -185,6 +182,7 @@ namespace Demo.SysWork.Data
 
             long idPerson = 0;
             string errMessage="";
+
             IDbConnection conn;
             IDbTransaction transaction;
 
@@ -199,7 +197,7 @@ namespace Demo.SysWork.Data
                 DbLogger.LogInfo(EDbInfoTag.InsertInfo, $"Person with id {idPerson} was added");
                 LogText($"Person with id {idPerson} was added");
             }
-            catch (GenericRepositoryException repoException)
+            catch (RepositoryException repoException)
             {
                 DbLogger.LogError(EDbErrorTag.InsertError,"", repoException);
                 LogText("Catch GenericRepositoryException ");
@@ -214,7 +212,7 @@ namespace Demo.SysWork.Data
                 LogText("Add duplicate Person id: {idPerson}");
                 _personRepository.Add(person);
             }
-            catch (GenericRepositoryException repoException)
+            catch (RepositoryException repoException)
             {
                 DbLogger.LogError(EDbErrorTag.InsertError, "", repoException);
                 LogText("Catch GenericRepositoryException ");
@@ -263,7 +261,7 @@ namespace Demo.SysWork.Data
                 DbLogger.LogInfo(EDbInfoTag.InsertInfo, $"Add Person using a connection, person id: {idPerson}");
                 LogText($"Add Person using a connection, person id: {idPerson}");
             }
-            catch (GenericRepositoryException repoException)
+            catch (RepositoryException repoException)
             {
                 DbLogger.LogError(EDbErrorTag.InsertError, "", repoException);
                 LogText("catch GenericRepositoryException");
@@ -286,7 +284,7 @@ namespace Demo.SysWork.Data
                 LogText($"Try add duplicate Person using a connection, person id: {idPerson}");
                 _personRepository.Add(person, conn);
             }
-            catch (GenericRepositoryException repoException)
+            catch (RepositoryException repoException)
             {
                 DbLogger.LogError(EDbErrorTag.InsertError, "", repoException);
                 LogText("Catch GenericRepositoryException");
@@ -324,7 +322,7 @@ namespace Demo.SysWork.Data
 
                 DbLogger.LogInfo(EDbInfoTag.InsertInfo, "2 persons was added correctly");
             }
-            catch (GenericRepositoryException repoException)
+            catch (RepositoryException repoException)
             {
                 transaction.Rollback();
                 DbLogger.LogError(EDbErrorTag.InsertError, "", repoException);
@@ -360,7 +358,7 @@ namespace Demo.SysWork.Data
 
                 transaction.Commit();
             }
-            catch (GenericRepositoryException repoException)
+            catch (RepositoryException repoException)
             {
 
                 LogText("catch GenericRepositoryException and Rollback Transaction");
@@ -374,6 +372,8 @@ namespace Demo.SysWork.Data
             }
 
             LogText(Environment.NewLine + "///      END Add Method DEMO         ///");
+
+            // ALLS Method work like this!!!!!!!!
 
         }
 
@@ -399,7 +399,7 @@ namespace Demo.SysWork.Data
                 DbLogger.LogInfo(EDbInfoTag.InsertInfo, "100 persons was added");
                 LogText("100 persons was added");
             }
-            catch (GenericRepositoryException gre)
+            catch (RepositoryException gre)
             {
                 DbLogger.LogError(EDbErrorTag.InsertError, "Error AddRange", gre);
             }
@@ -415,7 +415,7 @@ namespace Demo.SysWork.Data
                 _personRepository.AddRange(list);
                 DbLogger.LogInfo(EDbInfoTag.InsertInfo, "100 persons was added");
             }
-            catch (GenericRepositoryException gre)
+            catch (RepositoryException gre)
             {
                 DbLogger.LogError(EDbErrorTag.InsertError, "Error AddRange", gre);
                 LogText("Capture GenericRepositoryException ");
@@ -468,7 +468,7 @@ namespace Demo.SysWork.Data
                 DbLogger.LogInfo(EDbInfoTag.InsertInfo, "100 persons was added");
                 LogText("100 persons was added");
             }
-            catch (GenericRepositoryException gre)
+            catch (RepositoryException gre)
             {
                 DbLogger.LogError(EDbErrorTag.InsertError, "Error AddRange", gre);
                 LogText("Capture GenericRepositoryException ");
@@ -488,7 +488,7 @@ namespace Demo.SysWork.Data
                 _personRepository.AddRange(list, conn);
                 DbLogger.LogInfo(EDbInfoTag.InsertInfo, "100 persons was added");
             }
-            catch (GenericRepositoryException gre)
+            catch (RepositoryException gre)
             {
                 DbLogger.LogError(EDbErrorTag.InsertError, "Error AddRange", gre);
                 LogText("Capture GenericRepositoryException ");
@@ -521,7 +521,7 @@ namespace Demo.SysWork.Data
                 DbLogger.LogInfo(EDbInfoTag.InsertInfo, "Commit transaction");
                 LogText("Commit transaction");
             }
-            catch (GenericRepositoryException gre)
+            catch (RepositoryException gre)
             {
                 DbLogger.LogError(EDbErrorTag.InsertError, "Error AddRange", gre);
                 LogText("Capture GenericRepositoryException ");
@@ -553,7 +553,7 @@ namespace Demo.SysWork.Data
                 transaction.Commit();
                 DbLogger.LogInfo(EDbInfoTag.InsertInfo, "Commit transaction");
             }
-            catch (GenericRepositoryException gre)
+            catch (RepositoryException gre)
             {
                 DbLogger.LogError(EDbErrorTag.InsertError, "Error AddRange", gre);
                 LogText("Capture GenericRepositoryException ");
@@ -612,7 +612,7 @@ namespace Demo.SysWork.Data
                 LogText($"Person id {person.IdPerson} was updated");
 
             }
-            catch (GenericRepositoryException gre)
+            catch (RepositoryException gre)
             {
                 DbLogger.LogError(EDbErrorTag.InsertError, "Error AddRange", gre);
                 LogText("Capture GenericRepositoryException ");
@@ -693,7 +693,7 @@ namespace Demo.SysWork.Data
                 DbLogger.LogInfo(EDbInfoTag.UpdateInfo, $"Person id {person.IdPerson} was updated");
                 LogText($"Person id {person.IdPerson} was updated");
             }
-            catch (GenericRepositoryException gre)
+            catch (RepositoryException gre)
             {
                 transaction.Rollback();
                 LogText("Rollback transaction");
@@ -745,7 +745,7 @@ namespace Demo.SysWork.Data
                     LogText($"IdPerson {first5Persons[i].IdPerson} FN: {first5Persons[i].FirstName}, LN: {first5Persons[i].LastName}, PASSPORT: {first5Persons[i].Passport}");
                 }
             }
-            catch (GenericRepositoryException gre)
+            catch (RepositoryException gre)
             {
                 DbLogger.LogError(EDbErrorTag.InsertError, "Error AddRange", gre);
             }
@@ -796,7 +796,7 @@ namespace Demo.SysWork.Data
 
 
             }
-            catch (GenericRepositoryException gre)
+            catch (RepositoryException gre)
             {
                 DbLogger.LogError(EDbErrorTag.InsertError, "Error AddRange", gre);
                 LogText("Capture GenericRepositoryException ");
@@ -836,7 +836,7 @@ namespace Demo.SysWork.Data
                 }
 
             }
-            catch (GenericRepositoryException gre)
+            catch (RepositoryException gre)
             {
                 DbLogger.LogError(EDbErrorTag.ReadError, "", gre);
                 LogText($"The following error has occurred: {gre.OriginalException.Message}");
@@ -881,7 +881,7 @@ namespace Demo.SysWork.Data
                 LogText($"{recordsAffected} was deleted succefully");
 
             }
-            catch (GenericRepositoryException gre)
+            catch (RepositoryException gre)
             {
                 LogText($"The following erros has ocurred: {gre.OriginalException.Message}");
             }
@@ -913,7 +913,7 @@ namespace Demo.SysWork.Data
                 LogText($"{recordsAffected} was deleted succefully");
 
             }
-            catch (GenericRepositoryException gre)
+            catch (RepositoryException gre)
             {
                 LogText($"The following erros has ocurred: {gre.OriginalException.Message}");
             }
@@ -955,10 +955,15 @@ namespace Demo.SysWork.Data
                 dataGridView1.DataSource = null;
                 dataGridView1.DataSource = DbUtil.ConvertToDatatable<Person>(_personRepository.GetListByLambdaExpressionFilter(p => p.IdState != null).ToList());
                 MessageBox.Show("showing persons with IdState <> null", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                LogText($"showing persons with IdState <> null, result {dataGridView1.Rows.Count-1}  persons");
+                LogText($"showing persons with IdState <> null, result {dataGridView1.Rows.Count - 1}  persons");
+
+                dataGridView1.DataSource = null;
+                dataGridView1.DataSource = DbUtil.ConvertToDatatable<Person>(_personRepository.GetListByLambdaExpressionFilter(p => (p.Active ==  true) && (p.FirstName.Contains("FN")) && (p.IdState == null)).ToList());
+                MessageBox.Show("showing persons with IdState == null and active == 1 and First name cotains (FN)", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LogText($"showing persons with IdState == null and active == 1 and First name cotains (FN), result {dataGridView1.Rows.Count - 1}  persons");
 
             }
-            catch (GenericRepositoryException gre)
+            catch (RepositoryException gre)
             {
                 LogText($"The following erros has ocurred: {gre.OriginalException.Message}");
             }
@@ -1015,13 +1020,58 @@ namespace Demo.SysWork.Data
 
         private void BtnSqlLAMTest_Click(object sender, EventArgs e)
         {
-            SqlLam<Person>.SetAdapter(SqlAdapter.SqlServer2012);
-            var querySelectCount = new SqlLam<Person>().SelectCount(p => p.IdPerson).Where(p => p.IdState != null);
+            LogText(Environment.NewLine + "///      START SqlLam Method DEMO         ///");
 
-            var cantMySQL = _personRepository.GetDbExecutor()
+            switch (RepositoryManager.DataBaseEngine)
+            {
+                case EDataBaseEngine.MSSqlServer:
+                    SqlLam<Person>.SetAdapter(SqlAdapter.SqlServer2012);
+                    break;
+                case EDataBaseEngine.SqLite:
+                    SqlLam<Person>.SetAdapter(SqlAdapter.SQLite);
+                    break;
+                case EDataBaseEngine.OleDb:
+                    SqlLam<Person>.SetAdapter(SqlAdapter.SqlServer2008);
+                    break;
+                case EDataBaseEngine.MySql:
+                    SqlLam<Person>.SetAdapter(SqlAdapter.MySql);
+                    break;
+                default:
+                    break;
+            }
+
+            DateTime bornDate = new DateTime(2010, 1, 1);
+
+            LogText("SqlLam SelectCount()");
+            var querySelectCount = new SqlLam<Person>().SelectCount(p => p.IdPerson).Where(p => (p.IdState == null) && p.BirthDate >= bornDate);
+
+            LogText($"Generated Query {querySelectCount.QueryString}");
+            var getCount = _personRepository.GetDbExecutor()
                             .Query(querySelectCount.QueryString)
                             .AddParameters(querySelectCount.QueryParameters)
                             .ExecuteScalar();
+
+            LogText($"Result {getCount}");
+
+
+            LogText("SqlLam SelectDistict()");
+            var distinctSelect = new SqlLam<Person>().SelectDistinct(p => p.BirthDate).Where(p => ((p.IdState == null)) && (p.BirthDate >= bornDate));
+            LogText($"Generated Select Distinct Query {distinctSelect.QueryString}");
+
+            DataTable dt = new DataTable();
+            dt.Load(_personRepository.GetDbExecutor()
+                            .Query(distinctSelect.QueryString)
+                            .AddParameters(distinctSelect.QueryParameters)
+                            .ExecuteReader());
+
+            dataGridView1.DataSource = null;
+            dataGridView1.DataSource = dt;
+            dataGridView1.Refresh();
+
+
+            LogText("Result in datagridView");
+
+            LogText(Environment.NewLine + "///      END SqlLam Method DEMO         ///");
         }
 
         private void BtnTestEntityClassFromDb_Click(object sender, EventArgs e)
@@ -1038,7 +1088,6 @@ namespace Demo.SysWork.Data
             MessageBox.Show("Se copio la clase al portapapeles", "Aviso al operador", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             LogText(Environment.NewLine + "///      END EntityClassFromDb Method DEMO         ///" + Environment.NewLine);
-
         }
 
         private string GetScriptStates(EDataBaseEngine dataBaseEngine)
@@ -1206,9 +1255,8 @@ namespace Demo.SysWork.Data
         }
         private string GetScriptStatesMSSqlServer()
         {
-
             var result = " CREATE TABLE[States] " + Environment.NewLine;
-            result += " ([IdState][int] NOT NULL, " + Environment.NewLine;
+            result += " ([IdState][int] IDENTITY(1, 1) NOT NULL, " + Environment.NewLine;
             result += " [StateCode] [nvarchar] (6) NOT NULL, " + Environment.NewLine;
             result += " [Description] [nvarchar] (250) NOT NULL, " + Environment.NewLine;
             result += " CONSTRAINT[PK_States_1] PRIMARY KEY CLUSTERED " + Environment.NewLine;
@@ -1220,25 +1268,262 @@ namespace Demo.SysWork.Data
             return result;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void BtnRepositoryClassFromDb_Click(object sender, EventArgs e)
         {
-            OleDbConnection cn = new OleDbConnection(TxtConnectionString.Text);
-            cn.Open();
+            LogText(Environment.NewLine + "///      START RepositoryClassFromDb Method DEMO         ///" + Environment.NewLine);
 
-            //Retrieve schema information
-            DataTable columns = cn.GetOleDbSchemaTable(OleDbSchemaGuid.Indexes, new Object[] { null, null, null, null, "Persons" });
-            dataGridView1.DataSource = null;
-            dataGridView1.DataSource = columns;
-            dataGridView1.Refresh();
+            SyntaxProvider syntaxProvider = new SyntaxProvider(RepositoryManager.DataBaseEngine);
 
-            foreach (DataRow row in columns.Rows)
+            var repositoryClassFromDb = new RepositoryClassFromDb(RepositoryManager.DataBaseEngine, RepositoryManager.ConnectionString, "Person", "TestNamespace", "Persons");
+            var textClass = repositoryClassFromDb.ToString();
+            LogText(textClass);
+            Clipboard.SetText(textClass);
+
+            MessageBox.Show("Se copio la clase al portapapeles", "Aviso al operador", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            LogText(Environment.NewLine + "///      END RepositoryClassFromDb Method DEMO         ///" + Environment.NewLine);
+        }
+
+        private void BtnExistsTable_Click(object sender, EventArgs e)
+        {
+            LogText(Environment.NewLine + "///      START ExistsTable Method DEMO         ///" + Environment.NewLine);
+
+            string table = "Persons";
+            LogText(string.Format("Table {0} exists ={1} ", table, DbUtil.ExistsTable(RepositoryManager.DataBaseEngine, RepositoryManager.ConnectionString, table)));
+
+            table = "States";
+            LogText(string.Format("Table {0} exists ={1} ", table, DbUtil.ExistsTable(RepositoryManager.DataBaseEngine, RepositoryManager.ConnectionString, table)));
+
+            table = "State";
+            LogText(string.Format("Table {0} exists ={1} ", table, DbUtil.ExistsTable(RepositoryManager.DataBaseEngine, RepositoryManager.ConnectionString, table)));
+
+            table = "OtherTable";
+            LogText(string.Format("Table {0} exists ={1} ",table, DbUtil.ExistsTable(RepositoryManager.DataBaseEngine, RepositoryManager.ConnectionString, table)));
+
+            LogText(Environment.NewLine + "///      END ExistsTable Method DEMO         ///" + Environment.NewLine);
+        }
+
+        private void BtnExistsColumn_Click(object sender, EventArgs e)
+        {
+            LogText(Environment.NewLine + "///      START ExistsColumn Method DEMO         ///" + Environment.NewLine);
+
+            string table = "Persons";
+            string column = "IdPerson";
+            LogText(string.Format("Table: {0} Column: {1} exists ={2} ", table, column, DbUtil.ExistsColumn(RepositoryManager.DataBaseEngine, RepositoryManager.ConnectionString, table,column)));
+
+            table = "Persons";
+            column = "Long Name Field";
+            LogText(string.Format("Table: {0} Column: {1} exists ={2} ", table, column, DbUtil.ExistsColumn(RepositoryManager.DataBaseEngine, RepositoryManager.ConnectionString, table, column)));
+
+            table = "Persons";
+            column = "Other Field";
+            LogText(string.Format("Table: {0} Column: {1} exists ={2} ", table, column, DbUtil.ExistsColumn(RepositoryManager.DataBaseEngine, RepositoryManager.ConnectionString, table, column)));
+
+            LogText(Environment.NewLine + "///      END ExistsColumn Method DEMO         ///" + Environment.NewLine);
+        }
+
+        private void BtnGetByID_Click(object sender, EventArgs e)
+        {
+            LogText(Environment.NewLine + "///      START GetById Method DEMO         ///" + Environment.NewLine);
+
+            Person p;
+            p = _personRepository.GetById(-1);
+            if (p == null)
+                LogText("Person with Id -1 NO exists ");
+
+
+            if (long.TryParse(TxtId.Text, out long idPerson))
             {
-                Console.WriteLine(row["COLUMN_NAME"].ToString());
-                Console.WriteLine(row["TABLE_NAME"].ToString());
-                Console.WriteLine(row["UNIQUE"].ToString());
+                p = _personRepository.GetById(idPerson);
+                if (p == null)
+                {
+                    LogText($"Person with Id {idPerson} NO exists ");
+                }
+                else
+                {
+                    LogText($"FirstName: {p.FirstName}, LastName: {p.LastName}, Passport: {p.Passport} ");
+                }
+            }
+            else
+            {
+                LogText($" {TxtId.Text} is not a valid ID ");
             }
 
-            cn.Close();
+            LogText(Environment.NewLine + "///      END GetById Method DEMO         ///" + Environment.NewLine);
+        }
+
+        private void BtnGetByPassport_Click(object sender, EventArgs e)
+        {
+            LogText(Environment.NewLine + "///      START GetByPassport Method DEMO         ///" + Environment.NewLine);
+
+            Person p;
+            p = _personRepository.GetByPassport(TxtPassport.Text);
+            if (p == null)
+            {
+                LogText($"Person with Passport {TxtPassport.Text} NO exists ");
+            }
+            else
+            {
+                LogText($"FirstName: {p.FirstName}, LastName: {p.LastName}, Passport: {p.Passport} ");
+            }
+
+
+            LogText(Environment.NewLine + "///      END GetByPassport Method DEMO         ///" + Environment.NewLine);
+        }
+
+        private void BtnTestDbExecutor_Click(object sender, EventArgs e)
+        {
+            LogText(Environment.NewLine + "///      START DbExecutor Method DEMO         ///" + Environment.NewLine);
+
+            //SELECT
+            LogText("Select persons born between 01/01/2000 and 31/12/2010");
+
+            var reader = new DbExecutor(RepositoryManager.ConnectionString, RepositoryManager.DataBaseEngine)
+                .Query($"SELECT {_personRepository.ColumnsForSelect} FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
+                .AddParameter("@FromDate", new DateTime(2000, 01, 01))
+                .AddParameter("@ToDate", new DateTime(2010, 12, 31))
+                .ExecuteReader();
+
+            var mappedList = new MapDataReaderToEntity().Map<Person>(reader);
+
+
+            /*SUPER ABBREVIATED
+            var mappedList = new MapDataReaderToEntity().Map<Person>(new DbExecutor(RepositoryManager.ConnectionString, RepositoryManager.DataBaseEngine)
+                .Query($"SELECT {_personRepository.ColumnsForSelect} FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
+                .AddParameter("@FromDate", new DateTime(2000, 01, 01))
+                .AddParameter("@ToDate", new DateTime(2010, 12, 31))
+                .ExecuteReader());
+             */
+
+            dataGridView1.DataSource = null;
+            dataGridView1.DataSource = mappedList;
+            dataGridView1.Refresh();
+
+            LogText("Select persons born between 01/01/2000 and 31/12/2010 using GetTypedList<Person>()");
+            dataGridView1.DataSource = null;
+            dataGridView1.DataSource = new DbExecutor(RepositoryManager.ConnectionString, RepositoryManager.DataBaseEngine)
+                .Query($"SELECT {_personRepository.ColumnsForSelect} FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
+                .AddParameter("@FromDate", new DateTime(2000, 01, 01))
+                .AddParameter("@ToDate", new DateTime(2010, 12, 31))
+                .GetTypedList<Person>();
+
+            dataGridView1.Refresh();
+
+            // INSERT
+            LogText("Insert a new Person and Get the ID");
+            long idPerson;
+            var result = new DbExecutor(RepositoryManager.ConnectionString, RepositoryManager.DataBaseEngine)
+                .InsertQuery("Persons")
+                .AddFieldWithValue("FirstName", "Diego")
+                .AddFieldWithValue("LastName", "Martinez")
+                .AddFieldWithValue("Passport", "AR" + RandomNumber(8))
+                .AddFieldWithValue("BirthDate", new DateTime(1980, 5, 24))
+                .AddFieldWithValue("Active", true)
+                .AddFieldWithValue("Long Name Field", "Test")
+                .ExecuteScalar();
+
+            idPerson = DbUtil.ParseToLong(result);
+            LogText($"The idPerson {idPerson} was inserted");
+
+            // UPDATE
+            var updateQuery = new DbExecutor(RepositoryManager.ConnectionString, RepositoryManager.DataBaseEngine)
+                .UpdateQuery("Persons"," IdPerson = @IdPerson")
+                .AddFieldWithValue("FirstName", "Updated-Diego")
+                .AddFieldWithValue("LastName", "Updated-Martinez")
+                .AddParameter("@IdPerson",idPerson)
+                .ExecuteNonQuery();
+            LogText($"The idPerson {idPerson} was Updated");
+
+            var updateQuery2 = new DbExecutor(RepositoryManager.ConnectionString, RepositoryManager.DataBaseEngine)
+                .UpdateQuery("Persons")
+                .AddFieldWithValue("Long Name Field","UPDATED!!!!")
+                .ExecuteNonQuery();
+            LogText("Long Name Field was Updated for All Persons ");
+
+            var deleteQuery = new DbExecutor(RepositoryManager.ConnectionString, RepositoryManager.DataBaseEngine)
+                .Query("DELETE FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
+                .AddParameter("@FromDate", new DateTime(2000, 01, 01))
+                .AddParameter("@ToDate", new DateTime(2010, 12, 31))
+                .ExecuteNonQuery();
+            LogText($"Delete persons born between 01/01/2000 and 31/12/2010 recordAffected = {deleteQuery}");
+
+            LogText(Environment.NewLine + "///      END DbExecutor Method DEMO         ///" + Environment.NewLine);
+        }
+
+        private void BtnTestGenericViewManager_Click(object sender, EventArgs e)
+        {
+            LogText(Environment.NewLine + "///      START ViewManager DEMO         ///" + Environment.NewLine);
+            var VManagerPersonsWithStates = RepositoryManager.GetInstance().VManagerPersonsWithStates;
+
+            LogText("Select all from view VW_PersonsWithStates");
+            dataGridView1.DataSource = null;
+            dataGridView1.DataSource = VManagerPersonsWithStates.GetAll().ToList();
+            dataGridView1.Refresh();
+
+            LogText("Select from view VW_PersonsWithStates person with passport starts with 'AR2'");
+            dataGridView1.DataSource = null;
+            dataGridView1.DataSource = VManagerPersonsWithStates.GetListByLambdaExpressionFilter(p => p.Passport.StartsWith("AR2")).ToList();
+            dataGridView1.Refresh();
+
+            LogText("Get list using manual where clause, using parameters");
+
+            string whereClause = "  (FirstName LIKE '%Name%') AND " +
+                " (BirthDate >= @BirthDate) AND " +
+                " (IdState IN (1,2,3,4,5) OR (IdState IS NULL)) AND " +
+                " Active = 1 ";
+
+            var filter = VManagerPersonsWithStates.GetGenericWhereFilter();
+            filter.SetWhere(whereClause)
+                .AddParameter("@BirthDate", new DateTime(2014, 1, 1), DbType.DateTime);
+
+            dataGridView1.DataSource = null;
+            dataGridView1.DataSource =VManagerPersonsWithStates.GetListByGenericWhereFilter(filter).ToList();
+            dataGridView1.Refresh();
+            LogText(Environment.NewLine + "///      END ViewManager DEMO         ///" + Environment.NewLine);
+
+        }
+
+        private void BtnLogger_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void BtnTestWhereFilter_Click(object sender, EventArgs e)
+        {
+            LogText(Environment.NewLine + "///      START GenericWhereFilter DEMO         ///" + Environment.NewLine);
+
+            string textFilter = "  (FirstName LIKE '%Name%') AND " +
+                " (BirthDate >= @pBirthDate) AND " +
+                " (IdState IN (1,2,3,4,5) OR (IdState IS NULL)) AND " +
+                " Active = @pActive ";
+            LogText("Select persons with FirstName contains 'Name' AND birthDate >= 01/01/2014 AND IdState in List AND Active" + Environment.NewLine);
+
+            var selectFilter = _personRepository.GetGenericWhereFilter();
+            selectFilter.SetWhere(textFilter)
+                .AddParameter("@pBirthDate", new DateTime(2014, 1, 1), DbType.DateTime)
+                .AddParameter("@pActive", 1, DbType.Boolean);
+            LogText($"SelectQueryString = {selectFilter.SelectQueryString} " + Environment.NewLine);
+
+            LogText("Update persons, set 'LONG FIELD NAME' = 'UPDATED' with FirstName contains 'Name' AND birthDate >= 01/01/2014 AND IdState in List AND Active" + Environment.NewLine);
+            var updatefilter = _personRepository.GetGenericWhereFilter();
+            updatefilter.SetWhere(textFilter)
+                .AddParameter("@pBirthDate", new DateTime(2014, 1, 1), DbType.DateTime)
+                .AddParameter("@pActive", 1, DbType.Boolean)
+                .AddFieldWithValue("LONG FIELD NAME", "UPDATED");
+
+            LogText($"UpdateQueryString = {updatefilter.UpdateQueryString} " + Environment.NewLine);
+
+            LogText("Delete persons with IdState = 1 AND Active" + Environment.NewLine);
+            string deleteFilter = "WHERE (IdState = @pIdState) AND Active = @pActive";
+            var deletefilter = _personRepository.GetGenericWhereFilter();
+            deletefilter.SetWhere(deleteFilter)
+                .AddParameter("@pIdState", 1)
+                .AddParameter("@pActive", 1, DbType.Boolean);
+
+            LogText($"DeleteQueryString = {deletefilter.DeleteQueryString} " + Environment.NewLine);
+
+            LogText(Environment.NewLine + "///      START GenericWhereFilter DEMO         ///" + Environment.NewLine);
+
         }
     }
 }

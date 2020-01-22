@@ -1,5 +1,5 @@
 using System;
-using SysWork.Data.GenericRepostory.Attributes;
+using SysWork.Data.GenericRepository.Attributes;
 
 namespace GerdannaDataManager.Entities
 {

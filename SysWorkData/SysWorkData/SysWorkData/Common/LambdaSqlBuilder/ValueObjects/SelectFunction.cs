@@ -10,11 +10,34 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.ValueObjects
     /// </summary>
     public enum SelectFunction
     {
+        /// <summary>
+        /// The count
+        /// </summary>
         COUNT,
+
+        /// <summary>
+        /// The distinct
+        /// </summary>
         DISTINCT,
+
+        /// <summary>
+        /// The sum
+        /// </summary>
         SUM,
+
+        /// <summary>
+        /// The minimum
+        /// </summary>
         MIN,
+
+        /// <summary>
+        /// The maximum
+        /// </summary>
         MAX,
+
+        /// <summary>
+        /// The average
+        /// </summary>
         AVG
     }
 }

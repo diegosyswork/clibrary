@@ -5,12 +5,12 @@ using System.Data.Common;
 using System.Data.OleDb;
 using System.Linq;
 using SysWork.Data.Common.DataObjectProvider;
-using SysWork.Data.Extensions.OleDbCommandExtensions;
+using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
+using SysWork.Data.Common.Syntax;
 using SysWork.Data.GenericRepository.Mapper;
-using SysWork.Data.Syntax;
 
 namespace SysWork.Data.Common.Utilities
-{ 
+{
     #region DOCUMENTATION Class
     /// <summary>
     /// Class to facilitate Querys.
@@ -212,7 +212,7 @@ namespace SysWork.Data.Common.Utilities
         {
             _isInsertQuery = true;
 
-            var commandText = string.Format("INSERT INTO {0} ( /LIST_OF_FIELDS_NAMES/ ) VALUES ( /LIST_OF_PARAMETERS_NAMES/ )", tableName);
+            var commandText = string.Format("INSERT INTO {0} ( /LIST_OF_FIELDS_NAMES/ ) VALUES ( /LIST_OF_PARAMETERS_NAMES/ ) {1}", tableName, _syntaxProvider.GetSubQueryGetIdentity());
             _sqlQuery = commandText;
             return this;
         }
@@ -903,7 +903,15 @@ namespace SysWork.Data.Common.Utilities
                 }
 
                 if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                {
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
+                    if (_isInsertQuery)
+                    {
+                        dbCommand.ExecuteNonQuery();
+                        dbCommand.CommandText = "Select @@Identity";
+                        dbCommand.Parameters.Clear();
+                    }
+                }
 
                 return dbCommand.ExecuteScalar();
             }

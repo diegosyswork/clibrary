@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SysWork.Data.GenericRepostory.Attributes
+namespace SysWork.Data.GenericRepository.Attributes
 {
     #region DOCUMENTATION Class
     /// <summary>

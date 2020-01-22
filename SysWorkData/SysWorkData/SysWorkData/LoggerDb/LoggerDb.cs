@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.Text;
 using SysWork.Data.Common;
 using SysWork.Data.Common.Utilities;
-using SysWork.Data.GenericRepostory;
-using SysWork.Data.GenericRepostory.Attributes;
+using SysWork.Data.GenericRepository;
+using SysWork.Data.GenericRepository.Attributes;
 
 namespace SysWork.Data.Logger
 {
@@ -332,7 +332,7 @@ namespace SysWork.Data.Logger
     }
     /// <summary>
     /// </summary>
-    internal class DaoLogDb : BaseGenericRepository<LogDb>
+    internal class DaoLogDb : BaseRepository<LogDb>
     {
         public DaoLogDb(string ConnectionString) : base(ConnectionString)
         {

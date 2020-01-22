@@ -107,15 +107,15 @@
             // toolBarABM1
             // 
             this.toolBarABM1.AutoSize = true;
-            this.toolBarABM1.btnCancelarHabilitado = true;
-            this.toolBarABM1.btnConsultarHabilitado = true;
-            this.toolBarABM1.btnEliminarHabilitado = true;
-            this.toolBarABM1.btnExportarHabilitado = false;
-            this.toolBarABM1.btnGrabarHabilitado = true;
-            this.toolBarABM1.btnNuevoHabilitado = true;
-            this.toolBarABM1.btnRefreshHabilitado = true;
-            this.toolBarABM1.btnReporteHabilitado = false;
-            this.toolBarABM1.btnSalirHabilitado = true;
+            this.toolBarABM1.BtnCancelarHabilitado= true;
+            this.toolBarABM1.BtnConsultarHabilitado = true;
+            this.toolBarABM1.BtnEliminarHabilitado = true;
+            this.toolBarABM1.BtnExportarHabilitado = false;
+            this.toolBarABM1.BtnGrabarHabilitado = true;
+            this.toolBarABM1.BtnNuevoHabilitado = true;
+            this.toolBarABM1.BtnRefreshHabilitado = true;
+            this.toolBarABM1.BtnReporteHabilitado = false;
+            this.toolBarABM1.BtnSalirHabilitado = true;
             this.toolBarABM1.Dock = System.Windows.Forms.DockStyle.Top;
             this.toolBarABM1.Location = new System.Drawing.Point(0, 0);
             this.toolBarABM1.Name = "toolBarABM1";

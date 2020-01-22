@@ -1,9 +1,5 @@
 ﻿/* License: http://www.apache.org/licenses/LICENSE-2.0 */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 
 namespace SysWork.Data.Common.LambdaSqlBuilder.Builder
@@ -13,6 +9,13 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Builder
     /// </summary>
     partial class SqlQueryBuilder
     {
+        /// <summary>
+        /// Joins the specified original table name.
+        /// </summary>
+        /// <param name="originalTableName">Name of the original table.</param>
+        /// <param name="joinTableName">Name of the join table.</param>
+        /// <param name="leftField">The left field.</param>
+        /// <param name="rightField">The right field.</param>
         public void Join(string originalTableName, string joinTableName, string leftField, string rightField)
         {
             var joinString = string.Format("JOIN {0} ON {1} = {2}",
@@ -24,6 +27,12 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Builder
             _splitColumns.Add(rightField);
         }
 
+        /// <summary>
+        /// Orders the by.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        /// <param name="fieldName">Name of the field.</param>
+        /// <param name="desc">if set to <c>true</c> [desc].</param>
         public void OrderBy(string tableName, string fieldName, bool desc = false)
         {
             var order = Adapter.Field(tableName, fieldName);
@@ -33,23 +42,43 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Builder
             _sortList.Add(order);            
         }
 
+        /// <summary>
+        /// Selects the specified table name.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
         public void Select(string tableName)
         {
             var selectionString = string.Format("{0}.*", Adapter.Table(tableName));
             _selectionList.Add(selectionString);
         }
 
+        /// <summary>
+        /// Selects the specified table name.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        /// <param name="fieldName">Name of the field.</param>
         public void Select(string tableName, string fieldName)
         {
             _selectionList.Add(Adapter.Field(tableName, fieldName));
         }
 
+        /// <summary>
+        /// Selects the specified table name.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        /// <param name="fieldName">Name of the field.</param>
+        /// <param name="selectFunction">The select function.</param>
         public void Select(string tableName, string fieldName, SelectFunction selectFunction)
         {
             var selectionString = string.Format("{0}({1})", selectFunction.ToString(), Adapter.Field(tableName, fieldName));
             _selectionList.Add(selectionString);
         }
 
+        /// <summary>
+        /// Groups the by.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        /// <param name="fieldName">Name of the field.</param>
         public void GroupBy(string tableName, string fieldName)
         {
             _groupingList.Add(Adapter.Field(tableName, fieldName));

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SysWork.Data.GenericRepostory.Attributes
+namespace SysWork.Data.GenericRepository.Attributes
 {
     /// <summary>
     /// Configures the name of the db table related to this entity. 

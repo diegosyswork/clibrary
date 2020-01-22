@@ -93,8 +93,7 @@ namespace SysWork.Data.Common.SimpleQuery
                 return iter.Current;
             }
         }
-        
-        /// TODO: Crear Ejemplos del uso de los metodos de esta clase.
 
+        // TODO: Crear Ejemplos del uso de los metodos de esta clase.
     }
 }

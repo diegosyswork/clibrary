@@ -4,9 +4,9 @@ using System.Data.Common;
 using System.Text;
 using SysWork.Data.Common;
 using SysWork.Data.Common.DataObjectProvider;
-using SysWork.Data.Syntax;
+using SysWork.Data.Common.Syntax;
 
-namespace SysWork.Data.GenericRepostory.CodeWriter
+namespace SysWork.Data.GenericRepository.CodeWriter
 {
     /// <summary>
     /// Creates an Entity Class from a table.
@@ -65,14 +65,11 @@ namespace SysWork.Data.GenericRepostory.CodeWriter
         public string GetEntityTextClass()
         {
             StringBuilder builder = new StringBuilder();
-            /*
             builder.AppendLine(CodeWriterHelper.AddUsing("System"));
             builder.AppendLine(CodeWriterHelper.AddUsing("System.Collections.Generic"));
             builder.AppendLine(CodeWriterHelper.AddUsing("System.Linq"));
             builder.AppendLine(CodeWriterHelper.AddUsing("System.Text"));
-            builder.AppendLine(CodeWriterHelper.AddUsing("System.Threading.Tasks"));
-            */
-            builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.GenericRepostory.Attributes"));
+            builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.GenericRepository.Attributes"));
             builder.AppendLine(CodeWriterHelper.StartNamespace(_nameSpace + ".Entities"));
             builder.AppendLine(CodeWriterHelper.AddDbTableAttribute(_dbTableName));
             builder.AppendLine(CodeWriterHelper.StartClass(_className));
@@ -133,10 +130,10 @@ namespace SysWork.Data.GenericRepostory.CodeWriter
 
         private string AddSummary()
         {
-            string ret = "\t\t/// <summary>\r\n";
-            ret += "\t\t/// /// This class was created automatically with the class EntityClassFromDb.\r\n";
-            ret += "\t\t/// /// Please check the DbTypes and the field names.\r\n";
-            ret += "\t\t/// /// </summary>\r\n";
+            string ret = "\t/// <summary>\r\n";
+            ret += "\t /// This class was created automatically with the class EntityClassFromDb.\r\n";
+            ret += "\t /// Please check the DbTypes and the field names.\r\n";
+            ret += "\t /// </summary>\r\n";
 
             return ret;
         }

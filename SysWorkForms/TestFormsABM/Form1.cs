@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using SysWork.Data.DaoModel;
+using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.ObjectResolver;
 using SysWork.Forms.FormsABM;
 using SysWork.Util.Logger;
@@ -20,7 +14,7 @@ namespace TestFormsABM
     {
 
         public bool _noValidarFormulario;
-        private DaoCliente _daoCliente;
+        private ClienteRepository _daoCliente;
         private const string connectionString = "Data Source=54.94.227.132;Initial Catalog=ManosALaObra;User ID=ManosALaObra;Password=ManosALaObra$%&;";
 
         public Form1()
@@ -33,10 +27,10 @@ namespace TestFormsABM
             
             SeteaLogger();
 
-            _daoCliente = new DaoCliente(connectionString);
-            DaoEntity = _daoCliente;
+            _daoCliente = new ClienteRepository(connectionString);
+            Repository = _daoCliente;
 
-            InitABMControls();
+            InitFormControls();
 
 
             codClienteTextBox.Validating += ValidaControl;
@@ -75,21 +69,21 @@ namespace TestFormsABM
                 return false;
             }
 
-            if (!ValidacionFinal)
+            if (!IsFinalValidation)
             {
                 try
                 {
                     Entity = _daoCliente.GetByCodCliente(codClienteTextBox.Text.Trim());
 
                     if (Entity!= null)
-                        AsignarDatos();
+                        AssignData();
 
-                    ModoEdicion(true);
+                    SetEditMode(true);
                 }
-                catch (DaoModelException daoModelException)
+                catch (RepositoryException repositoryException)
                 {
                     //LoggerDb.Log(ELoggerDbTagError.ErrorDeLectura.ToString(), daoModelException.DbCommand, daoModelException.OriginalException);
-                    MessageBox.Show("Ha ocurrido el siguiente error al intentar acceder al registro: \r\n" + daoModelException.Message, "Aviso al operador", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Ha ocurrido el siguiente error al intentar acceder al registro: \r\n" + repositoryException.Message, "Aviso al operador", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
             }
@@ -100,28 +94,29 @@ namespace TestFormsABM
             return true;
         }
 
-        public override void EntityValuesToControls()
+        protected override void EntityValuesToControls()
         {
             codClienteTextBox.Text = Entity.codCliente;
             razonSocialTextBox.Text = Entity.razonSocial;
             activoCheckBox.Checked = Entity.activo;
         }
 
-        public override void ControlsValuesToEntity()
+        protected override void ControlsValuesToEntity()
         {
             Entity.codCliente = codClienteTextBox.Text;
             Entity.razonSocial = razonSocialTextBox.Text;
             Entity.activo = activoCheckBox.Checked;
+            base.ControlsValuesToEntity();
         }
 
-        public override bool DatosValidos()
+        protected override bool IsValidData()
         {
-            ValidacionFinal = true;
+            IsFinalValidation = true;
 
             bool valido = ValidaCodClienteTextBox();
             valido = valido && ValidaRazonSocialTextBox();
 
-            ValidacionFinal = false;
+            IsFinalValidation = false;
             return valido;
         }
 

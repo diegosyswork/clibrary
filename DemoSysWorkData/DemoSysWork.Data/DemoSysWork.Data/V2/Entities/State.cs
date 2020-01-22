@@ -1,4 +1,4 @@
-﻿using SysWork.Data.GenericRepostory.Attributes;
+﻿using SysWork.Data.GenericRepository.Attributes;
 
 namespace Demo.SysWork.Data.Entities
 {

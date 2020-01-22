@@ -1,15 +1,20 @@
-﻿using System;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.OleDb;
 using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.Linq;
 using System.Text;
 using SysWork.Data.Common;
+using SysWork.Data.Common.DataObjectProvider;
+using SysWork.Data.Common.Syntax;
 
-namespace SysWork.Data.GenericRepostory.CodeWriter
+namespace SysWork.Data.GenericRepository.CodeWriter
 {
     /// <summary>
-    /// 
+    /// Write a Repository Class
     /// </summary>
     public class RepositoryClassFromDb
     {
@@ -21,7 +26,7 @@ namespace SysWork.Data.GenericRepostory.CodeWriter
         private string _className;
 
         private string _dbTableName;
-
+        private SyntaxProvider _syntaxProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RepositoryClassFromDb"/> class. 
@@ -58,6 +63,7 @@ namespace SysWork.Data.GenericRepostory.CodeWriter
             _entityName = EntityName;
             _className = EntityName + "Repository";
             _dbTableName = DbTableName;
+            _syntaxProvider = new SyntaxProvider(_databaseEngine);
         }
 
         private string GetTextClass()
@@ -67,14 +73,14 @@ namespace SysWork.Data.GenericRepostory.CodeWriter
             builder.AppendLine(CodeWriterHelper.AddUsing("System.Collections.Generic"));
             builder.AppendLine(CodeWriterHelper.AddUsing("System.Linq"));
             builder.AppendLine(CodeWriterHelper.AddUsing("System.Text"));
-            builder.AppendLine(CodeWriterHelper.AddUsing("System.Threading.Tasks"));
+            //builder.AppendLine(CodeWriterHelper.AddUsing("System.Threading.Tasks"));
             builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.Common"));
-            builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.GenericRepostory"));
-            builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.GenericRepostory.Attributes"));
+            builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.GenericRepository"));
+            builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.GenericRepository.Attributes"));
             builder.AppendLine(CodeWriterHelper.AddUsing(_nameSpace + ".Entities"));
             builder.AppendLine(CodeWriterHelper.StartNamespace(_nameSpace + ".Repositories"));
-            builder.AppendLine(CodeWriterHelper.StartClass(_className, string.Format("BaseGenericRepository<{0}>", _entityName)));
             builder.AppendLine(AddSummary());
+            builder.AppendLine(CodeWriterHelper.StartClass(_className, string.Format("BaseRepository<{0}>", _entityName)));
             builder.AppendLine(AddConstructor());
             builder.AppendLine(AddMethodsGetByUniquesKeys());
             builder.AppendLine(CodeWriterHelper.EndClass());
@@ -83,15 +89,67 @@ namespace SysWork.Data.GenericRepostory.CodeWriter
             return builder.ToString();
         }
         /// <summary>
-        ///  Verifica todas las claves UNIQUE que contenga la tabla y en base a eso genera un
-        ///  metodo que devuelve una entidad
+        /// Verify all UNIQUE KEYS in the table, and create a method to return an Entity.
         /// </summary>
         /// <returns>
         /// </returns>
         private string AddMethodsGetByUniquesKeys()
         {
             string ret = "";
+            foreach (var UK in GetListUniqueKeys())
+            {
+                using (IDbConnection conn = StaticDbObjectProvider.GetIDbConnection(_databaseEngine, _connectionString))
+                {
+                    conn.Open();
+                    string columnList = GetListColumnsUnique(UK);
+                    string cmdText = string.Format("SELECT {0} FROM {1}", GetListColumnsUnique(UK), _syntaxProvider.GetSecureTableName(_dbTableName));
+                    var dbCommand = conn.CreateCommand();
+                    dbCommand.CommandText = cmdText;
+                    dbCommand.Connection = conn;
 
+                    DataTable schema = dbCommand.ExecuteReader(CommandBehavior.KeyInfo).GetSchemaTable();
+                    ret += CreateMethodCodeGetByUnique(schema, columnList) + Environment.NewLine;
+                }
+            }
+            return ret;
+        }
+
+        private List<string> GetListUniqueKeys()
+        {
+            switch (_databaseEngine)
+            {
+                case EDataBaseEngine.MSSqlServer:
+                    return GetListUniqueKeyMSSqlServer();
+                case EDataBaseEngine.SqLite:
+                    return GetListUniqueKeysSqlite();
+                case EDataBaseEngine.OleDb:
+                    return GetListUniqueKeysOleDb();
+                case EDataBaseEngine.MySql:
+                    return GetListUniqueKeysMySql();
+                default:
+                    throw new ArgumentOutOfRangeException("The databaseEngine is not supported by this method GetListUniques()");
+            }
+        }
+        private string GetListColumnsUnique(string uniqueKey)
+        {
+            switch (_databaseEngine)
+            {
+                case EDataBaseEngine.MSSqlServer:
+                    return GetListColumnsUniqueMSSqlServer(uniqueKey);
+                case EDataBaseEngine.SqLite:
+                    return GetListColumnsUniqueSqlite(uniqueKey);
+                case EDataBaseEngine.OleDb:
+                    return GetListColumnsUniqueOleDb(uniqueKey);
+                case EDataBaseEngine.MySql:
+                    return GetListColumnsUniqueMySql(uniqueKey);
+                default:
+                    throw new ArgumentOutOfRangeException("The databaseEngine is not supported by this method GetListUniques()");
+            }
+        }
+
+        private List<string> GetListUniqueKeyMSSqlServer()
+        {
+            var listUnique = new List<string>();
             using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
             {
                 sqlConnection.Open();
@@ -103,37 +161,143 @@ namespace SysWork.Data.GenericRepostory.CodeWriter
                 sqlCommand = new SqlCommand(sql, sqlConnection);
 
                 SqlDataReader readerConstraint = sqlCommand.ExecuteReader();
-                List<String> listaConstraints = new List<string>();
 
                 while (readerConstraint.Read())
-                    listaConstraints.Add(readerConstraint.GetString(0));
+                    listUnique.Add(readerConstraint.GetString(0));
 
                 readerConstraint.Close();
+            }
+            return listUnique;
+        }
 
-                foreach (var constraint in listaConstraints)
+        private string GetListColumnsUniqueMSSqlServer(string uniqueKey)
+        {
+            string columns = "";
+            using (SqlConnection conn = new SqlConnection(_connectionString))
+            {
+                conn.Open();
+                string sql = string.Format("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE CONSTRAINT_NAME = '{0}' AND TABLE_NAME = '{1}' ORDER BY ORDINAL_POSITION", uniqueKey, _dbTableName);
+                var cmd = new SqlCommand(sql, conn);
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
                 {
-                    string columnas = "";
-                    sql = string.Format("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE CONSTRAINT_NAME = '{0}' AND TABLE_NAME = '{1}' ORDER BY ORDINAL_POSITION", constraint,_dbTableName);
-                    sqlCommand = new SqlCommand(sql, sqlConnection);
-                    SqlDataReader readerColumnas = sqlCommand.ExecuteReader();
-                    while (readerColumnas.Read())
-                    {
-                        columnas += readerColumnas.GetString(0) + ",";
-                    }
-                    readerColumnas.Close();
-
-                    columnas = columnas.Substring(0, columnas.Length - 1);
-
-                    sql = string.Format("SELECT {0} FROM [{1}]", columnas, _dbTableName);
-                    sqlCommand = new SqlCommand(sql, sqlConnection);
-
-                    DataTable schema = sqlCommand.ExecuteReader(CommandBehavior.KeyInfo).GetSchemaTable();
-                    ret += CreateMethodCodeGetByUnique(schema, columnas) + Environment.NewLine;
+                    columns += _syntaxProvider.GetSecureColumnName(reader.GetString(0)) + ",";
                 }
-                sqlConnection.Close();
+                reader.Close();
+
+                columns = columns.Substring(0, columns.Length - 1);
+
+            }
+            return columns;
+        }
+        private List<string> GetListUniqueKeysOleDb()
+        {
+            var listUnique = new List<string>();
+            using (OleDbConnection conn = new OleDbConnection(_connectionString))
+            {
+                conn.Open();
+                DataTable Uks = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Indexes, new Object[] { null, null, null, null, _dbTableName });
+                foreach (DataRow row in Uks.Rows)
+                {
+                    if ((bool)row["UNIQUE"] && !((bool)row["PRIMARY_KEY"]))
+                        if (!listUnique.Contains(row["INDEX_NAME"].ToString()))
+                            listUnique.Add(row["INDEX_NAME"].ToString());
+                }
+            }
+            return listUnique;
+        }
+        private string GetListColumnsUniqueOleDb(string uniqueKey)
+        {
+            string columns = "";
+            using (OleDbConnection conn = new OleDbConnection(_connectionString))
+            {
+                conn.Open();
+                DataTable Uks = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Indexes, new Object[] { null, null, null, null, _dbTableName });
+                foreach (DataRow row in Uks.Rows)
+                {
+                    if (row["INDEX_NAME"].ToString().Equals(uniqueKey))
+                        columns += _syntaxProvider.GetSecureColumnName(row["COLUMN_NAME"].ToString()) + ",";
+                }
+                columns = columns.Substring(0, columns.Length - 1);
+            }
+            return columns;
+        }
+
+        private List<string> GetListUniqueKeysMySql()
+        {
+            var listUnique = new List<string>();
+            using (MySqlConnection conn = new MySqlConnection(_connectionString))
+            {
+                conn.Open();
+                DataTable Uks = conn.GetSchema("INDEXES", new string[] { null, null, _dbTableName });
+                foreach (DataRow row in Uks.Rows)
+                {
+                    if ((bool)row["UNIQUE"] && !((bool)row["PRIMARY"]))
+                        if (!listUnique.Contains(row["INDEX_NAME"].ToString()))
+                            listUnique.Add(row["INDEX_NAME"].ToString());
+                }
+            }
+            return listUnique;
+        }
+        private string GetListColumnsUniqueMySql(string uniqueKey)
+        {
+            string columns = "";
+
+            using (MySqlConnection conn = new MySqlConnection(_connectionString))
+            {
+                conn.Open();
+                DataTable schema = conn.GetSchema("INDEXCOLUMNS", new string[] { null, null, _dbTableName, uniqueKey, null });
+                foreach (DataRow row in schema.Rows)
+                {
+                    columns += _syntaxProvider.GetSecureColumnName(row["COLUMN_NAME"].ToString()) + ",";
+                }
+                columns = columns.Substring(0, columns.Length - 1);
             }
 
-            return ret;
+            return columns;
+        }
+
+
+        private List<string> GetListUniqueKeysSqlite()
+        {
+            var listUnique = new List<string>();
+            using (SQLiteConnection conn = new SQLiteConnection(_connectionString))
+            {
+                conn.Open();
+                var dbCommand = conn.CreateCommand();
+                dbCommand.Connection = conn;
+                dbCommand.CommandText = _syntaxProvider.GetQuerySelectTop0(_dbTableName);
+
+                DataTable schema = dbCommand.ExecuteReader(CommandBehavior.KeyInfo).GetSchemaTable();
+                foreach (DataRow row in schema.Rows)
+                {
+                    if (((bool)row["IsUnique"]) && !((bool)row["IsKey"]))
+                        listUnique.Add("UQ_" + row["ColumnName"].ToString());
+                }
+
+            }
+            return listUnique;
+        }
+
+        private string GetListColumnsUniqueSqlite(string uniqueKey)
+        {
+            string columns = "";
+            using (SQLiteConnection conn = new SQLiteConnection(_connectionString))
+            {
+                conn.Open();
+                var dbCommand = conn.CreateCommand();
+                dbCommand.Connection = conn;
+                dbCommand.CommandText = _syntaxProvider.GetQuerySelectTop0(_dbTableName);
+
+                DataTable schema = dbCommand.ExecuteReader(CommandBehavior.KeyInfo).GetSchemaTable();
+                foreach (DataRow row in schema.Rows)
+                {
+                    if (uniqueKey.Equals("UQ_" + row["ColumnName"].ToString()))
+                        columns += _syntaxProvider.GetSecureColumnName(row["ColumnName"].ToString()) + ",";
+                }
+                columns = columns.Substring(0, columns.Length - 1);
+            }
+            return columns;
         }
 
         private string CreateMethodCodeGetByUnique(DataTable schema,string columns)
@@ -142,11 +306,12 @@ namespace SysWork.Data.GenericRepostory.CodeWriter
 
             ret += string.Format("\t\tpublic {0} {1} ({2})" + Environment.NewLine, _entityName, GetMethodNameGetByUnique(schema,columns), GetMethodParametersGetByUnique(schema,columns));
             ret += "\t\t{" + Environment.NewLine;
-            ret += string.Format("\t\t\t {0} {1} = null;" + Environment.NewLine, _entityName, _entityName.ToLower());
-            ret += "\t\t\t var resultado = GetListByLambdaExpressionFilter(entity => " ;
+            ret += "\t\t\t return GetByLambdaExpressionFilter(entity => " ;
 
             string lambdaBody = "";
             List<string> listaColumnas = columns.Split(',').ToList();
+            for (int i = 0; i < listaColumnas.Count; i++)
+                listaColumnas[i] = _syntaxProvider.RemoveStartersAndEndersColumnName(listaColumnas[i]);
 
             foreach (DataRow dataRow in schema.Rows)
             {
@@ -160,11 +325,6 @@ namespace SysWork.Data.GenericRepostory.CodeWriter
             ret += lambdaBody;
 
             ret += ");" + Environment.NewLine;
-
-            ret += "\t\t\t if (resultado != null && resultado.Count > 0)" + Environment.NewLine;
-            ret += string.Format("\t\t\t\t {0} = resultado[0];",_entityName.ToLower());
-            ret += Environment.NewLine;
-            ret += string.Format("\t\t\t return {0};", _entityName.ToLower()) + Environment.NewLine;
 
             ret += "\t\t}";
 
@@ -182,6 +342,9 @@ namespace SysWork.Data.GenericRepostory.CodeWriter
         {
             string ret = "GetBy";
             List<string> listaColumnas = columns.Split(',').ToList();
+            for (int i = 0; i < listaColumnas.Count; i++)
+                listaColumnas[i] = _syntaxProvider.RemoveStartersAndEndersColumnName(listaColumnas[i]);
+
             foreach (DataRow dataRow in schema.Rows)
             {
                 string columnName = dataRow["ColumnName"].ToString();
@@ -202,8 +365,9 @@ namespace SysWork.Data.GenericRepostory.CodeWriter
         public string GetMethodParametersGetByUnique(DataTable schema, string columns)
         {
             string ret = "";
-
             List<string> listaColumnas = columns.Split(',').ToList();
+            for (int i = 0; i < listaColumnas.Count; i++)
+                listaColumnas[i] = _syntaxProvider.RemoveStartersAndEndersColumnName(listaColumnas[i]);
 
             foreach (DataRow dataRow in schema.Rows)
             {
@@ -236,15 +400,26 @@ namespace SysWork.Data.GenericRepostory.CodeWriter
 
         private string AddSummary()
         {
-            string ret = "\t /// <summary>" + Environment.NewLine;
-            ret += "\t/// **********************************************************************" + Environment.NewLine;
-            ret += "\t/// " + Environment.NewLine;
-            ret += "\t/// Esta clase fue generada automaticamente por la clase DaoClassFromDb" + Environment.NewLine;
-            ret += "\t/// " + Environment.NewLine;
-            ret += string.Format("\t/// Fecha: {0}", string.Format("{0:dd/MM/yyyy HH:mm:ss}", DateTime.Now)) + Environment.NewLine;
-            ret += "\t/// " + Environment.NewLine;
-            ret += "\t/// **********************************************************************" + Environment.NewLine;
-            ret += "\t/// </summary>" + Environment.NewLine;
+
+            string ret = "\t/// <summary>\r\n";
+            ret += "\t/// This class was created automatically with the RepositoryClassFromDb class.\r\n";
+            ret += "\t/// Inherited from GenericRepository which allows you to perform the following actions: \r\n";
+            ret += "\t/// Add \r\n";
+            ret += "\t/// AddRange \r\n";
+            ret += "\t/// Update \r\n";
+            ret += "\t/// UpdateRange \r\n";
+            ret += "\t/// DeleteById \r\n";
+            ret += "\t/// DeleteAll \r\n";
+            ret += "\t/// DeleteByLambdaExpressionFilter \r\n";
+            ret += "\t/// DeleteByGenericWhereFilter \r\n";
+            ret += "\t/// GetById \r\n";
+            ret += "\t/// GetByLambdaExpressionFilter \r\n";
+            ret += "\t/// GetByGenericWhereFilter \r\n";
+            ret += "\t/// GetAll \r\n";
+            ret += "\t/// GetListByLambdaExpressionFilter \r\n";
+            ret += "\t/// GetListByGenericWhereFilter \r\n";
+            ret += "\t/// Find \r\n";
+            ret += "\t/// </summary>\r\n";
 
             return ret;
         }
@@ -259,8 +434,5 @@ namespace SysWork.Data.GenericRepostory.CodeWriter
         {
             return GetTextClass();
         }
-
-
-
     }
 }

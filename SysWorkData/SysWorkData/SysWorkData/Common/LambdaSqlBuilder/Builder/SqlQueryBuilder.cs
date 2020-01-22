@@ -30,14 +30,77 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Builder
         private readonly List<string> _splitColumns = new List<string>();
         private int _paramIndex;
 
+
+        /// <summary>
+        /// Gets the table names.
+        /// </summary>
+        /// <value>
+        /// The table names.
+        /// </value>
         public List<string> TableNames { get { return _tableNames; } }
+
+        /// <summary>
+        /// Gets the join expressions.
+        /// </summary>
+        /// <value>
+        /// The join expressions.
+        /// </value>
         public List<string> JoinExpressions { get { return _joinExpressions; } }
+
+        /// <summary>
+        /// Gets the selection list.
+        /// </summary>
+        /// <value>
+        /// The selection list.
+        /// </value>
         public List<string> SelectionList { get { return _selectionList; } }
+
+        /// <summary>
+        /// Gets the where conditions.
+        /// </summary>
+        /// <value>
+        /// The where conditions.
+        /// </value>
         public List<string> WhereConditions { get { return _conditions; } }
+
+        /// <summary>
+        /// Gets the order by list.
+        /// </summary>
+        /// <value>
+        /// The order by list.
+        /// </value>
         public List<string> OrderByList { get { return _sortList; } }
+
+        /// <summary>
+        /// Gets the group by list.
+        /// </summary>
+        /// <value>
+        /// The group by list.
+        /// </value>
         public List<string> GroupByList { get { return _groupingList; } }
+
+        /// <summary>
+        /// Gets the having conditions.
+        /// </summary>
+        /// <value>
+        /// The having conditions.
+        /// </value>
         public List<string> HavingConditions { get { return _havingConditions; } }
+
+        /// <summary>
+        /// Gets the split columns.
+        /// </summary>
+        /// <value>
+        /// The split columns.
+        /// </value>
         public List<string> SplitColumns { get { return _splitColumns; } }
+        
+        /// <summary>
+        /// Gets the index of the current parameter.
+        /// </summary>
+        /// <value>
+        /// The index of the current parameter.
+        /// </value>
         public int CurrentParamIndex { get { return _paramIndex; } }
 
         private string Source
@@ -60,7 +123,12 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Builder
             }
         }
 
-        //private string Conditions
+        /// <summary>
+        /// Gets the conditions.
+        /// </summary>
+        /// <value>
+        /// The conditions.
+        /// </value>
         public string Conditions
         {
             get
@@ -110,13 +178,27 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Builder
         /// <value>
         /// The parameters.
         /// </value>
-        public IDictionary<string, object> Parameters { get; private set; }               
+        public IDictionary<string, object> Parameters { get; private set; }
+
+        /// <summary>
+        /// Gets the query string.
+        /// </summary>
+        /// <value>
+        /// The query string.
+        /// </value>
         public string QueryString
         {
             get { return Adapter.QueryString(Selection, Source, Conditions, Grouping, Having, Order); }
         }
-        
 
+
+        /// <summary>
+        /// Queries the string page.
+        /// </summary>
+        /// <param name="pageSize">Size of the page.</param>
+        /// <param name="pageNumber">The page number.</param>
+        /// <returns></returns>
+        /// <exception cref="Exception">Pagination requires the ORDER BY statement to be specified</exception>
         public string QueryStringPage(int pageSize, int? pageNumber = null)
         {
             if (pageNumber.HasValue)

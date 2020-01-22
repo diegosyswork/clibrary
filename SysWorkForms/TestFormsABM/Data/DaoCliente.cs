@@ -1,33 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SysWork.Data.DaoModel;
+﻿using System.Collections.Generic;
+using SysWork.Data.GenericRepository;
 
 namespace TestFormsABM.Data
 {
-    public class DaoCliente : BaseDao<Cliente>
+    public class ClienteRepository : BaseRepository<Cliente>
     {
-        public DaoCliente(string connectionString) : base(connectionString)
+        public ClienteRepository(string connectionString) : base(connectionString)
         {
 
         }
 
         public Cliente GetByCodCliente(string codCliente)
         {
-            Cliente cliente = null;
-
-            var resultado = GetListByLambdaExpressionFilter(c => c.codCliente == codCliente);
-            if (resultado != null && resultado.Count > 0)
-                cliente = resultado[0];
-
-            return cliente;
+            return GetByLambdaExpressionFilter(c => c.codCliente == codCliente);
         }
 
         public string GetProximoCodigo()
         {
-            return GetNextCode("codCliente", 6);
+            return "";
         }
 
         public IList<Cliente> GetListActivos()

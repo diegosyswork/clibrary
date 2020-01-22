@@ -71,7 +71,7 @@
       <Project>{A21FA2E6-2451-450F-AB10-E00C86A606DD}</Project>
       <Name>SysWork.Controls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\SysWorkData\SysWorkData\SysWork.Data.csproj">
+    <ProjectReference Include="..\..\SysWorkData\SysWorkData\SysWorkData\SysWork.Data.csproj">
       <Project>{885f2f8d-05a7-49dc-bc26-dcc00ca47c6e}</Project>
       <Name>SysWork.Data</Name>
     </ProjectReference>

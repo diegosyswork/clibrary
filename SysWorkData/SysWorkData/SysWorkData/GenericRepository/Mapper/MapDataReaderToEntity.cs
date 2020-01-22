@@ -4,8 +4,8 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using SysWork.Data.Common;
-using SysWork.Data.GenericRepostory.Attributes;
-using SysWork.Data.Syntax;
+using SysWork.Data.Common.Syntax;
+using SysWork.Data.GenericRepository.Attributes;
 
 namespace SysWork.Data.GenericRepository.Mapper
 {

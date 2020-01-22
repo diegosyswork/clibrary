@@ -5,9 +5,24 @@
     /// </summary>
     public enum LikeMethod
     {
+        /// <summary>
+        /// The starts with
+        /// </summary>
         StartsWith,
+
+        /// <summary>
+        /// The ends with
+        /// </summary>
         EndsWith,
+
+        /// <summary>
+        /// Determines whether this instance contains the object.
+        /// </summary>
         Contains,
+
+        /// <summary>
+        /// The equals
+        /// </summary>
         Equals
     }
 }

@@ -1,10 +1,10 @@
 ﻿using Demo.SysWork.Data.Entities;
 using SysWork.Data.Common;
-using SysWork.Data.GenericRepostory;
+using SysWork.Data.GenericRepository;
 
 namespace Demo.SysWork.Data.Repositories
 {
-    public class StateRepository : BaseGenericRepository<State>
+    public class StateRepository : BaseRepository<State>
     {
         public StateRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         {

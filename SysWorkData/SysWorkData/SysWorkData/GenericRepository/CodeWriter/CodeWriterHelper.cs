@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SysWork.Data.GenericRepostory.CodeWriter
+namespace SysWork.Data.GenericRepository.CodeWriter
 {
     /// <summary>
     /// Helper to write code
@@ -107,6 +107,7 @@ namespace SysWork.Data.GenericRepostory.CodeWriter
         /// </summary>
         /// <param name="isIdentity">if set to <c>true</c> [is identity].</param>
         /// <param name="isPrimary">if set to <c>true</c> [is primary].</param>
+        /// <param name="ColumnName"></param>
         /// <returns></returns>
         public static string AddDbColumnAttribute(bool isIdentity = false, bool isPrimary = false, string ColumnName=null)
         {

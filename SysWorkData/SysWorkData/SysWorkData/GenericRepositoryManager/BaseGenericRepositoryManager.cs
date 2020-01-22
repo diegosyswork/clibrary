@@ -3,10 +3,11 @@ using System.Data.Common;
 using SysWork.Data.Common;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.Utilities;
-using SysWork.Data.GenericRepostoryManager.Intefaces;
+using SysWork.Data.GenericRepositoryManager.Intefaces;
 
-namespace SysWork.Data.GenericRepostoryManager
+namespace SysWork.Data.GenericRepositoryManager
 {
+    #region DOCUMENTATION class
     /// <summary>
     /// Generic Repository Manager, to use, inherits from this, 
     /// and implement IRepositoryManager interface. Create public property's
@@ -16,9 +17,9 @@ namespace SysWork.Data.GenericRepostoryManager
     /// <example>
     /// <![CDATA[
     /// <summary>
-    /// Inherits of BaseGenericRepositoryManager and Implement IRepositoryManager
+    /// Inherits of BaseRepositoryManager and Implement IRepositoryManager
     /// </summary>
-    ///public class RepositoryManager : BaseGenericRepositoryManager<RepositoryManager>, IRepositoryManager
+    ///public class RepositoryManager : BaseRepositoryManager<RepositoryManager>, IRepositoryManager
     ///{
     ///
     ///    /// <summary>
@@ -46,7 +47,8 @@ namespace SysWork.Data.GenericRepostoryManager
     ///}
     /// ]]>
     /// </example>
-    public abstract class BaseGenericRepositoryManager<T> where T: class, IRepositoryManager
+    #endregion
+    public abstract class BaseRepositoryManager<T> where T: class, IRepositoryManager
     {
         private static T _TInstance = null;
 
@@ -124,17 +126,16 @@ namespace SysWork.Data.GenericRepostoryManager
         /// Returns a new instance of DbExecutor with the DataBaseEngine.
         /// </summary>
         /// <returns></returns>
-        protected DbExecutor GetDbExecutor()
+        public DbExecutor GetDbExecutor()
         {
             return new DbExecutor(_connectionString, _dataBaseEngine);
         }
 
         /// <summary>Gets an DbConnection, corresponding to the database engine</summary>
         /// <returns></returns>
-        protected DbConnection GetDbConnection()
+        public DbConnection GetDbConnection()
         {
             return StaticDbObjectProvider.GetDbConnection(_dataBaseEngine, _connectionString);
         }
     }
-
 }

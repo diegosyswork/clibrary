@@ -1,11 +1,11 @@
 using GerdannaDataManager.Entities;
 using SysWork.Data.Common;
 using SysWork.Data.Common.Utilities;
-using SysWork.Data.GenericRepostory;
+using SysWork.Data.GenericRepository;
 
 namespace GerdannaDataManager.Daos
 {
-    public class DaoPersona: BaseGenericRepository<Persona>
+    public class DaoPersona: BaseRepository<Persona>
     {
         public DaoPersona(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         {

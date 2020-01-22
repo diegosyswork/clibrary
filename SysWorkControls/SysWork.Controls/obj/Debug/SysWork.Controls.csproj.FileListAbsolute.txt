@@ -1,10 +1,11 @@
 C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\bin\Debug\SysWork.Controls.dll
 C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\bin\Debug\SysWork.Controls.pdb
+C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.csprojAssemblyReference.cache
 C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.InputBox.FrmInputBox.resources
 C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.Properties.Resources.resources
 C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.Toolbars.ToolBarABM.resources
 C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.Toolbars.ToolBarReporte.resources
-C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.csproj.GenerateResource.Cache
+C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.csproj.GenerateResource.cache
 C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.csproj.CoreCompileInputs.cache
 C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.dll
 C:\SWSISTEMAS\C#Library\SysWorkControls\SysWork.Controls\obj\Debug\SysWork.Controls.pdb

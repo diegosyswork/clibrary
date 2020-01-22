@@ -6,7 +6,7 @@ using System.Text;
 using SysWork.Data.Common;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.Utilities;
-using SysWork.Data.GenericRepostory.Exceptions;
+using SysWork.Data.GenericRepository.Exceptions;
 
 namespace SysWork.Data.LoggerDb
 {
@@ -415,7 +415,7 @@ namespace SysWork.Data.LoggerDb
         /// <param name="summary">The summary.</param>
         /// <param name="repositoryException">The repository exception.</param>
         /// <returns></returns>
-        public static bool LogError(EDbErrorTag eErrorTag, string summary, GenericRepositoryException repositoryException)
+        public static bool LogError(EDbErrorTag eErrorTag, string summary, RepositoryException repositoryException)
         {
             string sqlStatement = (repositoryException.DbCommand != null) ? DbUtil.ConvertCommandParamatersToLiteralValues((repositoryException.DbCommand)) : null;
             return DbLog(eErrorTag, summary, sqlStatement: sqlStatement, exception: repositoryException.OriginalException.ToString());
