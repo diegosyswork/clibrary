@@ -37,6 +37,7 @@ namespace SysWork.Data.Common.Syntax
 
             return secureTableName;
         }
+
         /// <summary>
         /// Gets an secure name of view, if this contains special characters adds brackets 
         /// or equivalent in the databaseEngine.
@@ -176,6 +177,5 @@ namespace SysWork.Data.Common.Syntax
 
             return result;
         }
-
     }
 }

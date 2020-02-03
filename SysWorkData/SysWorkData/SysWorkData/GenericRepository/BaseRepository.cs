@@ -30,8 +30,21 @@ namespace SysWork.Data.GenericRepository
     /// Abstract class to be partially implemented. It allows CRUD operations to be performed on database 
     /// entities represented by classes (classes must implement DbTableAttribute and DbColumnAttribute attributes). 
     /// Implementing this class allows: 
-    /// Add, AddRange, Update, UpdateRange, GetById, GetByLambdaExpressionFilter, GetAll, GetListByLambdaExpressionFilter, 
-    /// DeleteByLambdaExpressionFilter, DeleteById, Find .
+    /// Add ,
+    /// AddRange ,
+    /// Update ,
+    /// UpdateRange ,
+    /// DeleteById ,
+    /// DeleteAll ,
+    /// DeleteByLambdaExpressionFilter ,
+    /// DeleteByGenericWhereFilter ,
+    /// GetById ,
+    /// GetByLambdaExpressionFilter ,
+    /// GetByGenericWhereFilter ,
+    /// GetAll ,
+    /// GetListByLambdaExpressionFilter ,
+    /// GetListByGenericWhereFilter ,
+    /// Find
     /// <seealso cref="SysWork.Data.GenericRepository.Attributes"/>
     /// </summary>
     /// <remarks>
