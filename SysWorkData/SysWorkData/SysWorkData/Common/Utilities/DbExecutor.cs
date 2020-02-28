@@ -7,7 +7,6 @@ using System.Linq;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.Syntax;
-using SysWork.Data.GenericRepository.Mapper;
 
 namespace SysWork.Data.Common.Utilities
 {
@@ -351,7 +350,7 @@ namespace SysWork.Data.Common.Utilities
         }
 
         /// <summary>
-        /// Adds the parameter.
+        /// Adds a parameter.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
@@ -1114,17 +1113,6 @@ namespace SysWork.Data.Common.Utilities
                 throw exception;
             }
         }
-
-        /// <summary>
-        /// Gets a Typed List.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public List<T> GetTypedList<T>()where T:class, new()
-        {
-            return new MapDataReaderToEntity().Map<T>(ExecuteReader(_dbConnection, _dbTransaction)).ToList();
-        }
-
 
         private string FirstLetterCapital(string str)
         {

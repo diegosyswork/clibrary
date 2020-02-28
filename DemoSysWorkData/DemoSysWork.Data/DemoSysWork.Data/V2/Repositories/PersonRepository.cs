@@ -10,12 +10,14 @@ namespace Demo.SysWork.Data.Repositories
     {
         public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         {
+
         }
 
         public Person GetByPassport(string Passport)
         {
             return GetByLambdaExpressionFilter(entity => (entity.Passport == Passport));
         }
+
         public DbExecutor GetDbExecutor()
         {
             return BaseDbExecutor();

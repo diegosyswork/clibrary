@@ -1398,7 +1398,7 @@ namespace Demo.SysWork.Data
             dataGridView1.DataSource = null;
             dataGridView1.DataSource = mappedList;
             dataGridView1.Refresh();
-
+            /*
             LogText("Select persons born between 01/01/2000 and 31/12/2010 using GetTypedList<Person>()");
             dataGridView1.DataSource = null;
             dataGridView1.DataSource = new DbExecutor(RepositoryManager.ConnectionString, RepositoryManager.DataBaseEngine)
@@ -1406,8 +1406,8 @@ namespace Demo.SysWork.Data
                 .AddParameter("@FromDate", new DateTime(2000, 01, 01))
                 .AddParameter("@ToDate", new DateTime(2010, 12, 31))
                 .GetTypedList<Person>();
-
-            dataGridView1.Refresh();
+            */
+            //dataGridView1.Refresh();
 
             // INSERT
             LogText("Insert a new Person and Get the ID");

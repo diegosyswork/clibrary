@@ -355,25 +355,11 @@ namespace SysWork.Data.Common.Filters
         }
 
         /// <summary>
-        /// Add an Field with the value, automatically, creates a parameter with the same name and "@p_dbex_" prefix.
-        /// Use this only for InsertQuery and UpdateQuery.
+        /// Adds the field with value.
         /// </summary>
-        /// <param name="fieldName"></param>
-        /// <param name="value"></param>
-        /// <example>
-        /// <code>
-        ///     var id = new DbExecutor(connectionString)
-        ///                 .InsertQuery("Products")
-        ///                 .AddFieldWithValue("IdProduct",77978788)
-        ///                 .AddFieldWithValue("Description",77978788)
-        ///                 .AddFieldWithValue("IdCategory",5)
-        ///                 .AddFieldWithValue("Cost",155.4)
-        ///             .ExecuteScalar();
-        /// </code> 
-        /// </example>
-        /// <returns>
-        /// The same instance. Use the builder pattern
-        /// </returns>
+        /// <param name="fieldName">Name of the field.</param>
+        /// <param name="value">The value.</param>
+        /// <returns></returns>
         public GenericWhereFilter AddFieldWithValue(string fieldName, object value)
         {
             string parameterName = _filterParameterPrefix + _syntaxProvider.SecureNameForParameter(fieldName);

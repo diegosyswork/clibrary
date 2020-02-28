@@ -22,7 +22,11 @@ using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.GenericRepository.DbInfo;
 using SysWork.Data.GenericRepository.Interfaces;
 using SysWork.Data.GenericRepository.Mapper;
-
+#pragma warning disable 1587
+/// <summary>
+/// 
+/// </summary>
+#pragma warning restore 1587
 namespace SysWork.Data.GenericRepository
 {
     #region DOCUMENTATION Class
@@ -2494,6 +2498,87 @@ namespace SysWork.Data.GenericRepository
             return true;
         }
 
+
+        #region DOCUMENTATION UpdateRange(IList<TEntity> entities, out string errMessage)
+        /// <summary>
+        /// Updates a list of entities. No throws exceptions, if an exception occurs, 
+        /// returns false, and show the error message in out parameter errMessage.
+        /// </summary>
+        /// <remarks>
+        /// Update a list of entities. To determine which row to update in the database, 
+        /// this method uses the "IsPrimary" attributes of the DbColumnAttribute class. <see cref="Attributes.DbColumnAttribute"/>
+        /// </remarks>
+        /// <param name="entities">List of entities.</param>
+        /// <param name="errMessage">Out error message.</param>
+        /// <returns>
+        /// Returns <c>true</c>, if the entity were updated correctly, else return <c>false</c>. 
+        /// </returns>
+        /// <exception cref="RepositoryException">Throw </exception>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         //3 people are inserted to update them later
+        ///         var listEntities = new List<Person>();
+        ///        
+        ///         listEntities.Add(new Person { LastName = "Martinez", FirstName = "Diego", Passport = "AR00001" });
+        ///         listEntities.Add(new Person { LastName = "Perez", FirstName = "Juan", Passport = "AR00002" });
+        ///         listEntities.Add(new Person { LastName = "Fulanito", FirstName = "Cosme", Passport = "AR00003" });
+        ///         personRepository.AddRange(listEntities);
+        ///         
+        ///         // Get the list of the 3 people inserted
+        ///         listEntities = personRepository.GetByLambdaExpressionFilter(p=> p.Passport == "AR00001" || p.Passport == "AR00002" || p.Passport == "AR00003");
+        ///         
+        ///         // Update the passport of the entire list.
+        ///         listEntities[0].Passport = "AR10000U";
+        ///         listEntities[1].Passport = "AR20000U";
+        ///         listEntities[2].Passport = "AR30000U";
+        ///         if (PersonRepository.UpdateRange(listEntities, out string errMessage))
+        ///             Console.WriteLine("The list was updated");
+        ///         else
+        ///         {
+        ///             Console.WriteLine($"The following error occurred: {errMessage}");
+        ///         }
+        ///     }
+        ///}
+        /// ]]>
+        /// </code>
+        /// </example>
+        #endregion
         public bool UpdateRange(IList<TEntity> entities, out string errMessage)
         {
             bool result = false;
@@ -2517,26 +2602,474 @@ namespace SysWork.Data.GenericRepository
             return result;
         }
 
+        #region DOCUMENTATION UpdateRange(IList<TEntity> entities)
+        /// <summary>
+        /// Updates a list of entities. 
+        /// </summary>
+        /// <remarks>
+        /// Update a list of entities. To determine which row to update in the database, 
+        /// this method uses the "IsPrimary" attributes of the DbColumnAttribute class. <see cref="Attributes.DbColumnAttribute"/>
+        /// </remarks>
+        /// <param name="entities">List of entities.</param>
+        /// <returns>
+        /// Returns <c>true</c>, if the entity were updated correctly, else return <c>false</c>. 
+        /// </returns>
+        /// <exception cref="RepositoryException">Throw </exception>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         //3 people are inserted to update them later
+        ///         var listEntities = new List<Person>();
+        ///        
+        ///         listEntities.Add(new Person { LastName = "Martinez", FirstName = "Diego", Passport = "AR00001" });
+        ///         listEntities.Add(new Person { LastName = "Perez", FirstName = "Juan", Passport = "AR00002" });
+        ///         listEntities.Add(new Person { LastName = "Fulanito", FirstName = "Cosme", Passport = "AR00003" });
+        ///         personRepository.AddRange(listEntities);
+        ///         
+        ///         // Get the list of the 3 people inserted
+        ///         listEntities = personRepository.GetByLambdaExpressionFilter(p=> p.Passport == "AR00001" || p.Passport == "AR00002" || p.Passport == "AR00003");
+        ///         
+        ///         // Update the passport of the entire list.
+        ///         listEntities[0].Passport = "AR10000U";
+        ///         listEntities[1].Passport = "AR20000U";
+        ///         listEntities[2].Passport = "AR30000U";
+        /// 
+        ///         try
+        ///         {
+        ///             var result = PersonRepository.UpdateRange(listEntities);
+        ///             Console.WriteLine("The list was updated");
+        ///         }    
+        ///         catch(GenericRepositoryException gre)
+        ///         {
+        ///             Console.WriteLine("Database error");
+        ///         }
+        ///     }
+        ///}
+        /// ]]>
+        /// </code>
+        /// </example>
+        #endregion
         public bool UpdateRange(IList<TEntity> entities)
         {
             return UpdateRange(entities, null, null);
         }
 
+        #region DOCUMENTATION UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection)
+        /// <summary>
+        /// Updates a list of entities, using a connection provided. 
+        /// </summary>
+        /// <remarks>
+        /// Update a list of entities. To determine which row to update in the database, 
+        /// this method uses the "IsPrimary" attributes of the DbColumnAttribute class. <see cref="Attributes.DbColumnAttribute"/>
+        /// </remarks>
+        /// <param name="entities">List of entities.</param>
+        /// <param name="paramDbConnection">The database connection.</param>
+        /// <returns>
+        /// Returns <c>true</c>, if the entity were updated correctly, else return <c>false</c>. 
+        /// </returns>
+        /// <exception cref="RepositoryException">Throw </exception>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         // Get new Connection.
+        ///         var extConnection = personRepository.GetDbConnection();
+        ///         extConnection.Open();
+        ///         
+        ///         //3 people are inserted to update them later
+        ///         var listEntities = new List<Person>();
+        ///        
+        ///         listEntities.Add(new Person { LastName = "Martinez", FirstName = "Diego", Passport = "AR00001" });
+        ///         listEntities.Add(new Person { LastName = "Perez", FirstName = "Juan", Passport = "AR00002" });
+        ///         listEntities.Add(new Person { LastName = "Fulanito", FirstName = "Cosme", Passport = "AR00003" });
+        ///         personRepository.AddRange(listEntities);
+        ///         
+        ///         // Get the list of the 3 people inserted
+        ///         listEntities = personRepository.GetByLambdaExpressionFilter(p=> p.Passport == "AR00001" || p.Passport == "AR00002" || p.Passport == "AR00003");
+        ///         
+        ///         // Update the passport of the entire list.
+        ///         listEntities[0].Passport = "AR10000U";
+        ///         listEntities[1].Passport = "AR20000U";
+        ///         listEntities[2].Passport = "AR30000U";
+        /// 
+        ///         try
+        ///         {
+        ///             var result = PersonRepository.UpdateRange(listEntities,extConnection);
+        ///             Console.WriteLine("The list was updated");
+        ///         }    
+        ///         catch(GenericRepositoryException gre)
+        ///         {
+        ///             Console.WriteLine("Database error");
+        ///         }
+        ///     }
+        ///}
+        /// ]]>
+        /// </code>
+        /// </example>
+        #endregion
         public bool UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection)
         {
             return UpdateRange(entities, paramDbConnection, null);
         }
 
+        #region DOCUMENTATION UpdateRange(IList<TEntity> entities, IDbTransaction paramDbTransaction)
+        /// <summary>
+        /// Updates a list of entities, using transaction provided. 
+        /// </summary>
+        /// <remarks>
+        /// Update a list of entities. To determine which row to update in the database, 
+        /// this method uses the "IsPrimary" attributes of the DbColumnAttribute class. <see cref="Attributes.DbColumnAttribute"/>
+        /// </remarks>
+        /// <param name="entities">List of entities.</param>
+        /// <param name="paramDbTransaction">The database transaction.</param>
+        /// <returns>
+        /// Returns <c>true</c>, if the entity were updated correctly, else return <c>false</c>. 
+        /// </returns>
+        /// <exception cref="RepositoryException">Throw </exception>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         // Get new Connection.
+        ///         var extConnection = personRepository.GetDbConnection();
+        ///         extConnection.Open();
+        ///         
+        ///         //3 people are inserted to update them later
+        ///         var listEntities = new List<Person>();
+        ///        
+        ///         listEntities.Add(new Person { LastName = "Martinez", FirstName = "Diego", Passport = "AR00001" });
+        ///         listEntities.Add(new Person { LastName = "Perez", FirstName = "Juan", Passport = "AR00002" });
+        ///         listEntities.Add(new Person { LastName = "Fulanito", FirstName = "Cosme", Passport = "AR00003" });
+        ///         personRepository.AddRange(listEntities);
+        ///         
+        ///         // Get the list of the 3 people inserted
+        ///         listEntities = personRepository.GetByLambdaExpressionFilter(p=> p.Passport == "AR00001" || p.Passport == "AR00002" || p.Passport == "AR00003");
+        ///         
+        ///         // Update the passport of the entire list.
+        ///         listEntities[0].Passport = "AR10000U";
+        ///         listEntities[1].Passport = "AR20000U";
+        ///         listEntities[2].Passport = "AR30000U";
+        /// 
+        ///         // Create a Transaction
+        ///         var extTransaction = extConnection.BeginTransaction();
+        /// 
+        ///         try
+        ///         {
+        ///             var result = PersonRepository.UpdateRange(listEntities,extConnection,extTransaction);
+        ///             extTransaction.Commit();
+        ///             Console.WriteLine("The list was updated");
+        ///         }    
+        ///         catch(GenericRepositoryException gre)
+        ///         {
+        ///             Console.WriteLine("Database error");
+        ///             extTransaction.Rollback();
+        ///         }
+        ///     }
+        ///}
+        /// ]]>
+        /// </code>
+        /// </example>
+        #endregion
         public bool UpdateRange(IList<TEntity> entities, IDbTransaction paramDbTransaction)
         {
             return UpdateRange(entities, null, paramDbTransaction);
         }
 
+        #region DOCUMENTATION UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        /// <summary>
+        /// Updates a list of entities, using a connection and transaction provided. 
+        /// </summary>
+        /// <remarks>
+        /// Update a list of entities. To determine which row to update in the database, 
+        /// this method uses the "IsPrimary" attributes of the DbColumnAttribute class. <see cref="Attributes.DbColumnAttribute"/>
+        /// </remarks>
+        /// <param name="entities">List of entities.</param>
+        /// <param name="paramDbConnection">The database connection.</param>
+        /// <param name="paramDbTransaction">The database transaction.</param>
+        /// <returns>
+        /// Returns <c>true</c>, if the entity were updated correctly, else return <c>false</c>. 
+        /// </returns>
+        /// <exception cref="RepositoryException">Throw </exception>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         // Get new Connection.
+        ///         var extConnection = personRepository.GetDbConnection();
+        ///         extConnection.Open();
+        ///         
+        ///         //3 people are inserted to update them later
+        ///         var listEntities = new List<Person>();
+        ///        
+        ///         listEntities.Add(new Person { LastName = "Martinez", FirstName = "Diego", Passport = "AR00001" });
+        ///         listEntities.Add(new Person { LastName = "Perez", FirstName = "Juan", Passport = "AR00002" });
+        ///         listEntities.Add(new Person { LastName = "Fulanito", FirstName = "Cosme", Passport = "AR00003" });
+        ///         personRepository.AddRange(listEntities);
+        ///         
+        ///         // Get the list of the 3 people inserted
+        ///         listEntities = personRepository.GetByLambdaExpressionFilter(p=> p.Passport == "AR00001" || p.Passport == "AR00002" || p.Passport == "AR00003");
+        ///         
+        ///         // Update the passport of the entire list.
+        ///         listEntities[0].Passport = "AR10000U";
+        ///         listEntities[1].Passport = "AR20000U";
+        ///         listEntities[2].Passport = "AR30000U";
+        /// 
+        ///         // Create a Transaction
+        ///         var extTransaction = extConnection.BeginTransaction();
+        /// 
+        ///         try
+        ///         {
+        ///             var result = PersonRepository.UpdateRange(listEntities,extConnection,extTransaction);
+        ///             extTransaction.Commit();
+        ///             Console.WriteLine("The list was updated");
+        ///         }    
+        ///         catch(GenericRepositoryException gre)
+        ///         {
+        ///                 Console.WriteLine("Database error");
+        ///                 extTransaction.Rollback();
+        ///         }
+        ///     }
+        ///}
+        /// ]]>
+        /// </code>
+        /// </example>
+        #endregion
         public bool UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
         {
             return UpdateRange(entities, paramDbConnection, paramDbTransaction, out long recordsAffected);
         }
 
+        #region DOCUMENTATION UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
+        /// <summary>
+        /// Updates a list of entities, using a connection and transaction provided, and return recordsAffected. 
+        /// </summary>
+        /// <remarks>
+        /// Update a list of entities. To determine which row to update in the database, 
+        /// this method uses the "IsPrimary" attributes of the DbColumnAttribute class. <see cref="Attributes.DbColumnAttribute"/>
+        /// </remarks>
+        /// <param name="entities">List of entities.</param>
+        /// <param name="paramDbConnection">The database connection.</param>
+        /// <param name="paramDbTransaction">The database transaction.</param>
+        /// <param name="recordsAffected">out the records affected.</param>
+        /// <returns>
+        /// Returns <c>true</c>, if the entity were updated correctly, else return <c>false</c>. 
+        /// </returns>
+        /// <exception cref="RepositoryException">Throw </exception>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         // Get new Connection.
+        ///         var extConnection = personRepository.GetDbConnection();
+        ///         extConnection.Open();
+        ///         
+        ///         //3 people are inserted to update them later
+        ///         var listEntities = new List<Person>();
+        ///        
+        ///         listEntities.Add(new Person { LastName = "Martinez", FirstName = "Diego", Passport = "AR00001" });
+        ///         listEntities.Add(new Person { LastName = "Perez", FirstName = "Juan", Passport = "AR00002" });
+        ///         listEntities.Add(new Person { LastName = "Fulanito", FirstName = "Cosme", Passport = "AR00003" });
+        ///         personRepository.AddRange(listEntities);
+        ///         
+        ///         // Get the list of the 3 people inserted
+        ///         listEntities = personRepository.GetByLambdaExpressionFilter(p=> p.Passport == "AR00001" || p.Passport == "AR00002" || p.Passport == "AR00003");
+        ///         
+        ///         // Update the passport of the entire list.
+        ///         listEntities[0].Passport = "AR10000U";
+        ///         listEntities[1].Passport = "AR20000U";
+        ///         listEntities[2].Passport = "AR30000U";
+        /// 
+        ///         // Create a Transaction
+        ///         var extTransaction = extConnection.BeginTransaction();
+        /// 
+        ///         try
+        ///         {
+        ///             var result = PersonRepository.UpdateRange(listEntities,extConnection,extTransaction,out long recordsAffected);
+        ///             extTransaction.Commit();
+        ///             Console.WriteLine($"{recordsAffected} are updated");
+        ///         }    
+        ///         catch(GenericRepositoryException gre)
+        ///         {
+        ///                 Console.WriteLine("Database error");
+        ///                 extTransaction.Rollback();
+        ///         }
+        ///     }
+        ///}
+        /// ]]>
+        /// </code>
+        /// </example>
+        #endregion
         public bool UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
         {
             recordsAffected = 0;
@@ -2630,6 +3163,82 @@ namespace SysWork.Data.GenericRepository
             return true;
         }
 
+        #region DOCUMENTATION DeleteById(long Id,out string errMessage)
+        /// <summary>
+        /// Delete an entity by its identifier, using an external DbConnection .
+        /// </summary>
+        /// <param name="Id">The identifier.</param>
+        /// <param name="errMessage">Out Error Message</param>
+        /// 
+        /// <returns>
+        /// True, if an error did not occur 
+        /// (regardless of whether or not you deleted a record). 
+        /// 
+        /// False if an exception occurred. 
+        /// 
+        /// </returns>
+        /// <exception cref="RepositoryException"></exception>
+        /// <example>
+        /// <![CDATA[
+        /// 
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         var idPersonToDelete = 5712;
+        /// 
+        ///         try
+        ///         {
+        ///             if (PersonRepository.DeleteById(idPersonToDelete,out string errMessage))
+        ///             {
+        ///                 Console.WriteLine("Command executed successfully");
+        ///             }
+        ///             else
+        ///             {
+        ///                 Console.WriteLine($"Error executing the command: {errMessage}");
+        ///             }
+        ///         }    
+        ///         catch(GenericRepositoryException gre)
+        ///         {
+        ///             Console.WriteLine("Error executing the command");
+        ///         }
+        ///     }
+        ///}
+        /// 
+        /// ]]>
+        /// </example>
+#endregion
         public bool DeleteById(long Id, out string errMessage)
         {
             bool result = false;
@@ -2652,22 +3261,438 @@ namespace SysWork.Data.GenericRepository
             return result;
         }
 
+        #region DOCUMENTATION DeleteById(long Id)
+        /// <summary>
+        /// Delete an entity by its identifier, using an external DbConnection .
+        /// </summary>
+        /// <param name="Id">The identifier.</param>
+        /// <returns>
+        /// True, if an error did not occur 
+        /// (regardless of whether or not you deleted a record). 
+        /// 
+        /// False if an exception occurred. 
+        /// 
+        /// </returns>
+        /// <exception cref="RepositoryException"></exception>
+        /// <example>
+        /// <![CDATA[
+        /// 
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         var idPersonToDelete = 5712;
+        /// 
+        ///         try
+        ///         {
+        ///             if (PersonRepository.DeleteById(idPersonToDelete))
+        ///             {
+        ///                 Console.WriteLine("Command executed successfully");
+        ///             }
+        ///             else
+        ///             {
+        ///                 Console.WriteLine("Error executing the command");
+        ///             }
+        ///         }    
+        ///         catch(GenericRepositoryException gre)
+        ///         {
+        ///             Console.WriteLine("Error executing the command");
+        ///         }
+        ///     }
+        ///}
+        /// 
+        /// ]]>
+        /// </example>
+        #endregion
         public bool DeleteById(long Id)
         {
             return DeleteById(Id, null, null);
         }
+
+        #region DOCUMENTATION DeleteById(long Id, IDbConnection paramDbConnection)
+        /// <summary>
+        /// Delete an entity by its identifier, using an external DbConnection .
+        /// </summary>
+        /// <param name="Id">The identifier.</param>
+        /// <param name="paramDbConnection">External DbConnection.</param>
+        /// <returns>
+        /// True, if an error did not occur 
+        /// (regardless of whether or not you deleted a record). 
+        /// 
+        /// False if an exception occurred. 
+        /// 
+        /// </returns>
+        /// <exception cref="RepositoryException"></exception>
+        /// <example>
+        /// <![CDATA[
+        /// 
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         var idPersonToDelete = 5712;
+        ///         
+        ///         var dbConnection = personRepository.GetDbConnection();
+        ///         dbConnection.Open();
+        /// 
+        ///         try
+        ///         {
+        ///             if (PersonRepository.DeleteById(idPersonToDelete,dbConnection))
+        ///             {
+        ///                 Console.WriteLine("Command executed successfully");
+        ///             }
+        ///             else
+        ///             {
+        ///                 Console.WriteLine("Error executing the command");
+        ///             }
+        ///         }    
+        ///         catch(GenericRepositoryException gre)
+        ///         {
+        ///             Console.WriteLine("Error executing the command");
+        ///         }
+        ///     }
+        ///}
+        /// 
+        /// ]]>
+        /// </example>
+        #endregion
+
         public bool DeleteById(long Id, IDbConnection paramDbConnection)
         {
             return DeleteById(Id, paramDbConnection, null);
         }
+
+        #region DOCUMENTATION DeleteById(long Id, IDbTransaction paramDbTransaction)
+        /// <summary>
+        /// Delete an entity by its identifier, using an external DbTransaction.
+        /// </summary>
+        /// <param name="Id">The identifier.</param>
+        /// <param name="paramDbTransaction">External DbTransaction.</param>
+        /// <returns>
+        /// True, if an error did not occur 
+        /// (regardless of whether or not you deleted a record). 
+        /// 
+        /// False if an exception occurred.
+        /// 
+        /// </returns>
+        /// <exception cref="RepositoryException"></exception>
+        /// <example>
+        /// <![CDATA[
+        /// 
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         var idPersonToDelete = 5712;
+        ///         
+        ///         var dbConnection = personRepository.GetDbConnection();
+        ///         dbConnection.Open();
+        ///         var dbTransaction = dbConnection.BeginTransaction();
+        /// 
+        ///         try
+        ///         {
+        ///             if (PersonRepository.DeleteById(idPersonToDelete,dbConnection,dbTransaction,out long recordsAffected))
+        ///             {
+        ///                 dbTransaction.Commit();
+        ///                 Console.WriteLine("Command executed successfully");
+        ///             }
+        ///             else
+        ///             {
+        ///                 Console.WriteLine("Error executing the command");
+        ///                 dbTransaction.Rollback();
+        ///             }
+        ///         }    
+        ///         catch(GenericRepositoryException gre)
+        ///         {
+        ///             dbTransaction.Rollback();
+        ///             Console.WriteLine("Error executing the command");
+        ///         }
+        ///     }
+        ///}
+        /// 
+        /// ]]>
+        /// </example>
+        #endregion
         public bool DeleteById(long Id, IDbTransaction paramDbTransaction)
         {
             return DeleteById(Id, null, paramDbTransaction);
         }
+
+
+        #region DOCUMENTATION DeleteById(long Id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        /// <summary>
+        /// Delete an entity by its identifier, using an external DbConnection and DbTransaction.
+        /// </summary>
+        /// <param name="Id">The identifier.</param>
+        /// <param name="paramDbConnection">External DbConnection.</param>
+        /// <param name="paramDbTransaction">External DbTransaction.</param>
+        /// <returns>
+        /// True, if an error did not occur 
+        /// (regardless of whether or not you deleted a record). 
+        /// 
+        /// False if an exception occurred. 
+        /// 
+        /// </returns>
+        /// <exception cref="RepositoryException"></exception>
+        /// <example>
+        /// <![CDATA[
+        /// 
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         var idPersonToDelete = 5712;
+        ///         
+        ///         var dbConnection = personRepository.GetDbConnection();
+        ///         dbConnection.Open();
+        ///         var dbTransaction = dbConnection.BeginTransaction();
+        /// 
+        ///         try
+        ///         {
+        ///             if (PersonRepository.DeleteById(idPersonToDelete,dbConnection,dbTransaction,out long recordsAffected))
+        ///             {
+        ///                 dbTransaction.Commit();
+        ///                 Console.WriteLine("Command executed successfully");
+        ///             }
+        ///             else
+        ///             {
+        ///                 Console.WriteLine("Error executing the command");
+        ///                 dbTransaction.Rollback();
+        ///             }
+        ///         }    
+        ///         catch(GenericRepositoryException gre)
+        ///         {
+        ///             dbTransaction.Rollback();
+        ///             Console.WriteLine("Error executing the command");
+        ///         }
+        ///     }
+        ///}
+        /// 
+        /// ]]>
+        /// </example>
+        #endregion
         public bool DeleteById(long Id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
         {
             return DeleteById(Id, paramDbConnection, paramDbTransaction, out long recordsAffected);
         }
+
+        #region DOCUMENTATION DeleteById(long Id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
+        /// <summary>
+        /// Delete an entity by its identifier, using an external DbConnection and DbTransaction.
+        /// </summary>
+        /// <param name="Id">The identifier.</param>
+        /// <param name="paramDbConnection">External DbConnection.</param>
+        /// <param name="paramDbTransaction">External DbTransaction.</param>
+        /// <param name="recordsAffected">OUT The records affected.</param>
+        /// <returns>
+        /// True, if an error did not occur 
+        /// (regardless of whether or not you deleted a record). 
+        /// 
+        /// False if an exception occurred. 
+        /// 
+        /// You can get how many records you deleted through recordsAffected
+        /// </returns>
+        /// <exception cref="RepositoryException"></exception>
+        /// <example>
+        /// <![CDATA[
+        /// 
+        ///[DbTable (Name = "Persons")]
+        ///public class Person
+        ///{
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///}
+        ///
+        ///public class PersonRepository: BaseRepository<Person>
+        ///{
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     
+        ///     }
+        ///     
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///}
+        ///
+        ///class Test
+        ///{
+        ///     static void Main()
+        ///     {
+        ///         // MSSqlServer connectionString.
+        ///         var myConnectionString = "MyConnectionString";
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         
+        ///         var idPersonToDelete = 5712;
+        ///         
+        ///         var dbConnection = personRepository.GetDbConnection();
+        ///         dbConnection.Open();
+        ///         var dbTransaction = dbConnection.BeginTransaction();
+        /// 
+        ///         try
+        ///         {
+        ///             if (PersonRepository.DeleteById(idPersonToDelete,dbConnection,dbTransaction,out long recordsAffected))
+        ///             {
+        ///                 dbTransaction.Commit();
+        ///                 
+        ///                 if (recordsAffected == 0)
+        ///                 {
+        ///                     Console.WriteLine("Command executed successfully, but don't delete records");
+        ///                 }
+        ///                 else
+        ///                 {
+        ///                     Console.WriteLine($"Command executed successfully, records deleted: {recordsAffected}");
+        ///                 }
+        ///             }
+        ///             else
+        ///             {
+        ///                 Console.WriteLine("Error executing the command");
+        ///                 dbTransaction.Rollback();
+        ///             }
+        ///         }    
+        ///         catch(GenericRepositoryException gre)
+        ///         {
+        ///             dbTransaction.Rollback();
+        ///             Console.WriteLine("Error executing the command");
+        ///         }
+        ///     }
+        ///}
+        /// 
+        /// ]]>
+        /// </example>
+        #endregion
         public bool DeleteById(long Id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
         {
             recordsAffected = 0;
@@ -2740,6 +3765,7 @@ namespace SysWork.Data.GenericRepository
             }
             return true;
         }
+
 
         public bool DeleteAll(out string errMessage)
         {
@@ -2879,6 +3905,7 @@ namespace SysWork.Data.GenericRepository
             }
             return recordsAffected;
         }
+
         public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter)
         {
             return DeleteByGenericWhereFilter(whereFilter, null, null, out long recordsAffected);
@@ -3367,7 +4394,7 @@ namespace SysWork.Data.GenericRepository
             return result;
         }
         /// <summary>
-        /// Gets a new instance of the GenericFilterQuery.
+        /// Gets a new instance of the GenericFilterQuery with the ColumnsForSelect and TableName setted.
         /// </summary>
         /// <returns></returns>
         public GenericWhereFilter GetGenericWhereFilter()
