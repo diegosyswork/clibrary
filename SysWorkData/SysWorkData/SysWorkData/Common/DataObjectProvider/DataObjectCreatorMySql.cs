@@ -66,5 +66,14 @@ namespace SysWork.Data.Common.DataObjectProvider
         {
             return new MySqlParameter();
         }
+
+        /// <summary>
+        /// Gets an MySqlDataAdapter.
+        /// </summary>
+        /// <returns></returns>
+        public override DbDataAdapter GetDbDataAdapter()
+        {
+            return new MySqlDataAdapter();
+        }
     }
 }

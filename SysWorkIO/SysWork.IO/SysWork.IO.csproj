@@ -33,6 +33,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,13 +43,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CsvExport.cs" />
+    <Compile Include="DataGridViewToCSV.cs" />
     <Compile Include="DataReaderToCSV.cs" />
+    <Compile Include="DataTableToCSV.cs" />
     <Compile Include="FixedLengthFileReader.cs" />
     <Compile Include="FixedLenghtFileWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GoogleDriveManager\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

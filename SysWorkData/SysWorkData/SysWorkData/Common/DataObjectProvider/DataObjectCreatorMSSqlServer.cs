@@ -67,5 +67,14 @@ namespace SysWork.Data.Common.DataObjectProvider
         {
             return new SqlParameter();
         }
+
+        /// <summary>
+        /// Gets the SqlDataAdapter.
+        /// </summary>
+        /// <returns></returns>
+        public override DbDataAdapter GetDbDataAdapter()
+        {
+            return new SqlDataAdapter();
+        }
     }
 }

@@ -147,15 +147,19 @@ namespace SysWork.Data.Common.Utilities
                 else if (dataBaseEngine == EDataBaseEngine.OleDb)
                     dtColumns = dbConnection.GetSchema("Columns", new[] { null, null, tableName, null });
                 else if (dataBaseEngine == EDataBaseEngine.SqLite)
-                    dtColumns = dbConnection.GetSchema("Columns", new[] { null, tableName, null });
+                    dtColumns = dbConnection.GetSchema("Columns", new[] { null, tableName,null});
                 else
                     throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
 
-                DataView dv = new DataView(dtColumns);
+                // For DEBUG mode, show the result of GetSchema Method
+                foreach (DataRow dataRow in dtColumns.Rows)
+                {
+                    Console.WriteLine($"COLUMN_NAME = {dataRow["COLUMN_NAME"]} TABLE_NAME = {dataRow["TABLE_NAME"]}");
+                }
+                
+                // For compatibility with SQLite filter the TABLE_NAME, because the restriction does't work.
+                exists = dtColumns.Select(String.Format("COLUMN_NAME = '{0}' AND TABLE_NAME = '{1}'", columnName, tableName)).Length != 0;
 
-                dv.RowFilter = String.Format(" COLUMN_NAME = '{1}'",tableName,columnName); 
-
-                exists = dv.Count>0;
 
                 dbConnection.Close();
             }

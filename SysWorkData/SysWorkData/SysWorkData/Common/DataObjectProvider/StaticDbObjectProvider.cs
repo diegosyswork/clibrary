@@ -168,6 +168,27 @@ namespace SysWork.Data.Common.DataObjectProvider
             else
                 throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
         }
+
+        /// <summary>
+        /// Gets and DbDataAdapter data adapter.
+        /// </summary>
+        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
+        public static DbDataAdapter GetDbDataAdapter(EDataBaseEngine dataBaseEngine)
+        {
+            if (dataBaseEngine == EDataBaseEngine.MSSqlServer)
+                return new SqlDataAdapter();
+            else if (dataBaseEngine == EDataBaseEngine.OleDb)
+                return new OleDbDataAdapter();
+            else if (dataBaseEngine == EDataBaseEngine.SqLite)
+                return new SQLiteDataAdapter();
+            else if (dataBaseEngine == EDataBaseEngine.MySql)
+                return new MySqlDataAdapter();
+            else
+                throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
+        }
+
     }
 
 }

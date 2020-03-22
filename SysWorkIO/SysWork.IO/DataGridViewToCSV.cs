@@ -1,46 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace SysWork.IO
 {
-    /// <summary>
-    /// Export IDataReader to CSV.
-    /// </summary>
-    /// <remarks>
-    /// 
-    /// </remarks>
-    public static class DataReaderToCSV
+    public static class DataGridViewToCSV
     {
-        /// <summary>
-        /// Exports the specified data reader.
-        /// </summary>
-        /// <param name="dataReader">The data reader.</param>
-        /// <param name="includeHeaderAsFirstRow">if set to <c>true</c> [include header as first row].</param>
-        /// <param name="fieldDelimiter">Character Delimiter.</param>
-        /// <returns></returns>
-        public static string Export(IDataReader dataReader, bool includeHeaderAsFirstRow = true, string fieldDelimiter = ";")
+        public static string Export(DataGridView datagridView, bool includeHeaderAsFirstRow = true, string fieldDelimiter = ";")
         {
-            DataTable dataTable = new DataTable();
             StringBuilder csvRows = new StringBuilder();
             string row = "";
 
             int columns;
+            int rowIndex;
+            int columnIndex;
 
             try
             {
-                dataTable.Load(dataReader);
-                columns = dataTable.Columns.Count;
+                columns = datagridView.Columns.Count;
                 //Create Header
                 if (includeHeaderAsFirstRow)
                 {
-                    for (int index = 0; index < columns; index++)
+                    for (columnIndex = 0; columnIndex < columns; columnIndex++)
                     {
-                        row += (dataTable.Columns[index].ToString().Replace(fieldDelimiter,""));
-                        if (index < columns - 1)
+                        row += (datagridView.Columns[columnIndex].HeaderText.ToString().Replace(fieldDelimiter, ""));
+                        if (columnIndex < columns - 1)
                             row += (fieldDelimiter);
                     }
                     row += (Environment.NewLine);
@@ -49,16 +33,22 @@ namespace SysWork.IO
                 csvRows.Append(row);
 
                 //Create Rows
-                for (int rowIndex = 0; rowIndex < dataTable.Rows.Count; rowIndex++)
+
+                for (rowIndex = 0; rowIndex < datagridView.Rows.Count; rowIndex++)
                 {
+                    if (rowIndex == 83)
+                    {
+                        Console.Write("");
+                    }
+
                     row = "";
                     //Row
-                    for (int index = 0; index < columns - 1; index++)
+                    for (columnIndex = 0; columnIndex < columns - 1; columnIndex++)
                     {
-                        string value = dataTable.Rows[rowIndex][index].ToString();
+                        string value = datagridView.Rows[rowIndex].Cells[columnIndex].Value.ToString();
 
                         //If type of field is string
-                        if (dataTable.Rows[rowIndex][index] is string)
+                        if (datagridView.Rows[rowIndex].Cells[columnIndex].Value is string)
                         {
                             //If double quotes are used in value, ensure each are replaced by double quotes.
                             if (value.IndexOf("\"") >= 0)
@@ -79,12 +69,10 @@ namespace SysWork.IO
                             }
                         }
                         row += value;
-                        if (index < columns - 1)
+                        if (columnIndex < columns - 1)
                             row += fieldDelimiter;
                     }
-
-                    dataTable.Rows[rowIndex][columns - 1].ToString().Replace(fieldDelimiter, " ");
-
+                    //datagridView.Rows[rowIndex].Cells[columns - 1].ToString().Replace(fieldDelimiter, " ");
                     row += Environment.NewLine;
                     csvRows.Append(row);
                 }

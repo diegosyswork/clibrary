@@ -75,5 +75,10 @@ namespace SysWork.Data.Common.DataObjectProvider
         {
             return new OleDbParameter();
         }
+
+        public override DbDataAdapter GetDbDataAdapter()
+        {
+            return new OleDbDataAdapter();
+        }
     }
 }

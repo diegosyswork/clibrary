@@ -47,7 +47,7 @@ namespace SysWork.Data.Common.Filters
         /// </value>
         public string TableOrViewName { get { return _tableOrViewName; } private set { }}
 
-        private string _where = null;
+        private string _where = "";
         /// <summary>
         /// Gets the where clause.
         /// </summary>
@@ -246,19 +246,90 @@ namespace SysWork.Data.Common.Filters
         }
 
         /// <summary>
+        /// Appends to existing where clause.
+        /// </summary>
+        /// <param name="whereTermAppened">The where.</param>
+        /// <returns></returns>
+        public GenericWhereFilter AppendWhere(string whereTermAppened)
+        {
+            string stringToFind = "WHERE";
+            if (!string.IsNullOrEmpty(whereTermAppened))
+            {
+                if (whereTermAppened.StartsWith(stringToFind, System.StringComparison.InvariantCultureIgnoreCase))
+                    whereTermAppened = whereTermAppened.Substring(stringToFind.Length);
+
+                _where += whereTermAppened.Trim();
+                if (_where.StartsWith(stringToFind, System.StringComparison.InvariantCultureIgnoreCase))
+                    _where = _where.Substring(stringToFind.Length);
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Appends an AND Where clause.
+        /// </summary>
+        /// <param name="andWhereClause">The and where clause.</param>
+        /// <returns></returns>
+        public GenericWhereFilter AppendANDWhereClause(string andWhereClause)
+        {
+            string operatorToFind = "AND";
+            string whereToFind = "WHERE";
+
+            andWhereClause = andWhereClause.Trim();
+
+            if (!string.IsNullOrEmpty(andWhereClause))
+            {
+                if (andWhereClause.StartsWith(operatorToFind, System.StringComparison.InvariantCultureIgnoreCase))
+                    andWhereClause = andWhereClause.Substring(operatorToFind.Length);
+
+                if (andWhereClause.StartsWith(whereToFind, System.StringComparison.InvariantCultureIgnoreCase))
+                    andWhereClause = andWhereClause.Substring(whereToFind.Length);
+
+                _where += string.Format(" {0} ({1})", (string.IsNullOrEmpty(_where.Trim()) ? "":" AND "),andWhereClause);
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// Appends an OR Where clause.
+        /// </summary>
+        /// <param name="orWhereClause">The or where clause.</param>
+        /// <returns></returns>
+        public GenericWhereFilter AppendORWhereClause(string orWhereClause)
+        {
+            string operatorToFind = "OR";
+            string whereToFind = "WHERE";
+
+            orWhereClause = orWhereClause.Trim();
+
+            if (!string.IsNullOrEmpty(orWhereClause))
+            {
+                if (orWhereClause.StartsWith(operatorToFind, System.StringComparison.InvariantCultureIgnoreCase))
+                    orWhereClause = orWhereClause.Substring(operatorToFind.Length);
+
+                if (orWhereClause.StartsWith(whereToFind, System.StringComparison.InvariantCultureIgnoreCase))
+                    orWhereClause = orWhereClause.Substring(whereToFind.Length);
+
+                _where += string.Format(" {0} ({1})", (string.IsNullOrEmpty(_where.Trim()) ? "" : " OR "), orWhereClause);
+            }
+            return this;
+        }
+        
+        /// <summary>
         /// Sets the order by clause.
         /// </summary>
         /// <param name="orderBy">The order by.</param>
         /// <returns></returns>
         public GenericWhereFilter SetOrderBy(string orderBy)
         {
-            string w = "ORDER BY";
+            string stringToFind = "ORDER BY";
             if (!string.IsNullOrEmpty(orderBy))
             {
                 _orderBy = orderBy.Trim();
 
-                if (_orderBy.StartsWith(w, System.StringComparison.InvariantCultureIgnoreCase))
-                    _orderBy = _orderBy.Substring(w.Length);
+                if (_orderBy.StartsWith(stringToFind, System.StringComparison.InvariantCultureIgnoreCase))
+                    _orderBy = _orderBy.Substring(stringToFind.Length);
             }
 
             return this;

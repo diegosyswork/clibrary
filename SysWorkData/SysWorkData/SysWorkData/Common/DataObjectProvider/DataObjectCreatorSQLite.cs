@@ -77,5 +77,14 @@ namespace SysWork.Data.Common.DataObjectProvider
         {
             return new SQLiteParameter();
         }
+
+        /// <summary>
+        /// Gets an SQLiteDataAdapter.
+        /// </summary>
+        /// <returns></returns>
+        public override DbDataAdapter GetDbDataAdapter()
+        {
+            return new SQLiteDataAdapter();
+        }
     }
 }

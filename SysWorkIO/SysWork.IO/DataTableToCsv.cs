@@ -1,30 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SysWork.IO
 {
-    /// <summary>
-    /// Export IDataReader to CSV.
-    /// </summary>
-    /// <remarks>
-    /// 
-    /// </remarks>
-    public static class DataReaderToCSV
+    public static class DataTableToCSV
     {
-        /// <summary>
-        /// Exports the specified data reader.
-        /// </summary>
-        /// <param name="dataReader">The data reader.</param>
-        /// <param name="includeHeaderAsFirstRow">if set to <c>true</c> [include header as first row].</param>
-        /// <param name="fieldDelimiter">Character Delimiter.</param>
-        /// <returns></returns>
-        public static string Export(IDataReader dataReader, bool includeHeaderAsFirstRow = true, string fieldDelimiter = ";")
+        public static string Export(DataTable dataTable, bool includeHeaderAsFirstRow = true, string fieldDelimiter = ";")
         {
-            DataTable dataTable = new DataTable();
             StringBuilder csvRows = new StringBuilder();
             string row = "";
 
@@ -32,14 +15,13 @@ namespace SysWork.IO
 
             try
             {
-                dataTable.Load(dataReader);
                 columns = dataTable.Columns.Count;
                 //Create Header
                 if (includeHeaderAsFirstRow)
                 {
                     for (int index = 0; index < columns; index++)
                     {
-                        row += (dataTable.Columns[index].ToString().Replace(fieldDelimiter,""));
+                        row += (dataTable.Columns[index].ToString().Replace(fieldDelimiter, ""));
                         if (index < columns - 1)
                             row += (fieldDelimiter);
                     }
@@ -82,9 +64,7 @@ namespace SysWork.IO
                         if (index < columns - 1)
                             row += fieldDelimiter;
                     }
-
-                    dataTable.Rows[rowIndex][columns - 1].ToString().Replace(fieldDelimiter, " ");
-
+                    dataTable.Rows[rowIndex][columns - 1].ToString().ToString().Replace(fieldDelimiter, " ");
                     row += Environment.NewLine;
                     csvRows.Append(row);
                 }

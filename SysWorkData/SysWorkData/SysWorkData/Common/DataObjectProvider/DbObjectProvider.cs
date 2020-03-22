@@ -110,5 +110,14 @@ namespace SysWork.Data.Common.DataObjectProvider
         {
             return _dataObjectCreator.GetDbConnectionStringBuilder();
         }
+
+        /// <summary>
+        /// Gets an DbDataAdapter.
+        /// </summary>
+        /// <returns></returns>
+        public DbDataAdapter GetDbDataAdapter()
+        {
+            return _dataObjectCreator.GetDbDataAdapter();
+        }
     }
 }
