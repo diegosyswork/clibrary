@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SysWork.Data.GenericRepository.Interfaces.Actions
 {
@@ -21,6 +17,5 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
         bool UpdateRange(IList<TEntity> entities, out string errMessage, int commandTimeOut);
         bool UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected);
         bool UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected, int? commandTimeOut);
-
     }
 }
