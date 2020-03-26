@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SysWork.Data.GenericRepository.Interfaces.Accions
+namespace SysWork.Data.GenericRepository.Interfaces.Actions
 {
     public interface IDeleteById<TEntity>
     {
@@ -21,6 +21,5 @@ namespace SysWork.Data.GenericRepository.Interfaces.Accions
         bool DeleteById(long Id, out string errMessage, int commandTimeOut);
         bool DeleteById(long Id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected);
         bool DeleteById(long Id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected, int? commandTimeOut);
-
     }
 }

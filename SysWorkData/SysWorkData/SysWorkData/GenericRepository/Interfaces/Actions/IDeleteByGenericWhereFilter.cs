@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 using SysWork.Data.Common.Filters;
 
-namespace SysWork.Data.GenericRepository.Interfaces.Accions
+namespace SysWork.Data.GenericRepository.Interfaces.Actions
 {
     public interface IDeleteByGenericWhereFilter<TEntity>
     {

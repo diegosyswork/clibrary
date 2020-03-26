@@ -9,7 +9,7 @@ using SysWork.Data.Common.Utilities;
 using SysWork.Data.GenericRepository.Attributes;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.GenericRepository.DbInfo;
-using SysWork.Data.GenericRepository.Interfaces.Accions;
+using SysWork.Data.GenericRepository.Interfaces.Actions;
 
 namespace SysWork.Data.GenericRepository
 {
@@ -91,13 +91,11 @@ namespace SysWork.Data.GenericRepository
         #endregion
         public long Add(TEntity entity, out string errMessage)
         {
-            errMessage = "";
             return Add(entity, out errMessage, null);
         }
 
         public long Add(TEntity entity, out string errMessage, int commandTimeOut)
         {
-            errMessage = "";
             return Add(entity, out errMessage, commandTimeOut);
         }
 

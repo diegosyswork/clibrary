@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SysWork.Data.GenericRepository.Interfaces.Accions
+namespace SysWork.Data.GenericRepository.Interfaces.Actions
 {
     public interface IDeleteByLambdaExpressionFilter<TEntity>
     {
@@ -18,6 +18,5 @@ namespace SysWork.Data.GenericRepository.Interfaces.Accions
         long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction paramDbTransaction, int commandTimeOut);
         long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction);
         long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int? commandTimeOut);
-
     }
 }

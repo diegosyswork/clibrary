@@ -4,7 +4,7 @@ using System.Data.OleDb;
 using SysWork.Data.Common;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.GenericRepository.Exceptions;
-using SysWork.Data.GenericRepository.Interfaces.Accions;
+using SysWork.Data.GenericRepository.Interfaces.Actions;
 using SysWork.Data.Common.Filters;
 using System.Data.Common;
 

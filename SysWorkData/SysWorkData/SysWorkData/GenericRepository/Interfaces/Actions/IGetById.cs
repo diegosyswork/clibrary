@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SysWork.Data.GenericRepository.Interfaces.Accions
+namespace SysWork.Data.GenericRepository.Interfaces.Actions
 {
     interface IGetById<TEntity>
     {

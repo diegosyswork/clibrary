@@ -7,7 +7,7 @@ using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.GenericRepository.Attributes;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.GenericRepository.DbInfo;
-using SysWork.Data.GenericRepository.Interfaces.Accions;
+using SysWork.Data.GenericRepository.Interfaces.Actions;
 using System.Collections.Generic;
 
 namespace SysWork.Data.GenericRepository

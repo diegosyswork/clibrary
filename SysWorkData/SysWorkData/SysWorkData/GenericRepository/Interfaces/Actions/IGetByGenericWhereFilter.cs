@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SysWork.Data.Common.Filters;
 
-namespace SysWork.Data.GenericRepository.Interfaces.Accions
+namespace SysWork.Data.GenericRepository.Interfaces.Actions
 {
     public interface IGetByGenericWhereFilter<TEntity>
     {
