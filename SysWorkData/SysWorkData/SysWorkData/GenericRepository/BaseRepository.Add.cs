@@ -204,7 +204,7 @@ namespace SysWork.Data.GenericRepository
             return Add(entity, null, null, commandTimeOut);
         }
 
-        #region DOCUMENTATION Add(TEntity entity, IDbConnection paramDbConnection)
+        #region DOCUMENTATION Add(TEntity entity, IDbConnection dbConnection)
         /// <summary>
         /// Add a new entity to the database using a connection provided.
         /// </summary>
@@ -215,7 +215,7 @@ namespace SysWork.Data.GenericRepository
         /// In case of Exception trows new GenericRepositoryException.
         /// </remarks>
         /// <param name="entity">The entity.</param>
-        /// <param name="paramDbConnection"></param>
+        /// <param name="dbConnection"></param>
         /// <returns>
         /// If successful: the identity(Id) of the generated entity.
         /// In case it does not have an Identity type column: 0.
@@ -282,17 +282,17 @@ namespace SysWork.Data.GenericRepository
         /// </code>
         /// </example>
         #endregion
-        public long Add(TEntity entity, IDbConnection paramDbConnection)
+        public long Add(TEntity entity, IDbConnection dbConnection)
         {
-            return Add(entity, paramDbConnection, null, null);
+            return Add(entity, dbConnection, null, null);
         }
 
-        public long Add(TEntity entity, IDbConnection paramDbConnection, int commandTimeOut)
+        public long Add(TEntity entity, IDbConnection dbConnection, int commandTimeOut)
         {
-            return Add(entity, paramDbConnection, null, commandTimeOut);
+            return Add(entity, dbConnection, null, commandTimeOut);
         }
 
-        #region DOCUMENTATION Add(TEntity entity, IDbTransaction paramDbTransaction)
+        #region DOCUMENTATION Add(TEntity entity, IDbTransaction dbTransaction)
         /// <summary>
         /// Add a new entity to the database using a transaction provided.
         /// </summary>
@@ -303,7 +303,7 @@ namespace SysWork.Data.GenericRepository
         /// In case of Exception trows new GenericRepositoryException.
         /// </remarks>
         /// <param name="entity">The entity.</param>
-        /// <param name="paramDbTransaction">The parameter database transaction.</param>
+        /// <param name="dbTransaction">The parameter database transaction.</param>
         /// <returns>
         /// If successful: the identity(Id) of the generated entity.
         /// In case it does not have an Identity type column: 0.
@@ -373,17 +373,17 @@ namespace SysWork.Data.GenericRepository
         /// </code>
         /// </example>
         #endregion
-        public long Add(TEntity entity, IDbTransaction paramDbTransaction)
+        public long Add(TEntity entity, IDbTransaction dbTransaction)
         {
-            return Add(entity, null, paramDbTransaction, null);
+            return Add(entity, null, dbTransaction, null);
         }
 
-        public long Add(TEntity entity, IDbTransaction paramDbTransaction, int commandTimeOut)
+        public long Add(TEntity entity, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return Add(entity, null, paramDbTransaction, commandTimeOut);
+            return Add(entity, null, dbTransaction, commandTimeOut);
         }
 
-        #region DOCUMENTATION Add(TEntity entity, IDbConnection paramDbConnection,IDbTransaction paramDbTransaction)
+        #region DOCUMENTATION Add(TEntity entity, IDbConnection dbConnection,IDbTransaction dbTransaction)
         /// <summary>
         /// Add a new entity to the database using a connection and a transaction provided.
         /// </summary>
@@ -394,8 +394,8 @@ namespace SysWork.Data.GenericRepository
         /// In case of Exception trows new GenericRepositoryException.
         /// </remarks>
         /// <param name="entity">The entity.</param>
-        /// <param name="paramDbConnection">The parameter database connection.</param>
-        /// <param name="paramDbTransaction">The parameter database transaction.</param>
+        /// <param name="dbConnection">The parameter database connection.</param>
+        /// <param name="dbTransaction">The parameter database transaction.</param>
         /// <returns>
         /// If successful: the identity(Id) of the generated entity.
         /// In case it does not have an Identity type column: 0.
@@ -465,24 +465,23 @@ namespace SysWork.Data.GenericRepository
         /// </code>
         /// </example>
         #endregion
-        public long Add(TEntity entity, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        public long Add(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction)
         {
-            return Add(entity, paramDbConnection, paramDbTransaction, null);
+            return Add(entity, dbConnection, dbTransaction, null);
         }
 
-        public long Add(TEntity entity, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int? commandTimeOut)
+        public long Add(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
         {
             long identity = 0;
             bool hasIdentity = false;
 
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
 
-            IDbConnection dbConnection = paramDbConnection ?? BaseIDbConnection();
-            IDbCommand dbCommand = dbConnection.CreateCommand();
-            dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
+            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
+            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
             StringBuilder parameterList = new StringBuilder();
             foreach (PropertyInfo i in ListObjectPropertyInfo)
@@ -512,13 +511,14 @@ namespace SysWork.Data.GenericRepository
                 insertQuery.Append(string.Format("INSERT INTO {0} ( {1} ) VALUES ( {2} ) {3}  ", _syntaxProvider.GetSecureTableName(TableName), ColumnsForInsert, parameterList, _syntaxProvider.GetSubQueryGetIdentity()));
                 try
                 {
-                    if (dbConnection.State != ConnectionState.Open)
-                        dbConnection.Open();
+                    if (dbConnectionInUse.State != ConnectionState.Open)
+                        dbConnectionInUse.Open();
 
                     dbCommand.CommandText = insertQuery.ToString();
+                    dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
 
-                    if (paramDbTransaction != null)
-                        dbCommand.Transaction = paramDbTransaction;
+                    if (dbTransaction != null)
+                        dbCommand.Transaction = dbTransaction;
 
                     if (_dataBaseEngine == EDataBaseEngine.OleDb)
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
@@ -552,10 +552,10 @@ namespace SysWork.Data.GenericRepository
                 }
                 finally
                 {
-                    if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                    if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
                     {
-                        dbConnection.Close();
-                        dbConnection.Dispose();
+                        dbConnectionInUse.Close();
+                        dbConnectionInUse.Dispose();
                     }
                 }
             }

@@ -11,11 +11,11 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
     {
         IList<TEntity> GetAll();
         IList<TEntity> GetAll(int commandTimeOut);
-        IList<TEntity> GetAll(IDbConnection paramDbConnection);
-        IList<TEntity> GetAll(IDbConnection paramDbConnection, int commandTimeOut);
-        IList<TEntity> GetAll(IDbTransaction paramDbTransaction);
-        IList<TEntity> GetAll(IDbTransaction paramDbTransaction, int commandTimeOut);
-        IList<TEntity> GetAll(IDbConnection paramDbConnection, IDbTransaction paramDbTransaction);
-        IList<TEntity> GetAll(IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int? commandTimeOut);
+        IList<TEntity> GetAll(IDbConnection dbConnection);
+        IList<TEntity> GetAll(IDbConnection dbConnection, int commandTimeOut);
+        IList<TEntity> GetAll(IDbTransaction dbTransaction);
+        IList<TEntity> GetAll(IDbTransaction dbTransaction, int commandTimeOut);
+        IList<TEntity> GetAll(IDbConnection dbConnection, IDbTransaction dbTransaction);
+        IList<TEntity> GetAll(IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut);
     }
 }

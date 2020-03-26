@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.GenericRepository.Interfaces.Actions;
 
@@ -19,23 +15,23 @@ namespace SysWork.Data.GenericRepository
         {
             return DeleteAll(null, null, commandTimeOut);
         }
-        public long DeleteAll(IDbConnection paramDbConnection)
+        public long DeleteAll(IDbConnection dbConnection)
         {
-            return DeleteAll(paramDbConnection, null, null);
+            return DeleteAll(dbConnection, null, null);
         }
-        public long DeleteAll(IDbConnection paramDbConnection, int commandTimeOut)
+        public long DeleteAll(IDbConnection dbConnection, int commandTimeOut)
         {
-            return DeleteAll(paramDbConnection, null, commandTimeOut);
-        }
-
-        public long DeleteAll(IDbTransaction paramDbTransaction)
-        {
-            return DeleteAll(null, paramDbTransaction, null);
+            return DeleteAll(dbConnection, null, commandTimeOut);
         }
 
-        public long DeleteAll(IDbTransaction paramDbTransaction, int commandTimeOut)
+        public long DeleteAll(IDbTransaction dbTransaction)
         {
-            return DeleteAll(null,paramDbTransaction, commandTimeOut);
+            return DeleteAll(null, dbTransaction, null);
+        }
+
+        public long DeleteAll(IDbTransaction dbTransaction, int commandTimeOut)
+        {
+            return DeleteAll(null,dbTransaction, commandTimeOut);
         }
 
         public bool DeleteAll(out string errMessage)
@@ -72,33 +68,33 @@ namespace SysWork.Data.GenericRepository
             return result;
         }
 
-        public long DeleteAll(IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        public long DeleteAll(IDbConnection dbConnection, IDbTransaction dbTransaction)
         {
-            return DeleteAll(paramDbConnection, paramDbTransaction, null);
+            return DeleteAll(dbConnection, dbTransaction, null);
         }
 
-        public long DeleteAll(IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int? commandTimeOut)
+        public long DeleteAll(IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
         {
             long recordsAffected = 0;
 
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
 
-            IDbConnection dbConnection = paramDbConnection ?? BaseIDbConnection();
-            IDbCommand dbCommand = dbConnection.CreateCommand();
+            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
+            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
             dbCommand.CommandText = string.Format("DELETE FROM {0}", _syntaxProvider.GetSecureTableName(TableName));
             dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
 
             try
             {
-                if (dbConnection.State != ConnectionState.Open)
-                    dbConnection.Open();
+                if (dbConnectionInUse.State != ConnectionState.Open)
+                    dbConnectionInUse.Open();
 
-                if (paramDbTransaction != null)
-                    dbCommand.Transaction = paramDbTransaction;
+                if (dbTransaction != null)
+                    dbCommand.Transaction = dbTransaction;
 
 
                 recordsAffected = dbCommand.ExecuteNonQuery();
@@ -110,14 +106,13 @@ namespace SysWork.Data.GenericRepository
             }
             finally
             {
-                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
                 {
-                    dbConnection.Close();
-                    dbConnection.Dispose();
+                    dbConnectionInUse.Close();
+                    dbConnectionInUse.Dispose();
                 }
             }
             return recordsAffected;
         }
-
     }
 }

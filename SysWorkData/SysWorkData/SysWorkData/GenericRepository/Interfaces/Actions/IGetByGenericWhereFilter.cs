@@ -12,11 +12,11 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
     {
         TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter);
         TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, int commandTimeOut);
-        TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection);
-        TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, int commandTimeOut);
-        TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction paramDbTransaction);
-        TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction paramDbTransaction, int commandTimeOut);
-        TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction);
-        TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int? commandTimeOut);
+        TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection);
+        TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, int commandTimeOut);
+        TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction dbTransaction);
+        TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction dbTransaction, int commandTimeOut);
+        TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, IDbTransaction dbTransaction);
+        TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut);
     }
 }

@@ -22,45 +22,44 @@ namespace SysWork.Data.GenericRepository
             return Find(ids, null, null, commandTimeOut);
         }
 
-        public IList<TEntity> Find(IEnumerable<object> ids, IDbConnection paramDbConnection)
+        public IList<TEntity> Find(IEnumerable<object> ids, IDbConnection dbConnection)
         {
-            return Find(ids, paramDbConnection, null, null);
+            return Find(ids, dbConnection, null, null);
         }
 
-        public IList<TEntity> Find(IEnumerable<object> ids, IDbConnection paramDbConnection, int commandTimeOut)
+        public IList<TEntity> Find(IEnumerable<object> ids, IDbConnection dbConnection, int commandTimeOut)
         {
-            return Find(ids, paramDbConnection,null, commandTimeOut );
+            return Find(ids, dbConnection,null, commandTimeOut );
         }
 
 
-        public IList<TEntity> Find(IEnumerable<object> ids, IDbTransaction paramDbTransaction)
+        public IList<TEntity> Find(IEnumerable<object> ids, IDbTransaction dbTransaction)
         {
-            return Find(ids, null, paramDbTransaction, null);
+            return Find(ids, null, dbTransaction, null);
         }
 
-        public IList<TEntity> Find(IEnumerable<object> ids, IDbTransaction paramDbTransaction, int commandTimeOut)
+        public IList<TEntity> Find(IEnumerable<object> ids, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return Find(ids, null, paramDbTransaction, commandTimeOut);
+            return Find(ids, null, dbTransaction, commandTimeOut);
         }
 
-        public IList<TEntity> Find(IEnumerable<object> ids, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        public IList<TEntity> Find(IEnumerable<object> ids, IDbConnection dbConnection, IDbTransaction dbTransaction)
         {
-            return Find(ids, paramDbConnection, paramDbTransaction,null);
+            return Find(ids, dbConnection, dbTransaction,null);
         }
 
-        public IList<TEntity> Find(IEnumerable<object> ids, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int? commandTimeOut)
+        public IList<TEntity> Find(IEnumerable<object> ids, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
         {
             IList<TEntity> entities = new List<TEntity>();
             StringBuilder clause = new StringBuilder();
 
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
 
-            IDbConnection dbConnection = paramDbConnection ?? BaseIDbConnection();
-            IDbCommand dbCommand = dbConnection.CreateCommand();
-            dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
+            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
+            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
             foreach (var pi in ListObjectPropertyInfo)
             {
@@ -90,13 +89,14 @@ namespace SysWork.Data.GenericRepository
 
                 try
                 {
-                    if (dbConnection.State != ConnectionState.Open)
-                        dbConnection.Open();
+                    if (dbConnectionInUse.State != ConnectionState.Open)
+                        dbConnectionInUse.Open();
 
                     dbCommand.CommandText = findQuery.ToString();
+                    dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
 
-                    if (paramDbTransaction != null)
-                        dbCommand.Transaction = paramDbTransaction;
+                    if (dbTransaction != null)
+                        dbCommand.Transaction = dbTransaction;
 
                     IDataReader reader = dbCommand.ExecuteReader();
                     entities = new MapDataReaderToEntity().Map<TEntity>(reader, ListObjectPropertyInfo, _dataBaseEngine);
@@ -112,10 +112,10 @@ namespace SysWork.Data.GenericRepository
                 }
                 finally
                 {
-                    if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                    if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
                     {
-                        dbConnection.Close();
-                        dbConnection.Dispose();
+                        dbConnectionInUse.Close();
+                        dbConnectionInUse.Dispose();
                     }
                 }
             }

@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using SysWork.Data.Common;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.LambdaSqlBuilder;
@@ -27,52 +24,52 @@ namespace SysWork.Data.GenericRepository
             return GetListByLambdaExpressionFilter(lambdaExpressionFilter, null, null, commandTimeOut);
         }
 
-        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection)
+        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection)
         {
-            return GetListByLambdaExpressionFilter(lambdaExpressionFilter, paramDbConnection, null, null);
+            return GetListByLambdaExpressionFilter(lambdaExpressionFilter, dbConnection, null, null);
         }
 
-        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection, int commandTimeOut)
+        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, int commandTimeOut)
         {
-            return GetListByLambdaExpressionFilter(lambdaExpressionFilter, paramDbConnection, null, commandTimeOut);
+            return GetListByLambdaExpressionFilter(lambdaExpressionFilter, dbConnection, null, commandTimeOut);
         }
 
-        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction paramDbTransaction)
+        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction dbTransaction)
         {
-            return GetListByLambdaExpressionFilter(lambdaExpressionFilter, null, paramDbTransaction, null);
+            return GetListByLambdaExpressionFilter(lambdaExpressionFilter, null, dbTransaction, null);
         }
 
-        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction paramDbTransaction, int commandTimeOut)
+        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return GetListByLambdaExpressionFilter(lambdaExpressionFilter, null, paramDbTransaction, commandTimeOut);
+            return GetListByLambdaExpressionFilter(lambdaExpressionFilter, null, dbTransaction, commandTimeOut);
         }
 
-        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, IDbTransaction dbTransaction)
         {
-            return GetListByLambdaExpressionFilter(lambdaExpressionFilter, paramDbConnection, paramDbTransaction, null);
+            return GetListByLambdaExpressionFilter(lambdaExpressionFilter, dbConnection, dbTransaction, null);
         }
 
-        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int? commandTimeOut)
+        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
         {
             IList<TEntity> result = new List<TEntity>();
             SetSqlLamAdapter();
             var query = new SqlLam<TEntity>(lambdaExpressionFilter);
 
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
 
-            IDbConnection dbConnection = paramDbConnection ?? BaseIDbConnection();
-            IDbCommand dbCommand = dbConnection.CreateCommand();
+            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
+            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
             try
             {
-                if (dbConnection.State != ConnectionState.Open)
-                    dbConnection.Open();
+                if (dbConnectionInUse.State != ConnectionState.Open)
+                    dbConnectionInUse.Open();
 
-                if (paramDbTransaction != null)
-                    dbCommand.Transaction = paramDbTransaction;
+                if (dbTransaction != null)
+                    dbCommand.Transaction = dbTransaction;
 
                 dbCommand.CommandText = query.QueryString;
                 dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
@@ -97,10 +94,10 @@ namespace SysWork.Data.GenericRepository
             }
             finally
             {
-                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
                 {
-                    dbConnection.Close();
-                    dbConnection.Dispose();
+                    dbConnectionInUse.Close();
+                    dbConnectionInUse.Dispose();
                 }
             }
             return result;

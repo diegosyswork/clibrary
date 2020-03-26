@@ -11,12 +11,12 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
     {
         TEntity GetById(object id);
         TEntity GetById(object id, int commandTimeOut);
-        TEntity GetById(object id, IDbConnection paramDbConnection);
-        TEntity GetById(object id, IDbConnection paramDbConnection, int commandTimeOut);
-        TEntity GetById(object id, IDbTransaction paramDbTransaction);
-        TEntity GetById(object id, IDbTransaction paramDbTransaction, int commandTimeOut);
-        TEntity GetById(object id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction);
-        TEntity GetById(object id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int? commandTimeOut);
+        TEntity GetById(object id, IDbConnection dbConnection);
+        TEntity GetById(object id, IDbConnection dbConnection, int commandTimeOut);
+        TEntity GetById(object id, IDbTransaction dbTransaction);
+        TEntity GetById(object id, IDbTransaction dbTransaction, int commandTimeOut);
+        TEntity GetById(object id, IDbConnection dbConnection, IDbTransaction dbTransaction);
+        TEntity GetById(object id, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut);
     }
 
 }

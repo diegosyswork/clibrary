@@ -11,13 +11,13 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
     {
         long DeleteAll();
         long DeleteAll(int commandTimeOut);
-        long DeleteAll(IDbConnection paramDbConnection);
-        long DeleteAll(IDbConnection paramDbConnection, int commandTimeOut);
-        long DeleteAll(IDbTransaction paramDbTransaction);
-        long DeleteAll(IDbTransaction paramDbTransaction, int commandTimeOut);
+        long DeleteAll(IDbConnection dbConnection);
+        long DeleteAll(IDbConnection dbConnection, int commandTimeOut);
+        long DeleteAll(IDbTransaction dbTransaction);
+        long DeleteAll(IDbTransaction dbTransaction, int commandTimeOut);
         bool DeleteAll(out string errMessage);
         bool DeleteAll(out string errMessage, int commandTimeOut);
-        long DeleteAll(IDbConnection paramDbConnection, IDbTransaction paramDbTransaction);
-        long DeleteAll(IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int? commandTimeOut );
+        long DeleteAll(IDbConnection dbConnection, IDbTransaction dbTransaction);
+        long DeleteAll(IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut );
     }
 }

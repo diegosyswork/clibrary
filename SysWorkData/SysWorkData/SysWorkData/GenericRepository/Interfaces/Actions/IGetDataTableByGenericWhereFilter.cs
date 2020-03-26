@@ -12,11 +12,11 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
     {
         DataTable GetDataTableByGenericWhereFilter(GenericWhereFilter whereFilter);
         DataTable GetDataTableByGenericWhereFilter(GenericWhereFilter whereFilter, int commandTimeout);
-        DataTable GetDataTableByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection);
-        DataTable GetDataTableByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, int commandTimeout);
-        DataTable GetDataTableByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction paramDbTransaction);
-        DataTable GetDataTableByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction paramDbTransaction, int commandTimeout);
-        DataTable GetDataTableByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction);
-        DataTable GetDataTableByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int? CommandTimeout);
+        DataTable GetDataTableByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection);
+        DataTable GetDataTableByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, int commandTimeout);
+        DataTable GetDataTableByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction dbTransaction);
+        DataTable GetDataTableByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction dbTransaction, int commandTimeout);
+        DataTable GetDataTableByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, IDbTransaction dbTransaction);
+        DataTable GetDataTableByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, IDbTransaction dbTransaction, int? CommandTimeout);
     }
 }

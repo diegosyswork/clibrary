@@ -22,53 +22,53 @@ namespace SysWork.Data.GenericRepository
             return GetByGenericWhereFilter(whereFilter, null, null, commandTimeOut);
         }
 
-        public TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection)
+        public TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection)
         {
-            return GetByGenericWhereFilter(whereFilter, paramDbConnection, null, null);
+            return GetByGenericWhereFilter(whereFilter, dbConnection, null, null);
         }
 
-        public TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, int commandTimeOut)
+        public TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, int commandTimeOut)
         {
-            return GetByGenericWhereFilter(whereFilter, paramDbConnection, null, commandTimeOut);
+            return GetByGenericWhereFilter(whereFilter, dbConnection, null, commandTimeOut);
         }
 
-        public TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction paramDbTransaction)
+        public TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction dbTransaction)
         {
-            return GetByGenericWhereFilter(whereFilter, null, paramDbTransaction, null);
+            return GetByGenericWhereFilter(whereFilter, null, dbTransaction, null);
         }
 
-        public TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction paramDbTransaction, int commandTimeOut)
+        public TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return GetByGenericWhereFilter(whereFilter, null, paramDbTransaction, commandTimeOut);
+            return GetByGenericWhereFilter(whereFilter, null, dbTransaction, commandTimeOut);
         }
 
-        public TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        public TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, IDbTransaction dbTransaction)
         {
-            return GetByGenericWhereFilter(whereFilter, paramDbConnection, paramDbTransaction, null);
+            return GetByGenericWhereFilter(whereFilter, dbConnection, dbTransaction, null);
         }
 
-        public TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int? commandTimeOut)
+        public TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
         {
             TEntity entity = new TEntity();
 
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
 
-            IDbConnection dbConnection = paramDbConnection ?? BaseIDbConnection();
-            IDbCommand dbCommand = dbConnection.CreateCommand();
-            dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
+            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
+            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
             try
             {
-                if (dbConnection.State != ConnectionState.Open)
-                    dbConnection.Open();
+                if (dbConnectionInUse.State != ConnectionState.Open)
+                    dbConnectionInUse.Open();
 
-                if (paramDbTransaction != null)
-                    dbCommand.Transaction = paramDbTransaction;
+                if (dbTransaction != null)
+                    dbCommand.Transaction = dbTransaction;
 
                 dbCommand.CommandText = whereFilter.SelectQueryString;
+                dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
 
                 foreach (var param in whereFilter.Parameters)
                 {
@@ -106,10 +106,10 @@ namespace SysWork.Data.GenericRepository
             }
             finally
             {
-                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
                 {
-                    dbConnection.Close();
-                    dbConnection.Dispose();
+                    dbConnectionInUse.Close();
+                    dbConnectionInUse.Dispose();
                 }
             }
             return entity;

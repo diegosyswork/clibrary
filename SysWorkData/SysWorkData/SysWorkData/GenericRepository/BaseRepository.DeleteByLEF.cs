@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using SysWork.Data.Common;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.LambdaSqlBuilder;
@@ -25,56 +21,56 @@ namespace SysWork.Data.GenericRepository
             return 0;
         }
 
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection)
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection)
         {
             return 0;
         }
 
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection, int commandTimeOut)
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, int commandTimeOut)
         {
             return 0;
         }
 
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction paramDbTransaction)
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction dbTransaction)
         {
             return 0;
         }
 
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction paramDbTransaction, int commandTimeOut)
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction dbTransaction, int commandTimeOut)
         {
             return 0;
         }
 
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, IDbTransaction dbTransaction)
         {
             return 0;
         }
 
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int? commandTimeOut)
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
         {
             SetSqlLamAdapter();
             var query = new SqlLam<TEntity>(lambdaExpressionFilter);
 
             long recordsAffected = 0;
 
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
 
-            IDbConnection dbConnection = paramDbConnection ?? BaseIDbConnection();
-            IDbCommand dbCommand = dbConnection.CreateCommand();
+            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
+            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
             dbCommand.CommandText = string.Format("DELETE FROM {0} {1}", _syntaxProvider.GetSecureTableName(TableName), query.QueryWhere);
             dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
 
             try
             {
-                if (dbConnection.State != ConnectionState.Open)
-                    dbConnection.Open();
+                if (dbConnectionInUse.State != ConnectionState.Open)
+                    dbConnectionInUse.Open();
 
-                if (paramDbTransaction != null)
-                    dbCommand.Transaction = paramDbTransaction;
+                if (dbTransaction != null)
+                    dbCommand.Transaction = dbTransaction;
 
                 foreach (var parameters in query.QueryParameters)
                     dbCommand.Parameters.Add(CreateIDbDataParameter("@" + parameters.Key, parameters.Value));
@@ -92,10 +88,10 @@ namespace SysWork.Data.GenericRepository
             }
             finally
             {
-                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
                 {
-                    dbConnection.Close();
-                    dbConnection.Dispose();
+                    dbConnectionInUse.Close();
+                    dbConnectionInUse.Dispose();
                 }
             }
             return recordsAffected;

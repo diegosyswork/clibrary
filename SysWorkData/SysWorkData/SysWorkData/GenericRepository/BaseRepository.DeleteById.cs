@@ -23,34 +23,34 @@ namespace SysWork.Data.GenericRepository
             return DeleteById(Id, null, null, out long recordsAffected, commandTimeOut);
         }
 
-        public bool DeleteById(long Id, IDbConnection paramDbConnection)
+        public bool DeleteById(long Id, IDbConnection dbConnection)
         {
-            return DeleteById(Id, paramDbConnection, null, out long recordsAffected, null);
+            return DeleteById(Id, dbConnection, null, out long recordsAffected, null);
         }
 
-        public bool DeleteById(long Id, IDbConnection paramDbConnection, int commandTimeOut)
+        public bool DeleteById(long Id, IDbConnection dbConnection, int commandTimeOut)
         {
-            return DeleteById(Id, paramDbConnection, null, out long recordsAffected, commandTimeOut);
+            return DeleteById(Id, dbConnection, null, out long recordsAffected, commandTimeOut);
         }
 
-        public bool DeleteById(long Id, IDbTransaction paramDbTransaction)
+        public bool DeleteById(long Id, IDbTransaction dbTransaction)
         {
-            return DeleteById(Id, null, paramDbTransaction, out long recordsAffected, null);
+            return DeleteById(Id, null, dbTransaction, out long recordsAffected, null);
         }
 
-        public bool DeleteById(long Id, IDbTransaction paramDbTransaction, int commandTimeOut)
+        public bool DeleteById(long Id, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return DeleteById(Id, null, paramDbTransaction, out long recordsAffected, commandTimeOut);
+            return DeleteById(Id, null, dbTransaction, out long recordsAffected, commandTimeOut);
         }
 
-        public bool DeleteById(long Id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        public bool DeleteById(long Id, IDbConnection dbConnection, IDbTransaction dbTransaction)
         {
-            return DeleteById(Id, paramDbConnection, paramDbTransaction, out long recordsAffected, null);
+            return DeleteById(Id, dbConnection, dbTransaction, out long recordsAffected, null);
         }
 
-        public bool DeleteById(long Id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int commandTimeOut)
+        public bool DeleteById(long Id, IDbConnection dbConnection, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return DeleteById(Id, paramDbConnection, paramDbTransaction, out long recordsAffected, commandTimeOut);
+            return DeleteById(Id, dbConnection, dbTransaction, out long recordsAffected, commandTimeOut);
         }
 
         public bool DeleteById(long Id, out string errMessage)
@@ -84,22 +84,22 @@ namespace SysWork.Data.GenericRepository
             return result;
         }
 
-        public bool DeleteById(long Id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
+        public bool DeleteById(long Id, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected)
         {
-            return DeleteById(Id, paramDbConnection, paramDbTransaction, out recordsAffected, null);
+            return DeleteById(Id, dbConnection, dbTransaction, out recordsAffected, null);
         }
 
-        public bool DeleteById(long Id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected, int? commandTimeOut)
+        public bool DeleteById(long Id, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected, int? commandTimeOut)
         {
             recordsAffected = 0;
 
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
 
-            IDbConnection dbConnection = paramDbConnection ?? BaseIDbConnection();
-            IDbCommand dbCommand = dbConnection.CreateCommand();
+            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
+            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
             dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
 
@@ -134,13 +134,13 @@ namespace SysWork.Data.GenericRepository
 
                 try
                 {
-                    if (dbConnection.State != ConnectionState.Open)
-                        dbConnection.Open();
+                    if (dbConnectionInUse.State != ConnectionState.Open)
+                        dbConnectionInUse.Open();
 
                     dbCommand.CommandText = deleteQuery.ToString();
 
-                    if (paramDbTransaction != null)
-                        dbCommand.Transaction = paramDbTransaction;
+                    if (dbTransaction != null)
+                        dbCommand.Transaction = dbTransaction;
 
                     if (_dataBaseEngine == EDataBaseEngine.OleDb)
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
@@ -154,10 +154,10 @@ namespace SysWork.Data.GenericRepository
                 }
                 finally
                 {
-                    if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                    if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
                     {
-                        dbConnection.Close();
-                        dbConnection.Dispose();
+                        dbConnectionInUse.Close();
+                        dbConnectionInUse.Dispose();
                     }
                 }
             }

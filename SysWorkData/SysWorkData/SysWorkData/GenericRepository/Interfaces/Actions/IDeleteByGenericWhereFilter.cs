@@ -9,15 +9,15 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
         bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, int commandTimeOut);
         bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, out long recordsAffected);
         bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, out long recordsAffected, int commandTimeOut);
-        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection);
-        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, int commandTimeOut);
-        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, out long recordsAffected);
-        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, out long recordsAffected, int commandTimeOut);
-        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction paramDbTransaction);
-        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction paramDbTransaction, int commandTimeOut);
-        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction paramDbTransaction, out long recordsAffected);
-        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction paramDbTransaction, out long recordsAffected, int commandTimeOut);
-        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected);
-        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected, int? commandTimeOut);
+        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection);
+        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, int commandTimeOut);
+        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, out long recordsAffected);
+        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, out long recordsAffected, int commandTimeOut);
+        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction dbTransaction);
+        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction dbTransaction, int commandTimeOut);
+        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction dbTransaction, out long recordsAffected);
+        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction dbTransaction, out long recordsAffected, int commandTimeOut);
+        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected);
+        bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected, int? commandTimeOut);
     }
 }

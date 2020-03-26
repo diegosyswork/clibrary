@@ -11,15 +11,15 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
     {
         bool Update(TEntity entity);
         bool Update(TEntity entity, int commandTimeOut);
-        bool Update(TEntity entity, IDbConnection paramDbConnection);
-        bool Update(TEntity entity, IDbConnection paramDbConnection, int commandTimeOut);
-        bool Update(TEntity entity, IDbTransaction paramDbTransaction);
-        bool Update(TEntity entity, IDbTransaction paramDbTransaction, int commandTimeOut);
-        bool Update(TEntity entity, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction);
-        bool Update(TEntity entity, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int commandTimeOut);
+        bool Update(TEntity entity, IDbConnection dbConnection);
+        bool Update(TEntity entity, IDbConnection dbConnection, int commandTimeOut);
+        bool Update(TEntity entity, IDbTransaction dbTransaction);
+        bool Update(TEntity entity, IDbTransaction dbTransaction, int commandTimeOut);
+        bool Update(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction);
+        bool Update(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction, int commandTimeOut);
         bool Update(TEntity entity, out string errMessage);
         bool Update(TEntity entity, out string errMessage, int commandTimeOut);
-        bool Update(TEntity entity, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected);
-        bool Update(TEntity entity, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected, int? commandTimeOut);
+        bool Update(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected);
+        bool Update(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected, int? commandTimeOut);
     }
 }

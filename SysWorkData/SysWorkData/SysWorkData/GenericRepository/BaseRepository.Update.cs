@@ -24,40 +24,40 @@ namespace SysWork.Data.GenericRepository
             return Update(entity, null, null, out long recordsAffected, commandTimeOut);
         }
 
-        public bool Update(TEntity entity, IDbConnection paramDbConnection)
+        public bool Update(TEntity entity, IDbConnection dbConnection)
         {
-            return Update(entity, paramDbConnection, null, out long recordsAffected, null);
+            return Update(entity, dbConnection, null, out long recordsAffected, null);
         }
 
-        public bool Update(TEntity entity, IDbConnection paramDbConnection, int commandTimeOut)
+        public bool Update(TEntity entity, IDbConnection dbConnection, int commandTimeOut)
         {
-            return Update(entity, paramDbConnection, null, out long recordsAffected, commandTimeOut);
+            return Update(entity, dbConnection, null, out long recordsAffected, commandTimeOut);
         }
 
 
-        public bool Update(TEntity entity, IDbTransaction paramDbTransaction)
+        public bool Update(TEntity entity, IDbTransaction dbTransaction)
         {
-            return Update(entity, null, paramDbTransaction, out long recordsAffected, null);
+            return Update(entity, null, dbTransaction, out long recordsAffected, null);
         }
 
-        public bool Update(TEntity entity, IDbTransaction paramDbTransaction, int commandTimeOut)
+        public bool Update(TEntity entity, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return Update(entity, null, paramDbTransaction, out long recordsAffected, commandTimeOut);
+            return Update(entity, null, dbTransaction, out long recordsAffected, commandTimeOut);
         }
 
-        public bool Update(TEntity entity, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        public bool Update(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction)
         {
-            return Update(entity, paramDbConnection, paramDbTransaction, out long recordsAffected, null);
+            return Update(entity, dbConnection, dbTransaction, out long recordsAffected, null);
         }
 
-        public bool Update(TEntity entity, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int commandTimeOut)
+        public bool Update(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return Update(entity, paramDbConnection, paramDbTransaction, out long recordsAffected, commandTimeOut);
+            return Update(entity, dbConnection, dbTransaction, out long recordsAffected, commandTimeOut);
         }
 
-        public bool Update(TEntity entity, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
+        public bool Update(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected)
         {
-            return Update(entity, paramDbConnection, paramDbTransaction, out recordsAffected,null);
+            return Update(entity, dbConnection, dbTransaction, out recordsAffected,null);
         }
 
         public bool Update(TEntity entity, out string errMessage)
@@ -94,17 +94,17 @@ namespace SysWork.Data.GenericRepository
         }
 
 
-        public bool Update(TEntity entity, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected, int? commandTimeOut)
+        public bool Update(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected, int? commandTimeOut)
         {
             recordsAffected = 0;
 
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
 
-            IDbConnection dbConnection = paramDbConnection ?? BaseIDbConnection();
-            IDbCommand dbCommand = dbConnection.CreateCommand();
+            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
+            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
             StringBuilder parameterList = new StringBuilder();
             StringBuilder where = new StringBuilder();
@@ -149,14 +149,14 @@ namespace SysWork.Data.GenericRepository
 
                 try
                 {
-                    if (dbConnection.State != ConnectionState.Open)
-                        dbConnection.Open();
+                    if (dbConnectionInUse.State != ConnectionState.Open)
+                        dbConnectionInUse.Open();
 
                     dbCommand.CommandText = updateQuery.ToString();
                     dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
 
-                    if (paramDbTransaction != null)
-                        dbCommand.Transaction = paramDbTransaction;
+                    if (dbTransaction != null)
+                        dbCommand.Transaction = dbTransaction;
 
                     if (_dataBaseEngine == EDataBaseEngine.OleDb)
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
@@ -170,10 +170,10 @@ namespace SysWork.Data.GenericRepository
                 }
                 finally
                 {
-                    if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                    if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
                     {
-                        dbConnection.Close();
-                        dbConnection.Dispose();
+                        dbConnectionInUse.Close();
+                        dbConnectionInUse.Dispose();
                     }
                 }
             }

@@ -29,63 +29,62 @@ namespace SysWork.Data.GenericRepository
             return DeleteByGenericWhereFilter(whereFilter, null, null, out recordsAffected, commandTimeOut);
         }
 
-        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection)
+        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection)
         {
-            return DeleteByGenericWhereFilter(whereFilter, paramDbConnection, null, out long recordsAffected, null);
+            return DeleteByGenericWhereFilter(whereFilter, dbConnection, null, out long recordsAffected, null);
         }
 
-        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, int commandTimeOut)
+        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, int commandTimeOut)
         {
-            return DeleteByGenericWhereFilter(whereFilter, paramDbConnection, null, out long recordsAffected, commandTimeOut);
+            return DeleteByGenericWhereFilter(whereFilter, dbConnection, null, out long recordsAffected, commandTimeOut);
         }
 
-        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, out long recordsAffected)
+        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, out long recordsAffected)
         {
-            return DeleteByGenericWhereFilter(whereFilter, paramDbConnection, null, out recordsAffected, null);
+            return DeleteByGenericWhereFilter(whereFilter, dbConnection, null, out recordsAffected, null);
         }
 
-        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, out long recordsAffected, int commandTimeOut)
+        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, out long recordsAffected, int commandTimeOut)
         {
-            return DeleteByGenericWhereFilter(whereFilter, paramDbConnection, null, out recordsAffected, commandTimeOut);
+            return DeleteByGenericWhereFilter(whereFilter, dbConnection, null, out recordsAffected, commandTimeOut);
         }
 
-        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction paramDbTransaction)
+        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction dbTransaction)
         {
-            return DeleteByGenericWhereFilter(whereFilter, null, paramDbTransaction, out long recordsAffected, null);
+            return DeleteByGenericWhereFilter(whereFilter, null, dbTransaction, out long recordsAffected, null);
         }
 
-        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction paramDbTransaction, int commandTimeOut)
+        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return DeleteByGenericWhereFilter(whereFilter, null, paramDbTransaction, out long recordsAffected, null);
+            return DeleteByGenericWhereFilter(whereFilter, null, dbTransaction, out long recordsAffected, null);
         }
 
-        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction paramDbTransaction, out long recordsAffected)
+        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction dbTransaction, out long recordsAffected)
         {
-            return DeleteByGenericWhereFilter(whereFilter, null, paramDbTransaction, out recordsAffected, null);
+            return DeleteByGenericWhereFilter(whereFilter, null, dbTransaction, out recordsAffected, null);
         }
 
-        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction paramDbTransaction, out long recordsAffected, int commandTimeOut)
+        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction dbTransaction, out long recordsAffected, int commandTimeOut)
         {
-            return DeleteByGenericWhereFilter(whereFilter, null, paramDbTransaction, out recordsAffected, commandTimeOut);
+            return DeleteByGenericWhereFilter(whereFilter, null, dbTransaction, out recordsAffected, commandTimeOut);
         }
 
-        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
+        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected)
         {
-            return DeleteByGenericWhereFilter(whereFilter, paramDbConnection, paramDbTransaction, out recordsAffected, null);
+            return DeleteByGenericWhereFilter(whereFilter, dbConnection, dbTransaction, out recordsAffected, null);
         }
 
-        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected, int? commandTimeOut)
+        public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected, int? commandTimeOut)
         {
             recordsAffected = 0;
 
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
 
-            IDbConnection dbConnection = paramDbConnection ?? BaseIDbConnection();
-            IDbCommand dbCommand = dbConnection.CreateCommand();
-            dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
+            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
+            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
             TEntity entity = new TEntity();
 
@@ -94,13 +93,14 @@ namespace SysWork.Data.GenericRepository
                 string deleteQuery = whereFilter.DeleteQueryString;
                 try
                 {
-                    if (dbConnection.State != ConnectionState.Open)
-                        dbConnection.Open();
+                    if (dbConnectionInUse.State != ConnectionState.Open)
+                        dbConnectionInUse.Open();
 
-                    if (paramDbTransaction != null)
-                        dbCommand.Transaction = paramDbTransaction;
+                    if (dbTransaction != null)
+                        dbCommand.Transaction = dbTransaction;
 
                     dbCommand.CommandText = deleteQuery.ToString();
+                    dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
 
                     foreach (var param in whereFilter.Parameters)
                     {
@@ -130,10 +130,10 @@ namespace SysWork.Data.GenericRepository
                 }
                 finally
                 {
-                    if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                    if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
                     {
-                        dbConnection.Close();
-                        dbConnection.Dispose();
+                        dbConnectionInUse.Close();
+                        dbConnectionInUse.Dispose();
                     }
                 }
             }

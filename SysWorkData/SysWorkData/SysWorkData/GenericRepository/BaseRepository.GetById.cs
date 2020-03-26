@@ -26,44 +26,44 @@ namespace SysWork.Data.GenericRepository
         }
 
 
-        public TEntity GetById(object id, IDbConnection paramDbConnection)
+        public TEntity GetById(object id, IDbConnection dbConnection)
         {
-            return GetById(id, paramDbConnection, null, null);
+            return GetById(id, dbConnection, null, null);
         }
 
-        public TEntity GetById(object id, IDbConnection paramDbConnection, int commandTimeOut)
+        public TEntity GetById(object id, IDbConnection dbConnection, int commandTimeOut)
         {
-            return GetById(id, paramDbConnection, null, commandTimeOut);
+            return GetById(id, dbConnection, null, commandTimeOut);
         }
 
-        public TEntity GetById(object id, IDbTransaction paramDbTransaction)
+        public TEntity GetById(object id, IDbTransaction dbTransaction)
         {
-            return GetById(id, null, paramDbTransaction, null);
+            return GetById(id, null, dbTransaction, null);
         }
 
-        public TEntity GetById(object id, IDbTransaction paramDbTransaction, int commandTimeOut)
+        public TEntity GetById(object id, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return GetById(id, null, paramDbTransaction, commandTimeOut);
+            return GetById(id, null, dbTransaction, commandTimeOut);
         }
 
-        public TEntity GetById(object id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        public TEntity GetById(object id, IDbConnection dbConnection, IDbTransaction dbTransaction)
         {
-            return GetById(id, paramDbConnection, paramDbTransaction, null);
+            return GetById(id, dbConnection, dbTransaction, null);
         }
 
-        public TEntity GetById(object id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int? commandTimeOut)
+        public TEntity GetById(object id, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
         {
             TEntity entity = new TEntity();
 
             StringBuilder clause = new StringBuilder();
 
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
 
-            IDbConnection dbConnection = paramDbConnection ?? BaseIDbConnection();
-            IDbCommand dbCommand = dbConnection.CreateCommand();
+            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
+            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
             foreach (var pi in ListObjectPropertyInfo)
             {
@@ -93,11 +93,11 @@ namespace SysWork.Data.GenericRepository
 
                 try
                 {
-                    if (dbConnection.State != ConnectionState.Open)
-                        dbConnection.Open();
+                    if (dbConnectionInUse.State != ConnectionState.Open)
+                        dbConnectionInUse.Open();
 
-                    if (paramDbTransaction != null)
-                        dbCommand.Transaction = paramDbTransaction;
+                    if (dbTransaction != null)
+                        dbCommand.Transaction = dbTransaction;
 
                     if (_dataBaseEngine == EDataBaseEngine.OleDb)
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
@@ -120,10 +120,10 @@ namespace SysWork.Data.GenericRepository
                 }
                 finally
                 {
-                    if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                    if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
                     {
-                        dbConnection.Close();
-                        dbConnection.Dispose();
+                        dbConnectionInUse.Close();
+                        dbConnectionInUse.Dispose();
                     }
                 }
             }

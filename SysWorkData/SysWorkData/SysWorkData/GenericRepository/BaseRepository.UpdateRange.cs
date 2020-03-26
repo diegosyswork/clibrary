@@ -25,34 +25,34 @@ namespace SysWork.Data.GenericRepository
             return UpdateRange(entities, null, null, out long recordsAffected, commandTimeOut);
         }
 
-        public bool UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection)
+        public bool UpdateRange(IList<TEntity> entities, IDbConnection dbConnection)
         {
-            return UpdateRange(entities, paramDbConnection, null, out long recordsAffected, null);
+            return UpdateRange(entities, dbConnection, null, out long recordsAffected, null);
         }
 
-        public bool UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection, int commandTimeOut)
+        public bool UpdateRange(IList<TEntity> entities, IDbConnection dbConnection, int commandTimeOut)
         {
-            return UpdateRange(entities, paramDbConnection, null, out long recordsAffected, commandTimeOut);
+            return UpdateRange(entities, dbConnection, null, out long recordsAffected, commandTimeOut);
         }
 
-        public bool UpdateRange(IList<TEntity> entities, IDbTransaction paramDbTransaction)
+        public bool UpdateRange(IList<TEntity> entities, IDbTransaction dbTransaction)
         {
-            return UpdateRange(entities, null, paramDbTransaction, out long recordsAffected, null);
+            return UpdateRange(entities, null, dbTransaction, out long recordsAffected, null);
         }
 
-        public bool UpdateRange(IList<TEntity> entities, IDbTransaction paramDbTransaction, int commandTimeOut)
+        public bool UpdateRange(IList<TEntity> entities, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return UpdateRange(entities, null, paramDbTransaction, out long recordsAffected, commandTimeOut);
+            return UpdateRange(entities, null, dbTransaction, out long recordsAffected, commandTimeOut);
         }
 
-        public bool UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        public bool UpdateRange(IList<TEntity> entities, IDbConnection dbConnection, IDbTransaction dbTransaction)
         {
-            return UpdateRange(entities, paramDbConnection, paramDbTransaction, out long recordsAffected, null);
+            return UpdateRange(entities, dbConnection, dbTransaction, out long recordsAffected, null);
         }
 
-        public bool UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int commandTimeOut)
+        public bool UpdateRange(IList<TEntity> entities, IDbConnection dbConnection, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return UpdateRange(entities, paramDbConnection, paramDbTransaction, out long recordsAffected, commandTimeOut);
+            return UpdateRange(entities, dbConnection, dbTransaction, out long recordsAffected, commandTimeOut);
         }
 
         public bool UpdateRange(IList<TEntity> entities, out string errMessage)
@@ -89,27 +89,27 @@ namespace SysWork.Data.GenericRepository
         }
 
 
-        public bool UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
+        public bool UpdateRange(IList<TEntity> entities, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected)
         {
-            return UpdateRange(entities, paramDbConnection, paramDbTransaction, out recordsAffected, null);
+            return UpdateRange(entities, dbConnection, dbTransaction, out recordsAffected, null);
         }
 
-        public bool UpdateRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected, int? commandTimeOut)
+        public bool UpdateRange(IList<TEntity> entities, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected, int? commandTimeOut)
         {
             recordsAffected = 0;
 
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
 
-            IDbConnection dbConnection = paramDbConnection ?? BaseIDbConnection();
+            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
             IDbCommand dbCommand;
 
             try
             {
-                if (dbConnection.State != ConnectionState.Open)
-                    dbConnection.Open();
+                if (dbConnectionInUse.State != ConnectionState.Open)
+                    dbConnectionInUse.Open();
             }
             catch (Exception exceptionDb)
             {
@@ -123,7 +123,7 @@ namespace SysWork.Data.GenericRepository
                 StringBuilder where = new StringBuilder();
 
                 string parameterName;
-                dbCommand = dbConnection.CreateCommand();
+                dbCommand = dbConnectionInUse.CreateCommand();
 
                 foreach (PropertyInfo i in ListObjectPropertyInfo)
                 {
@@ -158,8 +158,8 @@ namespace SysWork.Data.GenericRepository
                     dbCommand.CommandText = updateRangeQuery.ToString();
                     dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
 
-                    if (paramDbTransaction != null)
-                        dbCommand.Transaction = paramDbTransaction;
+                    if (dbTransaction != null)
+                        dbCommand.Transaction = dbTransaction;
 
                     if (_dataBaseEngine == EDataBaseEngine.OleDb)
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
@@ -170,18 +170,18 @@ namespace SysWork.Data.GenericRepository
                 }
                 catch (Exception exceptionCommand)
                 {
-                    if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                    if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
                     {
-                        dbConnection.Close();
-                        dbConnection.Dispose();
+                        dbConnectionInUse.Close();
+                        dbConnectionInUse.Dispose();
                     }
                     throw new RepositoryException(exceptionCommand, dbCommand);
                 }
             }
-            if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+            if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
             {
-                dbConnection.Close();
-                dbConnection.Dispose();
+                dbConnectionInUse.Close();
+                dbConnectionInUse.Dispose();
             }
             return true;
         }

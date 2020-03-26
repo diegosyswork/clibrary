@@ -11,7 +11,7 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
         IList<TEntity> Find(IEnumerable<object> ids, IDbConnection dbConnection, int commandTimeOut);
         IList<TEntity> Find(IEnumerable<object> ids, IDbTransaction dbTransaction);
         IList<TEntity> Find(IEnumerable<object> ids, IDbTransaction dbTransaction, int commandTimeOut);
-        IList<TEntity> Find(IEnumerable<object> ids, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction);
-        IList<TEntity> Find(IEnumerable<object> ids, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction,int? commandTimeOut);
+        IList<TEntity> Find(IEnumerable<object> ids, IDbConnection dbConnection, IDbTransaction dbTransaction);
+        IList<TEntity> Find(IEnumerable<object> ids, IDbConnection dbConnection, IDbTransaction dbTransaction,int? commandTimeOut);
     }
 }

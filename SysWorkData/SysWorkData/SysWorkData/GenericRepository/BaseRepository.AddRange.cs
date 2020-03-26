@@ -117,91 +117,91 @@ namespace SysWork.Data.GenericRepository
             return AddRange(entities, null, null, out recordsAffected, out IEnumerable<object> addedIds, commandTimeOut);
         }
 
-        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection)
+        public bool AddRange(IList<TEntity> entities, IDbConnection dbConnection)
         {
-            return AddRange(entities, paramDbConnection, null, out long recordsAffected, out IEnumerable<object> addedIds, null);
+            return AddRange(entities, dbConnection, null, out long recordsAffected, out IEnumerable<object> addedIds, null);
         }
 
-        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, int commandTimeOut)
+        public bool AddRange(IList<TEntity> entities, IDbConnection dbConnection, int commandTimeOut)
         {
-            return AddRange(entities, paramDbConnection, null, out long recordsAffected, out IEnumerable<object> addedIds, commandTimeOut);
+            return AddRange(entities, dbConnection, null, out long recordsAffected, out IEnumerable<object> addedIds, commandTimeOut);
         }
 
-        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, out IEnumerable<object> addedIds)
+        public bool AddRange(IList<TEntity> entities, IDbConnection dbConnection, out IEnumerable<object> addedIds)
         {
-            return AddRange(entities, paramDbConnection, null, out long recordsAffected, out addedIds, null);
+            return AddRange(entities, dbConnection, null, out long recordsAffected, out addedIds, null);
         }
 
-        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, out IEnumerable<object> addedIds, int commandTimeOut)
+        public bool AddRange(IList<TEntity> entities, IDbConnection dbConnection, out IEnumerable<object> addedIds, int commandTimeOut)
         {
-            return AddRange(entities, paramDbConnection, null, out long recordsAffected, out addedIds, commandTimeOut);
+            return AddRange(entities, dbConnection, null, out long recordsAffected, out addedIds, commandTimeOut);
         }
-        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, out long recordsAffected)
+        public bool AddRange(IList<TEntity> entities, IDbConnection dbConnection, out long recordsAffected)
         {
-            return AddRange(entities, paramDbConnection, null, out recordsAffected, out IEnumerable<object> addedIds, null);
+            return AddRange(entities, dbConnection, null, out recordsAffected, out IEnumerable<object> addedIds, null);
         }
-        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, out long recordsAffected, int commandTimeOut)
+        public bool AddRange(IList<TEntity> entities, IDbConnection dbConnection, out long recordsAffected, int commandTimeOut)
         {
-            return AddRange(entities, paramDbConnection, null, out recordsAffected, out IEnumerable<object> addedIds, commandTimeOut);
-        }
-
-        public bool AddRange(IList<TEntity> entities, IDbTransaction paramDbTransaction)
-        {
-            return AddRange(entities, null, paramDbTransaction, out long recordsAffected, out IEnumerable<object> addedIds, null);
+            return AddRange(entities, dbConnection, null, out recordsAffected, out IEnumerable<object> addedIds, commandTimeOut);
         }
 
-        public bool AddRange(IList<TEntity> entities, IDbTransaction paramDbTransaction, int commandTimeOut)
+        public bool AddRange(IList<TEntity> entities, IDbTransaction dbTransaction)
         {
-            return AddRange(entities, null, paramDbTransaction, out long recordsAffected, out IEnumerable<object> addedIds, commandTimeOut);
+            return AddRange(entities, null, dbTransaction, out long recordsAffected, out IEnumerable<object> addedIds, null);
         }
 
-        public bool AddRange(IList<TEntity> entities, IDbTransaction paramDbTransaction, out IEnumerable<object> addedIds)
+        public bool AddRange(IList<TEntity> entities, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return AddRange(entities, null, paramDbTransaction, out long recordsAffected, out addedIds, null);
+            return AddRange(entities, null, dbTransaction, out long recordsAffected, out IEnumerable<object> addedIds, commandTimeOut);
         }
 
-        public bool AddRange(IList<TEntity> entities, IDbTransaction paramDbTransaction, out IEnumerable<object> addedIds, int commandTimeOut)
+        public bool AddRange(IList<TEntity> entities, IDbTransaction dbTransaction, out IEnumerable<object> addedIds)
         {
-            return AddRange(entities, null, paramDbTransaction, out long recordsAffected, out addedIds, commandTimeOut);
+            return AddRange(entities, null, dbTransaction, out long recordsAffected, out addedIds, null);
         }
 
-        public bool AddRange(IList<TEntity> entities, IDbTransaction paramDbTransaction, out long recordsAffected)
+        public bool AddRange(IList<TEntity> entities, IDbTransaction dbTransaction, out IEnumerable<object> addedIds, int commandTimeOut)
         {
-            return AddRange(entities, null, paramDbTransaction, out recordsAffected, out IEnumerable<object> addedIds, null);
+            return AddRange(entities, null, dbTransaction, out long recordsAffected, out addedIds, commandTimeOut);
         }
 
-        public bool AddRange(IList<TEntity> entities, IDbTransaction paramDbTransaction, out long recordsAffected, int commandTimeOut)
+        public bool AddRange(IList<TEntity> entities, IDbTransaction dbTransaction, out long recordsAffected)
         {
-            return AddRange(entities, null, paramDbTransaction, out recordsAffected, out IEnumerable<object> addedIds, commandTimeOut);
-        }
-        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
-        {
-            return AddRange(entities, paramDbConnection, paramDbTransaction, out long recordsAffected, out IEnumerable<object> addedIds, null);
+            return AddRange(entities, null, dbTransaction, out recordsAffected, out IEnumerable<object> addedIds, null);
         }
 
-        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int commandTimeOut)
+        public bool AddRange(IList<TEntity> entities, IDbTransaction dbTransaction, out long recordsAffected, int commandTimeOut)
         {
-            return AddRange(entities, paramDbConnection, paramDbTransaction, out long recordsAffected, out IEnumerable<object> addedIds, commandTimeOut);
+            return AddRange(entities, null, dbTransaction, out recordsAffected, out IEnumerable<object> addedIds, commandTimeOut);
+        }
+        public bool AddRange(IList<TEntity> entities, IDbConnection dbConnection, IDbTransaction dbTransaction)
+        {
+            return AddRange(entities, dbConnection, dbTransaction, out long recordsAffected, out IEnumerable<object> addedIds, null);
         }
 
-        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out IEnumerable<object> addedIds)
+        public bool AddRange(IList<TEntity> entities, IDbConnection dbConnection, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return AddRange(entities, paramDbConnection, paramDbTransaction, out long recordsAffected, out addedIds, null);
+            return AddRange(entities, dbConnection, dbTransaction, out long recordsAffected, out IEnumerable<object> addedIds, commandTimeOut);
         }
 
-        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out IEnumerable<object> addedIds, int commandTimeOut)
+        public bool AddRange(IList<TEntity> entities, IDbConnection dbConnection, IDbTransaction dbTransaction, out IEnumerable<object> addedIds)
         {
-            return AddRange(entities, paramDbConnection, paramDbTransaction, out long recordsAffected, out addedIds, commandTimeOut);
+            return AddRange(entities, dbConnection, dbTransaction, out long recordsAffected, out addedIds, null);
         }
 
-        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected)
+        public bool AddRange(IList<TEntity> entities, IDbConnection dbConnection, IDbTransaction dbTransaction, out IEnumerable<object> addedIds, int commandTimeOut)
         {
-            return AddRange(entities, paramDbConnection, paramDbTransaction, out recordsAffected, out IEnumerable<object> addedIds, null);
+            return AddRange(entities, dbConnection, dbTransaction, out long recordsAffected, out addedIds, commandTimeOut);
         }
 
-        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected, int commandTimeOut)
+        public bool AddRange(IList<TEntity> entities, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected)
         {
-            return AddRange(entities, paramDbConnection, paramDbTransaction, out recordsAffected, out IEnumerable<object> addedIds, commandTimeOut);
+            return AddRange(entities, dbConnection, dbTransaction, out recordsAffected, out IEnumerable<object> addedIds, null);
+        }
+
+        public bool AddRange(IList<TEntity> entities, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected, int commandTimeOut)
+        {
+            return AddRange(entities, dbConnection, dbTransaction, out recordsAffected, out IEnumerable<object> addedIds, commandTimeOut);
         }
 
         public bool AddRange(IList<TEntity> entities, out string errMessage)
@@ -259,29 +259,29 @@ namespace SysWork.Data.GenericRepository
         }
 
 
-        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected, out IEnumerable<object> addedIds)
+        public bool AddRange(IList<TEntity> entities, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected, out IEnumerable<object> addedIds)
         {
-            return AddRange(entities, paramDbConnection, paramDbTransaction, out recordsAffected, out addedIds, null);
+            return AddRange(entities, dbConnection, dbTransaction, out recordsAffected, out addedIds, null);
         }
 
-        public bool AddRange(IList<TEntity> entities, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected, out IEnumerable<object> addedIds, int? commandTimeOut)
+        public bool AddRange(IList<TEntity> entities, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected, out IEnumerable<object> addedIds, int? commandTimeOut)
         {
             recordsAffected = 0;
             var idList = new List<object>();
             bool hasIdentity = false;
             addedIds = null;
 
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
 
-            IDbConnection dbConnection = paramDbConnection ?? BaseIDbConnection();
+            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
             IDbCommand dbCommand;
             try
             {
-                if (dbConnection.State != ConnectionState.Open)
-                    dbConnection.Open();
+                if (dbConnectionInUse.State != ConnectionState.Open)
+                    dbConnectionInUse.Open();
             }
             catch (Exception connectionException)
             {
@@ -291,10 +291,10 @@ namespace SysWork.Data.GenericRepository
             foreach (TEntity entity in entities)
             {
                 string parameterList = "";
-                dbCommand = dbConnection.CreateCommand();
+                dbCommand = dbConnectionInUse.CreateCommand();
                 dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
 
-                string insertRangeQuery = "";
+                string addRangeQuery = "";
                 foreach (PropertyInfo i in ListObjectPropertyInfo)
                 {
                     var customAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
@@ -313,14 +313,14 @@ namespace SysWork.Data.GenericRepository
                 if (parameterList != string.Empty)
                 {
                     parameterList = parameterList.Substring(0, parameterList.Length - 1);
-                    insertRangeQuery = (string.Format("INSERT INTO {0} ( {1} ) VALUES ( {2} ) {3};", _syntaxProvider.GetSecureTableName(TableName), ColumnsForInsert, parameterList, _syntaxProvider.GetSubQueryGetIdentity()));
+                    addRangeQuery = (string.Format("INSERT INTO {0} ( {1} ) VALUES ( {2} ) {3};", _syntaxProvider.GetSecureTableName(TableName), ColumnsForInsert, parameterList, _syntaxProvider.GetSubQueryGetIdentity()));
                 }
 
                 try
                 {
-                    dbCommand.CommandText = insertRangeQuery;
-                    if (paramDbTransaction != null)
-                        dbCommand.Transaction = paramDbTransaction;
+                    dbCommand.CommandText = addRangeQuery;
+                    if (dbTransaction != null)
+                        dbCommand.Transaction = dbTransaction;
 
                     if (_dataBaseEngine == EDataBaseEngine.OleDb)
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
@@ -352,12 +352,12 @@ namespace SysWork.Data.GenericRepository
                 catch (Exception commandException)
                 {
                     // In case of exception, if the command is open, close it.
-                    if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                    if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
                     {
-                        if (dbConnection.State == ConnectionState.Open)
-                            dbConnection.Close();
+                        if (dbConnectionInUse.State == ConnectionState.Open)
+                            dbConnectionInUse.Close();
 
-                        dbConnection.Dispose();
+                        dbConnectionInUse.Dispose();
                     }
 
                     throw new RepositoryException(commandException, dbCommand);
@@ -366,10 +366,10 @@ namespace SysWork.Data.GenericRepository
 
             addedIds = idList;
 
-            if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+            if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
             {
-                dbConnection.Close();
-                dbConnection.Dispose();
+                dbConnectionInUse.Close();
+                dbConnectionInUse.Dispose();
             }
 
             return true;

@@ -19,53 +19,53 @@ namespace SysWork.Data.GenericRepository
             return GetAll(null, null, commandTimeOut);
         }
 
-        public IList<TEntity> GetAll(IDbConnection paramDbConnection)
+        public IList<TEntity> GetAll(IDbConnection dbConnection)
         {
-            return GetAll(paramDbConnection, null, null);
+            return GetAll(dbConnection, null, null);
         }
 
-        public IList<TEntity> GetAll(IDbConnection paramDbConnection, int commandTimeOut)
+        public IList<TEntity> GetAll(IDbConnection dbConnection, int commandTimeOut)
         {
-            return GetAll(paramDbConnection, null, commandTimeOut);
+            return GetAll(dbConnection, null, commandTimeOut);
         }
 
-        public IList<TEntity> GetAll(IDbTransaction paramDbTransaction)
+        public IList<TEntity> GetAll(IDbTransaction dbTransaction)
         {
-            return GetAll(null, paramDbTransaction, null);
+            return GetAll(null, dbTransaction, null);
         }
 
-        public IList<TEntity> GetAll(IDbTransaction paramDbTransaction, int commandTimeOut)
+        public IList<TEntity> GetAll(IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return GetAll(null, paramDbTransaction, commandTimeOut);
+            return GetAll(null, dbTransaction, commandTimeOut);
         }
 
-        public IList<TEntity> GetAll(IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
+        public IList<TEntity> GetAll(IDbConnection dbConnection, IDbTransaction dbTransaction)
         {
-            return GetAll(paramDbConnection, paramDbTransaction, null);
+            return GetAll(dbConnection, dbTransaction, null);
         }
 
-        public IList<TEntity> GetAll(IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int? commandTimeOut)
+        public IList<TEntity> GetAll(IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
         {
             IList<TEntity> collection = new List<TEntity>();
 
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
 
-            IDbConnection dbConnection = paramDbConnection ?? BaseIDbConnection();
-            IDbCommand dbCommand = dbConnection.CreateCommand();
+            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
+            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
             dbCommand.CommandText = string.Format("SELECT {0} FROM {1}", ColumnsForSelect, _syntaxProvider.GetSecureTableName(TableName));
             dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
 
             try
             {
-                if (dbConnection.State != ConnectionState.Open)
-                    dbConnection.Open();
+                if (dbConnectionInUse.State != ConnectionState.Open)
+                    dbConnectionInUse.Open();
 
-                if (paramDbTransaction != null)
-                    dbCommand.Transaction = paramDbTransaction;
+                if (dbTransaction != null)
+                    dbCommand.Transaction = dbTransaction;
 
                 IDataReader reader = dbCommand.ExecuteReader();
                 collection = new MapDataReaderToEntity().Map<TEntity>(reader, ListObjectPropertyInfo, _dataBaseEngine);
@@ -79,10 +79,10 @@ namespace SysWork.Data.GenericRepository
             }
             finally
             {
-                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
                 {
-                    dbConnection.Close();
-                    dbConnection.Dispose();
+                    dbConnectionInUse.Close();
+                    dbConnectionInUse.Dispose();
                 }
             }
 

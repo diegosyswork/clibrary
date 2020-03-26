@@ -11,15 +11,15 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
     {
         bool DeleteById(long Id);
         bool DeleteById(long Id, int commandTimeOut);
-        bool DeleteById(long Id, IDbConnection paramDbConnection);
-        bool DeleteById(long Id, IDbConnection paramDbConnection, int commandTimeOut);
-        bool DeleteById(long Id, IDbTransaction paramDbTransaction);
-        bool DeleteById(long Id, IDbTransaction paramDbTransaction, int commandTimeOut);
-        bool DeleteById(long Id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction);
-        bool DeleteById(long Id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, int commandTimeOut);
+        bool DeleteById(long Id, IDbConnection dbConnection);
+        bool DeleteById(long Id, IDbConnection dbConnection, int commandTimeOut);
+        bool DeleteById(long Id, IDbTransaction dbTransaction);
+        bool DeleteById(long Id, IDbTransaction dbTransaction, int commandTimeOut);
+        bool DeleteById(long Id, IDbConnection dbConnection, IDbTransaction dbTransaction);
+        bool DeleteById(long Id, IDbConnection dbConnection, IDbTransaction dbTransaction, int commandTimeOut);
         bool DeleteById(long Id, out string errMessage);
         bool DeleteById(long Id, out string errMessage, int commandTimeOut);
-        bool DeleteById(long Id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected);
-        bool DeleteById(long Id, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction, out long recordsAffected, int? commandTimeOut);
+        bool DeleteById(long Id, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected);
+        bool DeleteById(long Id, IDbConnection dbConnection, IDbTransaction dbTransaction, out long recordsAffected, int? commandTimeOut);
     }
 }
