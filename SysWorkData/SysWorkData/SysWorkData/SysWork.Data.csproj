@@ -113,7 +113,7 @@
     <Compile Include="GenericRepository\BaseRepository.GetListByLEF.cs" />
     <Compile Include="GenericRepository\BaseRepository.UpdateRange.cs" />
     <Compile Include="GenericRepository\BaseRepository.Update.cs" />
-    <Compile Include="GenericRepository\BaseViewManager.cs" />
+    <Compile Include="GenericViewManager\BaseViewManager.cs" />
     <Compile Include="GenericRepository\CodeWriter\CodeWriterHelper.cs" />
     <Compile Include="GenericRepository\CodeWriter\RepositoryClassFromDb.cs" />
     <Compile Include="GenericRepository\CodeWriter\EntityClassFromDb.cs" />

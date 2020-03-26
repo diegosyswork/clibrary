@@ -18,7 +18,7 @@ using SysWork.Data.Common.Filters;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 
-namespace SysWork.Data.GenericRepository
+namespace SysWork.Data.GenericViewManager
 {
     /// <summary>
     /// Generic Class to manage views
