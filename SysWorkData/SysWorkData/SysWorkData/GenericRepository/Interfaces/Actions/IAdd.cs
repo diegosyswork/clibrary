@@ -16,7 +16,7 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
         long Add(TEntity entity);
         
         /// <summary>
-        /// Adds a record, and use a custom dbCommand timeout.
+        /// Adds a record and use a custom dbCommand timeout.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="commandTimeOut">The command time out.</param>
@@ -58,7 +58,7 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
         long Add(TEntity entity, IDbTransaction dbTransaction, int commandTimeOut);
 
         /// <summary>
-        /// Adds a record, using and DbConnection and DbTransaction.
+        /// Adds a record using an DbConnection and DbTransaction.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="dbConnection">The database connection.</param>
@@ -67,7 +67,7 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
         long Add(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction);
 
         /// <summary>
-        /// Adds a record using an DbConnection and DbTransaction and custom dbCommand timeout.
+        /// Adds a record using an DbConnection, DbTransaction and custom dbCommand timeout.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="dbConnection">The database connection.</param>
@@ -77,7 +77,7 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
         long Add(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut);
 
         /// <summary>
-        /// Adds a record, no throws exceptions.
+        /// Adds a record. No throws exceptions.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="errMessage">The error message.</param>
@@ -85,13 +85,12 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
         long Add(TEntity entity, out string errMessage);
 
         /// <summary>
-        /// Adds a record using custom dbCommand timeout, no thows exceptions.
+        /// Adds a record using custom dbCommand timeout. No thows exceptions.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="errMessage">The error message.</param>
         /// <param name="commandTimeOut">The command time out.</param>
         /// <returns></returns>
         long Add(TEntity entity, out string errMessage, int commandTimeOut);
-
     }
 }
