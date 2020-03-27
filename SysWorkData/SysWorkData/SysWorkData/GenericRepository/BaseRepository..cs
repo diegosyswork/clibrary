@@ -24,7 +24,6 @@ using SysWork.Data.GenericRepository.DbInfo;
 /// </summary>
 #pragma warning restore 1587
 
-//TODO: 2020-03-12 : Agregar en todos los metodos la posibilidad de cambiar el CommandTimeOut
 namespace SysWork.Data.GenericRepository
 {
     #region DOCUMENTATION Class
@@ -61,9 +60,7 @@ namespace SysWork.Data.GenericRepository
     /// In case a transaction and a connection are specified, the ones provided will be used.
     /// </remarks>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
-    /// <seealso cref="SysWork.Data.GenericRepository.Interfaces.IRepository{TEntity}" />
     #endregion
-    //public abstract partial class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class, new()
     public abstract partial class BaseRepository<TEntity> where TEntity : class, new()
     {
         private string _connectionString;
@@ -166,7 +163,6 @@ namespace SysWork.Data.GenericRepository
                 throw new Exception(string.Format("The Entity {0}, has not linked to any table, Use [DbTable] attribute to link it to a table.", type.Name));
 
         }
-
         
         /// <summary>
         /// Gets a new instance of the GenericFilterQuery with the ColumnsForSelect and TableName setted.

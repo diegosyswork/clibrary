@@ -986,7 +986,6 @@ namespace Demo.SysWork.Data
             person.Address = RandomString(20) + " " + RandomNumber(4);
             person.BirthDate = DateTime.Today.AddDays(int.Parse(RandomNumber(4)) * -1);
             person.Active = true;
-
             return person;
         }
 

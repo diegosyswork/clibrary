@@ -3,20 +3,20 @@
 namespace SysWork.Data.GenericRepository.Interfaces.Actions
 {
     /// <summary>
-    /// Interface to Add Entities
+    /// Adds a record.
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
     public interface IAdd<TEntity>
     {
         /// <summary>
-        /// Adds the specified entity.
+        /// Adds a record.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <returns></returns>
         long Add(TEntity entity);
         
         /// <summary>
-        /// Adds the specified entity, and use a custom timeout.
+        /// Adds a record, and use a custom dbCommand timeout.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="commandTimeOut">The command time out.</param>
@@ -24,7 +24,7 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
         long Add(TEntity entity, int commandTimeOut);
 
         /// <summary>
-        /// Adds the specified entity using an DbConnection.
+        /// Adds a record using an DbConnection.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="dbConnection">The parameter database connection.</param>
@@ -32,7 +32,7 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
         long Add(TEntity entity, IDbConnection dbConnection);
 
         /// <summary>
-        /// Adds the specified entity using an DbConnection and custom command timeout.
+        /// Adds a record using an DbConnection and custom dbCommand timeout.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="dbConnection">The parameter database connection.</param>
@@ -41,7 +41,7 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
         long Add(TEntity entity, IDbConnection dbConnection, int commandTimeOut);
 
         /// <summary>
-        /// Adds the specified entity using an DbTransaction.
+        /// Adds a record using an DbTransaction.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="dbTransaction"></param>
@@ -49,7 +49,7 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
         long Add(TEntity entity, IDbTransaction dbTransaction);
 
         /// <summary>
-        /// Adds the specified entity using an DbTransaction and custom command timeout.
+        /// Adds a record using an DbTransaction and custom dbCommand timeout.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="dbTransaction">The database transaction.</param>
@@ -58,7 +58,7 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
         long Add(TEntity entity, IDbTransaction dbTransaction, int commandTimeOut);
 
         /// <summary>
-        /// Adds the specified entity, using and DbConnection and DbTransaction.
+        /// Adds a record, using and DbConnection and DbTransaction.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="dbConnection">The database connection.</param>
@@ -67,7 +67,7 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
         long Add(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction);
 
         /// <summary>
-        /// Adds the specified entity using an DbConnection and DbTransaction and custom command timeout.
+        /// Adds a record using an DbConnection and DbTransaction and custom dbCommand timeout.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="dbConnection">The database connection.</param>
@@ -77,7 +77,7 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
         long Add(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut);
 
         /// <summary>
-        /// Adds the specified entity, no throws exceptions.
+        /// Adds a record, no throws exceptions.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="errMessage">The error message.</param>
@@ -85,7 +85,7 @@ namespace SysWork.Data.GenericRepository.Interfaces.Actions
         long Add(TEntity entity, out string errMessage);
 
         /// <summary>
-        /// Adds the specified entity, no thows exceptions using custom command timeout.
+        /// Adds a record using custom dbCommand timeout, no thows exceptions.
         /// </summary>
         /// <param name="entity">The entity.</param>
         /// <param name="errMessage">The error message.</param>

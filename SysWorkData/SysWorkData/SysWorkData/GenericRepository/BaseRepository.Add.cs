@@ -13,187 +13,26 @@ using SysWork.Data.GenericRepository.Interfaces.Actions;
 
 namespace SysWork.Data.GenericRepository
 {
+    /// <summary>
+    /// Adds a record.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
     public abstract partial class BaseRepository<TEntity> : IAdd<TEntity>
     {
-        #region DOCUMENTATION Add(TEntity entity, out string errMessage)
         /// <summary>
-        /// Add a new entity to the database.
+        /// Adds a record.
         /// </summary>
         /// <remarks>
-        /// Add a new entity in the database, in case of error it does not throw exceptions. 
+        /// Adds a record in the database.
         /// If successful, it returns the identity(Id) of the generated entity.
         /// In case it does not have an Identity type column, it returns 0.
-        /// In case of error it returns -1 and shows the error in the errMessage output variable.
-        /// </remarks>
-        /// <param name="entity">Entidad a Insertar</param>
-        /// <param name="errMessage">OUT En caso de ocurrir una excepcion, encapsula el mensaje de error de la excepcion original</param>
-        /// <returns>
-        /// If successful: the identity(Id) of the generated entity.
-        /// In case it does not have an Identity type column: 0.
-        /// In case of error it : -1,  and shows the error in the errMessage output variable.
-        /// </returns>
-        /// <example>
-        /// <code>
-        /// <![CDATA[
-        ///[DbTable (Name = "Persons")]
-        ///public class Person
-        ///{
-        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
-        ///     public long IdPerson { get; set; }
-        ///     [DbColumn()]
-        ///     public string LastName { get; set; }
-        ///     [DbColumn()]
-        ///     public string FirstName { get; set; }
-        ///     [DbColumn()]
-        ///     public string Passport { get; set; }
-        ///}
-        ///
-        ///public class PersonRepository: BaseRepository<Person>
-        ///{
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
-        ///     {
-        ///     
-        ///     }
-        ///     
-        ///     public Person GetByPassport(string passport)
-        ///     {
-        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
-        ///     }
-        ///}
-        ///
-        ///class Test
-        ///{
-        ///     void main()
-        ///     {
-        ///         // MSSqlServer connectionString.
-        ///         var myConnectionString = "MyConnectionString";
-        ///      
-        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
-        ///         var p = new Person();
-        ///         p.LastName = "Martinez";
-        ///         p.FirstName = "Diego";
-        ///         p.Passport = "AR00127296";
-        ///
-        ///         long id = PersonRepository.Add(p,out string errMessage);
-        ///         if (id==-1)
-        ///         {
-        ///             Console.WriteLine ($"Ocurrs this error:{errMessage}");
-        ///         }
-        ///         else
-        ///         {
-        ///             Console.WriteLine ($"inserted id is: {id}");
-        ///         }
-        ///     }
-        ///}
-        /// ]]>
-        /// </code>
-        /// </example>
-        #endregion
-        public long Add(TEntity entity, out string errMessage)
-        {
-            return Add(entity, out errMessage, null);
-        }
-
-        public long Add(TEntity entity, out string errMessage, int commandTimeOut)
-        {
-            return Add(entity, out errMessage, commandTimeOut);
-        }
-
-        private long Add(TEntity entity, out string errMessage, int? commandTimeOut)
-        {
-            errMessage = "";
-            long identity = 0;
-
-            try
-            {
-                identity = Add(entity, null, null, commandTimeOut);
-            }
-            catch (RepositoryException genericRepositoryException)
-            {
-                errMessage = genericRepositoryException.OriginalException.Message;
-                identity = -1;
-            }
-            catch (Exception exception)
-            {
-                errMessage = exception.Message;
-                identity = -1;
-            }
-            return identity;
-        }
-
-        #region DOCUMENTATION Add(TEntity entity)
-        /// <summary>
-        /// Add a new entity to the database.
-        /// </summary>
-        /// <remarks>
-        /// Add a new entity in the database. 
-        /// If successful, it returns the identity(Id) of the generated entity.
-        /// In case it does not have an Identity type column, it returns 0.
-        /// In case of Exception trows new GenericRepositoryException.
+        /// In case of Exception throws a new GenericRepositoryException.
         /// </remarks>
         /// <param name="entity">The entity.</param>
         /// <returns>
-        /// If successful: the identity(Id) of the generated entity.
-        /// In case it does not have an Identity type column: 0.
+        /// If successful, it returns the identity(Id) of the generated entity.
+        /// In case it does not have an Identity type column, it returns 0.
         /// </returns>
-        /// <exception cref="RepositoryException"></exception>
-        /// <example>
-        /// <code>
-        /// <![CDATA[
-        ///[DbTable (Name = "Persons")]
-        ///public class Person
-        ///{
-        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
-        ///     public long IdPerson { get; set; }
-        ///     [DbColumn()]
-        ///     public string LastName { get; set; }
-        ///     [DbColumn()]
-        ///     public string FirstName { get; set; }
-        ///     [DbColumn()]
-        ///     public string Passport { get; set; }
-        ///}
-        ///
-        ///public class PersonRepository: BaseRepository<Person>
-        ///{
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
-        ///     {
-        ///     
-        ///     }
-        ///     
-        ///     public Person GetByPassport(string passport)
-        ///     {
-        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
-        ///     }
-        ///}
-        ///
-        ///class Test
-        ///{
-        ///     static void Main()
-        ///     {
-        ///         // MSSqlServer connectionString.
-        ///         var myConnectionString = "MyConnectionString";
-        ///      
-        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
-        ///         var p = new Person();
-        ///         p.LastName = "Martinez";
-        ///         p.FirstName = "Diego";
-        ///         p.Passport = "AR00127296";
-        ///         
-        ///         try
-        ///         {
-        ///             long id = PersonRepository.Add(p);
-        ///             Console.WriteLine ($"inserted id is: {id}");
-        ///         }
-        ///         catch(GenericRepositoryExpception gre)
-        ///         {
-        ///             Console.WriteLine ("Error ");
-        ///         }
-        ///     }
-        ///}
-        /// ]]>
-        /// </code>
-        /// </example>
-        #endregion
         public long Add(TEntity entity)
         {
             return Add(entity, null, null, null);
@@ -204,84 +43,6 @@ namespace SysWork.Data.GenericRepository
             return Add(entity, null, null, commandTimeOut);
         }
 
-        #region DOCUMENTATION Add(TEntity entity, IDbConnection dbConnection)
-        /// <summary>
-        /// Add a new entity to the database using a connection provided.
-        /// </summary>
-        /// <remarks>
-        /// Add a new entity in the database. 
-        /// If successful, it returns the identity(Id) of the generated entity.
-        /// In case it does not have an Identity type column, it returns 0.
-        /// In case of Exception trows new GenericRepositoryException.
-        /// </remarks>
-        /// <param name="entity">The entity.</param>
-        /// <param name="dbConnection"></param>
-        /// <returns>
-        /// If successful: the identity(Id) of the generated entity.
-        /// In case it does not have an Identity type column: 0.
-        /// </returns>
-        /// <exception cref="RepositoryException"></exception>
-        /// <example>
-        /// <code>
-        /// <![CDATA[
-        ///[DbTable (Name = "Persons")]
-        ///public class Person
-        ///{
-        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
-        ///     public long IdPerson { get; set; }
-        ///     [DbColumn()]
-        ///     public string LastName { get; set; }
-        ///     [DbColumn()]
-        ///     public string FirstName { get; set; }
-        ///     [DbColumn()]
-        ///     public string Passport { get; set; }
-        ///}
-        ///
-        ///public class PersonRepository: BaseRepository<Person>
-        ///{
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
-        ///     {
-        ///     
-        ///     }
-        ///     
-        ///     public Person GetByPassport(string passport)
-        ///     {
-        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
-        ///     }
-        ///}
-        ///
-        ///class Test
-        ///{
-        ///     static void Main()
-        ///     {
-        ///         // MSSqlServer connectionString.
-        ///         var myConnectionString = "MyConnectionString";
-        ///      
-        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
-        ///         var p = new Person();
-        ///         p.LastName = "Martinez";
-        ///         p.FirstName = "Diego";
-        ///         p.Passport = "AR00127296";
-        ///         
-        ///         // Get new Connection.
-        ///         var extConnection = PersonRepository.GetDbConnection();
-        ///         extConnection.Open();
-        ///         
-        ///         try
-        ///         {
-        ///             long id = PersonRepository.Add(p,extConnection);
-        ///             Console.WriteLine ($"inserted id is: {id}");
-        ///         }
-        ///         catch(GenericRepositoryExpception gre)
-        ///         {
-        ///             Console.WriteLine ("Error ");
-        ///         }
-        ///     }
-        ///}
-        /// ]]>
-        /// </code>
-        /// </example>
-        #endregion
         public long Add(TEntity entity, IDbConnection dbConnection)
         {
             return Add(entity, dbConnection, null, null);
@@ -292,87 +53,6 @@ namespace SysWork.Data.GenericRepository
             return Add(entity, dbConnection, null, commandTimeOut);
         }
 
-        #region DOCUMENTATION Add(TEntity entity, IDbTransaction dbTransaction)
-        /// <summary>
-        /// Add a new entity to the database using a transaction provided.
-        /// </summary>
-        /// <remarks>
-        /// Add a new entity in the database. 
-        /// If successful, it returns the identity(Id) of the generated entity.
-        /// In case it does not have an Identity type column, it returns 0.
-        /// In case of Exception trows new GenericRepositoryException.
-        /// </remarks>
-        /// <param name="entity">The entity.</param>
-        /// <param name="dbTransaction">The parameter database transaction.</param>
-        /// <returns>
-        /// If successful: the identity(Id) of the generated entity.
-        /// In case it does not have an Identity type column: 0.
-        /// </returns>
-        /// <exception cref="RepositoryException"></exception>
-        /// <example>
-        /// <code>
-        /// <![CDATA[
-        ///[DbTable (Name = "Persons")]
-        ///public class Person
-        ///{
-        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
-        ///     public long IdPerson { get; set; }
-        ///     [DbColumn()]
-        ///     public string LastName { get; set; }
-        ///     [DbColumn()]
-        ///     public string FirstName { get; set; }
-        ///     [DbColumn()]
-        ///     public string Passport { get; set; }
-        ///}
-        ///
-        ///public class PersonRepository: BaseRepository<Person>
-        ///{
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
-        ///     {
-        ///     
-        ///     }
-        ///     
-        ///     public Person GetByPassport(string passport)
-        ///     {
-        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
-        ///     }
-        ///}
-        ///
-        ///class Test
-        ///{
-        ///     static void Main()
-        ///     {
-        ///         // MSSqlServer connectionString.
-        ///         var myConnectionString = "MyConnectionString";
-        ///      
-        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
-        ///         var p = new Person();
-        ///         p.LastName = "Martinez";
-        ///         p.FirstName = "Diego";
-        ///         p.Passport = "AR00127296";
-        ///         
-        ///         // Get new Connection.
-        ///         var extConnection = PersonRepository.GetDbConnection();
-        ///         extConnection.Open();
-        ///         
-        ///         var extTransaction = extConnection.BeginTransaction();
-        ///         try
-        ///         {
-        ///             long id = PersonRepository.Add(p,extTransaction);
-        ///             extTransaction.Commit();
-        ///             Console.WriteLine ($"inserted id is: {id}");
-        ///         }
-        ///         catch(GenericRepositoryExpception gre)
-        ///         {
-        ///             extTransaction.RollBack();
-        ///             Console.WriteLine ("Error ");
-        ///         }
-        ///     }
-        ///}
-        /// ]]>
-        /// </code>
-        /// </example>
-        #endregion
         public long Add(TEntity entity, IDbTransaction dbTransaction)
         {
             return Add(entity, null, dbTransaction, null);
@@ -383,86 +63,120 @@ namespace SysWork.Data.GenericRepository
             return Add(entity, null, dbTransaction, commandTimeOut);
         }
 
-        #region DOCUMENTATION Add(TEntity entity, IDbConnection dbConnection,IDbTransaction dbTransaction)
+        #region DOCUMENTATION public long Add(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction)
         /// <summary>
-        /// Add a new entity to the database using a connection and a transaction provided.
+        /// Adds a record using an DbConnection and DbTransaction and custom dbCommand timeout.
         /// </summary>
         /// <remarks>
-        /// Add a new entity in the database. 
-        /// If successful, it returns the identity(Id) of the generated entity.
-        /// In case it does not have an Identity type column, it returns 0.
-        /// In case of Exception trows new GenericRepositoryException.
+        /// Adds a record using an DbConnection and DbTransaction and custom dbCommand timeout.
+        /// 
+        /// If dbConnection is null, a new one will be created and closed on completion.
+        /// If dbConnection is null and dbTransaction is not null, the connection from the dbTransaction will be used. The connection will not close at the end.
+        /// If dbTransaction is null, no transaction will be used in the dbCommand.
+        /// 
         /// </remarks>
         /// <param name="entity">The entity.</param>
-        /// <param name="dbConnection">The parameter database connection.</param>
-        /// <param name="dbTransaction">The parameter database transaction.</param>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <param name="dbTransaction">The database transaction.</param>
         /// <returns>
-        /// If successful: the identity(Id) of the generated entity.
-        /// In case it does not have an Identity type column: 0.
+        /// If successful, it returns the identity(Id) of the generated record.
+        /// In case it does not have an Identity type column, it returns 0.
         /// </returns>
         /// <exception cref="RepositoryException"></exception>
         /// <example>
-        /// <code>
         /// <![CDATA[
-        ///[DbTable (Name = "Persons")]
-        ///public class Person
-        ///{
+        /// [DbTable(Name = "Persons")]
+        /// public class Person
+        /// {
         ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
         ///     public long IdPerson { get; set; }
-        ///     [DbColumn()]
-        ///     public string LastName { get; set; }
+        ///
         ///     [DbColumn()]
         ///     public string FirstName { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///
         ///     [DbColumn()]
         ///     public string Passport { get; set; }
-        ///}
         ///
-        ///public class PersonRepository: BaseRepository<Person>
-        ///{
+        ///     [DbColumn()]
+        ///     public string Address { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public long? IdState { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public DateTime? BirthDate { get; set; }
+        ///
+        ///     [DbColumn(ColumnName = "Long Name Field")]
+        ///     public string LongNameField { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public bool Active { get; set; }
+        /// }
+        /// 
+        /// public class PersonRepository: BaseRepository<Person>
+        /// {
         ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
         ///     {
-        ///     
         ///     }
-        ///     
         ///     public Person GetByPassport(string passport)
         ///     {
         ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
         ///     }
-        ///}
-        ///
-        ///class Test
-        ///{
-        ///     static void Main()
+        ///     public DbExecutor GetDbExecutor()
         ///     {
-        ///         // MSSqlServer connectionString.
-        ///         var myConnectionString = "MyConnectionString";
+        ///         return BaseDbExecutor();
+        ///     }
+        ///     public DbConnection GetDbConnection()
+        ///     {
+        ///         return BaseDbConnection();
+        ///     }
+        /// }
+        /// 
+        /// class Sample
+        /// {
+        ///     void main()
+        ///     {
+        ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
-        ///         var personRepository = new PersonRepository<Person>(myConnectionString,EDatabaseEngine.MSSqlServer);
+        ///         var personRepository = new PersonRepository<Person>(connectionString, databaseEngine);
+        ///
         ///         var p = new Person();
-        ///         p.LastName = "Martinez";
         ///         p.FirstName = "Diego";
+        ///         p.LastName = "Martinez";
         ///         p.Passport = "AR00127296";
+        ///         p.LongNameField = "Field With Long Name";
+        ///         p.Address = "Address");
+        ///         p.BirthDate = new DateTime(1980,5,24);
+        ///         p.Active = true;
         ///         
-        ///         // Get new Connection.
-        ///         var extConnection = PersonRepository.GetDbConnection();
-        ///         extConnection.Open();
+        ///         var dbConnection = personRepository.GetDbConnection();
+        ///         dbConnection.Open();
         ///         
-        ///         var extTransaction = extConnection.BeginTransaction();
+        ///         var dbTransaction = dbConnection.BeginTransaction();
+        ///         
         ///         try
         ///         {
-        ///             long id = PersonRepository.Add(p,extConnection,extTransaction);
-        ///             extTransaction.Commit();
-        ///             Console.WriteLine ($"inserted id is: {id}");
+        ///             long id = PersonRepository.Add(p, dbConnection, dbTransaction);
+        ///             dbTransaction.Commit();
+        ///             Console.Writeline($"The generated id is{id}");
         ///         }
-        ///         catch(GenericRepositoryExpception gre)
+        ///         catch (GenericRepositoryException ex)
         ///         {
-        ///             extTransaction.RollBack();
-        ///             Console.WriteLine ("Error ");
+        ///             dbTransaction.Rollback();
+        ///             Console.Writeline($"The following error has occurred{ex.Message}");
+        ///         }
+        ///         finally
+        ///         {
+        ///             dbConnection.Close();
+        ///             dbConnection.Dispose();
         ///         }
         ///     }
-        ///}
+        /// }
         /// ]]>
-        /// </code>
         /// </example>
         #endregion
         public long Add(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction)
@@ -470,6 +184,126 @@ namespace SysWork.Data.GenericRepository
             return Add(entity, dbConnection, dbTransaction, null);
         }
 
+        #region DOCUMENTATION public long Add(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
+        /// <summary>
+        /// Adds a record using an DbConnection and DbTransaction and custom dbCommand timeout.
+        /// </summary>
+        /// <remarks>
+        /// Adds a record using an DbConnection and DbTransaction and custom dbCommand timeout.
+        /// 
+        /// If dbConnection is null, a new one will be created and closed on completion.
+        /// If dbConnection is null and dbTransaction is not null, the connection from the dbTransaction will be used. The connection will not close at the end.
+        /// If dbTransaction is null, no transaction will be used in the dbCommand.
+        /// If commandTimeout is null, DefaultCommandTimeout will be used.
+        /// 
+        /// </remarks>
+        /// <param name="entity">The entity.</param>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <param name="dbTransaction">The database transaction.</param>
+        /// <param name="commandTimeOut">The command timeout.</param>
+        /// <returns>
+        /// If successful, it returns the identity(Id) of the generated record.
+        /// In case it does not have an Identity type column, it returns 0.
+        /// </returns>
+        /// <exception cref="RepositoryException"></exception>
+        /// <example>
+        /// <![CDATA[
+        /// [DbTable(Name = "Persons")]
+        /// public class Person
+        /// {
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string Address { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public long? IdState { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public DateTime? BirthDate { get; set; }
+        ///
+        ///     [DbColumn(ColumnName = "Long Name Field")]
+        ///     public string LongNameField { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public bool Active { get; set; }
+        /// }
+        /// 
+        /// public class PersonRepository: BaseRepository<Person>
+        /// {
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     }
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///     public DbExecutor GetDbExecutor()
+        ///     {
+        ///         return BaseDbExecutor();
+        ///     }
+        ///     public DbConnection GetDbConnection()
+        ///     {
+        ///         return BaseDbConnection();
+        ///     }
+        /// }
+        /// 
+        /// class Sample
+        /// {
+        ///     void main()
+        ///     {
+        ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
+        ///      
+        ///         var personRepository = new PersonRepository<Person>(connectionString, databaseEngine);
+        ///
+        ///         var p = new Person();
+        ///         p.FirstName = "Diego";
+        ///         p.LastName = "Martinez";
+        ///         p.Passport = "AR00127296";
+        ///         p.LongNameField = "Field With Long Name";
+        ///         p.Address = "Address");
+        ///         p.BirthDate = new DateTime(1980,5,24);
+        ///         p.Active = true;
+        ///         
+        ///         int commandTimeOut = 60;
+        ///         
+        ///         var dbConnection = personRepository.GetDbConnection();
+        ///         dbConnection.Open();
+        ///         
+        ///         var dbTransaction = dbConnection.BeginTransaction();
+        ///         
+        ///         try
+        ///         {
+        ///             long id = PersonRepository.Add(p, dbConnection, dbTransaction, commandTimeOut );
+        ///             dbTransaction.Commit();
+        ///             Console.Writeline($"The generated id is{id}");
+        ///         }
+        ///         catch (GenericRepositoryException ex)
+        ///         {
+        ///             dbTransaction.Rollback();
+        ///             Console.Writeline($"The following error has occurred{ex.Message}");
+        ///         }
+        ///         finally
+        ///         {
+        ///             dbConnection.Close();
+        ///             dbConnection.Dispose();
+        ///         }
+        ///     }
+        /// }
+        /// ]]>
+        /// </example>
+        #endregion
         public long Add(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
         {
             long identity = 0;
@@ -561,5 +395,38 @@ namespace SysWork.Data.GenericRepository
             }
             return identity;
         }
+
+        public long Add(TEntity entity, out string errMessage)
+        {
+            return Add(entity, out errMessage, null);
+        }
+
+        public long Add(TEntity entity, out string errMessage, int commandTimeOut)
+        {
+            return Add(entity, out errMessage, commandTimeOut);
+        }
+
+        private long Add(TEntity entity, out string errMessage, int? commandTimeOut)
+        {
+            errMessage = "";
+            long identity = 0;
+
+            try
+            {
+                identity = Add(entity, null, null, commandTimeOut);
+            }
+            catch (RepositoryException genericRepositoryException)
+            {
+                errMessage = genericRepositoryException.OriginalException.Message;
+                identity = -1;
+            }
+            catch (Exception exception)
+            {
+                errMessage = exception.Message;
+                identity = -1;
+            }
+            return identity;
+        }
+
     }
 }
