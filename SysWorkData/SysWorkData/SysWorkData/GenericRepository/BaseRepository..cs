@@ -23,7 +23,6 @@ using SysWork.Data.GenericRepository.DbInfo;
 /// 
 /// </summary>
 #pragma warning restore 1587
-
 namespace SysWork.Data.GenericRepository
 {
     #region DOCUMENTATION Class
@@ -106,14 +105,6 @@ namespace SysWork.Data.GenericRepository
         /// </summary>
         public string ColumnsForSelect { get; private set; }
 
-        /// <summary>
-        /// Initializes a new instance class. Using MSSqlServer as DataBaseEngine.
-        /// </summary>
-        /// <param name="connectionString">The connection string.</param>
-        public BaseRepository(string connectionString)
-        {
-            BaseRepositoryConstructorResolver(connectionString, EDataBaseEngine.MSSqlServer);
-        }
 
         private int _defaultCommandTimeout = 30;
         /// <summary>
@@ -123,6 +114,15 @@ namespace SysWork.Data.GenericRepository
         /// The default CommandTimeOut.
         /// </value>
         protected int DefaultCommandTimeOut {get { return _defaultCommandTimeout; } set {_defaultCommandTimeout = value;}}
+
+        /// <summary>
+        /// Initializes a new instance class. Using MSSqlServer as DataBaseEngine.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        public BaseRepository(string connectionString)
+        {
+            BaseRepositoryConstructorResolver(connectionString, EDataBaseEngine.MSSqlServer);
+        }
 
         /// <summary>
         /// Initializes a new instance class.

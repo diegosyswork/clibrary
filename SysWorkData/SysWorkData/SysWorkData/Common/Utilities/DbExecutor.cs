@@ -227,7 +227,7 @@ namespace SysWork.Data.Common.Utilities
         ///  .UpdateQuery("Products"," WHERE IdCategory = @pIdCategory AND active = 0")
         ///  .AddFieldWithValue("Cost", 0)
         ///  .AddFieldWithValue("Price", 0)
-        ///  .AddParameter("IdCategory",5)
+        ///  .AddParameter("@pIdCategory",5)
         ///  .ExecuteNonQuery();
         /// </code>
         /// </example>
@@ -251,7 +251,7 @@ namespace SysWork.Data.Common.Utilities
         ///  .UpdateQuery("Products"," WHERE IdCategory = @pIdCategory AND active = 0")
         ///  .AddFieldWithValue("Cost", 0)
         ///  .AddFieldWithValue("Price", 0)
-        ///  .AddParameter("IdCategory",5)
+        ///  .AddParameter("@pIdCategory",5)
         ///  .ExecuteNonQuery();
         /// </code> 
         /// </example>
@@ -288,7 +288,7 @@ namespace SysWork.Data.Common.Utilities
         /// <code>
         ///   new DbExecutor(connectionString)
         ///  .UpdateQuery("Products"," SET cost = 0 WHERE IdCategory = @pIdCategory AND active = 0")
-        ///  .AddParameter("IdCategory",5)
+        ///  .AddParameter("@pIdCategory",5)
         ///  .ExecuteNonQuery();
         ///  
         ///   var result = new DbExecutor(connectionString)

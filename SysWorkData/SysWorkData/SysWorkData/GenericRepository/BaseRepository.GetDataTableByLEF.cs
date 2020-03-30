@@ -59,7 +59,7 @@ namespace SysWork.Data.GenericRepository
 
             if (dbConnection == null && dbTransaction != null)
                 dbConnection = dbTransaction.Connection;
-
+            
             DbConnection dbConnectionInUse = (DbConnection)dbConnection ?? BaseDbConnection();
             DbCommand dbCommand = dbConnectionInUse.CreateCommand();
 

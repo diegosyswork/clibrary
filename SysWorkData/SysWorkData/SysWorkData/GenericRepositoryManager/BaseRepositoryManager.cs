@@ -137,5 +137,30 @@ namespace SysWork.Data.GenericRepositoryManager
         {
             return StaticDbObjectProvider.GetDbConnection(_dataBaseEngine, _connectionString);
         }
+
+        private DbConnection _persistentConnection = null;
+
+        /// <summary>
+        /// Gets a persistent connection.
+        /// </summary>
+        /// <value>
+        /// An persistent DbConnection.
+        /// </value>
+        public DbConnection PersistentConnection { get { return GetPersistentDbConnection(); } }
+
+        private DbConnection GetPersistentDbConnection()
+        {
+            if (_persistentConnection == null)
+            {
+                _persistentConnection = GetDbConnection();
+            }
+            else
+            {
+                if (_persistentConnection.State != System.Data.ConnectionState.Open)
+                    _persistentConnection = GetDbConnection();
+            }
+            return _persistentConnection;
+        }
+
     }
 }

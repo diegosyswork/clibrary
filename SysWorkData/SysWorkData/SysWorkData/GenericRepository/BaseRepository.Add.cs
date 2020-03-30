@@ -13,10 +13,6 @@ using SysWork.Data.GenericRepository.Interfaces.Actions;
 
 namespace SysWork.Data.GenericRepository
 {
-    /// <summary>
-    /// Adds a record.
-    /// </summary>
-    /// <typeparam name="TEntity">The type of the entity.</typeparam>
     public abstract partial class BaseRepository<TEntity> : IAdd<TEntity>
     {
         #region DOCUMENTATION Add(TEntity entity)
@@ -33,7 +29,16 @@ namespace SysWork.Data.GenericRepository
         /// </returns>
         /// <exception cref="RepositoryException"></exception>
         /// <example>
+        /// <code>
         /// <![CDATA[
+        /// using System;
+        /// using System.Data.Common;
+        /// using SysWork.Data.Common;
+        /// using SysWork.Data.Common.Utilities;
+        /// using SysWork.Data.GenericRepository;
+        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.GenericRepository.Exceptions;
+        /// 
         /// [DbTable(Name = "Persons")]
         /// public class Person
         /// {
@@ -84,36 +89,37 @@ namespace SysWork.Data.GenericRepository
         ///     }
         /// }
         /// 
-        /// class Sample
+        /// public public class Sample
         /// {
-        ///     void main()
+        ///     static static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
         ///      
-        ///         var personRepository = new PersonRepository<Person>(connectionString, databaseEngine);
+        ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///
         ///         var p = new Person();
         ///         p.FirstName = "Diego";
         ///         p.LastName = "Martinez";
         ///         p.Passport = "AR00127296";
         ///         p.LongNameField = "Field With Long Name";
-        ///         p.Address = "Address");
+        ///         p.Address = "Address";
         ///         p.BirthDate = new DateTime(1980,5,24);
         ///         p.Active = true;
         ///         
         ///         try
         ///         {
         ///             long id = personRepository.Add(p);
-        ///             Console.Writeline($"The generated id is{id}");
+        ///             Console.WriteLine($"The generated id is{id}");
         ///         }
-        ///         catch (GenericRepositoryException ex)
+        ///         catch (RepositoryException ex)
         ///         {
-        ///             Console.Writeline($"The following error has occurred{ex.Message}");
+        ///             Console.WriteLine($"The following error has occurred{ex.Message}");
         ///         }
         ///     }
         /// }
         /// ]]>
+        /// </code>
         /// </example>
         #endregion
         public long Add(TEntity entity)
@@ -136,10 +142,19 @@ namespace SysWork.Data.GenericRepository
         /// </returns>
         /// <exception cref="RepositoryException"></exception>
         /// <example>
+        /// <code>
         /// <![CDATA[
-        /// [DbTable(Name = "Persons")]
-        /// public class Person
-        /// {
+        /// using System;
+        /// using System.Data.Common;
+        /// using SysWork.Data.Common;
+        /// using SysWork.Data.Common.Utilities;
+        /// using SysWork.Data.GenericRepository;
+        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.GenericRepository.Exceptions;
+        /// 
+        ///[DbTable(Name = "Persons")]
+        ///public class Person
+        ///{
         ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
         ///     public long IdPerson { get; set; }
         ///
@@ -187,21 +202,21 @@ namespace SysWork.Data.GenericRepository
         ///     }
         /// }
         /// 
-        /// class Sample
+        /// public class Sample
         /// {
-        ///     void main()
+        ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
         ///      
-        ///         var personRepository = new PersonRepository<Person>(connectionString, databaseEngine);
+        ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///
         ///         var p = new Person();
         ///         p.FirstName = "Diego";
         ///         p.LastName = "Martinez";
         ///         p.Passport = "AR00127296";
         ///         p.LongNameField = "Field With Long Name";
-        ///         p.Address = "Address");
+        ///         p.Address = "Address";
         ///         p.BirthDate = new DateTime(1980,5,24);
         ///         p.Active = true;
         ///         
@@ -210,16 +225,17 @@ namespace SysWork.Data.GenericRepository
         ///         try
         ///         {
         ///             long id = personRepository.Add(p, commandTimeOut);
-        ///             Console.Writeline($"The generated id is{id}");
+        ///             Console.WriteLine($"The generated id is{id}");
         ///         }
-        ///         catch (GenericRepositoryException ex)
+        ///         catch (RepositoryException ex)
         ///         {
-        ///             Console.Writeline($"The following error has occurred{ex.Message}");
+        ///             Console.WriteLine($"The following error has occurred{ex.Message}");
         ///         }
         ///     }
         /// }
         /// ]]>
-        /// </example>
+        ///</code>
+        ///</example>
         #endregion
         public long Add(TEntity entity, int commandTimeOut)
         {
@@ -241,7 +257,15 @@ namespace SysWork.Data.GenericRepository
         /// </returns>
         /// <exception cref="RepositoryException"></exception>
         /// <example>
-        /// <![CDATA[
+        /// <code><![CDATA[
+        /// using System;
+        /// using System.Data.Common;
+        /// using SysWork.Data.Common;
+        /// using SysWork.Data.Common.Utilities;
+        /// using SysWork.Data.GenericRepository;
+        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.GenericRepository.Exceptions;
+        /// 
         /// [DbTable(Name = "Persons")]
         /// public class Person
         /// {
@@ -292,21 +316,21 @@ namespace SysWork.Data.GenericRepository
         ///     }
         /// }
         /// 
-        /// class Sample
+        /// public class Sample
         /// {
-        ///     void main()
+        ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
         ///      
-        ///         var personRepository = new PersonRepository<Person>(connectionString, databaseEngine);
+        ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///
         ///         var p = new Person();
         ///         p.FirstName = "Diego";
         ///         p.LastName = "Martinez";
         ///         p.Passport = "AR00127296";
         ///         p.LongNameField = "Field With Long Name";
-        ///         p.Address = "Address");
+        ///         p.Address = "Address";
         ///         p.BirthDate = new DateTime(1980,5,24);
         ///         p.Active = true;
         ///         
@@ -318,11 +342,11 @@ namespace SysWork.Data.GenericRepository
         ///         try
         ///         {
         ///             long id = personRepository.Add(p, dbConnection);
-        ///             Console.Writeline($"The generated id is{id}");
+        ///             Console.WriteLine($"The generated id is{id}");
         ///         }
-        ///         catch (GenericRepositoryException ex)
+        ///         catch (RepositoryException ex)
         ///         {
-        ///             Console.Writeline($"The following error has occurred{ex.Message}");
+        ///             Console.WriteLine($"The following error has occurred{ex.Message}");
         ///         }
         ///         finally
         ///         {
@@ -331,7 +355,7 @@ namespace SysWork.Data.GenericRepository
         ///         }
         ///     }
         /// }
-        /// ]]>
+        /// ]]></code>
         /// </example>
         #endregion
         public long Add(TEntity entity, IDbConnection dbConnection)
@@ -355,7 +379,15 @@ namespace SysWork.Data.GenericRepository
         /// </returns>
         /// <exception cref="RepositoryException"></exception>
         /// <example>
-        /// <![CDATA[
+        /// <code><![CDATA[
+        /// using System;
+        /// using System.Data.Common;
+        /// using SysWork.Data.Common;
+        /// using SysWork.Data.Common.Utilities;
+        /// using SysWork.Data.GenericRepository;
+        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.GenericRepository.Exceptions;
+        /// 
         /// [DbTable(Name = "Persons")]
         /// public class Person
         /// {
@@ -406,21 +438,21 @@ namespace SysWork.Data.GenericRepository
         ///     }
         /// }
         /// 
-        /// class Sample
+        /// public class Sample
         /// {
-        ///     void main()
+        ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
         ///      
-        ///         var personRepository = new PersonRepository<Person>(connectionString, databaseEngine);
+        ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///
         ///         var p = new Person();
         ///         p.FirstName = "Diego";
         ///         p.LastName = "Martinez";
         ///         p.Passport = "AR00127296";
         ///         p.LongNameField = "Field With Long Name";
-        ///         p.Address = "Address");
+        ///         p.Address = "Address";
         ///         p.BirthDate = new DateTime(1980,5,24);
         ///         p.Active = true;
         ///         
@@ -432,11 +464,11 @@ namespace SysWork.Data.GenericRepository
         ///         try
         ///         {
         ///             long id = personRepository.Add(p, dbConnection, commandTimeOut);
-        ///             Console.Writeline($"The generated id is{id}");
+        ///             Console.WriteLine($"The generated id is{id}");
         ///         }
-        ///         catch (GenericRepositoryException ex)
+        ///         catch (RepositoryException ex)
         ///         {
-        ///             Console.Writeline($"The following error has occurred{ex.Message}");
+        ///             Console.WriteLine($"The following error has occurred{ex.Message}");
         ///         }
         ///         finally
         ///         {
@@ -445,7 +477,7 @@ namespace SysWork.Data.GenericRepository
         ///         }
         ///     }
         /// }
-        /// ]]>
+        /// ]]></code>
         /// </example>
         #endregion
         public long Add(TEntity entity, IDbConnection dbConnection, int commandTimeOut)
@@ -471,7 +503,15 @@ namespace SysWork.Data.GenericRepository
         /// </returns>
         /// <exception cref="RepositoryException"></exception>
         /// <example>
-        /// <![CDATA[
+        /// <code><![CDATA[
+        /// using System;
+        /// using System.Data.Common;
+        /// using SysWork.Data.Common;
+        /// using SysWork.Data.Common.Utilities;
+        /// using SysWork.Data.GenericRepository;
+        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.GenericRepository.Exceptions;
+        /// 
         /// [DbTable(Name = "Persons")]
         /// public class Person
         /// {
@@ -522,21 +562,21 @@ namespace SysWork.Data.GenericRepository
         ///     }
         /// }
         /// 
-        /// class Sample
+        /// public class Sample
         /// {
-        ///     void main()
+        ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
         ///      
-        ///         var personRepository = new PersonRepository<Person>(connectionString, databaseEngine);
+        ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///
         ///         var p = new Person();
         ///         p.FirstName = "Diego";
         ///         p.LastName = "Martinez";
         ///         p.Passport = "AR00127296";
         ///         p.LongNameField = "Field With Long Name";
-        ///         p.Address = "Address");
+        ///         p.Address = "Address";
         ///         p.BirthDate = new DateTime(1980,5,24);
         ///         p.Active = true;
         ///         
@@ -549,12 +589,12 @@ namespace SysWork.Data.GenericRepository
         ///         {
         ///             long id = personRepository.Add(p, dbTransaction);
         ///             dbTransaction.Commit();
-        ///             Console.Writeline($"The generated id is{id}");
+        ///             Console.WriteLine($"The generated id is{id}");
         ///         }
-        ///         catch (GenericRepositoryException ex)
+        ///         catch (RepositoryException ex)
         ///         {
         ///             dbTransaction.Rollback();
-        ///             Console.Writeline($"The following error has occurred{ex.Message}");
+        ///             Console.WriteLine($"The following error has occurred{ex.Message}");
         ///         }
         ///         finally
         ///         {
@@ -563,7 +603,7 @@ namespace SysWork.Data.GenericRepository
         ///         }
         ///     }
         /// }
-        /// ]]>
+        /// ]]></code>
         /// </example>
         #endregion
         public long Add(TEntity entity, IDbTransaction dbTransaction)
@@ -590,7 +630,15 @@ namespace SysWork.Data.GenericRepository
         /// </returns>
         /// <exception cref="RepositoryException"></exception>
         /// <example>
-        /// <![CDATA[
+        /// <code><![CDATA[
+        /// using System;
+        /// using System.Data.Common;
+        /// using SysWork.Data.Common;
+        /// using SysWork.Data.Common.Utilities;
+        /// using SysWork.Data.GenericRepository;
+        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.GenericRepository.Exceptions;
+        /// 
         /// [DbTable(Name = "Persons")]
         /// public class Person
         /// {
@@ -641,21 +689,21 @@ namespace SysWork.Data.GenericRepository
         ///     }
         /// }
         /// 
-        /// class Sample
+        /// public class Sample
         /// {
-        ///     void main()
+        ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
         ///      
-        ///         var personRepository = new PersonRepository<Person>(connectionString, databaseEngine);
+        ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///
         ///         var p = new Person();
         ///         p.FirstName = "Diego";
         ///         p.LastName = "Martinez";
         ///         p.Passport = "AR00127296";
         ///         p.LongNameField = "Field With Long Name";
-        ///         p.Address = "Address");
+        ///         p.Address = "Address";
         ///         p.BirthDate = new DateTime(1980,5,24);
         ///         p.Active = true;
         ///         
@@ -670,12 +718,12 @@ namespace SysWork.Data.GenericRepository
         ///         {
         ///             long id = personRepository.Add(p, dbTransaction, commandTimeOut);
         ///             dbTransaction.Commit();
-        ///             Console.Writeline($"The generated id is{id}");
+        ///             Console.WriteLine($"The generated id is{id}");
         ///         }
-        ///         catch (GenericRepositoryException ex)
+        ///         catch (RepositoryException ex)
         ///         {
         ///             dbTransaction.Rollback();
-        ///             Console.Writeline($"The following error has occurred{ex.Message}");
+        ///             Console.WriteLine($"The following error has occurred{ex.Message}");
         ///         }
         ///         finally
         ///         {
@@ -684,7 +732,7 @@ namespace SysWork.Data.GenericRepository
         ///         }
         ///     }
         /// }
-        /// ]]>
+        /// ]]></code>
         /// </example>
         #endregion
         public long Add(TEntity entity, IDbTransaction dbTransaction, int commandTimeOut)
@@ -713,7 +761,15 @@ namespace SysWork.Data.GenericRepository
         /// </returns>
         /// <exception cref="RepositoryException"></exception>
         /// <example>
-        /// <![CDATA[
+        /// <code><![CDATA[
+        /// using System;
+        /// using System.Data.Common;
+        /// using SysWork.Data.Common;
+        /// using SysWork.Data.Common.Utilities;
+        /// using SysWork.Data.GenericRepository;
+        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.GenericRepository.Exceptions;
+        /// 
         /// [DbTable(Name = "Persons")]
         /// public class Person
         /// {
@@ -764,21 +820,21 @@ namespace SysWork.Data.GenericRepository
         ///     }
         /// }
         /// 
-        /// class Sample
+        /// public class Sample
         /// {
-        ///     void main()
+        ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
         ///      
-        ///         var personRepository = new PersonRepository<Person>(connectionString, databaseEngine);
+        ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///
         ///         var p = new Person();
         ///         p.FirstName = "Diego";
         ///         p.LastName = "Martinez";
         ///         p.Passport = "AR00127296";
         ///         p.LongNameField = "Field With Long Name";
-        ///         p.Address = "Address");
+        ///         p.Address = "Address";
         ///         p.BirthDate = new DateTime(1980,5,24);
         ///         p.Active = true;
         ///         
@@ -791,12 +847,12 @@ namespace SysWork.Data.GenericRepository
         ///         {
         ///             long id = personRepository.Add(p, dbConnection, dbTransaction);
         ///             dbTransaction.Commit();
-        ///             Console.Writeline($"The generated id is{id}");
+        ///             Console.WriteLine($"The generated id is{id}");
         ///         }
-        ///         catch (GenericRepositoryException ex)
+        ///         catch (RepositoryException ex)
         ///         {
         ///             dbTransaction.Rollback();
-        ///             Console.Writeline($"The following error has occurred{ex.Message}");
+        ///             Console.WriteLine($"The following error has occurred{ex.Message}");
         ///         }
         ///         finally
         ///         {
@@ -805,7 +861,7 @@ namespace SysWork.Data.GenericRepository
         ///         }
         ///     }
         /// }
-        /// ]]>
+        /// ]]></code>
         /// </example>
         #endregion
         public long Add(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction)
@@ -836,7 +892,15 @@ namespace SysWork.Data.GenericRepository
         /// </returns>
         /// <exception cref="RepositoryException"></exception>
         /// <example>
-        /// <![CDATA[
+        /// <code><![CDATA[
+        /// using System;
+        /// using System.Data.Common;
+        /// using SysWork.Data.Common;
+        /// using SysWork.Data.Common.Utilities;
+        /// using SysWork.Data.GenericRepository;
+        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.GenericRepository.Exceptions;
+        /// 
         /// [DbTable(Name = "Persons")]
         /// public class Person
         /// {
@@ -887,21 +951,21 @@ namespace SysWork.Data.GenericRepository
         ///     }
         /// }
         /// 
-        /// class Sample
+        /// public class Sample
         /// {
-        ///     void main()
+        ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
         ///      
-        ///         var personRepository = new PersonRepository<Person>(connectionString, databaseEngine);
+        ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///
         ///         var p = new Person();
         ///         p.FirstName = "Diego";
         ///         p.LastName = "Martinez";
         ///         p.Passport = "AR00127296";
         ///         p.LongNameField = "Field With Long Name";
-        ///         p.Address = "Address");
+        ///         p.Address = "Address";
         ///         p.BirthDate = new DateTime(1980,5,24);
         ///         p.Active = true;
         ///         
@@ -916,12 +980,12 @@ namespace SysWork.Data.GenericRepository
         ///         {
         ///             long id = personRepository.Add(p, dbConnection, dbTransaction, commandTimeOut );
         ///             dbTransaction.Commit();
-        ///             Console.Writeline($"The generated id is{id}");
+        ///             Console.WriteLine($"The generated id is{id}");
         ///         }
-        ///         catch (GenericRepositoryException ex)
+        ///         catch (RepositoryException ex)
         ///         {
         ///             dbTransaction.Rollback();
-        ///             Console.Writeline($"The following error has occurred{ex.Message}");
+        ///             Console.WriteLine($"The following error has occurred{ex.Message}");
         ///         }
         ///         finally
         ///         {
@@ -930,7 +994,7 @@ namespace SysWork.Data.GenericRepository
         ///         }
         ///     }
         /// }
-        /// ]]>
+        /// ]]></code>
         /// </example>
         #endregion
         public long Add(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
@@ -1038,7 +1102,15 @@ namespace SysWork.Data.GenericRepository
         /// </returns>
         /// <exception cref="RepositoryException"></exception>
         /// <example>
-        /// <![CDATA[
+        /// <code><![CDATA[
+        /// using System;
+        /// using System.Data.Common;
+        /// using SysWork.Data.Common;
+        /// using SysWork.Data.Common.Utilities;
+        /// using SysWork.Data.GenericRepository;
+        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.GenericRepository.Exceptions;
+        /// 
         /// [DbTable(Name = "Persons")]
         /// public class Person
         /// {
@@ -1089,36 +1161,36 @@ namespace SysWork.Data.GenericRepository
         ///     }
         /// }
         /// 
-        /// class Sample
+        /// public class Sample
         /// {
-        ///     void main()
+        ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
         ///      
-        ///         var personRepository = new PersonRepository<Person>(connectionString, databaseEngine);
+        ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///
         ///         var p = new Person();
         ///         p.FirstName = "Diego";
         ///         p.LastName = "Martinez";
         ///         p.Passport = "AR00127296";
         ///         p.LongNameField = "Field With Long Name";
-        ///         p.Address = "Address");
+        ///         p.Address = "Address";
         ///         p.BirthDate = new DateTime(1980,5,24);
         ///         p.Active = true;
         ///         
         ///         long id = personRepository.Add(p, out string errMessage);
         ///         if (id!=-1)
         ///         {
-        ///             Console.Writeline($"The generated id is{id}");
+        ///             Console.WriteLine($"The generated id is{id}");
         ///         }
         ///         else
         ///         {
-        ///             Console.Writeline($"The following error has occurred: {errMessage}}");
+        ///             Console.WriteLine($"The following error has occurred: {errMessage}}");
         ///         }
         ///     }
         /// }
-        /// ]]>
+        /// ]]></code>
         /// </example>
         #endregion
         public long Add(TEntity entity, out string errMessage)
@@ -1141,7 +1213,15 @@ namespace SysWork.Data.GenericRepository
         /// </returns>
         /// <exception cref="RepositoryException"></exception>
         /// <example>
-        /// <![CDATA[
+        /// <code><![CDATA[
+        /// using System;
+        /// using System.Data.Common;
+        /// using SysWork.Data.Common;
+        /// using SysWork.Data.Common.Utilities;
+        /// using SysWork.Data.GenericRepository;
+        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.GenericRepository.Exceptions;
+        /// 
         /// [DbTable(Name = "Persons")]
         /// public class Person
         /// {
@@ -1192,21 +1272,21 @@ namespace SysWork.Data.GenericRepository
         ///     }
         /// }
         /// 
-        /// class Sample
+        /// public class Sample
         /// {
-        ///     void main()
+        ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
         ///      
-        ///         var personRepository = new PersonRepository<Person>(connectionString, databaseEngine);
+        ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///
         ///         var p = new Person();
         ///         p.FirstName = "Diego";
         ///         p.LastName = "Martinez";
         ///         p.Passport = "AR00127296";
         ///         p.LongNameField = "Field With Long Name";
-        ///         p.Address = "Address");
+        ///         p.Address = "Address";
         ///         p.BirthDate = new DateTime(1980,5,24);
         ///         p.Active = true;
         ///         
@@ -1215,15 +1295,15 @@ namespace SysWork.Data.GenericRepository
         ///         long id = personRepository.Add(p, out string errMessage, commandTimeOut );
         ///         if (id!=-1)
         ///         {
-        ///             Console.Writeline($"The generated id is{id}");
+        ///             Console.WriteLine($"The generated id is{id}");
         ///         }
         ///         else
         ///         {
-        ///             Console.Writeline($"The following error has occurred: {errMessage}}");
+        ///             Console.WriteLine($"The following error has occurred: {errMessage}}");
         ///         }
         ///     }
         /// }
-        /// ]]>
+        /// ]]></code>
         /// </example>
         #endregion
         public long Add(TEntity entity, out string errMessage, int commandTimeOut)
@@ -1240,9 +1320,9 @@ namespace SysWork.Data.GenericRepository
             {
                 identity = Add(entity, null, null, commandTimeOut);
             }
-            catch (RepositoryException genericRepositoryException)
+            catch (RepositoryException RepositoryException)
             {
-                errMessage = genericRepositoryException.OriginalException.Message;
+                errMessage = RepositoryException.OriginalException.Message;
                 identity = -1;
             }
             catch (Exception exception)
