@@ -9,27 +9,426 @@ using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.GenericRepository.DbInfo;
 using SysWork.Data.GenericRepository.Interfaces.Actions;
 using System.Collections.Generic;
-using System.Data.Common;
 
 namespace SysWork.Data.GenericRepository
 {
     public abstract partial class BaseRepository<TEntity> : IAddRange<TEntity>
     {
+        #region DOCUMENTATION AddRange(IList<TEntity> entities)
+        /// <summary>
+        /// Adds a list of records.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <returns></returns>
+        /// <example>
+        /// <code><![CDATA[
+        /// using System;
+        /// using System.Data.Common;
+        /// using SysWork.Data.Common;
+        /// using SysWork.Data.Common.Utilities;
+        /// using SysWork.Data.GenericRepository;
+        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.GenericRepository.Exceptions;
+        /// 
+        /// [DbTable(Name = "Persons")]
+        /// public class Person
+        /// {
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string Address { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public long? IdState { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public DateTime? BirthDate { get; set; }
+        ///
+        ///     [DbColumn(ColumnName = "Long Name Field")]
+        ///     public string LongNameField { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public bool Active { get; set; }
+        /// }
+        /// 
+        /// public class PersonRepository: BaseRepository<Person>
+        /// {
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     }
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///     public DbExecutor GetDbExecutor()
+        ///     {
+        ///         return BaseDbExecutor();
+        ///     }
+        ///     public DbConnection GetDbConnection()
+        ///     {
+        ///         return BaseDbConnection();
+        ///     }
+        /// }
+        /// 
+        /// public class Sample
+        /// {
+        ///     static void Main()
+        ///     {
+        ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
+        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///      
+        ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
+        ///         
+        ///         var entityList = new List<Person>();
+        ///         
+        ///         entityList.Add(new Person { FirstName = "Diego", LastName = "Martinez", Passport = "AR00177286", LongNameField = "Long Field", Address = "Address 555",BirthDate = new DateTime(1980,5,24), Active = True });
+        ///         entityList.Add(new Person { FirstName = "Cosme", LastName = "Fulanito", Passport = "AR00122216", LongNameField = "Long Field", Address = "Address 444",BirthDate = new DateTime(1990,4,26), Active = True });
+        ///         entityList.Add(new Person { FirstName = "Jhon", LastName = "Perez", Passport = "AR00333333", LongNameField = "Long Field", Address = "Address 333",BirthDate = new DateTime(2000,3,1), Active = True });
+        ///         
+        ///         try
+        ///         {
+        ///             bool result = personRepository.AddRange(entityList);
+        ///             Console.WriteLine("Records added succefully");
+        ///         }
+        ///         catch(RepositoryException re)
+        ///         {
+        ///             Console.WriteLine($"The following error has occurred: {re.OriginalException.Message}");
+        ///         }
+        ///     }
+        /// }
+        /// ]]></code>
+        /// </example>
+        #endregion
         public bool AddRange(IList<TEntity> entities)
         {
+
             return AddRange(entities, null, null, out long recordsAffected, out IEnumerable<object> addedIds, null);
         }
 
+        #region DOCUMENTATION AddRange(IList<TEntity> entities, int commandTimeOut)
+        /// <summary>
+        /// Adds a list of records using a custom dbCommand timeout.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <param name="commandTimeOut">The command time out.</param>
+        /// <returns></returns>
+        /// <example>
+        /// <code><![CDATA[
+        /// using System;
+        /// using System.Data.Common;
+        /// using SysWork.Data.Common;
+        /// using SysWork.Data.Common.Utilities;
+        /// using SysWork.Data.GenericRepository;
+        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.GenericRepository.Exceptions;
+        /// 
+        /// [DbTable(Name = "Persons")]
+        /// public class Person
+        /// {
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string Address { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public long? IdState { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public DateTime? BirthDate { get; set; }
+        ///
+        ///     [DbColumn(ColumnName = "Long Name Field")]
+        ///     public string LongNameField { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public bool Active { get; set; }
+        /// }
+        /// 
+        /// public class PersonRepository: BaseRepository<Person>
+        /// {
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     }
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///     public DbExecutor GetDbExecutor()
+        ///     {
+        ///         return BaseDbExecutor();
+        ///     }
+        ///     public DbConnection GetDbConnection()
+        ///     {
+        ///         return BaseDbConnection();
+        ///     }
+        /// }
+        /// 
+        /// public class Sample
+        /// {
+        ///     static void Main()
+        ///     {
+        ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
+        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///      
+        ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
+        ///         
+        ///         var entityList = new List<Person>();
+        ///         
+        ///         entityList.Add(new Person { FirstName = "Diego", LastName = "Martinez", Passport = "AR00177286", LongNameField = "Long Field", Address = "Address 555",BirthDate = new DateTime(1980,5,24), Active = True });
+        ///         entityList.Add(new Person { FirstName = "Cosme", LastName = "Fulanito", Passport = "AR00122216", LongNameField = "Long Field", Address = "Address 444",BirthDate = new DateTime(1990,4,26), Active = True });
+        ///         entityList.Add(new Person { FirstName = "Jhon", LastName = "Perez", Passport = "AR00333333", LongNameField = "Long Field", Address = "Address 333",BirthDate = new DateTime(2000,3,1), Active = True });
+        ///         
+        ///         int commandTimeOut = 60;
+        ///         
+        ///         try
+        ///         {
+        ///             bool result = personRepository.AddRange(entityList, commandTimeOut);
+        ///             Console.WriteLine("Records added succefully");
+        ///         }
+        ///         catch(RepositoryException re)
+        ///         {
+        ///             Console.WriteLine($"The following error has occurred: {re.OriginalException.Message}");
+        ///         }
+        ///     }
+        /// }
+        /// ]]></code>
+        /// </example>
+        #endregion
         public bool AddRange(IList<TEntity> entities, int commandTimeOut)
         {
             return AddRange(entities, null, null, out long recordsAffected, out IEnumerable<object> addedIds, commandTimeOut);
         }
 
+        #region DOCUMENTATION AddRange(IList<TEntity> entities, out IEnumerable<object> addedIds)
+        /// <summary>
+        /// Adds a list of records. Out parameter IEnumerable returns the Ids of the entities added.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <param name="addedIds">The added ids.</param>
+        /// <returns></returns>
+        /// <example>
+        /// <code><![CDATA[
+        /// using System;
+        /// using System.Data.Common;
+        /// using SysWork.Data.Common;
+        /// using SysWork.Data.Common.Utilities;
+        /// using SysWork.Data.GenericRepository;
+        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.GenericRepository.Exceptions;
+        /// 
+        /// [DbTable(Name = "Persons")]
+        /// public class Person
+        /// {
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string Address { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public long? IdState { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public DateTime? BirthDate { get; set; }
+        ///
+        ///     [DbColumn(ColumnName = "Long Name Field")]
+        ///     public string LongNameField { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public bool Active { get; set; }
+        /// }
+        /// 
+        /// public class PersonRepository: BaseRepository<Person>
+        /// {
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     }
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///     public DbExecutor GetDbExecutor()
+        ///     {
+        ///         return BaseDbExecutor();
+        ///     }
+        ///     public DbConnection GetDbConnection()
+        ///     {
+        ///         return BaseDbConnection();
+        ///     }
+        /// }
+        /// 
+        /// public class Sample
+        /// {
+        ///     static void Main()
+        ///     {
+        ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
+        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///      
+        ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
+        ///         
+        ///         var entityList = new List<Person>();
+        ///         
+        ///         entityList.Add(new Person { FirstName = "Diego", LastName = "Martinez", Passport = "AR00177286", LongNameField = "Long Field", Address = "Address 555",BirthDate = new DateTime(1980,5,24), Active = True });
+        ///         entityList.Add(new Person { FirstName = "Cosme", LastName = "Fulanito", Passport = "AR00122216", LongNameField = "Long Field", Address = "Address 444",BirthDate = new DateTime(1990,4,26), Active = True });
+        ///         entityList.Add(new Person { FirstName = "Jhon", LastName = "Perez", Passport = "AR00333333", LongNameField = "Long Field", Address = "Address 333",BirthDate = new DateTime(2000,3,1), Active = True });
+        ///         
+        ///         try
+        ///         {
+        ///             bool result = personRepository.AddRange(entityList, out IEnumerable<object> addedIds);
+        ///             
+        ///             Console.WriteLine("Added ids:");
+        ///             foreach (var id in addedIds)
+        ///             {
+        ///                 Console.WriteLine($"{id.ToString()}");
+        ///             }
+        ///         }
+        ///         catch(RepositoryException re)
+        ///         {
+        ///             Console.WriteLine($"The following error has occurred: {re.OriginalException.Message}");
+        ///         }
+        ///     }
+        /// }
+        /// ]]></code>
+        /// </example>
+        #endregion
         public bool AddRange(IList<TEntity> entities, out IEnumerable<object> addedIds)
         {
             return AddRange(entities, null, null, out long recordsAffected, out addedIds, null);
         }
 
+
+        #region DOCUMENTATION AddRange(IList<TEntity> entities, out IEnumerable<object> addedIds, int commandTimeOut)
+        /// <summary>
+        /// Adds a list of records using a custom dbCommand timeout. Out parameter long returns the count of the records added. Out parameter IEnumerable returns the Ids of the entities added.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <param name="addedIds">The added ids.</param>
+        /// <param name="commandTimeOut">The command time out.</param>
+        /// <returns></returns>
+        /// <example>
+        /// <code><![CDATA[
+        /// using System;
+        /// using System.Data.Common;
+        /// using SysWork.Data.Common;
+        /// using SysWork.Data.Common.Utilities;
+        /// using SysWork.Data.GenericRepository;
+        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.GenericRepository.Exceptions;
+        /// 
+        /// [DbTable(Name = "Persons")]
+        /// public class Person
+        /// {
+        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     public long IdPerson { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string FirstName { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string LastName { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string Passport { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public string Address { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public long? IdState { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public DateTime? BirthDate { get; set; }
+        ///
+        ///     [DbColumn(ColumnName = "Long Name Field")]
+        ///     public string LongNameField { get; set; }
+        ///
+        ///     [DbColumn()]
+        ///     public bool Active { get; set; }
+        /// }
+        /// 
+        /// public class PersonRepository: BaseRepository<Person>
+        /// {
+        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     {
+        ///     }
+        ///     public Person GetByPassport(string passport)
+        ///     {
+        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
+        ///     }
+        ///     public DbExecutor GetDbExecutor()
+        ///     {
+        ///         return BaseDbExecutor();
+        ///     }
+        ///     public DbConnection GetDbConnection()
+        ///     {
+        ///         return BaseDbConnection();
+        ///     }
+        /// }
+        /// 
+        /// public class Sample
+        /// {
+        ///     static void Main()
+        ///     {
+        ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
+        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///      
+        ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
+        ///         
+        ///         var entityList = new List<Person>();
+        ///         
+        ///         entityList.Add(new Person { FirstName = "Diego", LastName = "Martinez", Passport = "AR00177286", LongNameField = "Long Field", Address = "Address 555",BirthDate = new DateTime(1980,5,24), Active = True });
+        ///         entityList.Add(new Person { FirstName = "Cosme", LastName = "Fulanito", Passport = "AR00122216", LongNameField = "Long Field", Address = "Address 444",BirthDate = new DateTime(1990,4,26), Active = True });
+        ///         entityList.Add(new Person { FirstName = "Jhon", LastName = "Perez", Passport = "AR00333333", LongNameField = "Long Field", Address = "Address 333",BirthDate = new DateTime(2000,3,1), Active = True });
+        ///         
+        ///         int commandTimeOut = 60;
+        ///         
+        ///         try
+        ///         {
+        ///             bool result = personRepository.AddRange(entityList, out IEnumerable<object> addedIds, commandTimeOut);
+        ///             
+        ///             Console.WriteLine("Added ids:");
+        ///             foreach (var id in addedIds)
+        ///             {
+        ///                 Console.WriteLine($"{id.ToString()}");
+        ///             }
+        ///         }
+        ///         catch(RepositoryException re)
+        ///         {
+        ///             Console.WriteLine($"The following error has occurred: {re.OriginalException.Message}");
+        ///         }
+        ///     }
+        /// }
+        /// ]]></code>
+        /// </example>
+        #endregion
         public bool AddRange(IList<TEntity> entities, out IEnumerable<object> addedIds, int commandTimeOut)
         {
             return AddRange(entities, null, null, out long recordsAffected, out addedIds, commandTimeOut);
