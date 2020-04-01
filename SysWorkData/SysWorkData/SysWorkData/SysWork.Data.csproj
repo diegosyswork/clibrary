@@ -25,6 +25,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\SysWork.Data.xml</DocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -93,9 +94,9 @@
     <Compile Include="Common\DataObjectProvider\DataObjectCreatorOleDb.cs" />
     <Compile Include="Common\DataObjectProvider\DataObjectCreatorSQLite.cs" />
     <Compile Include="Common\DataObjectProvider\DataObjectCreatorMSSqlServer.cs" />
-    <Compile Include="GenericRepository\Attributes\DbColumnAttribute.cs" />
-    <Compile Include="GenericRepository\Attributes\DbTableAttribute.cs" />
-    <Compile Include="GenericRepository\Attributes\DbViewAttribute.cs" />
+    <Compile Include="Common\Attributes\DbColumnAttribute.cs" />
+    <Compile Include="Common\Attributes\DbTableAttribute.cs" />
+    <Compile Include="Common\Attributes\DbViewAttribute.cs" />
     <Compile Include="GenericRepository\BaseRepository..cs" />
     <Compile Include="GenericRepository\BaseRepository.Add.cs" />
     <Compile Include="GenericRepository\BaseRepository.AddRange.cs" />
@@ -115,10 +116,10 @@
     <Compile Include="GenericRepository\BaseRepository.Update.cs" />
     <Compile Include="GenericViewManager\BaseViewManager.cs" />
     <Compile Include="GenericRepository\CodeWriter\CodeWriterHelper.cs" />
-    <Compile Include="GenericRepository\CodeWriter\RepositoryClassFromDb.cs" />
-    <Compile Include="GenericRepository\CodeWriter\EntityClassFromDb.cs" />
+    <Compile Include="GenericRepository\CodeWriter\RepositoryClassFromTable.cs" />
+    <Compile Include="GenericRepository\CodeWriter\EntityClassFromTable.cs" />
     <Compile Include="GenericRepository\DbInfo\ColumnDbInfo.cs" />
-    <Compile Include="GenericRepositoryManager\BaseRepositoryManager.cs" />
+    <Compile Include="GenericDataManager\BaseDataManager.cs" />
     <Compile Include="GenericRepository\Exceptions\RepositoryException.cs" />
     <Compile Include="Common\Filters\GenericWhereFilter.cs" />
     <Compile Include="GenericRepository\Interfaces\Actions\IFind.cs" />
@@ -155,7 +156,10 @@
     <Compile Include="Common\DataObjectProvider\StaticDbObjectProvider.cs" />
     <Compile Include="Common\EDatabaseEngine.cs" />
     <Compile Include="GenericRepository\Mapper\MapDataReaderToEntity.cs" />
-    <Compile Include="GenericRepositoryManager\Intefaces\IRepositoryManager.cs" />
+    <Compile Include="GenericDataManager\Intefaces\IDataManager.cs" />
+    <Compile Include="GenericViewManager\CodeWriter\CodeWriterViewHelper.cs" />
+    <Compile Include="GenericViewManager\CodeWriter\EntityClassFromView.cs" />
+    <Compile Include="GenericViewManager\CodeWriter\ViewManagerClassFromView.cs" />
     <Compile Include="LoggerDb\DbLogger.cs" />
     <Compile Include="LoggerDb\LoggerDb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -248,7 +252,9 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="GenericViewManager\Attributes\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.108.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.108.0\build\net45\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

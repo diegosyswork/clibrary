@@ -5,7 +5,7 @@ using System.Text;
 using SysWork.Data.Common;
 using SysWork.Data.Common.Utilities;
 using SysWork.Data.GenericRepository;
-using SysWork.Data.GenericRepository.Attributes;
+using SysWork.Data.Common.Attributes;
 
 namespace SysWork.Data.Logger
 {

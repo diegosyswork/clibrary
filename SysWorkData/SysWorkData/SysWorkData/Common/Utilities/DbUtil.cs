@@ -113,6 +113,51 @@ namespace SysWork.Data.Common.Utilities
         }
 
         /// <summary>
+        /// Given a connectionString return a list of views in the Database.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        /// <returns></returns>
+        public static List<string> GetListViews(string connectionString)
+        {
+            return GetListViews(EDataBaseEngine.MSSqlServer, connectionString);
+        }
+
+        /// <summary>
+        /// Given a connectionString and DatabaseEngine, return a list of views in the Database.
+        /// </summary>
+        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="connectionString">The connection string.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
+        public static List<string> GetListViews(EDataBaseEngine dataBaseEngine, string connectionString)
+        {
+            using (DbConnection connection = StaticDbObjectProvider.GetDbConnection(dataBaseEngine, connectionString))
+            {
+                connection.Open();
+                DataTable schema = null;
+
+                if (dataBaseEngine == EDataBaseEngine.MSSqlServer)
+                    schema = connection.GetSchema("Tables", new string[] { null, null, null, "VIEW" });
+                else if (dataBaseEngine == EDataBaseEngine.MySql)
+                    schema = connection.GetSchema("Views", new string[] { null, null, null, null });
+                else if (dataBaseEngine == EDataBaseEngine.OleDb)
+                    schema = connection.GetSchema("Views", new string[] { null, null, null });
+                else if (dataBaseEngine == EDataBaseEngine.SqLite)
+                    schema = connection.GetSchema("Views", new string[] { null, null, null, null });
+                else
+                    throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
+
+                List<string> views = new List<string>();
+                foreach (DataRow row in schema.Rows)
+                {
+                    views.Add(row[2].ToString());
+                }
+                connection.Close();
+
+                return views;
+            }
+        }
+        /// <summary>
         /// Given an connectionString, an table name and a column name determines if the column exists. The default DatabaseEngine is MSSqlServer</summary>
         /// <param name="connectionString"></param>
         /// <param name="tableName"></param>

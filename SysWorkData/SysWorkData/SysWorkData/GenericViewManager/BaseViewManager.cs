@@ -11,7 +11,7 @@ using SysWork.Data.Common;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.GenericRepository.Mapper;
-using SysWork.Data.GenericRepository.Attributes;
+using SysWork.Data.Common.Attributes;
 using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 using SysWork.Data.Common.Filters;
@@ -492,7 +492,6 @@ namespace SysWork.Data.GenericViewManager
         {
             return DataObjectProvider.GetIDbConnection(_connectionString);
         }
-
         private void SetSqlLamAdapter()
         {
             if (_dataBaseEngine == EDataBaseEngine.MSSqlServer)

@@ -15,7 +15,7 @@ using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.Utilities;
-using SysWork.Data.GenericRepository.Attributes;
+using SysWork.Data.Common.Attributes;
 using SysWork.Data.GenericRepository.DbInfo;
 
 #pragma warning disable 1587
@@ -47,7 +47,7 @@ namespace SysWork.Data.GenericRepository
     /// GetListByGenericWhereFilter,
     /// GetDataTableByGenericWhereFilter,
     /// Find
-    /// <seealso cref="SysWork.Data.GenericRepository.Attributes"/>
+    /// <seealso cref="SysWork.Data.Common.Attributes"/>
     /// </summary>
     /// <remarks>
     /// This class is multi database engine, see the supported database engines <see cref="Common.EDataBaseEngine"/>. 

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using SysWork.Data.Common;
 using SysWork.Data.Common.Syntax;
-using SysWork.Data.GenericRepository.Attributes;
+using SysWork.Data.Common.Attributes;
 
 namespace SysWork.Data.GenericRepository.Mapper
 {

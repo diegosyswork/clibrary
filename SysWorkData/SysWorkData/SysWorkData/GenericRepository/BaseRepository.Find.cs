@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using System.Text;
-using SysWork.Data.GenericRepository.Attributes;
+using SysWork.Data.Common.Attributes;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.GenericRepository.Interfaces.Actions;
 using SysWork.Data.GenericRepository.Mapper;

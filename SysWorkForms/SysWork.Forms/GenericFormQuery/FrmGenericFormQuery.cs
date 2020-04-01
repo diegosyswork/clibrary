@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using SysWork.Forms.FormsABM.FormsUtil;
+using SysWork.Controls;
 
 namespace SysWork.Forms.GenericFormQuery
 {
-    
+
     public partial class FrmGenericFormQuery: Form
     {
         

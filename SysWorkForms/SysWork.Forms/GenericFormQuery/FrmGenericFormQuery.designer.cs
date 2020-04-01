@@ -103,7 +103,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::SysWork.Forms.FormsABM.Properties.Resources.consulta_48x48;
+            this.pictureBox1.Image = global::SysWork.Forms.Properties.Resources.consulta_48x48;
             this.pictureBox1.Location = new System.Drawing.Point(28, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(35, 39);

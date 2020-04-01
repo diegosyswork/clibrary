@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using SysWork.Data.Common.LambdaSqlBuilder.Builder;
-using SysWork.Data.GenericRepository.Attributes;
+using SysWork.Data.Common.Attributes;
 
 namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
 {

@@ -80,7 +80,7 @@
     <Compile Include="V2\Entities\Person.cs" />
     <Compile Include="V2\Entities\State.cs" />
     <Compile Include="V2\Entities\VW_PersonsWithStates.cs" />
-    <Compile Include="V2\Repositories\RepositoryManager .cs" />
+    <Compile Include="V2\Repositories\DataManager .cs" />
     <Compile Include="V2\Repositories\PersonRepository.cs" />
     <Compile Include="V2\Repositories\StateRepository.cs" />
     <Compile Include="V2\Repositories\VManagerPersonsWithStates.cs" />

@@ -6,7 +6,7 @@ using System.Text;
 using SysWork.Data.Common;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.Utilities;
-using SysWork.Data.GenericRepository.Attributes;
+using SysWork.Data.Common.Attributes;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.GenericRepository.DbInfo;
 using SysWork.Data.GenericRepository.Interfaces.Actions;
@@ -36,7 +36,7 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common;
         /// using SysWork.Data.Common.Utilities;
         /// using SysWork.Data.GenericRepository;
-        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
         /// [DbTable(Name = "Persons")]
@@ -149,7 +149,7 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common;
         /// using SysWork.Data.Common.Utilities;
         /// using SysWork.Data.GenericRepository;
-        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
         ///[DbTable(Name = "Persons")]
@@ -263,7 +263,7 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common;
         /// using SysWork.Data.Common.Utilities;
         /// using SysWork.Data.GenericRepository;
-        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
         /// [DbTable(Name = "Persons")]
@@ -385,7 +385,7 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common;
         /// using SysWork.Data.Common.Utilities;
         /// using SysWork.Data.GenericRepository;
-        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
         /// [DbTable(Name = "Persons")]
@@ -509,7 +509,7 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common;
         /// using SysWork.Data.Common.Utilities;
         /// using SysWork.Data.GenericRepository;
-        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
         /// [DbTable(Name = "Persons")]
@@ -636,7 +636,7 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common;
         /// using SysWork.Data.Common.Utilities;
         /// using SysWork.Data.GenericRepository;
-        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
         /// [DbTable(Name = "Persons")]
@@ -767,7 +767,7 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common;
         /// using SysWork.Data.Common.Utilities;
         /// using SysWork.Data.GenericRepository;
-        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
         /// [DbTable(Name = "Persons")]
@@ -898,7 +898,7 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common;
         /// using SysWork.Data.Common.Utilities;
         /// using SysWork.Data.GenericRepository;
-        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
         /// [DbTable(Name = "Persons")]
@@ -1108,7 +1108,7 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common;
         /// using SysWork.Data.Common.Utilities;
         /// using SysWork.Data.GenericRepository;
-        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
         /// [DbTable(Name = "Persons")]
@@ -1219,7 +1219,7 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common;
         /// using SysWork.Data.Common.Utilities;
         /// using SysWork.Data.GenericRepository;
-        /// using SysWork.Data.GenericRepository.Attributes;
+        /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
         /// [DbTable(Name = "Persons")]

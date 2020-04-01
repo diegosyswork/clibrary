@@ -107,17 +107,17 @@ namespace Demo.SysWork.Data
 
             LogText("Tables ok");
 
-            RepositoryManager.DataBaseEngine = databaseEngine;
-            RepositoryManager.ConnectionString = TxtConnectionString.Text;
-            LogText("RepositoryManager Setted");
+            DataManager.DataBaseEngine = databaseEngine;
+            DataManager.ConnectionString = TxtConnectionString.Text;
+            LogText("DataManager Setted");
 
-            DbLogger.DataBaseEngine = RepositoryManager.DataBaseEngine;
-            DbLogger.ConnectionString = RepositoryManager.ConnectionString;
+            DbLogger.DataBaseEngine = DataManager.DataBaseEngine;
+            DbLogger.ConnectionString = DataManager.ConnectionString;
             DbLogger.AppUserName = "Diego Martinez";
             DbLogger.DbUserName = "TEST_SYSWORK_DATA";
             LogText("DbLogger Setted");
 
-            _personRepository = RepositoryManager.GetInstance().PersonRepository;
+            _personRepository = DataManager.GetInstance().PersonRepository;
         }
 
         private void BtnGetParameters_Click(object sender, EventArgs e)
@@ -1021,7 +1021,7 @@ namespace Demo.SysWork.Data
         {
             LogText(Environment.NewLine + "///      START SqlLam Method DEMO         ///");
 
-            switch (RepositoryManager.DataBaseEngine)
+            switch (DataManager.DataBaseEngine)
             {
                 case EDataBaseEngine.MSSqlServer:
                     SqlLam<Person>.SetAdapter(SqlAdapter.SqlServer2012);
@@ -1077,9 +1077,9 @@ namespace Demo.SysWork.Data
         {
             LogText(Environment.NewLine + "///      START EntityClassFromDb Method DEMO         ///"+ Environment.NewLine  );
 
-            SyntaxProvider syntaxProvider = new SyntaxProvider(RepositoryManager.DataBaseEngine);
+            SyntaxProvider syntaxProvider = new SyntaxProvider(DataManager.DataBaseEngine);
 
-            var entityClassFrom = new EntityClassFromDb(RepositoryManager.DataBaseEngine, RepositoryManager.ConnectionString, "Persons", "Persons", "TestNamespace");
+            var entityClassFrom = new EntityClassFromTable(DataManager.DataBaseEngine, DataManager.ConnectionString, "Persons", "Persons", "TestNamespace");
             var textClass = entityClassFrom.ToString();
             LogText(textClass);
             Clipboard.SetText(textClass);
@@ -1271,9 +1271,9 @@ namespace Demo.SysWork.Data
         {
             LogText(Environment.NewLine + "///      START RepositoryClassFromDb Method DEMO         ///" + Environment.NewLine);
 
-            SyntaxProvider syntaxProvider = new SyntaxProvider(RepositoryManager.DataBaseEngine);
+            SyntaxProvider syntaxProvider = new SyntaxProvider(DataManager.DataBaseEngine);
 
-            var repositoryClassFromDb = new RepositoryClassFromDb(RepositoryManager.DataBaseEngine, RepositoryManager.ConnectionString, "Person", "TestNamespace", "Persons");
+            var repositoryClassFromDb = new RepositoryClassFromTable(DataManager.DataBaseEngine, DataManager.ConnectionString, "Person", "TestNamespace", "Persons");
             var textClass = repositoryClassFromDb.ToString();
             LogText(textClass);
             Clipboard.SetText(textClass);
@@ -1288,16 +1288,16 @@ namespace Demo.SysWork.Data
             LogText(Environment.NewLine + "///      START ExistsTable Method DEMO         ///" + Environment.NewLine);
 
             string table = "Persons";
-            LogText(string.Format("Table {0} exists ={1} ", table, DbUtil.ExistsTable(RepositoryManager.DataBaseEngine, RepositoryManager.ConnectionString, table)));
+            LogText(string.Format("Table {0} exists ={1} ", table, DbUtil.ExistsTable(DataManager.DataBaseEngine, DataManager.ConnectionString, table)));
 
             table = "States";
-            LogText(string.Format("Table {0} exists ={1} ", table, DbUtil.ExistsTable(RepositoryManager.DataBaseEngine, RepositoryManager.ConnectionString, table)));
+            LogText(string.Format("Table {0} exists ={1} ", table, DbUtil.ExistsTable(DataManager.DataBaseEngine, DataManager.ConnectionString, table)));
 
             table = "State";
-            LogText(string.Format("Table {0} exists ={1} ", table, DbUtil.ExistsTable(RepositoryManager.DataBaseEngine, RepositoryManager.ConnectionString, table)));
+            LogText(string.Format("Table {0} exists ={1} ", table, DbUtil.ExistsTable(DataManager.DataBaseEngine, DataManager.ConnectionString, table)));
 
             table = "OtherTable";
-            LogText(string.Format("Table {0} exists ={1} ",table, DbUtil.ExistsTable(RepositoryManager.DataBaseEngine, RepositoryManager.ConnectionString, table)));
+            LogText(string.Format("Table {0} exists ={1} ",table, DbUtil.ExistsTable(DataManager.DataBaseEngine, DataManager.ConnectionString, table)));
 
             LogText(Environment.NewLine + "///      END ExistsTable Method DEMO         ///" + Environment.NewLine);
         }
@@ -1308,15 +1308,15 @@ namespace Demo.SysWork.Data
 
             string table = "Persons";
             string column = "IdPerson";
-            LogText(string.Format("Table: {0} Column: {1} exists ={2} ", table, column, DbUtil.ExistsColumn(RepositoryManager.DataBaseEngine, RepositoryManager.ConnectionString, table,column)));
+            LogText(string.Format("Table: {0} Column: {1} exists ={2} ", table, column, DbUtil.ExistsColumn(DataManager.DataBaseEngine, DataManager.ConnectionString, table,column)));
 
             table = "Persons";
             column = "Long Name Field";
-            LogText(string.Format("Table: {0} Column: {1} exists ={2} ", table, column, DbUtil.ExistsColumn(RepositoryManager.DataBaseEngine, RepositoryManager.ConnectionString, table, column)));
+            LogText(string.Format("Table: {0} Column: {1} exists ={2} ", table, column, DbUtil.ExistsColumn(DataManager.DataBaseEngine, DataManager.ConnectionString, table, column)));
 
             table = "Persons";
             column = "Other Field";
-            LogText(string.Format("Table: {0} Column: {1} exists ={2} ", table, column, DbUtil.ExistsColumn(RepositoryManager.DataBaseEngine, RepositoryManager.ConnectionString, table, column)));
+            LogText(string.Format("Table: {0} Column: {1} exists ={2} ", table, column, DbUtil.ExistsColumn(DataManager.DataBaseEngine, DataManager.ConnectionString, table, column)));
 
             LogText(Environment.NewLine + "///      END ExistsColumn Method DEMO         ///" + Environment.NewLine);
         }
@@ -1377,7 +1377,7 @@ namespace Demo.SysWork.Data
             //SELECT
             LogText("Select persons born between 01/01/2000 and 31/12/2010");
 
-            var reader = new DbExecutor(RepositoryManager.ConnectionString, RepositoryManager.DataBaseEngine)
+            var reader = new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
                 .Query($"SELECT {_personRepository.ColumnsForSelect} FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
                 .AddParameter("@FromDate", new DateTime(2000, 01, 01))
                 .AddParameter("@ToDate", new DateTime(2010, 12, 31))
@@ -1387,7 +1387,7 @@ namespace Demo.SysWork.Data
 
 
             /*SUPER ABBREVIATED
-            var mappedList = new MapDataReaderToEntity().Map<Person>(new DbExecutor(RepositoryManager.ConnectionString, RepositoryManager.DataBaseEngine)
+            var mappedList = new MapDataReaderToEntity().Map<Person>(new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
                 .Query($"SELECT {_personRepository.ColumnsForSelect} FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
                 .AddParameter("@FromDate", new DateTime(2000, 01, 01))
                 .AddParameter("@ToDate", new DateTime(2010, 12, 31))
@@ -1400,7 +1400,7 @@ namespace Demo.SysWork.Data
             /*
             LogText("Select persons born between 01/01/2000 and 31/12/2010 using GetTypedList<Person>()");
             dataGridView1.DataSource = null;
-            dataGridView1.DataSource = new DbExecutor(RepositoryManager.ConnectionString, RepositoryManager.DataBaseEngine)
+            dataGridView1.DataSource = new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
                 .Query($"SELECT {_personRepository.ColumnsForSelect} FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
                 .AddParameter("@FromDate", new DateTime(2000, 01, 01))
                 .AddParameter("@ToDate", new DateTime(2010, 12, 31))
@@ -1411,7 +1411,7 @@ namespace Demo.SysWork.Data
             // INSERT
             LogText("Insert a new Person and Get the ID");
             long idPerson;
-            var result = new DbExecutor(RepositoryManager.ConnectionString, RepositoryManager.DataBaseEngine)
+            var result = new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
                 .InsertQuery("Persons")
                 .AddFieldWithValue("FirstName", "Diego")
                 .AddFieldWithValue("LastName", "Martinez")
@@ -1425,7 +1425,7 @@ namespace Demo.SysWork.Data
             LogText($"The idPerson {idPerson} was inserted");
 
             // UPDATE
-            var updateQuery = new DbExecutor(RepositoryManager.ConnectionString, RepositoryManager.DataBaseEngine)
+            var updateQuery = new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
                 .UpdateQuery("Persons"," IdPerson = @IdPerson")
                 .AddFieldWithValue("FirstName", "Updated-Diego")
                 .AddFieldWithValue("LastName", "Updated-Martinez")
@@ -1433,13 +1433,13 @@ namespace Demo.SysWork.Data
                 .ExecuteNonQuery();
             LogText($"The idPerson {idPerson} was Updated");
 
-            var updateQuery2 = new DbExecutor(RepositoryManager.ConnectionString, RepositoryManager.DataBaseEngine)
+            var updateQuery2 = new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
                 .UpdateQuery("Persons")
                 .AddFieldWithValue("Long Name Field","UPDATED!!!!")
                 .ExecuteNonQuery();
             LogText("Long Name Field was Updated for All Persons ");
 
-            var deleteQuery = new DbExecutor(RepositoryManager.ConnectionString, RepositoryManager.DataBaseEngine)
+            var deleteQuery = new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
                 .Query("DELETE FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
                 .AddParameter("@FromDate", new DateTime(2000, 01, 01))
                 .AddParameter("@ToDate", new DateTime(2010, 12, 31))
@@ -1452,7 +1452,7 @@ namespace Demo.SysWork.Data
         private void BtnTestGenericViewManager_Click(object sender, EventArgs e)
         {
             LogText(Environment.NewLine + "///      START ViewManager DEMO         ///" + Environment.NewLine);
-            var VManagerPersonsWithStates = RepositoryManager.GetInstance().VManagerPersonsWithStates;
+            var VManagerPersonsWithStates = DataManager.GetInstance().VManagerPersonsWithStates;
 
             LogText("Select all from view VW_PersonsWithStates");
             dataGridView1.DataSource = null;
