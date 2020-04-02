@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq.Expressions;
 
-namespace SysWork.Data.GenericRepository.Interfaces.Actions
+namespace SysWork.Data.Common.Interfaces.Actions
 {
     /// <summary>
     /// Gets an IList with the records that match with the LambdaExpressionFilter.

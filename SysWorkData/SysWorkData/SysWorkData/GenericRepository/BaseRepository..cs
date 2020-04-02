@@ -16,7 +16,7 @@ using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.Utilities;
 using SysWork.Data.Common.Attributes;
-using SysWork.Data.GenericRepository.DbInfo;
+using SysWork.Data.Common.DbInfo;
 
 #pragma warning disable 1587
 /// <summary>

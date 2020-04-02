@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
-using SysWork.Controls;
+using SysWork.Forms.Utilities;
 
 namespace SysWork.Forms.GenericFormQuery
 {
 
     public partial class FrmGenericFormQuery: Form
     {
-        
         private ListViewColumnSorter _lvwColumnSorter;
         
         public FrmGenericFormQuery()

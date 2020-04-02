@@ -5,8 +5,8 @@ using System.Reflection;
 using System.Text;
 using SysWork.Data.Common.Attributes;
 using SysWork.Data.GenericRepository.Exceptions;
-using SysWork.Data.GenericRepository.Interfaces.Actions;
-using SysWork.Data.GenericRepository.Mapper;
+using SysWork.Data.Common.Interfaces.Actions;
+using SysWork.Data.Common.Mapper;
 
 namespace SysWork.Data.GenericRepository
 {

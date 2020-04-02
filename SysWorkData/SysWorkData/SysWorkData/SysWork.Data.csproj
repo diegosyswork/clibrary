@@ -118,27 +118,27 @@
     <Compile Include="GenericRepository\CodeWriter\CodeWriterHelper.cs" />
     <Compile Include="GenericRepository\CodeWriter\RepositoryClassFromTable.cs" />
     <Compile Include="GenericRepository\CodeWriter\EntityClassFromTable.cs" />
-    <Compile Include="GenericRepository\DbInfo\ColumnDbInfo.cs" />
+    <Compile Include="Common\DbInfo\ColumnDbInfo.cs" />
     <Compile Include="GenericDataManager\BaseDataManager.cs" />
     <Compile Include="GenericRepository\Exceptions\RepositoryException.cs" />
     <Compile Include="Common\Filters\GenericWhereFilter.cs" />
-    <Compile Include="GenericRepository\Interfaces\Actions\IFind.cs" />
-    <Compile Include="GenericRepository\Interfaces\Actions\IGetDataTableByGenericWhereFilter.cs" />
-    <Compile Include="GenericRepository\Interfaces\Actions\IGetDataTableByLambdaExpressionFilter.cs" />
-    <Compile Include="GenericRepository\Interfaces\Actions\IGetListByGenericWhereFilter.cs" />
-    <Compile Include="GenericRepository\Interfaces\Actions\IGetListByLambdaExpressionFilter.cs" />
-    <Compile Include="GenericRepository\Interfaces\Actions\IDeleteAll.cs" />
-    <Compile Include="GenericRepository\Interfaces\Actions\IDeleteByGenericWhereFilter.cs" />
-    <Compile Include="GenericRepository\Interfaces\Actions\IDeleteById.cs" />
-    <Compile Include="GenericRepository\Interfaces\Actions\IDeleteByLambdaExpressionFilter.cs" />
-    <Compile Include="GenericRepository\Interfaces\Actions\IAdd.cs" />
-    <Compile Include="GenericRepository\Interfaces\Actions\IGetAll.cs" />
-    <Compile Include="GenericRepository\Interfaces\Actions\IGetByGenericWhereFilter.cs" />
-    <Compile Include="GenericRepository\Interfaces\Actions\IGetById.cs" />
-    <Compile Include="GenericRepository\Interfaces\Actions\IGetByLambdaExpressionFilter.cs" />
-    <Compile Include="GenericRepository\Interfaces\Actions\IUpdate.cs" />
-    <Compile Include="GenericRepository\Interfaces\Actions\IAddRange.cs" />
-    <Compile Include="GenericRepository\Interfaces\Actions\IUpdateRange.cs" />
+    <Compile Include="Common\Interfaces\Actions\IFind.cs" />
+    <Compile Include="Common\Interfaces\Actions\IGetDataTableByGenericWhereFilter.cs" />
+    <Compile Include="Common\Interfaces\Actions\IGetDataTableByLambdaExpressionFilter.cs" />
+    <Compile Include="Common\Interfaces\Actions\IGetListByGenericWhereFilter.cs" />
+    <Compile Include="Common\Interfaces\Actions\IGetListByLambdaExpressionFilter.cs" />
+    <Compile Include="Common\Interfaces\Actions\IDeleteAll.cs" />
+    <Compile Include="Common\Interfaces\Actions\IDeleteByGenericWhereFilter.cs" />
+    <Compile Include="Common\Interfaces\Actions\IDeleteById.cs" />
+    <Compile Include="Common\Interfaces\Actions\IDeleteByLambdaExpressionFilter.cs" />
+    <Compile Include="Common\Interfaces\Actions\IAdd.cs" />
+    <Compile Include="Common\Interfaces\Actions\IGetAll.cs" />
+    <Compile Include="Common\Interfaces\Actions\IGetByGenericWhereFilter.cs" />
+    <Compile Include="Common\Interfaces\Actions\IGetById.cs" />
+    <Compile Include="Common\Interfaces\Actions\IGetByLambdaExpressionFilter.cs" />
+    <Compile Include="Common\Interfaces\Actions\IUpdate.cs" />
+    <Compile Include="Common\Interfaces\Actions\IAddRange.cs" />
+    <Compile Include="Common\Interfaces\Actions\IUpdateRange.cs" />
     <Compile Include="Common\DataRecordDynamicWrapper.cs" />
     <Compile Include="Common\Extensions\OleDbCommandExtensions.cs" />
     <Compile Include="Common\FormsGetParameters\FrmGetParamMSSQL.cs">
@@ -155,8 +155,9 @@
     </Compile>
     <Compile Include="Common\DataObjectProvider\StaticDbObjectProvider.cs" />
     <Compile Include="Common\EDatabaseEngine.cs" />
-    <Compile Include="GenericRepository\Mapper\MapDataReaderToEntity.cs" />
+    <Compile Include="Common\Mapper\MapDataReaderToEntity.cs" />
     <Compile Include="GenericDataManager\Intefaces\IDataManager.cs" />
+    <Compile Include="GenericViewManager\BaseViewManager.GetAll.cs" />
     <Compile Include="GenericViewManager\CodeWriter\CodeWriterViewHelper.cs" />
     <Compile Include="GenericViewManager\CodeWriter\EntityClassFromView.cs" />
     <Compile Include="GenericViewManager\CodeWriter\ViewManagerClassFromView.cs" />
@@ -198,6 +199,7 @@
   <ItemGroup>
     <None Include="app.manifest" />
     <Compile Include="GenericRepository\BaseRepository.GetListByGWF.cs" />
+    <Compile Include="GenericViewManager\BaseViewManager.GetListByLEF.cs" />
     <None Include="packages.config" />
     <None Include="Resources\675171-data_database_paradox_sqlite_db-512.png" />
   </ItemGroup>
@@ -252,9 +254,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GenericViewManager\Attributes\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.108.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.108.0\build\net45\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

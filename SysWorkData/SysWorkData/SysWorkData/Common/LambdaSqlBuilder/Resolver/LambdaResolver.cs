@@ -47,23 +47,33 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
             return columnName;
         }
 
-        public static string GetTableName<T>()
+        public static string GetTableOrViewName<T>()
         {
-            return GetTableName(typeof(T));
+            return GetTableOrViewName(typeof(T));
         }
 
-        public static string GetTableName(Type type)
+        public static string GetTableOrViewName(Type type)
         {
-            var column = type.GetCustomAttributes(false).OfType<DbTableAttribute>().FirstOrDefault();
-            if (column != null)
-                return column.Name;
+            //var table = type.GetCustomAttributes(false).OfType<DbTableAttribute>().FirstOrDefault();
+            //if (table != null)
+            //    return table.Name;
+            // else
+            //     return type.Name;
+
+            var table = type.GetCustomAttributes(false).OfType<DbTableAttribute>().FirstOrDefault();
+            var view = type.GetCustomAttributes(false).OfType<DbViewAttribute>().FirstOrDefault();
+
+            if (table != null)
+                return table.Name;
+            else if (view != null)
+                return view.Name;
             else
                 return type.Name;
         }
 
         private static string GetTableName(MemberExpression expression)
         {
-            return GetTableName(expression.Member.DeclaringType);
+            return GetTableOrViewName(expression.Member.DeclaringType);
         }
 
         private static BinaryExpression GetBinaryExpression(Expression expression)

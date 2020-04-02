@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
 using SysWork.Data.Common;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
-using SysWork.Data.Common.LambdaSqlBuilder;
-using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.Common.Interfaces.Actions;
+using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.Mapper;
+using SysWork.Data.GenericRepository.Exceptions;
 
-namespace SysWork.Data.GenericRepository
+namespace SysWork.Data.GenericViewManager
 {
-    public abstract partial class BaseRepository<TEntity> : IGetListByLambdaExpressionFilter<TEntity>
+    public abstract partial class BaseViewManager<TEntity> : IGetListByLambdaExpressionFilter<TEntity>
     {
         public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter)
         {

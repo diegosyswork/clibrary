@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reflection;
-using SysWork.Data.Common;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.Attributes;
 
-namespace SysWork.Data.GenericRepository.Mapper
+namespace SysWork.Data.Common.Mapper
 {
     ///TODO: Revisar la documentacion y crear ejemplo del uso de los metodos.
     /// <summary>

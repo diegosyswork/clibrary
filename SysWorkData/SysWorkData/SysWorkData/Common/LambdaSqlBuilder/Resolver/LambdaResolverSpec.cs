@@ -24,13 +24,13 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
 
         public void Join<T1, T2>(MemberExpression leftExpression, MemberExpression rightExpression)
         {
-            _builder.Join(GetTableName<T1>(), GetTableName<T2>(), GetColumnName(leftExpression), GetColumnName(rightExpression));
+            _builder.Join(GetTableOrViewName<T1>(), GetTableOrViewName<T2>(), GetColumnName(leftExpression), GetColumnName(rightExpression));
         }
 
         public void OrderBy<T>(Expression<Func<T, object>> expression, bool desc = false)
         {
             var fieldName = GetColumnName(GetMemberExpression(expression.Body));
-            _builder.OrderBy(GetTableName<T>(), fieldName, desc);
+            _builder.OrderBy(GetTableOrViewName<T>(), fieldName, desc);
         }
         
         public void Select<T>(Expression<Func<T, object>> expression)
@@ -43,7 +43,7 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
             switch (expression.NodeType)
             {
                 case ExpressionType.Parameter:
-                    _builder.Select(GetTableName(expression.Type));
+                    _builder.Select(GetTableOrViewName(expression.Type));
                     break;
                 case ExpressionType.Convert:
                 case ExpressionType.MemberAccess:
@@ -61,9 +61,9 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
         private void Select<T>(MemberExpression expression)
         {
             if (expression.Type.IsClass && expression.Type != typeof(String))
-                _builder.Select(GetTableName(expression.Type));                            
+                _builder.Select(GetTableOrViewName(expression.Type));                            
             else
-                _builder.Select(GetTableName<T>(), GetColumnName(expression));            
+                _builder.Select(GetTableOrViewName<T>(), GetColumnName(expression));            
         }
 
         public void SelectWithFunction<T>(Expression<Func<T, object>> expression, SelectFunction selectFunction)
@@ -74,7 +74,7 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
         private void SelectWithFunction<T>(Expression expression, SelectFunction selectFunction)
         {
             var fieldName = GetColumnName(GetMemberExpression(expression));
-            _builder.Select(GetTableName<T>(), fieldName, selectFunction);
+            _builder.Select(GetTableOrViewName<T>(), fieldName, selectFunction);
         }
 
         public void GroupBy<T>(Expression<Func<T, object>> expression)
@@ -85,7 +85,7 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
         private void GroupBy<T>(MemberExpression expression)
         {
             var fieldName = GetColumnName(GetMemberExpression(expression));
-            _builder.GroupBy(GetTableName<T>(), fieldName);
+            _builder.GroupBy(GetTableOrViewName<T>(), fieldName);
         }
     }
 }

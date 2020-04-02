@@ -4,13 +4,12 @@ using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using SysWork.Data.Common;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.GenericRepository.Exceptions;
-using SysWork.Data.GenericRepository.Mapper;
+using SysWork.Data.Common.Mapper;
 using SysWork.Data.Common.Attributes;
 using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
@@ -24,7 +23,7 @@ namespace SysWork.Data.GenericViewManager
     /// Generic Class to manage views
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
-    public abstract class BaseViewManager<TEntity> where TEntity : class, new()
+    public abstract partial class BaseViewManager<TEntity> where TEntity : class, new()
     {
         private string _connectionString;
         /// <summary>
@@ -62,7 +61,15 @@ namespace SysWork.Data.GenericViewManager
         /// </summary>
         public string ColumnsForSelect { get; private set; }
 
-        private string _whereClause = null;
+        private int _defaultCommandTimeout = 30;
+        /// <summary>
+        /// Gets or sets the default CommandTimeOut.
+        /// </summary>
+        /// <value>
+        /// The default CommandTimeOut.
+        /// </value>
+        protected int DefaultCommandTimeOut { get { return _defaultCommandTimeout; } set { _defaultCommandTimeout = value; } }
+        
         /// <summary>
         /// Initializes a new instance class. Using MSSqlServer as DataBaseEngine.
         /// </summary>
@@ -152,178 +159,6 @@ namespace SysWork.Data.GenericViewManager
         protected IDbConnection GetIDbConnection()
         {
             return DataObjectProvider.GetIDbConnection(_connectionString);
-        }
-
-        /// <summary>
-        /// Gets all.
-        /// </summary>
-        /// <returns></returns>
-        public IList<TEntity> GetAll()
-        {
-            return GetAll(null, null);
-        }
-
-        /// <summary>
-        /// Gets all.
-        /// </summary>
-        /// <param name="paramDbTransaction">The parameter database transaction.</param>
-        /// <returns></returns>
-        public IList<TEntity> GetAll(IDbTransaction paramDbTransaction)
-        {
-            return GetAll(null, paramDbTransaction);
-        }
-
-        /// <summary>
-        /// Gets all.
-        /// </summary>
-        /// <param name="paramDbConnection">The parameter database connection.</param>
-        /// <returns></returns>
-        public IList<TEntity> GetAll(IDbConnection paramDbConnection)
-        {
-            return GetAll(paramDbConnection, null);
-        }
-
-        /// <summary>
-        /// Gets all.
-        /// </summary>
-        /// <param name="paramDbConnection">The parameter database connection.</param>
-        /// <param name="paramDbTransaction">The parameter database transaction.</param>
-        /// <returns></returns>
-        /// <exception cref="RepositoryException"></exception>
-        public IList<TEntity> GetAll(IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
-        {
-            IList<TEntity> collection = new List<TEntity>();
-
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
-
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
-
-            IDbConnection dbConnection = paramDbConnection ?? GetIDbConnection();
-            IDbCommand dbCommand = dbConnection.CreateCommand();
-
-            dbCommand.CommandText = string.Format("SELECT {0} FROM {1}", ColumnsForSelect, _syntaxProvider.GetSecureViewName(ViewName));
-
-            try
-            {
-                if (dbConnection.State != ConnectionState.Open)
-                    dbConnection.Open();
-
-                if (paramDbTransaction != null)
-                    dbCommand.Transaction = paramDbTransaction;
-
-                IDataReader reader = dbCommand.ExecuteReader();
-                collection = new MapDataReaderToEntity().Map<TEntity>(reader, ListObjectPropertyInfo, _dataBaseEngine);
-
-                reader.Close(); reader.Dispose();
-                dbCommand.Dispose();
-            }
-            catch (Exception exception)
-            {
-                throw new RepositoryException(exception, dbCommand);
-            }
-            finally
-            {
-                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
-                {
-                    dbConnection.Close();
-                    dbConnection.Dispose();
-                }
-            }
-
-            return collection;
-        }
-
-        /// <summary>
-        /// Gets the list by lambda expression filter.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <returns></returns>
-        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter)
-        {
-            return GetListByLambdaExpressionFilter(lambdaExpressionFilter, null, null);
-        }
-
-        /// <summary>
-        /// Gets the list by lambda expression filter.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <param name="paramDbConnection">The parameter database connection.</param>
-        /// <returns></returns>
-        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection)
-        {
-            return GetListByLambdaExpressionFilter(lambdaExpressionFilter, paramDbConnection, null);
-        }
-
-        /// <summary>
-        /// Gets the list by lambda expression filter.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <param name="paramDbTransaction">The parameter database transaction.</param>
-        /// <returns></returns>
-        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction paramDbTransaction)
-        {
-            return GetListByLambdaExpressionFilter(lambdaExpressionFilter, null, paramDbTransaction);
-        }
-
-        /// <summary>
-        /// Gets the list by lambda expression filter.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <param name="paramDbConnection">The parameter database connection.</param>
-        /// <param name="paramDbTransaction">The parameter database transaction.</param>
-        /// <returns></returns>
-        /// <exception cref="RepositoryException"></exception>
-        public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
-        {
-            IList<TEntity> result = new List<TEntity>();
-            SetSqlLamAdapter();
-            var query = new SqlLam<TEntity>(lambdaExpressionFilter);
-
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
-
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
-
-            IDbConnection dbConnection = paramDbConnection ?? GetIDbConnection();
-            IDbCommand dbCommand = dbConnection.CreateCommand();
-
-            try
-            {
-                if (dbConnection.State != ConnectionState.Open)
-                    dbConnection.Open();
-
-                if (paramDbTransaction != null)
-                    dbCommand.Transaction = paramDbTransaction;
-
-                dbCommand.CommandText = query.QueryString;
-
-                foreach (var parameters in query.QueryParameters)
-                    dbCommand.Parameters.Add(CreateIDbDataParameter("@" + parameters.Key, parameters.Value));
-
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
-                    ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
-
-                IDataReader reader = dbCommand.ExecuteReader();
-                result = new MapDataReaderToEntity().Map<TEntity>(reader, ListObjectPropertyInfo, _dataBaseEngine);
-
-                reader.Close();
-                reader.Dispose();
-                dbCommand.Dispose();
-            }
-            catch (Exception exception)
-            {
-                throw new RepositoryException(exception, dbCommand);
-            }
-            finally
-            {
-                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
-                {
-                    dbConnection.Close();
-                    dbConnection.Dispose();
-                }
-            }
-            return result;
         }
 
         /// <summary>

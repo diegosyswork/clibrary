@@ -11,27 +11,27 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
         public void QueryByIsIn<T>(Expression<Func<T, object>> expression, SqlLamBase sqlQuery)
         {
             var fieldName = GetColumnName(expression);
-            _builder.QueryByIsIn(GetTableName<T>(), fieldName, sqlQuery);
+            _builder.QueryByIsIn(GetTableOrViewName<T>(), fieldName, sqlQuery);
         }
 
         public void QueryByIsIn<T>(Expression<Func<T, object>> expression, IEnumerable<object> values)
         {
             var fieldName = GetColumnName(expression);
-            _builder.QueryByIsIn(GetTableName<T>(), fieldName, values);
+            _builder.QueryByIsIn(GetTableOrViewName<T>(), fieldName, values);
         }
 
         public void QueryByNotIn<T>(Expression<Func<T, object>> expression, SqlLamBase sqlQuery)
         {
             var fieldName = GetColumnName(expression);
             _builder.Not();
-            _builder.QueryByIsIn(GetTableName<T>(), fieldName, sqlQuery);
+            _builder.QueryByIsIn(GetTableOrViewName<T>(), fieldName, sqlQuery);
         }
 
         public void QueryByNotIn<T>(Expression<Func<T, object>> expression, IEnumerable<object> values)
         {
             var fieldName = GetColumnName(expression);
             _builder.Not();
-            _builder.QueryByIsIn(GetTableName<T>(), fieldName, values);
+            _builder.QueryByIsIn(GetTableOrViewName<T>(), fieldName, values);
         }
     }
 }

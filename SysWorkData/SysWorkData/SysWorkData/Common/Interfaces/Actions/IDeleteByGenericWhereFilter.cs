@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using SysWork.Data.Common.Filters;
 
-namespace SysWork.Data.GenericRepository.Interfaces.Actions
+namespace SysWork.Data.Common.Interfaces.Actions
 {
     /// <summary>
     /// Deletes all records that match with the GenericWhereFilter.

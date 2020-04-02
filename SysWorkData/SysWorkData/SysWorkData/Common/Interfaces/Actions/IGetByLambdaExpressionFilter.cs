@@ -2,7 +2,7 @@
 using System.Data;
 using System.Linq.Expressions;
 
-namespace SysWork.Data.GenericRepository.Interfaces.Actions
+namespace SysWork.Data.Common.Interfaces.Actions
 {
     /// <summary>
     /// Gets a record that match with the LambdaExpressionFilter.

@@ -24,7 +24,7 @@ namespace SysWork.Data.Common.LambdaSqlBuilder
         /// </summary>
         public SqlLam()
         {
-            _builder = new SqlQueryBuilder(LambdaResolver.GetTableName<T>(), _defaultAdapter);
+            _builder = new SqlQueryBuilder(LambdaResolver.GetTableOrViewName<T>(), _defaultAdapter);
             _resolver = new LambdaResolver(_builder);
         }
 

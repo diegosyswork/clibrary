@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 using SysWork.Data.GenericRepository.Exceptions;
-using SysWork.Data.GenericRepository.Interfaces.Actions;
+using SysWork.Data.Common.Interfaces.Actions;
 
 namespace SysWork.Data.GenericRepository
 {

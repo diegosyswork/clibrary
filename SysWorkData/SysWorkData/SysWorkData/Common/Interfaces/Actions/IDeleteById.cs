@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace SysWork.Data.GenericRepository.Interfaces.Actions
+namespace SysWork.Data.Common.Interfaces.Actions
 {
     /// <summary>
     /// Deletes a record by the identifier.

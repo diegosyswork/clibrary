@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 
-namespace SysWork.Data.GenericRepository.DbInfo
+namespace SysWork.Data.Common.DbInfo
 {
     internal class ColumnDbInfo
     {

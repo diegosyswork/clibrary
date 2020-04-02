@@ -2,7 +2,7 @@
 using System.Data;
 using SysWork.Data.Common.Filters;
 
-namespace SysWork.Data.GenericRepository.Interfaces.Actions
+namespace SysWork.Data.Common.Interfaces.Actions
 {
     /// <summary>
     /// Gets an IList with the records that match with the GenericWhereFilter.

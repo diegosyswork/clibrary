@@ -2,7 +2,7 @@
 using System.Data;
 using System.Linq.Expressions;
 
-namespace SysWork.Data.GenericRepository.Interfaces.Actions
+namespace SysWork.Data.Common.Interfaces.Actions
 {
     /// <summary>
     /// Deletes all records that match with the LambdaExpressionFilter.

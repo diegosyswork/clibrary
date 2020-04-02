@@ -61,16 +61,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SysWorkControls\SysWork.Controls\SysWork.Controls.csproj">
-      <Project>{A21FA2E6-2451-450F-AB10-E00C86A606DD}</Project>
-      <Name>SysWork.Controls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SysWorkData\SysWorkData\SysWorkData\SysWork.Data.csproj">
-      <Project>{885F2F8D-05A7-49DC-BC26-DCC00CA47C6E}</Project>
-      <Name>SysWork.Data</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="GenericFormQuery\FrmGenericFormQuery.resx">
       <DependentUpon>FrmGenericFormQuery.cs</DependentUpon>
     </EmbeddedResource>
