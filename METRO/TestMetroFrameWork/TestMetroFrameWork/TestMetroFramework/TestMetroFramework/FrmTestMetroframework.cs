@@ -1,14 +1,10 @@
 ﻿using MetroFramework;
 using MetroFramework.Forms;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TestMetroFramework
@@ -23,7 +19,7 @@ namespace TestMetroFramework
             InitializeComponent();
             metroStyleManager1.Theme = MetroFramework.MetroThemeStyle.Dark;
             metroStyleManager1.Style = MetroFramework.MetroColorStyle.Lime;
-            PicImagenProducto.Image = RoundCorners(Image.FromFile(@"d:\recibir\7891150043237.png"),500);
+           // PicImagenProducto.Image = RoundCorners(Image.FromFile(@"d:\recibir\7891150043237.png"),500);
         }
         private void FrmTestMetroframework_Load(object sender, EventArgs e)
         {
@@ -41,8 +37,9 @@ namespace TestMetroFramework
             GridArticulos.Columns["ColDescuento"].DataPropertyName = "Descuento";
             GridArticulos.Columns["ColTotal"].DataPropertyName = "Total";
 
-
             GridArticulos.DataSource = _lista;
+
+            LblImporteTotal.Text = _lista.Sum(a => a.Total).ToString("$ ###,###,##0.00");
         }
 
         private void LoadData()
@@ -51,10 +48,7 @@ namespace TestMetroFramework
 
             _lista.Add(
                         new DetalleGrilla
-                        {
-                            CodArticulo = "7891150043237",
-                            Descripcion = "ACONDICIONADOR DAVE RECUPERACION EXTREMA x 900 ml",
-                            Cantidad = 1,
+                        {CodArticulo = "7891150043237",Descripcion = "ACONDICIONADOR DAVE RECUPERACION EXTREMA x 900 ml",                            Cantidad = 1,
                             Unitario = 289,
                             Descuento = 0,
                             Total = 289
@@ -67,9 +61,9 @@ namespace TestMetroFramework
                             CodArticulo = "7891167021013",
                             Descripcion = "SARDINAS EN ACEITE GOMES da COSTA x 125 gr",
                             Cantidad = 3,
-                            Unitario = 50,
+                            Unitario = 55.123456M,
                             Descuento = 0,
-                            Total = 150,
+                            Total = 165.370368M
                         }
             );
 
@@ -101,6 +95,23 @@ namespace TestMetroFramework
 
         private Image RoundCorners(Image image, int cornerRadius)
         {
+            Bitmap roundedImage = new Bitmap(image.Width, image.Height);
+
+            GraphicsPath graphicsPath = new GraphicsPath();
+            graphicsPath.AddEllipse(0, 0, image.Width, image.Height);
+
+            using (Graphics g = Graphics.FromImage(roundedImage))
+            {
+                g.SmoothingMode = SmoothingMode.HighQuality;
+                g.SetClip(graphicsPath);
+                g.DrawImage(image, Point.Empty);
+            }
+            return roundedImage;
+        }
+
+/*
+        private Image RoundCorners(Image image, int cornerRadius)
+        {
             cornerRadius *= 2;
             Bitmap roundedImage = new Bitmap(image.Width, image.Height);
             GraphicsPath gp = new GraphicsPath();
@@ -116,6 +127,8 @@ namespace TestMetroFramework
             }
             return roundedImage;
         }
+*/
+
 
         private void GridArticulos_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
@@ -123,12 +136,10 @@ namespace TestMetroFramework
             if (cust != null)
             {
                 PicImagenProducto.Image = RoundCorners(Image.FromFile($@"d:\recibir\{cust.CodArticulo}.png"), 500);
-                pictureBoxRounded1.Image = Image.FromFile($@"d:\recibir\{cust.CodArticulo}.png");
 
-                LblImporteArticulo.Text = string.Format("{0:######0.00}", cust.Unitario);
-                LblDescripcionArticulo.Text = string.Format("{0:######0.00}", cust.Cantidad) + " x " + cust.Descripcion.ToUpper();
+                LblImporteArticulo.Text = string.Format("{0:###,###,##0.00}", cust.Unitario);
+                LblDescripcionArticulo.Text = string.Format("{0:###,###,##0.00}", cust.Cantidad) + " x " + cust.Descripcion.ToUpper();
             }
-
         }
 
         private void GridArticulos_RowLeave(object sender, DataGridViewCellEventArgs e)
@@ -150,6 +161,11 @@ namespace TestMetroFramework
             int next = m.Next(0, 13);
             metroStyleManager1.Style = (MetroColorStyle)next;
 
+        }
+
+        private void TxtCodigoCliente_Validating(object sender, CancelEventArgs e)
+        {
+            errorProvider1.SetError(TxtCodigoCliente, "errr");
         }
     }
 

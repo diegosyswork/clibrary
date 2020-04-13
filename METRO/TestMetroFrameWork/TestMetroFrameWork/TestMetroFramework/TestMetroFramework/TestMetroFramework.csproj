@@ -52,9 +52,6 @@
     <Compile Include="FrmTestMetroframework.Designer.cs">
       <DependentUpon>FrmTestMetroframework.cs</DependentUpon>
     </Compile>
-    <Compile Include="PictureBoxRounded.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FrmTestMetroframework.resx">

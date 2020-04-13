@@ -68,6 +68,7 @@
             this.LblFecha = new MetroFramework.Controls.MetroLabel();
             this.DtpFecha = new MetroFramework.Controls.MetroDateTime();
             this.panelVendedor = new System.Windows.Forms.Panel();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.LblVendedor = new MetroFramework.Controls.MetroLabel();
             this.CmbVendedor = new MetroFramework.Controls.MetroComboBox();
             this.panelCondicionVenta = new System.Windows.Forms.Panel();
@@ -96,11 +97,11 @@
             this.LblDescripcionArticulo = new MetroFramework.Controls.MetroLabel();
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
-            this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
+            this.LblImporteTotal = new MetroFramework.Controls.MetroLabel();
             this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
             this.metroLabel5 = new MetroFramework.Controls.MetroLabel();
             this.metroLabel6 = new MetroFramework.Controls.MetroLabel();
-            this.pictureBoxRounded1 = new TestMetroFramework.PictureBoxRounded();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).BeginInit();
             this.layoutEncabezado.SuspendLayout();
             this.panelComprobante.SuspendLayout();
@@ -113,7 +114,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PicImagenProducto)).BeginInit();
             this.panelGrilla.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridArticulos)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRounded1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // metroRendererManager1
@@ -415,9 +416,9 @@
             this.LblRazonSocial.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.LblRazonSocial.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.LblRazonSocial.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.LblRazonSocial.Location = new System.Drawing.Point(171, 6);
+            this.LblRazonSocial.Location = new System.Drawing.Point(186, 6);
             this.LblRazonSocial.Name = "LblRazonSocial";
-            this.LblRazonSocial.Size = new System.Drawing.Size(233, 26);
+            this.LblRazonSocial.Size = new System.Drawing.Size(218, 26);
             this.LblRazonSocial.TabIndex = 12;
             this.LblRazonSocial.Text = "ARTECOLA ARGENTINA S.A.";
             this.LblRazonSocial.UseStyleColors = true;
@@ -453,6 +454,7 @@
             this.TxtCodigoCliente.UseSelectable = true;
             this.TxtCodigoCliente.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
             this.TxtCodigoCliente.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
+            this.TxtCodigoCliente.Validating += new System.ComponentModel.CancelEventHandler(this.TxtCodigoCliente_Validating);
             // 
             // LblCliente
             // 
@@ -537,6 +539,7 @@
             // 
             // panelVendedor
             // 
+            this.panelVendedor.Controls.Add(this.textBox1);
             this.panelVendedor.Controls.Add(this.LblVendedor);
             this.panelVendedor.Controls.Add(this.CmbVendedor);
             this.panelVendedor.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -544,6 +547,13 @@
             this.panelVendedor.Name = "panelVendedor";
             this.panelVendedor.Size = new System.Drawing.Size(344, 42);
             this.panelVendedor.TabIndex = 3;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(31, 8);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(56, 20);
+            this.textBox1.TabIndex = 24;
             // 
             // LblVendedor
             // 
@@ -597,6 +607,7 @@
             this.CmbConndicionVenta.FontSize = MetroFramework.MetroComboBoxSize.Small;
             this.CmbConndicionVenta.FontWeight = MetroFramework.MetroComboBoxWeight.Light;
             this.CmbConndicionVenta.FormattingEnabled = true;
+            this.CmbConndicionVenta.IntegralHeight = false;
             this.CmbConndicionVenta.ItemHeight = 19;
             this.CmbConndicionVenta.Items.AddRange(new object[] {
             "Contado",
@@ -845,7 +856,7 @@
             // 
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             this.ColCodigo.DefaultCellStyle = dataGridViewCellStyle2;
-            this.ColCodigo.HeaderText = "Codigo";
+            this.ColCodigo.HeaderText = "CODIGO";
             this.ColCodigo.Name = "ColCodigo";
             this.ColCodigo.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.ColCodigo.Width = 200;
@@ -855,35 +866,36 @@
             this.ColDescripcion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             this.ColDescripcion.DefaultCellStyle = dataGridViewCellStyle3;
-            this.ColDescripcion.HeaderText = "Descripcion";
+            this.ColDescripcion.HeaderText = "DESCRIPCION";
             this.ColDescripcion.Name = "ColDescripcion";
             // 
             // ColCantidad
             // 
             dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
             this.ColCantidad.DefaultCellStyle = dataGridViewCellStyle4;
-            this.ColCantidad.HeaderText = "Cantidad";
+            this.ColCantidad.HeaderText = "CANTIDAD";
             this.ColCantidad.Name = "ColCantidad";
             // 
             // ColUnitario
             // 
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
             this.ColUnitario.DefaultCellStyle = dataGridViewCellStyle5;
-            this.ColUnitario.HeaderText = "Unitario";
+            this.ColUnitario.HeaderText = "UNITARIO";
             this.ColUnitario.Name = "ColUnitario";
             // 
             // ColDescuento
             // 
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
             this.ColDescuento.DefaultCellStyle = dataGridViewCellStyle6;
-            this.ColDescuento.HeaderText = "% Dto.";
+            this.ColDescuento.HeaderText = "% DTO.";
             this.ColDescuento.Name = "ColDescuento";
             // 
             // ColTotal
             // 
             dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle7.NullValue = "0";
             this.ColTotal.DefaultCellStyle = dataGridViewCellStyle7;
-            this.ColTotal.HeaderText = "Total";
+            this.ColTotal.HeaderText = "TOTAL";
             this.ColTotal.Name = "ColTotal";
             // 
             // LblDescripcionArticulo
@@ -921,18 +933,18 @@
             this.metroLabel2.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.metroLabel2.UseStyleColors = true;
             // 
-            // metroLabel3
+            // LblImporteTotal
             // 
-            this.metroLabel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroLabel3.FontSize = MetroFramework.MetroLabelSize.Tall;
-            this.metroLabel3.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel3.Location = new System.Drawing.Point(757, 732);
-            this.metroLabel3.Name = "metroLabel3";
-            this.metroLabel3.Size = new System.Drawing.Size(134, 26);
-            this.metroLabel3.TabIndex = 14;
-            this.metroLabel3.Text = "$ 1500.00";
-            this.metroLabel3.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.metroLabel3.UseStyleColors = true;
+            this.LblImporteTotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.LblImporteTotal.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.LblImporteTotal.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.LblImporteTotal.Location = new System.Drawing.Point(757, 732);
+            this.LblImporteTotal.Name = "LblImporteTotal";
+            this.LblImporteTotal.Size = new System.Drawing.Size(134, 26);
+            this.LblImporteTotal.TabIndex = 14;
+            this.LblImporteTotal.Text = "$ 1500.00";
+            this.LblImporteTotal.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.LblImporteTotal.UseStyleColors = true;
             // 
             // metroLabel4
             // 
@@ -969,14 +981,9 @@
             this.metroLabel6.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.metroLabel6.UseStyleColors = true;
             // 
-            // pictureBoxRounded1
+            // errorProvider1
             // 
-            this.pictureBoxRounded1.Location = new System.Drawing.Point(894, 410);
-            this.pictureBoxRounded1.Name = "pictureBoxRounded1";
-            this.pictureBoxRounded1.Size = new System.Drawing.Size(100, 100);
-            this.pictureBoxRounded1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxRounded1.TabIndex = 18;
-            this.pictureBoxRounded1.TabStop = false;
+            this.errorProvider1.ContainerControl = this;
             // 
             // FrmTestMetroframework
             // 
@@ -987,11 +994,10 @@
             this.BackLocation = MetroFramework.Forms.BackLocation.TopRight;
             this.BackMaxSize = 25;
             this.ClientSize = new System.Drawing.Size(1024, 768);
-            this.Controls.Add(this.pictureBoxRounded1);
             this.Controls.Add(this.metroLabel6);
             this.Controls.Add(this.metroLabel5);
             this.Controls.Add(this.metroLabel4);
-            this.Controls.Add(this.metroLabel3);
+            this.Controls.Add(this.LblImporteTotal);
             this.Controls.Add(this.metroLabel2);
             this.Controls.Add(this.metroLabel1);
             this.Controls.Add(this.LblDescripcionArticulo);
@@ -1029,7 +1035,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.PicImagenProducto)).EndInit();
             this.panelGrilla.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.GridArticulos)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRounded1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1086,7 +1092,7 @@
         private MetroFramework.Controls.MetroPanel panelGrilla;
         private MetroFramework.Controls.MetroGrid GridArticulos;
         private MetroFramework.Controls.MetroLabel LblDescripcionArticulo;
-        private MetroFramework.Controls.MetroLabel metroLabel3;
+        private MetroFramework.Controls.MetroLabel LblImporteTotal;
         private MetroFramework.Controls.MetroLabel metroLabel2;
         private MetroFramework.Controls.MetroLabel metroLabel1;
         private MetroFramework.Controls.MetroLabel metroLabel5;
@@ -1098,7 +1104,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColUnitario;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColDescuento;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColTotal;
-        private PictureBoxRounded pictureBoxRounded1;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 
