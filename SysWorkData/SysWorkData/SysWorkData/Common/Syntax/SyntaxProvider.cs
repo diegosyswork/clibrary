@@ -177,5 +177,68 @@ namespace SysWork.Data.Common.Syntax
 
             return result;
         }
+
+        /// <summary>
+        /// Gets the query for SELECT TOP 1 1 FROM TABLE.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException">The database engine is not supported by this method GetQuerySelectTop0</exception>
+        public string GetQuerySelectTop_1_1(string tableName)
+        {
+            string result = "";
+            switch (_dataBaseEngine)
+            {
+                case EDataBaseEngine.MSSqlServer:
+                    result = string.Format("SELECT TOP 1 1 FROM {0}", GetSecureTableName(tableName));
+                    break;
+                case EDataBaseEngine.SqLite:
+                    result = string.Format("SELECT 1 FROM {0} LIMIT 1", GetSecureTableName(tableName));
+                    break;
+                case EDataBaseEngine.OleDb:
+                    result = string.Format("SELECT TOP 1 1 FROM {0} ", GetSecureTableName(tableName));
+                    break;
+                case EDataBaseEngine.MySql:
+                    result = string.Format("SELECT 1 FROM {0} LIMIT 1", GetSecureTableName(tableName));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("The database engine is not supported by this method GetQuerySelectTop0");
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Gets the query for SELECT COUNT(*) FROM TABLE.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException">The database engine is not supported by this method GetQuerySelectTop0</exception>
+        public string GetQuerySelectCOUNT(string tableName)
+        {
+            string result = "";
+            switch (_dataBaseEngine)
+            {
+                case EDataBaseEngine.MSSqlServer:
+                    result = string.Format("SELECT COUNT(*) FROM {0} ", GetSecureTableName(tableName));
+                    break;
+                case EDataBaseEngine.SqLite:
+                    result = string.Format("SELECT COUNT(*) FROM {0} ", GetSecureTableName(tableName));
+                    break;
+                case EDataBaseEngine.OleDb:
+                    result = string.Format("SELECT COUNT(*) FROM {0} ", GetSecureTableName(tableName));
+                    break;
+                case EDataBaseEngine.MySql:
+                    result = string.Format("SELECT COUNT(*) FROM {0}", GetSecureTableName(tableName));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("The database engine is not supported by this method GetQuerySelectTop0");
+            }
+
+            return result;
+        }
+
+
+
     }
 }

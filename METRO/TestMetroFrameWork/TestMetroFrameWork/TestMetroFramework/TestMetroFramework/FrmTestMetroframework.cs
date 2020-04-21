@@ -19,7 +19,6 @@ namespace TestMetroFramework
             InitializeComponent();
             metroStyleManager1.Theme = MetroFramework.MetroThemeStyle.Dark;
             metroStyleManager1.Style = MetroFramework.MetroColorStyle.Lime;
-           // PicImagenProducto.Image = RoundCorners(Image.FromFile(@"d:\recibir\7891150043237.png"),500);
         }
         private void FrmTestMetroframework_Load(object sender, EventArgs e)
         {
@@ -95,6 +94,8 @@ namespace TestMetroFramework
 
         private Image RoundCorners(Image image, int cornerRadius)
         {
+
+
             Bitmap roundedImage = new Bitmap(image.Width, image.Height);
 
             GraphicsPath graphicsPath = new GraphicsPath();
@@ -108,27 +109,6 @@ namespace TestMetroFramework
             }
             return roundedImage;
         }
-
-/*
-        private Image RoundCorners(Image image, int cornerRadius)
-        {
-            cornerRadius *= 2;
-            Bitmap roundedImage = new Bitmap(image.Width, image.Height);
-            GraphicsPath gp = new GraphicsPath();
-            gp.AddArc(0, 0, cornerRadius, cornerRadius, 180, 90);
-            gp.AddArc(0 + roundedImage.Width - cornerRadius, 0, cornerRadius, cornerRadius, 270, 90);
-            gp.AddArc(0 + roundedImage.Width - cornerRadius, 0 + roundedImage.Height - cornerRadius, cornerRadius, cornerRadius, 0, 90);
-            gp.AddArc(0, 0 + roundedImage.Height - cornerRadius, cornerRadius, cornerRadius, 90, 90);
-            using (Graphics g = Graphics.FromImage(roundedImage))
-            {
-                g.SmoothingMode = SmoothingMode.HighQuality;
-                g.SetClip(gp);
-                g.DrawImage(image, Point.Empty);
-            }
-            return roundedImage;
-        }
-*/
-
 
         private void GridArticulos_RowEnter(object sender, DataGridViewCellEventArgs e)
         {
@@ -160,7 +140,6 @@ namespace TestMetroFramework
             var m = new Random();
             int next = m.Next(0, 13);
             metroStyleManager1.Style = (MetroColorStyle)next;
-
         }
 
         private void TxtCodigoCliente_Validating(object sender, CancelEventArgs e)

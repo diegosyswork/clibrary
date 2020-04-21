@@ -1,5 +1,5 @@
 ﻿using System;
-using SysWork.Data.GenericRepository.Attributes;
+using SysWork.Data.Common.Attributes;
 
 namespace Demo.SysWork.Data.Entities
 {

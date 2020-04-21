@@ -541,6 +541,7 @@ namespace MetroFramework.Controls
                 //force Left align on items
                 if (_forceLeftAlign == true)
                 {
+                    Console.WriteLine("OnDrawItem forceAlign");
                     foreach (ColumnHeader col in this.Columns)
                     {
                         col.TextAlign = HorizontalAlignment.Left;
@@ -584,7 +585,7 @@ namespace MetroFramework.Controls
             {
                 Rectangle rect = e.Bounds;
                 Graphics g = e.Graphics;
-
+                
                 //minimum item height
                 if (rect.Height < _minimumItemHeight)
                 { rect.Height = (int)_minimumItemHeight; }
@@ -599,10 +600,11 @@ namespace MetroFramework.Controls
                 g.SmoothingMode = SmoothingMode.AntiAlias;
                 g.CompositingQuality = CompositingQuality.HighQuality;
                 g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-
+                
                 //force Left align on items
                 if (_forceLeftAlign == true)
                 {
+                    Console.WriteLine("ForceAling");
                     foreach (ColumnHeader col in this.Columns)
                     {
                         col.TextAlign = HorizontalAlignment.Left;
@@ -613,6 +615,8 @@ namespace MetroFramework.Controls
                 {
                     if ((e.ItemState & ListViewItemStates.Selected) != 0)
                     {
+                        Console.WriteLine("e.ItemState & ListViewItemStates.Selected) != 0");
+
                         //CheckBox present?
                         if ((this.CheckBoxes == true) && (e.ColumnIndex == 0))
                         {
@@ -673,17 +677,19 @@ namespace MetroFramework.Controls
 
                         //drawText
                         Color textColor = MetroPaint.ForeColor.ListView.Selected(Theme, Style); // GetForeTextColor(PaletteState.CheckedPressed);
-                        //if (!_hasFocus)
-                        //    textColor = GetForeTextColor(PaletteState.Normal);
-
-
+                                                                                                //if (!_hasFocus)
+                                                                                                //    textColor = GetForeTextColor(PaletteState.Normal);
                         //compact the text:
                         string TextToDraw = CompactString(e.SubItem.Text, MeasureStringWidth, this.Font, TextFormatFlags.EndEllipsis);
 
+                        StringFormat TextFormat = new StringFormat();
+                        TextFormat.FormatFlags = StringFormatFlags.NoWrap;
+                        TextFormat.Alignment = ConvertHorizontalAlignmentToStringAlignment(e.Header.TextAlign);
+
                         //Draw String
-                        e.Graphics.DrawString(TextToDraw, this.Font, new SolidBrush(textColor), rect);
-
-
+                        rect.Width = rect.Width - 7;
+                        e.Graphics.DrawString(TextToDraw, this.Font, new SolidBrush(textColor), rect, TextFormat);
+                        
                         //e.DrawFocusRectangle(rect);
                     }
                     else
@@ -871,7 +877,7 @@ namespace MetroFramework.Controls
 
                     //OffSet Header
                     HeaderPressedOffset(ref rect, e.State);
-
+                   
                     //get Colors And Font
                     Color textColor = GetForeTextColorHeader(bHot);
                     Font textFont = GetHeaderForeTextFont();
@@ -883,6 +889,9 @@ namespace MetroFramework.Controls
 
                     //string Ellipsis
                     string ColumnHeaderString = CompactString(e.Header.Text, rect.Width, textFont, TextFormatFlags.EndEllipsis);
+
+                    // ojo
+                    rect.Width -= 10;
 
                     //draw Text
                     g.DrawString(ColumnHeaderString, textFont, new SolidBrush(textColor), rect, TextFormat);

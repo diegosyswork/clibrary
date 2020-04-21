@@ -10,7 +10,7 @@ using SysWork.Data.Common.DbConnector;
 using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 using SysWork.Data.Common.Utilities;
-using SysWork.Data.GenericRepository.Mapper;
+using SysWork.Data.Common.Mapper;
 using SysWork.Data.GenericRepository.CodeWriter;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.LoggerDb;

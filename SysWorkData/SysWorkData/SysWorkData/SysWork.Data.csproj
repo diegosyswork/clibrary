@@ -40,6 +40,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Common\Interfaces\Actions\ICount.cs" />
+    <Compile Include="Common\Interfaces\Actions\IExists.cs" />
     <Compile Include="Common\Utilities\DbExecutor.cs" />
     <Compile Include="Common\DbConnector\AbstractDbConnector.cs" />
     <Compile Include="Common\DbConnector\DataBaseConnector.cs" />
@@ -200,6 +202,8 @@
     <None Include="app.manifest" />
     <Compile Include="GenericRepository\BaseRepository.GetListByGWF.cs" />
     <Compile Include="GenericViewManager\BaseViewManager.GetListByLEF.cs" />
+    <Compile Include="GenericRepository\BaseRepository.Exists.cs" />
+    <Compile Include="GenericRepository\BaseRepository.Count.cs" />
     <None Include="packages.config" />
     <None Include="Resources\675171-data_database_paradox_sqlite_db-512.png" />
   </ItemGroup>

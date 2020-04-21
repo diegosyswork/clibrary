@@ -68,7 +68,6 @@
             this.LblFecha = new MetroFramework.Controls.MetroLabel();
             this.DtpFecha = new MetroFramework.Controls.MetroDateTime();
             this.panelVendedor = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.LblVendedor = new MetroFramework.Controls.MetroLabel();
             this.CmbVendedor = new MetroFramework.Controls.MetroComboBox();
             this.panelCondicionVenta = new System.Windows.Forms.Panel();
@@ -393,9 +392,9 @@
             this.LblDatosCliente2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LblDatosCliente2.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.LblDatosCliente2.Location = new System.Drawing.Point(62, 73);
+            this.LblDatosCliente2.Location = new System.Drawing.Point(62, 69);
             this.LblDatosCliente2.Name = "LblDatosCliente2";
-            this.LblDatosCliente2.Size = new System.Drawing.Size(342, 19);
+            this.LblDatosCliente2.Size = new System.Drawing.Size(342, 29);
             this.LblDatosCliente2.TabIndex = 14;
             this.LblDatosCliente2.Text = "Piedra Buena 7684, Martin Coronado (B1682A42), Buenos Aires, Argentina";
             // 
@@ -539,7 +538,6 @@
             // 
             // panelVendedor
             // 
-            this.panelVendedor.Controls.Add(this.textBox1);
             this.panelVendedor.Controls.Add(this.LblVendedor);
             this.panelVendedor.Controls.Add(this.CmbVendedor);
             this.panelVendedor.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -547,13 +545,6 @@
             this.panelVendedor.Name = "panelVendedor";
             this.panelVendedor.Size = new System.Drawing.Size(344, 42);
             this.panelVendedor.TabIndex = 3;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(31, 8);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(56, 20);
-            this.textBox1.TabIndex = 24;
             // 
             // LblVendedor
             // 
@@ -650,10 +641,9 @@
             // LblLista
             // 
             this.LblLista.AutoSize = true;
-            this.LblLista.FontSize = MetroFramework.MetroLabelSize.Small;
             this.LblLista.Location = new System.Drawing.Point(3, 3);
             this.LblLista.Name = "LblLista";
-            this.LblLista.Size = new System.Drawing.Size(29, 15);
+            this.LblLista.Size = new System.Drawing.Size(34, 19);
             this.LblLista.TabIndex = 26;
             this.LblLista.Text = "Lista";
             // 
@@ -1105,7 +1095,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColDescuento;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColTotal;
         private System.Windows.Forms.ErrorProvider errorProvider1;
-        private System.Windows.Forms.TextBox textBox1;
     }
 }
 
