@@ -159,6 +159,10 @@ namespace SysWork.Data.GenericDataManager
                 if (_persistentConnection.State != System.Data.ConnectionState.Open)
                     _persistentConnection = GetDbConnection();
             }
+
+            if (_persistentConnection.State != System.Data.ConnectionState.Open)
+                _persistentConnection.Open();
+
             return _persistentConnection;
         }
 

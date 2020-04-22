@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using SysWork.Data.Common;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.Filters;
@@ -17,83 +13,221 @@ using SysWork.Data.GenericRepository.Exceptions;
 
 namespace SysWork.Data.GenericRepository
 {
+    /// <summary>
+    /// Counts records in the Table.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity.</typeparam>
     public abstract partial class BaseRepository<TEntity> : ICount<TEntity>
     {
+        /// <summary>
+        /// Counts all records in the Table.
+        /// </summary>
+        /// <returns></returns>
         public long Count()
         {
-            throw new NotImplementedException();
+            return Count(dbConnection: null, dbTransaction: null, commandTimeOut: null);
         }
 
+        /// <summary>
+        /// Counts all records in the Table using a custom dbCommnad timeout.
+        /// </summary>
+        /// <returns></returns>
         public long Count(int commandTimeOut)
         {
-            throw new NotImplementedException();
+            return Count(dbConnection:null, dbTransaction:null, commandTimeOut:commandTimeOut);
         }
 
+        /// <summary>
+        /// Counts all records in the Table using an DbConnection.
+        /// </summary>
+        /// <returns></returns>
         public long Count(DbConnection dbConnection)
         {
-            throw new NotImplementedException();
+            return Count(dbConnection, null, null);
         }
 
+        /// <summary>
+        /// Counts all records in the Table using an DbConnection and a custom dbCommnad timeout.
+        /// </summary>
+        /// <returns></returns>
         public long Count(DbConnection dbConnection, int commandTimeOut)
         {
-            throw new NotImplementedException();
+            return Count(dbConnection, null, commandTimeOut);
         }
 
-        public long Count(DbTransaction DbTransaction)
+        /// <summary>
+        /// Counts all records in the Table using an DbTransaction.
+        /// </summary>
+        /// <param name="dbTransaction">The database transaction.</param>
+        /// <returns></returns>
+        public long Count(DbTransaction dbTransaction)
         {
-            throw new NotImplementedException();
+            return Count(dbConnection: null, dbTransaction: dbTransaction, commandTimeOut: null);
         }
 
-        public long Count(DbTransaction DbTransaction, int commandTimeOut)
+        /// <summary>
+        /// Counts all records in the Table using an DbTransaction and a custom dbCommnad timeout.
+        /// </summary>
+        /// <param name="dbTransaction">The database transaction.</param>
+        /// <param name="commandTimeOut">The command time out.</param>
+        /// <returns></returns>
+        public long Count( DbTransaction dbTransaction, int commandTimeOut)
         {
-            throw new NotImplementedException();
+            return Count(dbConnection: null, dbTransaction: dbTransaction, commandTimeOut: commandTimeOut);
         }
 
-        public long Count(DbConnection dbConnection, DbTransaction DbTransaction)
+        /// <summary>
+        /// Counts all records in the Table using an DbConnection and DbTransaction.
+        /// </summary>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <param name="dbTransaction">The database transaction.</param>
+        /// <returns></returns>
+        public long Count(DbConnection dbConnection, DbTransaction dbTransaction)
         {
-            throw new NotImplementedException();
+            return Count(dbConnection, dbTransaction, null);
         }
 
-        public long Count(DbConnection dbConnection, DbTransaction DbTransaction, int commandTimeOut)
+        /// <summary>
+        /// Counts all records in the Table using an DbConnection, DbTransaction and a custom dbCommnad timeout.
+        /// </summary>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <param name="dbTransaction">The database transaction.</param>
+        /// <param name="commandTimeOut">The command time out.</param>
+        /// <returns></returns>
+        public long Count(DbConnection dbConnection, DbTransaction dbTransaction, int? commandTimeOut)
         {
-            throw new NotImplementedException();
+            long result = 0;
+
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
+
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
+
+            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
+            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
+
+            string selectCountQuery = _syntaxProvider.GetQuerySelectCOUNT(TableName);
+            try
+            {
+                if (dbConnectionInUse.State != ConnectionState.Open)
+                    dbConnectionInUse.Open();
+
+                if (dbTransaction != null)
+                    dbCommand.Transaction = dbTransaction;
+
+                dbCommand.CommandText = selectCountQuery;
+                dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
+
+                if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                    ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
+
+                result = DbUtil.ParseToLong(dbCommand.ExecuteScalar());
+
+                dbCommand.Dispose();
+            }
+            catch (Exception exception)
+            {
+                throw new RepositoryException(exception, dbCommand);
+            }
+            finally
+            {
+                if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
+                {
+                    dbConnectionInUse.Close();
+                    dbConnectionInUse.Dispose();
+                }
+            }
+            return result;
         }
 
+        /// <summary>
+        /// Counts all records in the Table using an GenericWhereFilter.
+        /// </summary>
+        /// <param name="whereFilter">The where filter.</param>
+        /// <returns></returns>
         public long Count(GenericWhereFilter whereFilter)
         {
-            throw new NotImplementedException();
+            return Count(whereFilter, null, null, null);
         }
 
+        /// <summary>
+        /// Counts all records in the Table using an GenericWhereFilter and a custom dbCommnad timeout.
+        /// </summary>
+        /// <param name="whereFilter">The where filter.</param>
+        /// <param name="commandTimeOut">The command time out.</param>
+        /// <returns></returns>
         public long Count(GenericWhereFilter whereFilter, int commandTimeOut)
         {
-            throw new NotImplementedException();
+            return Count(whereFilter, null, null, commandTimeOut);
         }
 
+        /// <summary>
+        /// Counts all records in the Table using an GenericWhereFilter and DbTransaction.
+        /// </summary>
+        /// <param name="whereFilter">The where filter.</param>
+        /// <param name="dbTransaction">The database transaction.</param>
+        /// <returns></returns>
         public long Count(GenericWhereFilter whereFilter, DbTransaction dbTransaction)
         {
-            throw new NotImplementedException();
+            return Count(whereFilter, null, dbTransaction, null);
         }
 
+        /// <summary>
+        /// Counts all records in the Table using an GenericWhereFilter, DbTransaction and a custom dbCommnad timeout.
+        /// </summary>
+        /// <param name="whereFilter">The where filter.</param>
+        /// <param name="dbTransaction">The database transaction.</param>
+        /// <param name="commandTimeOut">The command time out.</param>
+        /// <returns></returns>
         public long Count(GenericWhereFilter whereFilter, DbTransaction dbTransaction, int commandTimeOut)
         {
-            throw new NotImplementedException();
+            return Count(whereFilter, null, dbTransaction, commandTimeOut);
         }
 
+        /// <summary>
+        /// Counts all records in the Table using an GenericWhereFilter and DbConnection.
+        /// </summary>
+        /// <param name="whereFilter">The where filter.</param>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <returns></returns>
         public long Count(GenericWhereFilter whereFilter, DbConnection dbConnection)
         {
             return Count(whereFilter, dbConnection, null, null);
         }
 
+
+        /// <summary>
+        /// Counts all records in the Table using an GenericWhereFilter, DbConnection and a custom dbCommnad timeout.
+        /// </summary>
+        /// <param name="whereFilter">The where filter.</param>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <param name="commandTimeOut">The command time out.</param>
+        /// <returns></returns>
         public long Count(GenericWhereFilter whereFilter, DbConnection dbConnection, int commandTimeOut)
         {
             return Count(whereFilter, dbConnection, null, commandTimeOut);
-        } 
+        }
 
+        /// <summary>
+        /// Counts all records in the Table using an GenericWhereFilter, DbConnection and DbTransaction.
+        /// </summary>
+        /// <param name="whereFilter">The where filter.</param>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <param name="dbTransaction">The database transaction.</param>
+        /// <returns></returns>
         public long Count(GenericWhereFilter whereFilter, DbConnection dbConnection, DbTransaction dbTransaction)
         {
             return Count(whereFilter, dbConnection, dbTransaction, null);
         }
 
+        /// <summary>
+        /// Counts all records in the Table using an GenericWhereFilter, DbConnection, DbTransaction and a custom dbCommnad timeout.
+        /// </summary>
+        /// <param name="whereFilter">The where filter.</param>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <param name="dbTransaction">The database transaction.</param>
+        /// <param name="commandTimeOut">The command time out.</param>
+        /// <returns></returns>
         public long Count(GenericWhereFilter whereFilter, DbConnection dbConnection, DbTransaction dbTransaction, int? commandTimeOut)
         {
             long result = 0;
@@ -163,41 +297,93 @@ namespace SysWork.Data.GenericRepository
             return result;
         }
 
+        /// <summary>
+        /// Counts all records in the Table using an LambdaExpressionFilter.
+        /// </summary>
+        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
+        /// <returns></returns>
         public long Count(Expression<Func<TEntity, bool>> lambdaExpressionFilter)
         {
             return Count(lambdaExpressionFilter, null, null, null);
         }
 
+        /// <summary>
+        /// Counts all records in the Table using an LambdaExpressionFilter and a custom dbCommnad timeout.
+        /// </summary>
+        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
+        /// <param name="commandTimeOut">The command time out.</param>
+        /// <returns></returns>
         public long Count(Expression<Func<TEntity, bool>> lambdaExpressionFilter, int commandTimeOut)
         {
             return Count(lambdaExpressionFilter, null, null, commandTimeOut);
         }
 
+        /// <summary>
+        /// Counts all records in the Table using an LambdaExpressionFilter and DbTransacrion.
+        /// </summary>
+        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
+        /// <param name="dbTransaction">The database transaction.</param>
+        /// <returns></returns>
         public long Count(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbTransaction dbTransaction)
         {
             return Count(lambdaExpressionFilter, null, dbTransaction, null);
         }
 
+        /// <summary>
+        /// Counts all records in the Table using an LambdaExpressionFilter, DbTransacrion and a custom dbCommnad timeout.
+        /// </summary>
+        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
+        /// <param name="dbTransaction">The database transaction.</param>
+        /// <param name="commandTimeOut">The command time out.</param>
+        /// <returns></returns>
         public long Count(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbTransaction dbTransaction, int commandTimeOut)
         {
             return Count(lambdaExpressionFilter, null, dbTransaction, commandTimeOut);
         }
 
+        /// <summary>
+        /// Counts all records in the Table using an LambdaExpressionFilter and DbConnection.
+        /// </summary>
+        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <returns></returns>
         public long Count(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection)
         {
             return Count(lambdaExpressionFilter, dbConnection, null);
         }
 
+        /// <summary>
+        /// Counts all records in the Table using an LambdaExpressionFilter, DbConnection and a custom dbCommnad timeout.
+        /// </summary>
+        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <param name="commandTimeOut">The command time out.</param>
+        /// <returns></returns>
         public long Count(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, int commandTimeOut)
         {
             return Count(lambdaExpressionFilter, dbConnection, commandTimeOut);
         }
 
+        /// <summary>
+        /// Counts all records in the Table using an LambdaExpressionFilter, DbConnection and DbTransaction.
+        /// </summary>
+        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <param name="dbTransaction">The database transaction.</param>
+        /// <returns></returns>
         public long Count(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, DbTransaction dbTransaction)
         {
             return Count(lambdaExpressionFilter, dbConnection, dbTransaction, null);
         }
 
+        /// <summary>
+        /// Counts all records in the Table using an LambdaExpressionFilter, DbConnection, DbTransaction and a custom dbCommnad timeout.
+        /// </summary>
+        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <param name="dbTransaction">The database transaction.</param>
+        /// <param name="commandTimeOut">The command time out.</param>
+        /// <returns></returns>
         public long Count(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, DbTransaction dbTransaction, int? commandTimeOut)
         {
             long result = 0;

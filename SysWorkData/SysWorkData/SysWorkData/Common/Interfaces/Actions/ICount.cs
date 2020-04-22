@@ -38,34 +38,34 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <summary>
         /// Counts all records in the Table using an DbTransaction.
         /// </summary>
-        /// <param name="DbTransaction">The database transaction.</param>
+        /// <param name="dbTransaction">The database transaction.</param>
         /// <returns></returns>
-        long Count(DbTransaction DbTransaction);
+        long Count(DbTransaction dbTransaction);
 
         /// <summary>
         /// Counts all records in the Table using an DbTransaction and a custom dbCommnad timeout.
         /// </summary>
-        /// <param name="DbTransaction">The database transaction.</param>
+        /// <param name="dbTransaction">The database transaction.</param>
         /// <param name="commandTimeOut">The command time out.</param>
         /// <returns></returns>
-        long Count(DbTransaction DbTransaction, int commandTimeOut);
+        long Count(DbTransaction dbTransaction, int commandTimeOut);
 
         /// <summary>
         /// Counts all records in the Table using an DbConnection and DbTransaction.
         /// </summary>
         /// <param name="dbConnection">The database connection.</param>
-        /// <param name="DbTransaction">The database transaction.</param>
+        /// <param name="dbTransaction">The database transaction.</param>
         /// <returns></returns>
-        long Count(DbConnection dbConnection, DbTransaction DbTransaction);
+        long Count(DbConnection dbConnection, DbTransaction dbTransaction);
 
         /// <summary>
         /// Counts all records in the Table using an DbConnection, DbTransaction and a custom dbCommnad timeout.
         /// </summary>
         /// <param name="dbConnection">The database connection.</param>
-        /// <param name="DbTransaction">The database transaction.</param>
+        /// <param name="dbTransaction">The database transaction.</param>
         /// <param name="commandTimeOut">The command time out.</param>
         /// <returns></returns>
-        long Count(DbConnection dbConnection, DbTransaction DbTransaction, int commandTimeOut);
+        long Count(DbConnection dbConnection, DbTransaction dbTransaction, int? commandTimeOut);
 
         /// <summary>
         /// Counts all records in the Table using an GenericWhereFilter.
