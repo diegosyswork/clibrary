@@ -3,7 +3,7 @@
 namespace SysWork.Data.Common.Attributes
 {
     /// <summary>
-    /// 
+    /// Configures the name of the db view related to this entity. 
     /// </summary>
     /// <seealso cref="System.Attribute" />
     [AttributeUsage(AttributeTargets.Class)]

@@ -75,7 +75,7 @@ namespace SysWork.Data.Common.DbConnector
                 frmGetParamSQL.DataBase = connectionSb.InitialCatalog;
                 frmGetParamSQL.ConnectionString = ConnectionString;
 
-                frmGetParamSQL.ErrMessage = "Ha ocurrido el siguiente error: \r\r" + errMessage;
+                frmGetParamSQL.ErrMessage = string.IsNullOrEmpty(errMessage) ? "" : "Ha ocurrido el siguiente error: \r\r" + errMessage;
 
                 frmGetParamSQL.ShowDialog();
 

@@ -65,7 +65,7 @@ namespace SysWork.Data.Common.DbConnector
 
                 frmGetParamSQLite.ConnectionString = ConnectionString;
 
-                frmGetParamSQLite.ErrMessage = "Ha ocurrido el siguiente error: \r\r" + ConnectionError;
+                frmGetParamSQLite.ErrMessage = string.IsNullOrEmpty(ConnectionError) ? "" : "Ha ocurrido el siguiente error: \r\r" + ConnectionError;
 
                 frmGetParamSQLite.ShowDialog();
 

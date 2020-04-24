@@ -66,7 +66,7 @@ namespace SysWork.Data.Common.DbConnector
 
                 frmGetParamOleDb.ConnectionString = ConnectionString;
 
-                frmGetParamOleDb.ErrMessage = "Ha ocurrido el siguiente error: \r\r" + errMessage;
+                frmGetParamOleDb.ErrMessage = string.IsNullOrEmpty(errMessage) ? "" : "Ha ocurrido el siguiente error: \r\r" + errMessage;
 
                 frmGetParamOleDb.ShowDialog();
 

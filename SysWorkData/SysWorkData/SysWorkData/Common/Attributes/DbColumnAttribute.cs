@@ -13,22 +13,19 @@ namespace SysWork.Data.Common.Attributes
     /// [DbTable(Name = "Persons")]
     /// public class Person
     /// {
-    ///     [DbColumn(IsIdentity = True)]
+    ///     [DbColumn(IsIdentity = True, IsPrimary = True)]
     ///     public long IdPerson {get; set;}
     ///     
-    ///     [DbColumn(IsPrimary = True)]
+    ///     [DbColumn]
     ///     public string LastName {get; set;}
     ///     
-    ///     [DbColumn(IsPrimary = True)]
+    ///     [DbColumn]
     ///     public string FirstName {get; set;}
     ///     
-    ///     [DbColumn(IsPrimary = True)]
+    ///     [DbColumn]
     ///     public string PassPort {get; set;}
     ///     
-    ///     [DbColumn(IsPrimary = True)]
-    ///     public string BirthDay {get; set;}
-    ///     
-    ///     [DbColumn(ColumnName = Birth Day")]
+    ///     [DbColumn(ColumnName = "Birth Day")]
     ///     public string Birth_Day {get; set;}
     /// }
     /// ]]>

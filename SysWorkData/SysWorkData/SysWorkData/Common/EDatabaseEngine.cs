@@ -1,6 +1,3 @@
-/// <summary>
-/// 
-/// </summary>
 namespace SysWork.Data.Common
 {
     /// <summary>

@@ -47,6 +47,8 @@ namespace SysWork.Data.Common.FormsGetParam
             {
                 this.Height = this.Height - txtErrMessage.Height;
             }
+
+            this.CenterToScreen();
         }
 
         private void BtnAceptar_Click(object sender, EventArgs e)

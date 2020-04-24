@@ -12,9 +12,11 @@ namespace SysWork.Data.Logger
     /// <summary>
     /// Logger ** DEPRECATED ** ONLY FOR RETROCOMPATIBILITY
     /// </summary>
+    [Obsolete("Use DbLogger")]
     public class LoggerDb
     {
         /// <summary></summary>
+        [Obsolete("Obsolete")]
         public enum ELoggerDbTagError
         {
             /// <summary>
@@ -42,6 +44,7 @@ namespace SysWork.Data.Logger
 
         /// <summary>
         /// </summary>
+        [Obsolete("Obsolete")]
         public enum ELoggerDbTagInfo
         {
             /// <summary>
@@ -233,42 +236,49 @@ namespace SysWork.Data.Logger
 
         /// <summary>
         /// </summary>
+        [Obsolete("Use DbLogger")]
         public static bool Log(string mensaje)
         {
             return Logger(DateTime.Now, mensaje);
         }
         /// <summary>
         /// </summary>
+        [Obsolete("Use DbLogger")]
         public static bool Log(string tag, string mensaje)
         {
             return Logger(DateTime.Now, mensaje: mensaje, tag: tag);
         }
         /// <summary>
         /// </summary>
+        [Obsolete("Use DbLogger")]
         public static bool Log(string tag, string mensaje, Exception excepcion)
         {
             return Logger(DateTime.Now, mensaje: mensaje, tag: tag, excepcion: excepcion.ToString());
         }
         /// <summary>
         /// </summary>
+        [Obsolete("Use DbLogger")]
         public static bool Log(string tag, string mensaje, string usuario)
         {
             return Logger(DateTime.Now, mensaje: mensaje, tag: tag, usuario: usuario);
         }
         /// <summary>
         /// </summary>
+        [Obsolete("Use DbLogger")]
         public static bool Log(string tag, string mensaje, string excepcion, string sentenciaSQL)
         {
             return Logger(DateTime.Now, mensaje: mensaje, tag: tag, excepcion: excepcion, sentenciaSQL: sentenciaSQL);
         }
         /// <summary>
         /// </summary>
+        [Obsolete("Use DbLogger")]
         private static bool Log(DateTime fechaHora, string mensaje, string usuario = null, string tag = null, string modulo = null, string metodo = null, string sentenciaSQL = null, string parametros = null, string resultado = null, string excepcion = null)
         {
             return Logger(fechaHora, mensaje, usuario, tag, modulo, metodo, sentenciaSQL, parametros, resultado, excepcion);
         }
         /// <summary>
         /// </summary>
+        [Obsolete("Use DbLogger")]
         public static bool Log(string tag, IDbCommand dbCommand)
         {
             string sentenciaSQL = (dbCommand == null) ? DbUtil.ConvertCommandParamatersToLiteralValues((dbCommand)) : null;
@@ -276,6 +286,7 @@ namespace SysWork.Data.Logger
         }
         /// <summary>
         /// </summary>
+        [Obsolete("Use DbLogger")]
         public static bool Log(string tag, string mensaje, IDbCommand dbCommand)
         {
             string sentenciaSQL = (dbCommand == null) ? DbUtil.ConvertCommandParamatersToLiteralValues((dbCommand)) : null;
@@ -283,6 +294,7 @@ namespace SysWork.Data.Logger
         }
         /// <summary>
         /// </summary>
+        [Obsolete("Use DbLogger")]
         public static bool Log(string tag, IDbCommand dbCommand, Exception exception)
         {
 
@@ -291,6 +303,7 @@ namespace SysWork.Data.Logger
         }
         /// <summary>
         /// </summary>
+        [Obsolete("Use DbLogger")]
         public static bool Log(string tag, Exception exception)
         {
             return Logger(DateTime.Now, tag: tag, mensaje: "", sentenciaSQL: "", excepcion: exception.ToString());

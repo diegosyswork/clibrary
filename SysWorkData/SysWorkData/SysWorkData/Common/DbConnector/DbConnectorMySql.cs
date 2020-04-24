@@ -76,7 +76,7 @@ namespace SysWork.Data.Common.DbConnector
                 frmGetParamMySQL.DataBase = connectionSb.Database;
                 frmGetParamMySQL.ConnectionString = ConnectionString;
 
-                frmGetParamMySQL.ErrMessage = "Ha ocurrido el siguiente error: \r\r" + errMessage;
+                frmGetParamMySQL.ErrMessage = string.IsNullOrEmpty(errMessage) ? "" : "Ha ocurrido el siguiente error: \r\r" + errMessage;
 
                 frmGetParamMySQL.ShowDialog();
 
