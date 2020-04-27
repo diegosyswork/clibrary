@@ -10,6 +10,7 @@ using System.Text;
 using SysWork.Data.Common;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.Syntax;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.GenericRepository.CodeWriter
 {

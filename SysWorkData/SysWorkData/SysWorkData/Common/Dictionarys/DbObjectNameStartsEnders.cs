@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.Dictionarys
 {

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.Attributes;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.Mapper
 {

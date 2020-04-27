@@ -1,4 +1,5 @@
 ﻿using System;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.DbConnector
 {
@@ -88,6 +89,15 @@ namespace SysWork.Data.Common.DbConnector
         /// Muestra el ultimo mensaje de error ocurrido al intentar abrir la conecction.
         /// </summary>
         public string ConnectionError{get { return _dbObjectConnector.ConnectionError; } private set { } }
+
+        /// <summary>
+        /// Gets the parameter type used.
+        /// </summary>
+        /// <value>
+        /// The parameter type used.
+        /// </value>
+        public EConnectorParameterTypeUsed ParameterTypeUsed { get { return _dbObjectConnector.ConnectorParameterTypeUsed; } private set { } }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DataBaseConnector"/> class. DataBaseEngine is MSSQLServer.
         /// </summary>
@@ -122,11 +132,11 @@ namespace SysWork.Data.Common.DbConnector
                     _dbObjectConnector = new DbConnectorMySql();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("El motor de base de datos informado no esta admitido para esta clase");
+                    throw new ArgumentOutOfRangeException("The dataBaseEngine is not supported by this method");
             }
         }
         /// <summary>
-        /// Connects this instance.
+        /// Connect Method.
         /// </summary>
         public void Connect()
         {

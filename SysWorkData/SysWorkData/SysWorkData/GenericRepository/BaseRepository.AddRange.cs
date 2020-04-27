@@ -9,6 +9,7 @@ using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.Common.DbInfo;
 using SysWork.Data.Common.Interfaces.Actions;
 using System.Collections.Generic;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.GenericRepository
 {

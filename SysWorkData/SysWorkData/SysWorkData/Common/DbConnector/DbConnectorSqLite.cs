@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 using SysWork.Data.Common.FormsGetParam;
 using SysWork.Data.Common.Utilities;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.DbConnector
 {
@@ -19,6 +20,8 @@ namespace SysWork.Data.Common.DbConnector
         /// <exception cref="ArgumentException">The ConnectionStringName is not set.</exception>
         public override void Connect()
         {
+            ConnectorParameterTypeUsed = EConnectorParameterTypeUsed.ConnectionString;
+
             if (TryGetConnectionStringFromConfig)
             {
                 if (string.IsNullOrEmpty(ConnectionStringName))

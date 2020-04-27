@@ -11,6 +11,7 @@ using MySql.Data.MySqlClient;
 using System.Windows.Forms;
 using SysWork.Data.Common.DataObjectProvider;
 using System.Text;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.Utilities
 {

@@ -43,12 +43,12 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
         /// <summary>
         /// Adds the database table attribute.
         /// </summary>
-        /// <param name="dbTableName">Name of the database table.</param>
+        /// <param name="dbViewName">Name of the database table.</param>
         /// <returns></returns>
-        public static string AddDbViewAttribute(string dbTableName)
+        public static string AddDbViewAttribute(string dbViewName)
         {
             string ret;
-            ret = string.Format("\t[DbView (Name = \"{0}\")]", dbTableName);
+            ret = string.Format("\t[DbView (Name = \"{0}\")]", dbViewName);
             return ret;
         }
 
@@ -178,6 +178,5 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
 
             return ret;
         }
-
     }
 }

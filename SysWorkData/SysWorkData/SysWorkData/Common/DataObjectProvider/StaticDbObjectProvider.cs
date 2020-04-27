@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Data.SQLite;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.DataObjectProvider
 {

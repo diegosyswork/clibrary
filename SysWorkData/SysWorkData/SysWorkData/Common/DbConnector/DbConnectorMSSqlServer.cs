@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using SysWork.Data.Common.FormsGetParam;
 using SysWork.Data.Common.Utilities;
 using System.Data.SqlClient;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.DbConnector
 {
@@ -12,6 +13,7 @@ namespace SysWork.Data.Common.DbConnector
     /// </summary>
     public class DbConnectorMSSqlServer : AbstractDbConnector
     {
+
         /// <summary>
         /// Try to connect with the specified parameters.
         /// </summary>
@@ -37,6 +39,7 @@ namespace SysWork.Data.Common.DbConnector
                 connectionSb.UserID = DefaultUser ?? "";
                 connectionSb.Password = DefaultPassword ?? "";
                 connectionSb.InitialCatalog = DefaultDatabase ?? "";
+                ConnectorParameterTypeUsed = EConnectorParameterTypeUsed.ManualParameter;
             }
             else
             {
@@ -49,6 +52,7 @@ namespace SysWork.Data.Common.DbConnector
                     connectionSb.DataSource = DbUtil.Decrypt(connectionSb.DataSource);
                     connectionSb.InitialCatalog = DbUtil.Decrypt(connectionSb.InitialCatalog);
                 }
+                ConnectorParameterTypeUsed = EConnectorParameterTypeUsed.ConnectionString;
             }
 
             bool hasConnectionSuccess = false;
@@ -76,11 +80,15 @@ namespace SysWork.Data.Common.DbConnector
                 frmGetParamSQL.ConnectionString = ConnectionString;
 
                 frmGetParamSQL.ErrMessage = string.IsNullOrEmpty(errMessage) ? "" : "Ha ocurrido el siguiente error: \r\r" + errMessage;
+                frmGetParamSQL.ParameterTypeUsed = ConnectorParameterTypeUsed;
 
                 frmGetParamSQL.ShowDialog();
 
+                ConnectorParameterTypeUsed = frmGetParamSQL.ParameterTypeUsed;
+
                 if (frmGetParamSQL.DialogResult == DialogResult.OK)
                 {
+
                     if (!string.IsNullOrEmpty(frmGetParamSQL.ConnectionString))
                     {
                         ConnectionString  = frmGetParamSQL.ConnectionString;
@@ -125,7 +133,6 @@ namespace SysWork.Data.Common.DbConnector
                 else
                     if (UserGotParameters)
                         DbUtil.EditConnectionStringInConfig(ConnectionStringName, connectionSb.ToString());
-
             }
         }
     }

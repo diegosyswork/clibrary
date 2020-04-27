@@ -243,10 +243,10 @@
             this.Controls.Add(this.grpConnectionString);
             this.Controls.Add(this.grpManualParameters);
             this.Controls.Add(this.rbtnParametrosManuales);
-            this.Controls.Add(this.txtErrMessage);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.txtErrMessage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "FrmGetParamMySQL";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

@@ -2,10 +2,36 @@
 
 namespace SysWork.Data.Common.Attributes
 {
+    #region DOCUMENTATION Class
     /// <summary>
-    /// Configures the name of the db view related to this entity. 
+    /// Use this class to decorate the properties of a class that represents a database view. 
+    /// Supports view names with special characters.
     /// </summary>
-    /// <seealso cref="System.Attribute" />
+    /// <example>
+    /// <code>
+    /// <![CDATA[
+    /// [DbView(Name = "Persons")]
+    /// public class Person
+    /// {
+    ///     [DbColumn]
+    ///     public long IdPerson {get; set;}
+    ///     
+    ///     [DbColumn]
+    ///     public string LastName {get; set;}
+    ///     
+    ///     [DbColumn]
+    ///     public string FirstName {get; set;}
+    ///     
+    ///     [DbColumn]
+    ///     public string PassPort {get; set;}
+    ///     
+    ///     [DbColumn(ColumnName = "Birth Day")]
+    ///     public string Birth_Day {get; set;}
+    /// }
+    /// ]]>
+    /// </code>
+    /// </example>
+    #endregion
     [AttributeUsage(AttributeTargets.Class)]
     public class DbViewAttribute : Attribute
     {

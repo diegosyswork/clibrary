@@ -1,5 +1,6 @@
 ﻿using Demo.SysWork.Data.V2.Entities;
 using SysWork.Data.Common;
+using SysWork.Data.Common.ValueObjects;
 using SysWork.Data.GenericViewManager;
 
 namespace Demo.SysWork.Data.Repositories

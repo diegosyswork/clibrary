@@ -3,6 +3,7 @@ using System.Data.OleDb;
 using System.Windows.Forms;
 using SysWork.Data.Common.FormsGetParam;
 using SysWork.Data.Common.Utilities;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.DbConnector
 {
@@ -15,13 +16,15 @@ namespace SysWork.Data.Common.DbConnector
         /// <summary>
         /// try to connect to the specified parameters.
         /// </summary>
-        /// <exception cref="ArgumentException">The ConnectionStringName is nos set.</exception>
+        /// <exception cref="ArgumentException">The ConnectionStringName is not set.</exception>
         public override void Connect()
         {
+            ConnectorParameterTypeUsed = EConnectorParameterTypeUsed.ConnectionString;
+
             if (TryGetConnectionStringFromConfig)
             {
                 if (string.IsNullOrEmpty(ConnectionStringName))
-                    throw new ArgumentException("The ConnectionStringName is nos set.");
+                    throw new ArgumentException("The ConnectionStringName is not set.");
 
                 if (DbUtil.ExistsConnectionStringInConfig(ConnectionStringName))
                     ConnectionString = DbUtil.GetConnectionStringFromConfig(ConnectionStringName);
@@ -44,7 +47,6 @@ namespace SysWork.Data.Common.DbConnector
                     }
                 }
             }
-
 
             bool hasConnectionSuccess = false;
             string errMessage = "";

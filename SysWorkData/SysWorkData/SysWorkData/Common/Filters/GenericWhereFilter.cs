@@ -5,11 +5,13 @@ using System.Reflection;
 using System.Text;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.Attributes;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.Filters
 {
     /// <summary>
     /// Generic class to help the creation of clauses where. 
+    /// Makes it easy to create select, delete and update queries.
     /// </summary>
     /// <remarks>
     /// Generic class to help the creation of clauses where. 
@@ -17,12 +19,27 @@ namespace SysWork.Data.Common.Filters
     /// If not specify DatabaseEngine, the default is MSSqlServer.
     /// </remarks>
     /// <example>
+    /// <code>
     /// <![CDATA[
-    ///
     /// 
+    ///   var whereFilterSelect = new GenericWhereFilter(EDataBaseEngine.MSSqlServer);
+    ///   
+    ///   // Sets the columns for select
+    ///   whereFilterSelect.SetColumnsForSelect<TEntity>();
+    ///   
+    ///   // Sets the table name (using an Generic Type)
+    ///   whereFilterSelect.SetTableOrViewName<TEntity>();
+    ///   
+    ///   string where = "  (BirthDate >= @pBirthDate) AND Active = @pActive";
+    ///   
+    ///   whereFilterSelect.SetWhere(textFilter)
+    ///   .AddParameter("@pBirthDate", new DateTime(2014, 1, 1), DbType.DateTime)
+    ///   .AddParameter("@pActive", 1, DbType.Boolean);
+    ///   
+    ///   var selectQueryString = whereFilterSelect.SelectQueryString;
     /// 
     /// ]]>
-    /// </example>
+    /// </code>
     public class GenericWhereFilter
     {
         private const string _filterParameterPrefix = "@p_dbex_";

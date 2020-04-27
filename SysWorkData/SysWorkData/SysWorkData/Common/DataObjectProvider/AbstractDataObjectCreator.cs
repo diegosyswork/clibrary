@@ -47,7 +47,7 @@ namespace SysWork.Data.Common.DataObjectProvider
         public abstract DbConnectionStringBuilder GetDbConnectionStringBuilder();
 
         /// <summary>
-        /// Gets the database data adapter.
+        /// Return an DbDataAdapter.
         /// </summary>
         /// <returns></returns>
         public abstract DbDataAdapter GetDbDataAdapter();

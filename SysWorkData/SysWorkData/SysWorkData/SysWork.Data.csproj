@@ -40,6 +40,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Common\ValueObjects\EConnectorParameterTypeUsed.cs" />
     <Compile Include="Common\Interfaces\Actions\IRecordCount.cs" />
     <Compile Include="Common\Interfaces\Actions\IExists.cs" />
     <Compile Include="Common\Utilities\DbExecutor.cs" />
@@ -156,7 +157,7 @@
       <DependentUpon>FrmGetParamSQLite.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\DataObjectProvider\StaticDbObjectProvider.cs" />
-    <Compile Include="Common\EDatabaseEngine.cs" />
+    <Compile Include="Common\ValueObjects\EDatabaseEngine.cs" />
     <Compile Include="Common\Mapper\MapDataReaderToEntity.cs" />
     <Compile Include="GenericDataManager\Intefaces\IDataManager.cs" />
     <Compile Include="GenericViewManager\BaseViewManager.GetAll.cs" />

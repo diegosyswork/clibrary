@@ -15,6 +15,7 @@ using SysWork.Data.GenericRepository.CodeWriter;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.LoggerDb;
 using SysWork.Data.Common.Syntax;
+using SysWork.Data.Common.ValueObjects;
 
 namespace Demo.SysWork.Data
 {
@@ -126,9 +127,15 @@ namespace Demo.SysWork.Data
             dbConnector.ConnectionString = TxtConnectionString.Text;
             dbConnector.PromptUser = true;
             dbConnector.BeforeConnectShowDefaultsParameters = true;
+            dbConnector.DefaultDatabase = "TEST_SYSWORK_DATA";
+
             dbConnector.Connect();
             if (dbConnector.IsConnectionSuccess)
                 TxtConnectionString.Text = dbConnector.ConnectionString;
+
+            var x = dbConnector.ParameterTypeUsed;
+
+
         }
 
         enum EState

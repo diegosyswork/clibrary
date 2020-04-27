@@ -1,4 +1,4 @@
-namespace SysWork.Data.Common
+namespace SysWork.Data.Common.ValueObjects
 {
     /// <summary>
     /// Supported Database Engines

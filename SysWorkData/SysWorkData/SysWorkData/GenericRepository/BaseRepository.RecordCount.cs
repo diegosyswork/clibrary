@@ -9,6 +9,7 @@ using SysWork.Data.Common.Filters;
 using SysWork.Data.Common.Interfaces.Actions;
 using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.Utilities;
+using SysWork.Data.Common.ValueObjects;
 using SysWork.Data.GenericRepository.Exceptions;
 
 namespace SysWork.Data.GenericRepository

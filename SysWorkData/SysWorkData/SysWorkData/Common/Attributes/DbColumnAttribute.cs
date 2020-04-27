@@ -4,8 +4,8 @@ namespace SysWork.Data.Common.Attributes
 {
     #region DOCUMENTATION Class
     /// <summary>
-    /// Use this class to decorate the properties of a class that represents a database entity. 
-    /// Supports Columns columns with special characters.
+    /// Use this class to decorate the properties of a class that represents a database column. 
+    /// supports column names with special characters.
     /// </summary>
     /// <example>
     /// <code>
@@ -46,7 +46,7 @@ namespace SysWork.Data.Common.Attributes
         public string ColumnName { get; set; } = null;
         
         /// <summary>
-        /// Sets true if requieres implicit conversion.
+        /// Sets true if requieres explicit conversion.
         /// </summary>
         public bool Convert { get; set; }
         

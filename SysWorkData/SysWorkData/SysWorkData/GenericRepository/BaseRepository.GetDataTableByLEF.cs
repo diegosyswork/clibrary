@@ -8,6 +8,7 @@ using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.Common.Interfaces.Actions;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.GenericRepository
 {

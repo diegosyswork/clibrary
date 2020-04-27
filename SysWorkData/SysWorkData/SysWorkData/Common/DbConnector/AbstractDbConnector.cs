@@ -1,4 +1,6 @@
-﻿namespace SysWork.Data.Common.DbConnector
+﻿using SysWork.Data.Common.ValueObjects;
+
+namespace SysWork.Data.Common.DbConnector
 {
 
     /// <summary>
@@ -105,6 +107,14 @@
         /// Gets the last error message.
         /// </summary>
         public string ConnectionError { get; protected set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the connector parameter type used.
+        /// </summary>
+        /// <value>
+        /// The connector parameter type used.
+        /// </value>
+        public EConnectorParameterTypeUsed ConnectorParameterTypeUsed { get; set; } = EConnectorParameterTypeUsed.ManualParameter;
 
         /// <summary>
         /// try to connect to the specified parameters.

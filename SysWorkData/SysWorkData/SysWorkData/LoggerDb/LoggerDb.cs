@@ -6,6 +6,7 @@ using SysWork.Data.Common;
 using SysWork.Data.Common.Utilities;
 using SysWork.Data.GenericRepository;
 using SysWork.Data.Common.Attributes;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Logger
 {

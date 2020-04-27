@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using SysWork.Data.Common;
 using SysWork.Data.Common.Syntax;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.GenericViewManager.CodeWriter
 {

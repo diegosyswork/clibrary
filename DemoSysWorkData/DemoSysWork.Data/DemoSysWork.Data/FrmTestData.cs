@@ -14,6 +14,7 @@ using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 using SysWork.Data.Common.DbConnector;
 using SysWork.Data.LoggerDb;
+using SysWork.Data.Common.ValueObjects;
 
 namespace TestSysWorkData
 {

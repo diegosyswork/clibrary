@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using SysWork.Data.Common.Utilities;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.FormsGetParam
 {
@@ -57,6 +58,16 @@ namespace SysWork.Data.Common.FormsGetParam
         /// The error message.
         /// </value>
         public string ErrMessage { get; set; }
+
+        /// <summary>
+        /// Gets the parameters used.
+        /// </summary>
+        /// <value>
+        /// The parameters used.
+        /// </value>
+        public EConnectorParameterTypeUsed ParameterTypeUsed { get; set; }
+
+
         public FrmGetParamMySQL()
         {
             InitializeComponent();
@@ -71,7 +82,7 @@ namespace SysWork.Data.Common.FormsGetParam
 
             txtConnectionString.Text = ConnectionString;
 
-            rbtnConnectionString.Checked = !string.IsNullOrEmpty(ConnectionString);
+            rbtnConnectionString.Checked = (ParameterTypeUsed == EConnectorParameterTypeUsed.ConnectionString);
 
             txtErrMessage.Text = ErrMessage;
             txtErrMessage.Refresh();
@@ -96,6 +107,9 @@ namespace SysWork.Data.Common.FormsGetParam
             DataBase = txtDataBase.Text;
 
             ConnectionString = txtConnectionString.Text;
+
+            ParameterTypeUsed = rbtnConnectionString.Checked ? EConnectorParameterTypeUsed.ConnectionString : EConnectorParameterTypeUsed.ManualParameter;
+
             if (rbtnConnectionString.Checked)
             {
                 if (string.IsNullOrEmpty(ConnectionString.Trim()))

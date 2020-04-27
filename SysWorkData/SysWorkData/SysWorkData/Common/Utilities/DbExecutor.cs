@@ -7,6 +7,7 @@ using System.Linq;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.Syntax;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.Utilities
 {
@@ -88,13 +89,14 @@ namespace SysWork.Data.Common.Utilities
         private DbObjectProvider _dataObjectProvider;
         private SyntaxProvider _syntaxProvider;
 
+        private int _defaultCommandTimeOut = 30;
         /// <summary>
         /// Gets or sets the default command time out.
         /// </summary>
         /// <value>
         /// The default command time out.
         /// </value>
-        public int DefaultCommandTimeOut { get; set; } = 30;
+        public int DefaultCommandTimeOut { get { return _defaultCommandTimeOut; } set { _defaultCommandTimeOut = value; } } 
 
         /// <summary>
         /// Gets the SQL query.
@@ -537,7 +539,7 @@ namespace SysWork.Data.Common.Utilities
         #endregion 
         public long ExecuteNonQuery()
         {
-            return ExecuteNonQuery(_dbConnection, _dbTransaction);
+            return ExecuteNonQuery(_dbConnection, _dbTransaction,null);
         }
 
         #region DOCUMENTATION ExecuteNonQuery(int dbCommandTimeOut)
@@ -591,6 +593,7 @@ namespace SysWork.Data.Common.Utilities
         /// An long with the records affecteds by the query.
         /// </returns>
         #endregion 
+
         public long ExecuteNonQuery(int dbCommandTimeOut)
         {
             return ExecuteNonQuery(_dbConnection, _dbTransaction, dbCommandTimeOut);
@@ -600,47 +603,36 @@ namespace SysWork.Data.Common.Utilities
         /// <summary>
         /// Run an IDbCommand with the SQLQuery using the ExecuteNonQuery() method.
         /// </summary>
-        /// <param name="paramConnection">The parameter connection.</param>
+        /// <param name="dbConnection">The parameter connection.</param>
         /// <param name="dbTransaction">The database transaction.</param>
         /// <param name="dbCommandTimeOut">CommandTimeOut form this execution</param>
         /// <returns>
         /// An long with the recordsAffecteds.
         /// </returns>
         #endregion
-        private long ExecuteNonQuery(IDbConnection paramConnection, IDbTransaction dbTransaction, int dbCommandTimeOut = -1)
+        private long ExecuteNonQuery(IDbConnection dbConnection, IDbTransaction dbTransaction, int? dbCommandTimeOut = -1)
         {
             if (_isInsertQuery) NormalizeInsertQuery();
             if (_isUpdateQuery) NormalizeUpdateQuery();
 
-            if (dbCommandTimeOut == -1) dbCommandTimeOut = DefaultCommandTimeOut;
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
-            bool closeConnection = ((paramConnection == null) && (dbTransaction == null));
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
 
-            if (paramConnection == null && dbTransaction != null)
-                paramConnection = dbTransaction.Connection;
+            IDbConnection dbConnectionInUse = dbConnection ?? _dataObjectProvider.GetIDbConnection(_connectionString);
+            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
-            IDbConnection dbConnection;
-            if (paramConnection == null)
-            {
-                dbConnection = _dataObjectProvider.GetIDbConnection();
-                dbConnection.ConnectionString = _connectionString;
-            }
-            else
-            {
-                dbConnection = paramConnection;
-            }
-
-            IDbCommand dbCommand = dbConnection.CreateCommand();
             try
             {
-                if (dbConnection.State != ConnectionState.Open)
-                    dbConnection.Open();
+                if (dbConnectionInUse.State != ConnectionState.Open)
+                    dbConnectionInUse.Open();
 
                 if (dbTransaction != null)
                     dbCommand.Transaction = dbTransaction;
 
                 dbCommand.CommandText = _sqlQuery;
-                dbCommand.CommandTimeout = dbCommandTimeOut;
+                dbCommand.CommandTimeout = dbCommandTimeOut ?? _defaultCommandTimeOut;
 
                 foreach (var param in _queryParameters)
                 {
@@ -671,10 +663,10 @@ namespace SysWork.Data.Common.Utilities
             }
             finally
             {
-                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
                 {
-                    dbConnection.Close();
-                    dbConnection.Dispose();
+                    dbConnectionInUse.Close();
+                    dbConnectionInUse.Dispose();
                 }
             }
         }
@@ -745,7 +737,7 @@ namespace SysWork.Data.Common.Utilities
         #endregion
         public object ExecuteScalar()
         {
-            return ExecuteScalar(_dbConnection, _dbTransaction);
+            return ExecuteScalar(_dbConnection, _dbTransaction, null);
         }
 
 
@@ -821,7 +813,7 @@ namespace SysWork.Data.Common.Utilities
         /// <summary>
         /// Run an IDbCommand with the SQLQuery using the ExecuteScalar() method and use the IDbConnection and the IDbTransaction provided.
         /// </summary>
-        /// <param name="paramConnection">The parameter connection.</param>
+        /// <param name="dbConnection">The parameter connection.</param>
         /// <param name="dbTransaction">The database transaction.</param>
         /// <param name="dbCommandTimeOut">CommandTimeOut for this execution</param>
         /// <example>
@@ -850,40 +842,29 @@ namespace SysWork.Data.Common.Utilities
         /// An object that must then be converted to obtain the query result value.
         /// </returns>
         #endregion
-        private object ExecuteScalar(IDbConnection paramConnection, IDbTransaction dbTransaction, int dbCommandTimeOut = -1)
+        private object ExecuteScalar(IDbConnection dbConnection, IDbTransaction dbTransaction, int? dbCommandTimeOut)
         {
             if (_isInsertQuery) NormalizeInsertQuery();
             if (_isUpdateQuery) NormalizeUpdateQuery();
 
-            if (dbCommandTimeOut == -1) dbCommandTimeOut = DefaultCommandTimeOut;
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
-            bool closeConnection = ((paramConnection == null) && (dbTransaction == null));
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
 
-            if (paramConnection == null && dbTransaction != null)
-                paramConnection = dbTransaction.Connection;
+            IDbConnection dbConnectionInUse = dbConnection ?? _dataObjectProvider.GetIDbConnection(_connectionString);
+            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
-            IDbConnection dbConnection;
-            if (paramConnection == null)
-            {
-                dbConnection = _dataObjectProvider.GetIDbConnection();
-                dbConnection.ConnectionString = _connectionString;
-            }
-            else
-            {
-                dbConnection = paramConnection;
-            }
-
-            IDbCommand dbCommand = dbConnection.CreateCommand();
             try
             {
-                if (dbConnection.State != ConnectionState.Open)
-                    dbConnection.Open();
+                if (dbConnectionInUse.State != ConnectionState.Open)
+                    dbConnectionInUse.Open();
 
                 if (dbTransaction != null)
                     dbCommand.Transaction = dbTransaction;
                 
                 dbCommand.CommandText = _sqlQuery;
-                dbCommand.CommandTimeout = dbCommandTimeOut;
+                dbCommand.CommandTimeout = dbCommandTimeOut ?? _defaultCommandTimeOut;
 
                 foreach (var param in _queryParameters)
                 {
@@ -920,10 +901,10 @@ namespace SysWork.Data.Common.Utilities
             }
             finally
             {
-                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
+                if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
                 {
-                    dbConnection.Close();
-                    dbConnection.Dispose();
+                    dbConnectionInUse.Close();
+                    dbConnectionInUse.Dispose();
                 }
             }
         }
@@ -981,7 +962,7 @@ namespace SysWork.Data.Common.Utilities
         #endregion
         public IDataReader ExecuteReader()
         {
-            return ExecuteReader(_dbConnection, _dbTransaction);
+            return ExecuteReader(_dbConnection, _dbTransaction,null);
         }
 
         #region DOCUMENTATION ExecuteReader(int dbCommandTextTimeOut)
@@ -1045,40 +1026,31 @@ namespace SysWork.Data.Common.Utilities
         /// <summary>
         /// Run an IDbCommand with the SQLQuery using the ExecuteReader(int dbCommandTextTimeOut) method.
         /// </summary>
-        /// <param name="paramConnection">The parameter connection.</param>
+        /// <param name="dbConnection">The parameter connection.</param>
         /// <param name="dbTransaction">The database transaction.</param>
         /// <param name="dbCommandTimeout">The DbCommand timeout for this execution.</param>
         /// <returns></returns>
-        private IDataReader ExecuteReader(IDbConnection paramConnection, IDbTransaction dbTransaction, int dbCommandTimeout = -1)
+        private IDataReader ExecuteReader(IDbConnection dbConnection, IDbTransaction dbTransaction, int? dbCommandTimeout)
         {
-            bool closeConnection = ((paramConnection == null) && (dbTransaction == null));
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
             if (dbCommandTimeout == -1) dbCommandTimeout = DefaultCommandTimeOut;
 
-            if (paramConnection == null && dbTransaction != null)
-                paramConnection = dbTransaction.Connection;
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
 
-            IDbConnection dbConnection;
-            if (paramConnection == null)
-            {
-                dbConnection = _dataObjectProvider.GetIDbConnection();
-                dbConnection.ConnectionString = _connectionString;
-            }
-            else
-            {
-                dbConnection = paramConnection;
-            }
+            IDbConnection dbConnectionInUse = dbConnection ?? _dataObjectProvider.GetIDbConnection(_connectionString);
+            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
-            IDbCommand dbCommand = dbConnection.CreateCommand();
             try
             {
-                if (dbConnection.State != ConnectionState.Open)
-                    dbConnection.Open();
+                if (dbConnectionInUse.State != ConnectionState.Open)
+                    dbConnectionInUse.Open();
 
                 if (dbTransaction != null)
                     dbCommand.Transaction = dbTransaction;
 
                 dbCommand.CommandText = _sqlQuery;
-                dbCommand.CommandTimeout = dbCommandTimeout;
+                dbCommand.CommandTimeout = dbCommandTimeout ?? _defaultCommandTimeOut;
 
                 foreach (var param in _queryParameters)
                 {
@@ -1104,10 +1076,10 @@ namespace SysWork.Data.Common.Utilities
             }
             catch (Exception exception)
             {
-                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open))
+                if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open))
                 {
-                    dbConnection.Close();
-                    dbConnection.Dispose();
+                    dbConnectionInUse.Close();
+                    dbConnectionInUse.Dispose();
                 }
 
                 throw exception;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using SysWork.Data.Common.Utilities;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.FormsGetParam
 {

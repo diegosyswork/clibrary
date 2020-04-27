@@ -7,7 +7,6 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using SysWork.Data.Common;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.Dictionarys;
 using SysWork.Data.Common.Filters;
@@ -17,6 +16,7 @@ using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.Utilities;
 using SysWork.Data.Common.Attributes;
 using SysWork.Data.Common.DbInfo;
+using SysWork.Data.Common.ValueObjects;
 
 #pragma warning disable 1587
 /// <summary>
@@ -58,7 +58,6 @@ namespace SysWork.Data.GenericRepository
     /// 
     /// In case a transaction and a connection are specified, the ones provided will be used.
     /// </remarks>
-    /// <typeparam name="TEntity">The type of the entity.</typeparam>
     #endregion
     public abstract partial class BaseRepository<TEntity> where TEntity : class, new()
     {

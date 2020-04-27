@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.DataObjectProvider
 {

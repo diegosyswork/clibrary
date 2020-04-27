@@ -6,7 +6,6 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using SysWork.Data.Common;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.Common.Mapper;
@@ -16,6 +15,7 @@ using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 using SysWork.Data.Common.Filters;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.GenericViewManager
 {
@@ -35,7 +35,6 @@ namespace SysWork.Data.GenericViewManager
         /// <summary>
         /// Gets the Database Engine.
         /// </summary>
-        /// <seealso cref=" SysWork.Data.Common.EDataBaseEngine"/>
         public EDataBaseEngine DataBaseEngine { get { return _dataBaseEngine; } private set { _dataBaseEngine = value; } }
 
         /// <summary>

@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using SysWork.Data.Common.FormsGetParam;
 using SysWork.Data.Common.Utilities;
 using MySql.Data.MySqlClient;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.DbConnector
 {
@@ -38,6 +39,7 @@ namespace SysWork.Data.Common.DbConnector
                 connectionSb.UserID = DefaultUser ?? "";
                 connectionSb.Password = DefaultPassword ?? "";
                 connectionSb.Database= DefaultDatabase ?? "";
+                ConnectorParameterTypeUsed = EConnectorParameterTypeUsed.ManualParameter;
             }
             else
             {
@@ -50,6 +52,7 @@ namespace SysWork.Data.Common.DbConnector
                     connectionSb.Server = DbUtil.Decrypt(connectionSb.Server);
                     connectionSb.Database = DbUtil.Decrypt(connectionSb.Database );
                 }
+                ConnectorParameterTypeUsed = EConnectorParameterTypeUsed.ConnectionString;
             }
 
             bool hasConnectionSuccess = false;
@@ -78,7 +81,11 @@ namespace SysWork.Data.Common.DbConnector
 
                 frmGetParamMySQL.ErrMessage = string.IsNullOrEmpty(errMessage) ? "" : "Ha ocurrido el siguiente error: \r\r" + errMessage;
 
+                frmGetParamMySQL.ParameterTypeUsed = ConnectorParameterTypeUsed;
+
                 frmGetParamMySQL.ShowDialog();
+
+                ConnectorParameterTypeUsed = frmGetParamMySQL.ParameterTypeUsed;
 
                 if (frmGetParamMySQL.DialogResult == DialogResult.OK)
                 {
