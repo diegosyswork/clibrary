@@ -1,11 +1,4 @@
-﻿/* License: http://www.apache.org/licenses/LICENSE-2.0 */
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace SysWork.Data.Common.LambdaSqlBuilder.Adapter
+﻿namespace SysWork.Data.Common.LambdaSqlBuilder.Adapter
 {
     /// <summary>
     /// Provides functionality common to all supported SQL Server versions
@@ -18,7 +11,6 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Adapter
             return string.Format("SELECT TOP({4}) {0} FROM {1} {2} {3}",
                     selection, source, conditions, order, pageSize);
         }
-
 
         public string Table(string tableName)
         {

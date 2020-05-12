@@ -1,16 +1,17 @@
-﻿namespace SysWork.Data.Common.LambdaSqlBuilder.Adapter
+﻿using System;
+using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
+
+namespace SysWork.Data.Common.LambdaSqlBuilder.Adapter
 {
     class MySQLAdapter : SqlAdapterBase, ISqlAdapter
     {
-        public string QueryStringPage(string source, string selection, string conditions, string order,
-            int pageSize)
+        public string QueryStringPage(string source, string selection, string conditions, string order, int pageSize)
         {
             return string.Format("SELECT {0} FROM {1} {2} {3} LIMIT {4} ",
-                    selection, source, conditions, order, pageSize);
+                selection, source, conditions, order, pageSize);
         }
 
-        public string QueryStringPage(string source, string selection, string conditions, string order,
-        int pageSize, int pageNumber)
+        public string QueryStringPage(string source, string selection, string conditions, string order, int pageSize, int pageNumber)
         {
             return string.Format("SELECT {0} FROM {1} {2} {3} LIMIT {4} OFFSET {5}",
                                  selection, source, conditions, order,  pageSize, pageSize * (pageNumber - 1));

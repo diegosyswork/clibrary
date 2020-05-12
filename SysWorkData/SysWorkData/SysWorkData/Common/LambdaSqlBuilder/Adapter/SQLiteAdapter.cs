@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 
 namespace SysWork.Data.Common.LambdaSqlBuilder.Adapter
 {
@@ -36,5 +33,7 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Adapter
         {
             return "@" + parameterId;
         }
+
+
     }
 }

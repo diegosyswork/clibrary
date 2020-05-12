@@ -1,7 +1,7 @@
 namespace SysWork.Data.Common.ValueObjects
 {
     /// <summary>
-    /// Supported Database Engines
+    /// Supported Database Engines.
     /// </summary>
     public enum EDataBaseEngine
     {

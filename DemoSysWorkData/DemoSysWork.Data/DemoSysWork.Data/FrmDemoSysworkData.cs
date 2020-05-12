@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using SysWork.Data.Common;
 using SysWork.Data.Common.DbConnector;
 using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
@@ -132,10 +131,6 @@ namespace Demo.SysWork.Data
             dbConnector.Connect();
             if (dbConnector.IsConnectionSuccess)
                 TxtConnectionString.Text = dbConnector.ConnectionString;
-
-            var x = dbConnector.ParameterTypeUsed;
-
-
         }
 
         enum EState
@@ -1074,6 +1069,8 @@ namespace Demo.SysWork.Data
             dataGridView1.DataSource = dt;
             dataGridView1.Refresh();
 
+            var test = new SqlLam<Person>().Where(p => ((p.FirstName.StartsWith("A") ) || (p.FirstName.StartsWith("b")) || (p.FirstName.StartsWith("E") )));
+
 
             LogText("Result in datagridView");
 
@@ -1529,7 +1526,6 @@ namespace Demo.SysWork.Data
             LogText($"DeleteQueryString = {deletefilter.DeleteQueryString} " + Environment.NewLine);
 
             LogText(Environment.NewLine + "///      START GenericWhereFilter DEMO         ///" + Environment.NewLine);
-
         }
     }
 }

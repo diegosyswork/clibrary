@@ -9,7 +9,7 @@ namespace SysWork.Data.Common.FormsGetParam
     /// Form to Get Data Parameters for SQLite
     /// </summary>
     /// <seealso cref="System.Windows.Forms.Form" />
-    public partial class FrmGetParamSQLite : Form
+    internal partial class FrmGetParamSQLite : Form
     {
         /// <summary>
         /// Gets or sets the connection string.
@@ -52,7 +52,7 @@ namespace SysWork.Data.Common.FormsGetParam
             this.CenterToScreen();
         }
 
-        private void BtnAceptar_Click(object sender, EventArgs e)
+        private void BtnAcept_Click(object sender, EventArgs e)
         {
 
             if (string.IsNullOrEmpty(txtConnectionString.Text))
@@ -72,7 +72,7 @@ namespace SysWork.Data.Common.FormsGetParam
             this.Close();
         }
 
-        private void BtnCancelar_Click(object sender, EventArgs e)
+        private void BtnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
             this.Close();

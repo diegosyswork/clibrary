@@ -13,6 +13,7 @@ namespace SysWork.Data.Common.Utilities
 {
     #region DOCUMENTATION Class
     /// <summary>
+    /// 
     /// Class to facilitate Querys.
     /// 
     /// This class implements the builder pattern to help execute structured queries. 
@@ -21,51 +22,52 @@ namespace SysWork.Data.Common.Utilities
     /// 
     /// </summary>
     /// <remarks>
-    /// <seealso cref="Common.EDataBaseEngine"/>..
+    /// <seealso cref="Common.ValueObjects.EDataBaseEngine"/>..
     /// </remarks>
     /// <example>
     /// <code>
+    /// <![CDATA[
     /// 
     ///   var connectionString = "MyConnectrionString";
     ///   
     ///   var recordsAffected = new DbExecutor(connectionString)
-    ///  .Query("UPDATE Products SET Cost = @pCost WHERE IdProduct = @pIdProduct AND IdCategory = @pIdCategory")
-    ///  .AddParameter("@pCost",155.4)
-    ///  .AddParameter("@pIdProduct",77978788)
-    ///  .AddParameter("@pIdCategory",5)
+    ///     .Query("UPDATE Products SET Cost = @pCost WHERE IdProduct = @pIdProduct AND IdCategory = @pIdCategory")
+    ///     .AddParameter("@pCost",155.4)
+    ///     .AddParameter("@pIdProduct",77978788)
+    ///     .AddParameter("@pIdCategory",5)
     ///  .ExecuteNonQuery();
     ///   
     ///   var id = new DbExecutor(connectionString)
-    ///  .InsertQuery("Products")
-    ///  .AddFieldWithValue("IdProduct",77978788)
-    ///  .AddFieldWithValue("Description",77978788)
-    ///  .AddFieldWithValue("IdCategory",5)
-    ///  .AddFieldWithValue("Cost",155.4)
+    ///     .InsertQuery("Products")
+    ///     .AddFieldWithValue("IdProduct",77978788)
+    ///     .AddFieldWithValue("Description","Product Description")
+    ///     .AddFieldWithValue("IdCategory",5)
+    ///     .AddFieldWithValue("Cost",155.4)
     ///  .ExecuteScalar();
     ///  
     ///   new DbExecutor(connectionString)
-    ///  .UpdateQuery("Products"," WHERE IdCategory = @pIdCategory AND active = 0")
-    ///  .AddFieldWithValue("Cost", 0)
-    ///  .AddFieldWithValue("Price", 0)
-    ///  .AddParameter("IdCategory",5)
+    ///     .UpdateQuery("Products"," WHERE IdCategory = @pIdCategory AND active = 0")
+    ///     .AddFieldWithValue("Cost", 0)
+    ///     .AddFieldWithValue("Price", 0)
+    ///     .AddParameter("IdCategory",5)
     ///  .ExecuteNonQuery();
     ///  
     ///   var reader = new DbExecutor(connectionString)
-    ///  .Query("SELECT Products WHERE IdCategory = @pIdCategory")
-    ///  .AddParameter("@pIdCategory",5)
-    ///  .ExecuteReader();
+    ///     .Query("SELECT Products WHERE IdCategory = @pIdCategory")
+    ///     .AddParameter("@pIdCategory",5)
+    ///     .ExecuteReader();
     ///   while(reader.Read())
     ///   {
     ///       // do something.
     ///   }
     ///   
     ///   var resul = new DbExecutor(connectionString)
-    ///  .Query("SELECT COUNT(*) as qty FROM Products WHERE IdCategory = @pIdCategory")
-    ///  .AddParameter("@pIdCategory",5)
+    ///     .Query("SELECT COUNT(*) as qty FROM Products WHERE IdCategory = @pIdCategory")
+    ///     .AddParameter("@pIdCategory",5)
     ///  .ExecuteScalar();
-    ///  
     ///   var productCount = DbUtil.ParseToLong(result); 
     /// 
+    /// ]]>
     /// </code>
     /// </example>
     #endregion
@@ -198,12 +200,14 @@ namespace SysWork.Data.Common.Utilities
         /// <param name="tableName"></param>
         /// <example>
         /// <code>
-        ///    var id = new DbExecutor(connectionString)
-        ///   .InsertQuery("Products")
-        ///   .AddFieldWithValue("Cost",155.4)
-        ///   .AddFieldWithValue("IdProduct",77978788)
-        ///   .AddFieldWithValue("IdCategory",5)
+        /// <![CDATA[
+        ///   var id = new DbExecutor(connectionString)
+        ///     .InsertQuery("Products")
+        ///     .AddFieldWithValue("Cost",155.4)
+        ///     .AddFieldWithValue("IdProduct",77978788)
+        ///     .AddFieldWithValue("IdCategory",5)
         ///   .ExecuteScalar();
+        /// ]]>
         /// </code>
         /// </example>
         /// <returns>
@@ -225,12 +229,14 @@ namespace SysWork.Data.Common.Utilities
         /// <param name="tableName"></param>
         /// <example>
         /// <code>
+        /// <![CDATA[
         ///   new DbExecutor(connectionString)
-        ///  .UpdateQuery("Products"," WHERE IdCategory = @pIdCategory AND active = 0")
-        ///  .AddFieldWithValue("Cost", 0)
-        ///  .AddFieldWithValue("Price", 0)
-        ///  .AddParameter("@pIdCategory",5)
+        ///     .UpdateQuery("Products"," WHERE IdCategory = @pIdCategory AND active = 0")
+        ///     .AddFieldWithValue("Cost", 0)
+        ///     .AddFieldWithValue("Price", 0)
+        ///     .AddParameter("@pIdCategory",5)
         ///  .ExecuteNonQuery();
+        /// ]]>
         /// </code>
         /// </example>
         /// <returns>
@@ -249,12 +255,14 @@ namespace SysWork.Data.Common.Utilities
         /// <param name="where"></param>
         /// <example>
         /// <code>
-        ///   new DbExecutor(connectionString)
-        ///  .UpdateQuery("Products"," WHERE IdCategory = @pIdCategory AND active = 0")
-        ///  .AddFieldWithValue("Cost", 0)
-        ///  .AddFieldWithValue("Price", 0)
-        ///  .AddParameter("@pIdCategory",5)
-        ///  .ExecuteNonQuery();
+        /// <![CDATA[
+        ///     new DbExecutor(connectionString)
+        ///         .UpdateQuery("Products"," WHERE IdCategory = @pIdCategory AND active = 0")
+        ///         .AddFieldWithValue("Cost", 0)
+        ///         .AddFieldWithValue("Price", 0)
+        ///         .AddParameter("@pIdCategory",5)
+        ///     .ExecuteNonQuery();
+        /// ]]>
         /// </code> 
         /// </example>
         /// <returns>
@@ -282,22 +290,24 @@ namespace SysWork.Data.Common.Utilities
         }
 
         /// <summary>
-        /// Adds and parameter.
+        /// Adds a parameter.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
         /// <example>
         /// <code>
+        /// <![CDATA[
         ///   new DbExecutor(connectionString)
-        ///  .UpdateQuery("Products"," SET cost = 0 WHERE IdCategory = @pIdCategory AND active = 0")
-        ///  .AddParameter("@pIdCategory",5)
+        ///     .UpdateQuery("Products"," SET cost = 0 WHERE IdCategory = @pIdCategory AND active = 0")
+        ///     .AddParameter("@pIdCategory",5)
         ///  .ExecuteNonQuery();
         ///  
         ///   var result = new DbExecutor(connectionString)
-        ///  .Query("INSERT INTO products (ProductCode, Description) VALUES (@pProductCode,@pDescription)")
-        ///  .AddParameter("@pProductCode","779778745581")
-        ///  .AddParameter("@pDescription","MANAOS UVA")
+        ///     .Query("INSERT INTO products (ProductCode, Description) VALUES (@pProductCode,@pDescription)")
+        ///     .AddParameter("@pProductCode","779778745581")
+        ///     .AddParameter("@pDescription","MANAOS UVA")
         ///  .ExecuteScalar();
+        /// ]]>
         /// </code> 
         /// </example>
         /// <returns>
@@ -315,12 +325,25 @@ namespace SysWork.Data.Common.Utilities
         }
 
         /// <summary>
-        /// Adds the parameter.
+        /// Adds a parameter.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
         /// <param name="size">The size.</param>
-        /// <returns></returns>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///   var result = new DbExecutor(connectionString)
+        ///     .Query("INSERT INTO products (ProductCode, Description) VALUES (@pProductCode,@pDescription)")
+        ///     .AddParameter("@pProductCode","779778745581")
+        ///     .AddParameter("@pDescription","MANAOS UVA x 2.25 LTS",50)
+        ///  .ExecuteScalar();
+        /// ]]>
+        /// </code> 
+        /// </example>
+        /// <returns>
+        /// The same instance. Use the builder pattern
+        /// </returns>
         public DbExecutor AddParameter(string name, object value, int size)
         {
             if (!_queryParameters.ContainsKey(name))
@@ -338,7 +361,22 @@ namespace SysWork.Data.Common.Utilities
         /// <param name="name">The name.</param>
         /// <param name="value">The value.</param>
         /// <param name="dbType">Type of the database.</param>
-        /// <returns></returns>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///   var result = new DbExecutor(connectionString)
+        ///     .Query("INSERT INTO products (ProductCode, Description,ExpirationDate) VALUES (@pProductCode,@pDescription,@pExpirationDate)")
+        ///     .AddParameter("@pProductCode","779778745581")
+        ///     .AddParameter("@pDescription","MANAOS UVA x 2.25 LTS",50)
+        ///     .AddParameter("@pExpirationDate","2021-01-01",DbType.DateTime)
+        ///     
+        ///  .ExecuteScalar();
+        /// ]]>
+        /// </code> 
+        /// </example>
+        /// <returns>
+        /// The same instance. Use the builder pattern
+        /// </returns>
         public DbExecutor AddParameter(string name, object value, DbType dbType)
         {
             if (!_queryParameters.ContainsKey(name))
@@ -358,9 +396,24 @@ namespace SysWork.Data.Common.Utilities
         /// <param name="value">The value.</param>
         /// <param name="dbType">Type of the database.</param>
         /// <param name="size">The size.</param>
-        /// <returns></returns>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///   var result = new DbExecutor(connectionString)
+        ///     .Query("INSERT INTO products (ProductCode, Description,ExpirationDate) VALUES (@pProductCode,@pDescription,@pExpirationDate)")
+        ///     .AddParameter("@pProductCode","779778745581")
+        ///     .AddParameter("@pDescription","MANAOS UVA x 2.25 LTS",DbType.String, 50)
+        ///     .AddParameter("@pExpirationDate","2021-01-01",DbType.DateTime)
+        ///  .ExecuteScalar();
+        /// ]]>
+        /// </code> 
+        /// </example>
+        /// <returns>
+        /// The same instance. Use the builder pattern
+        /// </returns>
         public DbExecutor AddParameter(string name, object value, DbType dbType, int size)
         {
+            
             if (!_queryParameters.ContainsKey(name))
                 _queryParameters.Add(name, value);
 
@@ -389,20 +442,22 @@ namespace SysWork.Data.Common.Utilities
         }
 
         /// <summary>
-        /// Add an Field with the value, automatically, creates a parameter with the same name and "@p_dbex_" prefix.
-        /// Use this only for InsertQuery and UpdateQuery.
+        /// Add a field with the value, internally, create a parameter with the same name and the prefix "@p_dbex_".
+        /// Use this only for InsertQuery and UpdateQuery.Supports special field names (names with spaces "", minus "-", etc.)
         /// </summary>
         /// <param name="fieldName"></param>
         /// <param name="value"></param>
         /// <example>
         /// <code>
+        /// <![CDATA[
         ///   var id = new DbExecutor(connectionString)
-        ///  .InsertQuery("Products")
-        ///  .AddFieldWithValue("IdProduct",77978788)
-        ///  .AddFieldWithValue("Description",77978788)
-        ///  .AddFieldWithValue("IdCategory",5)
-        ///  .AddFieldWithValue("Cost",155.4)
+        ///     .InsertQuery("Products")
+        ///     .AddFieldWithValue("IdProduct",77978788)
+        ///     .AddFieldWithValue("Description","MANAOS UVA x 2.25 LT")
+        ///     .AddFieldWithValue("IdCategory",5)
+        ///     .AddFieldWithValue("Cost",155.4)
         ///  .ExecuteScalar();
+        /// ]]>
         /// </code> 
         /// </example>
         /// <returns>
@@ -422,11 +477,25 @@ namespace SysWork.Data.Common.Utilities
         }
 
         /// <summary>
-        /// Adds the field with value.
+        /// Add a field with the value, and the max size. Internally, create a parameter with the same name and the prefix "@p_dbex_".
+        /// Use this only for InsertQuery and UpdateQuery.Supports special field names (names with spaces "", minus "-", etc.)
         /// </summary>
         /// <param name="fieldName">Name of the field.</param>
         /// <param name="value">The value.</param>
         /// <param name="size">The size.</param>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///   var id = new DbExecutor(connectionString)
+        ///     .InsertQuery("Products")
+        ///     .AddFieldWithValue("IdProduct",77978788)
+        ///     .AddFieldWithValue("Description","MANAOS UVA x 2.25 LT", 50)  
+        ///     .AddFieldWithValue("IdCategory",5)
+        ///     .AddFieldWithValue("Cost",155.4)
+        ///  .ExecuteScalar();
+        /// ]]>
+        /// </code> 
+        /// </example>
         /// <returns>
         /// The same instance. Use the builder pattern
         /// </returns>
@@ -444,12 +513,27 @@ namespace SysWork.Data.Common.Utilities
         }
 
         /// <summary>
-        /// Adds the field with value.
+        /// Add a field with the value and the DbType. Internally, create a parameter with the same name and the prefix "@p_dbex_".
+        /// Use this only for InsertQuery and UpdateQuery.Supports special field names (names with spaces "", minus "-", etc.)
         /// </summary>
         /// <param name="fieldName">Name of the field.</param>
         /// <param name="value">The value.</param>
         /// <param name="dbType">Type of the database.</param>
-        /// <returns></returns>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///   var result = new DbExecutor(connectionString)
+        ///     .Query("INSERT INTO products (ProductCode, Description,ExpirationDate) VALUES (@pProductCode,@pDescription,@pExpirationDate)")
+        ///     .AddParameter("@pProductCode","779778745581")
+        ///     .AddParameter("@pDescription","MANAOS UVA x 2.25 LTS",DbType.String)
+        ///     .AddParameter("@pExpirationDate","2021-01-01",DbType.DateTime)
+        ///  .ExecuteScalar();
+        /// ]]>
+        /// </code> 
+        /// </example>
+        /// <returns>
+        /// The same instance. Use the builder pattern
+        /// </returns>
         public DbExecutor AddFieldWithValue(string fieldName, object value, DbType dbType)
         {
             string parameterName = _DbExecutorParameterPrefix + _syntaxProvider.SecureNameForParameter(fieldName);
@@ -464,13 +548,28 @@ namespace SysWork.Data.Common.Utilities
         }
 
         /// <summary>
-        /// Adds the field with value.
+        /// Add a field with the value, the DbType and the max size. Internally, create a parameter with the same name and the prefix "@p_dbex_".
+        /// Use this only for InsertQuery and UpdateQuery.Supports special field names (names with spaces "", minus "-", etc.)
         /// </summary>
         /// <param name="fieldName">Name of the field.</param>
         /// <param name="value">The value.</param>
         /// <param name="dbType">Type of the database.</param>
         /// <param name="size">The size.</param>
-        /// <returns></returns>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        ///   var result = new DbExecutor(connectionString)
+        ///     .Query("INSERT INTO products (ProductCode, Description,ExpirationDate) VALUES (@pProductCode,@pDescription,@pExpirationDate)")
+        ///     .AddParameter("@pProductCode","779778745581")
+        ///     .AddParameter("@pDescription","MANAOS UVA x 2.25 LTS",DbType.String, 50)
+        ///     .AddParameter("@pExpirationDate","2021-01-01",DbType.DateTime)
+        ///  .ExecuteScalar();
+        /// ]]>
+        /// </code> 
+        /// </example>
+        /// <returns>
+        /// The same instance. Use the builder pattern
+        /// </returns>
         public DbExecutor AddFieldWithValue(string fieldName, object value, DbType dbType, int size)
         {
             string parameterName = _DbExecutorParameterPrefix + _syntaxProvider.SecureNameForParameter(fieldName);
@@ -492,26 +591,26 @@ namespace SysWork.Data.Common.Utilities
         /// Run an IDbCommand with the SQLQuery using the ExecuteNonQuery() method.
         /// </summary>
         /// <example>
-        ///   <code>
-        ///   
+        /// <code>
+        /// <![CDATA[
+        /// 
         ///   var recordsAffected = new DbExecutor(connectionString)
-        ///  .Query("UPDATE Products SET Cost = @pCost WHERE IdProduct = @pIdProduct AND IdCategory = @pIdCategory")
-        ///  .AddParameter("@pCost",155.4)
-        ///  .AddParameter("@pIdProduct",77978788)
-        ///  .AddParameter("@pIdCategory",5)
+        ///     .Query("UPDATE Products SET Cost = @pCost WHERE IdProduct = @pIdProduct AND IdCategory = @pIdCategory")
+        ///     .AddParameter("@pCost",155.4)
+        ///     .AddParameter("@pIdProduct",77978788)
+        ///     .AddParameter("@pIdCategory",5)
         ///  .ExecuteNonQuery();
         ///  
-        /// 
         ///   //Using an external connection
         ///   var extConnectionString = "MyConnectrionString";
         ///   var extIDbConnection = DataManager.GetInstance().GetDbConnection();
         ///   extIDbConnection.Open();
         ///   
         ///   var recordsAffected = new DbExecutor(extIDbConnection)
-        ///  .Query("UPDATE Products SET Cost = @pCost WHERE IdProduct = @pIdProduct AND IdCategory = @pIdCategory")
-        ///  .AddParameter("@pCost",155.4)
-        ///  .AddParameter("@pIdProduct",77978788)
-        ///  .AddParameter("@pIdCategory",5)
+        ///     .Query("UPDATE Products SET Cost = @pCost WHERE IdProduct = @pIdProduct AND IdCategory = @pIdCategory")
+        ///     .AddParameter("@pCost",155.4)
+        ///     .AddParameter("@pIdProduct",77978788)
+        ///     .AddParameter("@pIdCategory",5)
         ///  .ExecuteNonQuery();
         ///  
         ///   // Using an external transaction.-
@@ -522,17 +621,16 @@ namespace SysWork.Data.Common.Utilities
         ///   var dbTransaction = extDbConnection.BeginTransaction();
         ///   
         ///   var recordsAffected = new DbExecutor(dbTransaction)
-        ///  .Query("UPDATE Products SET Cost = @pCost WHERE IdProduct = @pIdProduct AND IdCategory = @pIdCategory")
-        ///  .AddParameter("@pCost",155.4)
-        ///  .AddParameter("@pIdProduct",77978788)
-        ///  .AddParameter("@pIdCategory",5)
+        ///     .Query("UPDATE Products SET Cost = @pCost WHERE IdProduct = @pIdProduct AND IdCategory = @pIdCategory")
+        ///     .AddParameter("@pCost",155.4)
+        ///     .AddParameter("@pIdProduct",77978788)
+        ///     .AddParameter("@pIdCategory",5)
         ///  .ExecuteNonQuery();
         ///  
         ///  IDbTransaction.Commit();
-        ///  
-        ///  </code>
+        /// ]]>
+        /// </code>
         /// </example>
-        /// 
         /// <returns>
         /// An long with the records affecteds by the query.
         /// </returns>
@@ -544,12 +642,12 @@ namespace SysWork.Data.Common.Utilities
 
         #region DOCUMENTATION ExecuteNonQuery(int dbCommandTimeOut)
         /// <summary>
-        /// Run an IDbCommand with the SQLQuery using the ExecuteNonQuery() method.
+        /// Run an IDbCommand with the SQLQuery using the ExecuteNonQuery() method and a custom dbCommandTimeOut.
         /// </summary>
         /// <param name="dbCommandTimeOut">Timeout for this execution.</param>
         /// <example>
         ///   <code>
-        ///   
+        /// <![CDATA[
         ///   var recordsAffected = new DbExecutor(connectionString)
         ///  .Query("UPDATE Products SET Cost = @pCost WHERE IdProduct = @pIdProduct AND IdCategory = @pIdCategory")
         ///  .AddParameter("@pCost",155.4)
@@ -557,7 +655,6 @@ namespace SysWork.Data.Common.Utilities
         ///  .AddParameter("@pIdCategory",5)
         ///  .ExecuteNonQuery(10);
         ///  
-        /// 
         ///   //Using an external connection
         ///   var extConnectionString = "MyConnectrionString";
         ///   var extIDbConnection = DataManager.GetInstance().GetDbConnection();
@@ -585,32 +682,19 @@ namespace SysWork.Data.Common.Utilities
         ///  .ExecuteNonQuery(10);
         ///  
         ///  IDbTransaction.Commit();
-        ///  
+        /// ]]>
         ///  </code>
         /// </example>
-        /// 
         /// <returns>
         /// An long with the records affecteds by the query.
         /// </returns>
         #endregion 
-
         public long ExecuteNonQuery(int dbCommandTimeOut)
         {
             return ExecuteNonQuery(_dbConnection, _dbTransaction, dbCommandTimeOut);
         }
 
-        #region DOCUMENTATION private ExecuteNonQuery(IDbConnection paramConnection, IDbTransaction dbTransaction, int dbCommandTimeOut = -1)
-        /// <summary>
-        /// Run an IDbCommand with the SQLQuery using the ExecuteNonQuery() method.
-        /// </summary>
-        /// <param name="dbConnection">The parameter connection.</param>
-        /// <param name="dbTransaction">The database transaction.</param>
-        /// <param name="dbCommandTimeOut">CommandTimeOut form this execution</param>
-        /// <returns>
-        /// An long with the recordsAffecteds.
-        /// </returns>
-        #endregion
-        private long ExecuteNonQuery(IDbConnection dbConnection, IDbTransaction dbTransaction, int? dbCommandTimeOut = -1)
+        private long ExecuteNonQuery(IDbConnection dbConnection, IDbTransaction dbTransaction, int? dbCommandTimeOut)
         {
             if (_isInsertQuery) NormalizeInsertQuery();
             if (_isUpdateQuery) NormalizeUpdateQuery();
@@ -914,11 +998,12 @@ namespace SysWork.Data.Common.Utilities
         /// </summary>
         /// <example>
         /// <code>
+        /// <![CDATA[
         /// 
         ///   var connectionString = "MyConnectionString";
         ///   var reader = new DbExecutor(connectionString)
-        ///  .Query("SELECT Products WHERE IdCategory = @pIdCategory")
-        ///  .AddParameter("@pIdCategory",5)
+        ///     .Query("SELECT Products WHERE IdCategory = @pIdCategory")
+        ///     .AddParameter("@pIdCategory",5)
         ///  .ExecuteReader(IDbConnection);
         ///  
         ///   while(reader.Read())
@@ -931,8 +1016,8 @@ namespace SysWork.Data.Common.Utilities
         ///   extDbConnection.Open();
         ///   
         ///   var reader = new DbExecutor(extDbConnection)
-        ///  .Query("SELECT Products WHERE IdCategory = @pIdCategory")
-        ///  .AddParameter("@pIdCategory",5)
+        ///     .Query("SELECT Products WHERE IdCategory = @pIdCategory")
+        ///     .AddParameter("@pIdCategory",5)
         ///  .ExecuteReader();
         ///  
         ///   while(reader.Read())
@@ -943,17 +1028,16 @@ namespace SysWork.Data.Common.Utilities
         ///   // Using an External transaction.
         ///   var extTransaction = extDbConnection.BeginTransaction();
         ///   var reader = new DbExecutor(extTransaction)
-        ///  .Query("SELECT Products WHERE IdCategory = @pIdCategory")
-        ///  .AddParameter("@pIdCategory",5)
+        ///     .Query("SELECT Products WHERE IdCategory = @pIdCategory")
+        ///     .AddParameter("@pIdCategory",5)
         ///  .ExecuteReader(IDbTransaction);
         ///  
         ///   while(reader.Read())
         ///   {
         ///       // do something.
         ///   }
-        ///   
         ///   extTransaction.Commit();
-        ///   
+        /// ]]>
         /// </code>
         /// </example>
         /// <returns>

@@ -7,15 +7,15 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using SysWork.Data.Common.Attributes;
 using SysWork.Data.Common.DataObjectProvider;
+using SysWork.Data.Common.DbInfo;
 using SysWork.Data.Common.Dictionarys;
 using SysWork.Data.Common.Filters;
 using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.Utilities;
-using SysWork.Data.Common.Attributes;
-using SysWork.Data.Common.DbInfo;
 using SysWork.Data.Common.ValueObjects;
 
 #pragma warning disable 1587
@@ -50,7 +50,7 @@ namespace SysWork.Data.GenericRepository
     /// <seealso cref="SysWork.Data.Common.Attributes"/>
     /// </summary>
     /// <remarks>
-    /// This class is multi database engine, see the supported database engines <see cref="Common.EDataBaseEngine"/>. 
+    /// This class is multi database engine, see the supported database engines <see cref="Common.ValueObjects.EDataBaseEngine"/>. 
     /// 
     /// All its methods, in case of not specifying a connection, create a new one and at the end they close it.
     /// 
@@ -71,7 +71,7 @@ namespace SysWork.Data.GenericRepository
         /// <summary>
         /// Gets the Database Engine.
         /// </summary>
-        /// <seealso cref=" SysWork.Data.Common.EDataBaseEngine"/>
+        /// <seealso cref=" SysWork.Data.Common.ValueObjects.EDataBaseEngine"/>
         public EDataBaseEngine DataBaseEngine { get { return _dataBaseEngine; } }
 
         private Hashtable _columnListWithDbInfo = new Hashtable();

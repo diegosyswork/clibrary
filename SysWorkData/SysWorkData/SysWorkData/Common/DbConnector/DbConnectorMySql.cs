@@ -9,10 +9,9 @@ namespace SysWork.Data.Common.DbConnector
 {
     /// <summary>
     /// Implementation of AbstractDbConnector Class for MySql
-    /// <seealso cref="SysWork.Data.Common.DbConnector.AbstractDbConnector" />
     /// </summary>
-
-    public class DbConnectorMySql : AbstractDbConnector
+    /// <seealso cref="SysWork.Data.Common.DbConnector.AbstractDBConnector" />
+    public class DbConnectorMySql : AbstractDBConnector
     {
         /// <summary>
         /// try to connect to the specified parameters.
@@ -85,10 +84,10 @@ namespace SysWork.Data.Common.DbConnector
 
                 frmGetParamMySQL.ShowDialog();
 
-                ConnectorParameterTypeUsed = frmGetParamMySQL.ParameterTypeUsed;
-
                 if (frmGetParamMySQL.DialogResult == DialogResult.OK)
                 {
+                    ConnectorParameterTypeUsed = frmGetParamMySQL.ParameterTypeUsed;
+
                     if (!string.IsNullOrEmpty(frmGetParamMySQL.ConnectionString))
                     {
                         ConnectionString = frmGetParamMySQL.ConnectionString;

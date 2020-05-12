@@ -10,7 +10,7 @@ namespace SysWork.Data.Common.DataObjectProvider
     /// Implement the Abstract Factory Method Pattern.
     /// </summary>
     ///<remarks>
-    /// This class, depending of the dataBaseEngine <see cref="Common.EDataBaseEngine"/> passed in the constructor, 
+    /// This class, depending of the dataBaseEngine <see cref="Common.ValueObjects.EDataBaseEngine"/> passed in the constructor, 
     /// is responsible for providing the different Database Objects 
     /// using the "DataObjectCreators" that implement AbstractDataObjectCreator.
     /// </remarks> 

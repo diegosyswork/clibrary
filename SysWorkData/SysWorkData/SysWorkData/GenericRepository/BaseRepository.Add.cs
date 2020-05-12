@@ -3,7 +3,6 @@ using System.Data;
 using System.Data.OleDb;
 using System.Reflection;
 using System.Text;
-using SysWork.Data.Common;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.Utilities;
 using SysWork.Data.Common.Attributes;

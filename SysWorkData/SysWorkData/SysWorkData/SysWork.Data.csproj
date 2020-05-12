@@ -40,11 +40,12 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Common\DbConnector\AbstractDBConnector.cs" />
     <Compile Include="Common\ValueObjects\EConnectorParameterTypeUsed.cs" />
     <Compile Include="Common\Interfaces\Actions\IRecordCount.cs" />
     <Compile Include="Common\Interfaces\Actions\IExists.cs" />
     <Compile Include="Common\Utilities\DbExecutor.cs" />
-    <Compile Include="Common\DbConnector\AbstractDbConnector.cs" />
+    <Compile Include="Common\DbConnector\Interfaces\IDbConnector.cs" />
     <Compile Include="Common\DbConnector\DataBaseConnector.cs" />
     <Compile Include="Common\DbConnector\DbConnectorMSSqlServer.cs" />
     <Compile Include="Common\DbConnector\DbConnectorMySql.cs" />

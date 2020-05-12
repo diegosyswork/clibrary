@@ -4,7 +4,7 @@ namespace SysWork.Data.Common.Attributes
 {
     #region DOCUMENTATION Class
     /// <summary>
-    /// Use this class to decorate the properties of a class that represents a database table. 
+    /// Use this class to decorate a class that represents a database table. 
     /// Supports table names with special characters.
     /// </summary>
     /// <example>

@@ -55,7 +55,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(247, 347);
+            this.btnCancel.Location = new System.Drawing.Point(308, 418);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(85, 21);
             this.btnCancel.TabIndex = 8;
@@ -66,7 +66,7 @@
             // btnOk
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnOk.Location = new System.Drawing.Point(125, 347);
+            this.btnOk.Location = new System.Drawing.Point(164, 418);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(85, 21);
             this.btnOk.TabIndex = 9;
@@ -77,7 +77,7 @@
             // lblErrMessage
             // 
             this.lblErrMessage.AutoSize = true;
-            this.lblErrMessage.Location = new System.Drawing.Point(23, 347);
+            this.lblErrMessage.Location = new System.Drawing.Point(12, 402);
             this.lblErrMessage.MaximumSize = new System.Drawing.Size(232, 0);
             this.lblErrMessage.MinimumSize = new System.Drawing.Size(410, 0);
             this.lblErrMessage.Name = "lblErrMessage";
@@ -89,7 +89,7 @@
             // 
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.pictureBox1.Image = global::SysWork.Data.Properties.Resources.connector_icon_mssqlserver;
-            this.pictureBox1.Location = new System.Drawing.Point(169, -8);
+            this.pictureBox1.Location = new System.Drawing.Point(198, -8);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(125, 135);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -119,9 +119,9 @@
             this.grpManualParameters.Controls.Add(this.label2);
             this.grpManualParameters.Controls.Add(this.txtServer);
             this.grpManualParameters.Controls.Add(this.label1);
-            this.grpManualParameters.Location = new System.Drawing.Point(24, 133);
+            this.grpManualParameters.Location = new System.Drawing.Point(12, 133);
             this.grpManualParameters.Name = "grpManualParameters";
-            this.grpManualParameters.Size = new System.Drawing.Size(410, 129);
+            this.grpManualParameters.Size = new System.Drawing.Size(478, 129);
             this.grpManualParameters.TabIndex = 13;
             this.grpManualParameters.TabStop = false;
             this.grpManualParameters.Text = "Datos de Conexion";
@@ -130,7 +130,7 @@
             // 
             this.txtDataBase.Location = new System.Drawing.Point(108, 97);
             this.txtDataBase.Name = "txtDataBase";
-            this.txtDataBase.Size = new System.Drawing.Size(232, 20);
+            this.txtDataBase.Size = new System.Drawing.Size(359, 20);
             this.txtDataBase.TabIndex = 15;
             // 
             // label4
@@ -147,7 +147,7 @@
             this.txtPassword.Location = new System.Drawing.Point(108, 71);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(232, 20);
+            this.txtPassword.Size = new System.Drawing.Size(359, 20);
             this.txtPassword.TabIndex = 13;
             // 
             // label3
@@ -163,7 +163,7 @@
             // 
             this.txtLogin.Location = new System.Drawing.Point(108, 45);
             this.txtLogin.Name = "txtLogin";
-            this.txtLogin.Size = new System.Drawing.Size(232, 20);
+            this.txtLogin.Size = new System.Drawing.Size(359, 20);
             this.txtLogin.TabIndex = 11;
             // 
             // label2
@@ -179,7 +179,7 @@
             // 
             this.txtServer.Location = new System.Drawing.Point(108, 19);
             this.txtServer.Name = "txtServer";
-            this.txtServer.Size = new System.Drawing.Size(232, 20);
+            this.txtServer.Size = new System.Drawing.Size(359, 20);
             this.txtServer.TabIndex = 9;
             // 
             // label1
@@ -196,9 +196,9 @@
             this.grpConnectionString.Controls.Add(this.txtConnectionString);
             this.grpConnectionString.Controls.Add(this.label8);
             this.grpConnectionString.Enabled = false;
-            this.grpConnectionString.Location = new System.Drawing.Point(23, 291);
+            this.grpConnectionString.Location = new System.Drawing.Point(12, 291);
             this.grpConnectionString.Name = "grpConnectionString";
-            this.grpConnectionString.Size = new System.Drawing.Size(411, 54);
+            this.grpConnectionString.Size = new System.Drawing.Size(480, 101);
             this.grpConnectionString.TabIndex = 16;
             this.grpConnectionString.TabStop = false;
             this.grpConnectionString.Text = "Datos de Conexion";
@@ -206,8 +206,10 @@
             // txtConnectionString
             // 
             this.txtConnectionString.Location = new System.Drawing.Point(108, 19);
+            this.txtConnectionString.Multiline = true;
             this.txtConnectionString.Name = "txtConnectionString";
-            this.txtConnectionString.Size = new System.Drawing.Size(292, 20);
+            this.txtConnectionString.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtConnectionString.Size = new System.Drawing.Size(365, 70);
             this.txtConnectionString.TabIndex = 9;
             // 
             // label8
@@ -237,7 +239,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(449, 380);
+            this.ClientSize = new System.Drawing.Size(504, 451);
             this.ControlBox = false;
             this.Controls.Add(this.rbtnConnectionString);
             this.Controls.Add(this.grpConnectionString);

@@ -9,7 +9,7 @@ namespace SysWork.Data.Common.FormsGetParam
     /// Form to Get Data Parameters for OleDb.
     /// </summary>
     /// <seealso cref="System.Windows.Forms.Form" />
-    public partial class FrmGetParamOleDb : Form
+    internal partial class FrmGetParamOleDb : Form
     {
         /// <summary>
         /// Gets or sets the connection string.

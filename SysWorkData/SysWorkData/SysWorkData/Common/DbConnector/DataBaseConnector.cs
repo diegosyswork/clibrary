@@ -6,9 +6,9 @@ namespace SysWork.Data.Common.DbConnector
     /// <summary>
     /// 
     /// </summary>
-    public class DataBaseConnector
+    public class DataBaseConnector:IDbConnector
     {
-        private AbstractDbConnector _dbObjectConnector;
+        private IDbConnector _dbObjectConnector;
         private EDataBaseEngine _dataBaseEngine { get; set; }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace SysWork.Data.Common.DbConnector
         /// <summary>
         /// Devuelve si el usuario, ingreso datos.
         /// </summary>
-        public bool UserGotParameters { get { return _dbObjectConnector.UserGotParameters; } private set { } } 
+        public bool UserGotParameters { get { return _dbObjectConnector.UserGotParameters; } set { } } 
 
         /// <summary>
         /// Origen de datos Predeterminado (nombre de server / instancia)
@@ -65,7 +65,7 @@ namespace SysWork.Data.Common.DbConnector
         /// <summary>
         /// Devuelve si se pudo realizar la conexion correctamente con los datos proporcionados.
         /// </summary>
-        public bool IsConnectionSuccess { get { return _dbObjectConnector.IsConnectionSuccess; } private set { } } 
+        public bool IsConnectionSuccess { get { return _dbObjectConnector.IsConnectionSuccess; } set { } } 
 
         /// <summary>
         /// En caso de conexion correcta escribe la cadena de conexion en el archivo de configuracion
@@ -88,7 +88,7 @@ namespace SysWork.Data.Common.DbConnector
         /// <summary>
         /// Muestra el ultimo mensaje de error ocurrido al intentar abrir la conecction.
         /// </summary>
-        public string ConnectionError{get { return _dbObjectConnector.ConnectionError; } private set { } }
+        public string ConnectionError{get { return _dbObjectConnector.ConnectionError; } set { } }
 
         /// <summary>
         /// Gets the parameter type used.
@@ -96,7 +96,7 @@ namespace SysWork.Data.Common.DbConnector
         /// <value>
         /// The parameter type used.
         /// </value>
-        public EConnectorParameterTypeUsed ParameterTypeUsed { get { return _dbObjectConnector.ConnectorParameterTypeUsed; } private set { } }
+        public EConnectorParameterTypeUsed ConnectorParameterTypeUsed { get { return _dbObjectConnector.ConnectorParameterTypeUsed; } set { } }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataBaseConnector"/> class. DataBaseEngine is MSSQLServer.

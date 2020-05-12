@@ -33,18 +33,20 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
 
         private Node ResolveQuery(BinaryExpression binaryExpression)
         {
-            return new OperationNode
-                       {
-                           Left = ResolveQuery((dynamic) binaryExpression.Left),
-                           Operator = binaryExpression.NodeType,
-                           Right = ResolveQuery((dynamic) binaryExpression.Right)
-                       };
+            var operationNode = new OperationNode();
+
+            operationNode.Left = ResolveQuery((dynamic)binaryExpression.Left);
+            operationNode.Operator = binaryExpression.NodeType;
+            operationNode.Right = ResolveQuery((dynamic)binaryExpression.Right);
+
+            return operationNode;
         }
 
         private Node ResolveQuery(MethodCallExpression callExpression)
         {
-            LikeMethod callFunction;
-            if (Enum.TryParse(callExpression.Method.Name, true, out callFunction))
+            LikeMethod likeOperation;
+
+            if (Enum.TryParse(callExpression.Method.Name, true, out likeOperation))
             {
                 var member = callExpression.Object as MemberExpression;
                 var fieldValue = (string)GetExpressionValue(callExpression.Arguments.First());
@@ -56,7 +58,7 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
                                            TableName = GetTableName(member),
                                            FieldName = GetColumnName(callExpression.Object)
                                        },
-                               Method = callFunction,
+                               Method = likeOperation,
                                Value = fieldValue
                            };
             }

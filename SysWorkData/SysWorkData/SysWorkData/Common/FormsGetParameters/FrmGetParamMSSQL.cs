@@ -59,8 +59,17 @@ namespace SysWork.Data.Common.FormsGetParam
         /// </value>
         public string ErrMessage { get; set; }
 
+        /// <summary>
+        /// Gets or sets the parameter type used.
+        /// </summary>
+        /// <value>
+        /// The parameter type used.
+        /// </value>
         public EConnectorParameterTypeUsed ParameterTypeUsed { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FrmGetParamSQL"/> class.
+        /// </summary>
         public FrmGetParamSQL()
         {
             InitializeComponent();
@@ -81,13 +90,9 @@ namespace SysWork.Data.Common.FormsGetParam
             lblErrMessage.Refresh();
 
             if (!string.IsNullOrEmpty(ErrMessage))
-            {
                 this.Height = this.Height + lblErrMessage.Height;
-            }
             else
-            {
                 this.Height = this.Height - lblErrMessage.Height;
-            }
 
             this.CenterToScreen();
         }

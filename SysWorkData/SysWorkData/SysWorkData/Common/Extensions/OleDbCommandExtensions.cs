@@ -53,7 +53,6 @@ namespace SysWork.Data.Common.Extensions.OleDbCommandExtensions
 
                     newParameters.Add(newParameter);
                 }
-
                 return "?";
             });
 

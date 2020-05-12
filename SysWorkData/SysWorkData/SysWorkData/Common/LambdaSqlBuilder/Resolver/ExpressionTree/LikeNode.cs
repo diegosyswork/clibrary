@@ -12,4 +12,5 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver.ExpressionTree
         public MemberNode MemberNode { get; set; }
         public string Value { get; set; }
     }
+
 }

@@ -9,11 +9,11 @@ namespace SysWork.Data.Common.DbConnector
 {
     /// <summary>
     /// Implementation of AbstractDbConnector Class for MSSqlServer
-    /// <seealso cref="SysWork.Data.Common.DbConnector.AbstractDbConnector" />
     /// </summary>
-    public class DbConnectorMSSqlServer : AbstractDbConnector
+    /// <seealso cref="SysWork.Data.Common.DbConnector.AbstractDBConnector" />
+    
+    public class DbConnectorMSSqlServer : AbstractDBConnector
     {
-
         /// <summary>
         /// Try to connect with the specified parameters.
         /// </summary>
@@ -70,8 +70,7 @@ namespace SysWork.Data.Common.DbConnector
             {
                 UserGotParameters = true;
 
-                FrmGetParamSQL frmGetParamSQL;
-                frmGetParamSQL = new FrmGetParamSQL();
+                FrmGetParamSQL frmGetParamSQL = new FrmGetParamSQL();
 
                 frmGetParamSQL.Server = connectionSb.DataSource;
                 frmGetParamSQL.Login = connectionSb.UserID;
@@ -80,14 +79,14 @@ namespace SysWork.Data.Common.DbConnector
                 frmGetParamSQL.ConnectionString = ConnectionString;
 
                 frmGetParamSQL.ErrMessage = string.IsNullOrEmpty(errMessage) ? "" : "Ha ocurrido el siguiente error: \r\r" + errMessage;
+
                 frmGetParamSQL.ParameterTypeUsed = ConnectorParameterTypeUsed;
 
                 frmGetParamSQL.ShowDialog();
 
-                ConnectorParameterTypeUsed = frmGetParamSQL.ParameterTypeUsed;
-
                 if (frmGetParamSQL.DialogResult == DialogResult.OK)
                 {
+                    ConnectorParameterTypeUsed = frmGetParamSQL.ParameterTypeUsed;
 
                     if (!string.IsNullOrEmpty(frmGetParamSQL.ConnectionString))
                     {

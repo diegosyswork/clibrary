@@ -1,6 +1,6 @@
 ﻿namespace SysWork.Data.Common.FormsGetParam
 {
-    partial class FrmGetParamSQLite
+    internal partial class FrmGetParamSQLite
     {
         /// <summary>
         /// Required designer variable.
@@ -41,8 +41,10 @@
             // 
             // txtErrMessage
             // 
+            this.txtErrMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtErrMessage.AutoSize = true;
-            this.txtErrMessage.Location = new System.Drawing.Point(12, 189);
+            this.txtErrMessage.Location = new System.Drawing.Point(12, 244);
             this.txtErrMessage.MaximumSize = new System.Drawing.Size(232, 0);
             this.txtErrMessage.MinimumSize = new System.Drawing.Size(450, 0);
             this.txtErrMessage.Name = "txtErrMessage";
@@ -53,31 +55,31 @@
             // btnOk
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnOk.Location = new System.Drawing.Point(141, 207);
+            this.btnOk.Location = new System.Drawing.Point(203, 260);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(85, 21);
             this.btnOk.TabIndex = 21;
             this.btnOk.Text = "&Aceptar";
             this.btnOk.UseVisualStyleBackColor = true;
-            this.btnOk.Click += new System.EventHandler(this.BtnAceptar_Click);
+            this.btnOk.Click += new System.EventHandler(this.BtnAcept_Click);
             // 
             // btnCancel
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(263, 207);
+            this.btnCancel.Location = new System.Drawing.Point(346, 260);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(85, 21);
             this.btnCancel.TabIndex = 20;
             this.btnCancel.Text = "&Cancelar";
             this.btnCancel.UseVisualStyleBackColor = true;
-            this.btnCancel.Click += new System.EventHandler(this.BtnCancelar_Click);
+            this.btnCancel.Click += new System.EventHandler(this.BtnCancel_Click);
             // 
             // pictureBox1
             // 
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.pictureBox1.Image = global::SysWork.Data.Properties.Resources.connector_icon_sqlite;
-            this.pictureBox1.Location = new System.Drawing.Point(184, -9);
+            this.pictureBox1.Location = new System.Drawing.Point(250, -9);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(125, 135);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -88,9 +90,9 @@
             // 
             this.grpConnectionString.Controls.Add(this.txtConnectionString);
             this.grpConnectionString.Controls.Add(this.label8);
-            this.grpConnectionString.Location = new System.Drawing.Point(12, 132);
+            this.grpConnectionString.Location = new System.Drawing.Point(12, 134);
             this.grpConnectionString.Name = "grpConnectionString";
-            this.grpConnectionString.Size = new System.Drawing.Size(458, 54);
+            this.grpConnectionString.Size = new System.Drawing.Size(590, 100);
             this.grpConnectionString.TabIndex = 26;
             this.grpConnectionString.TabStop = false;
             this.grpConnectionString.Text = "Datos de Conexion";
@@ -98,8 +100,10 @@
             // txtConnectionString
             // 
             this.txtConnectionString.Location = new System.Drawing.Point(108, 19);
+            this.txtConnectionString.Multiline = true;
             this.txtConnectionString.Name = "txtConnectionString";
-            this.txtConnectionString.Size = new System.Drawing.Size(344, 20);
+            this.txtConnectionString.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtConnectionString.Size = new System.Drawing.Size(474, 70);
             this.txtConnectionString.TabIndex = 9;
             // 
             // label8
@@ -115,7 +119,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(477, 240);
+            this.ClientSize = new System.Drawing.Size(614, 296);
             this.ControlBox = false;
             this.Controls.Add(this.grpConnectionString);
             this.Controls.Add(this.btnOk);

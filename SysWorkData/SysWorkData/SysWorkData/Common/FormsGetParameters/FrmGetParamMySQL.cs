@@ -67,7 +67,9 @@ namespace SysWork.Data.Common.FormsGetParam
         /// </value>
         public EConnectorParameterTypeUsed ParameterTypeUsed { get; set; }
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FrmGetParamMySQL"/> class.
+        /// </summary>
         public FrmGetParamMySQL()
         {
             InitializeComponent();
@@ -88,13 +90,9 @@ namespace SysWork.Data.Common.FormsGetParam
             txtErrMessage.Refresh();
 
             if (!string.IsNullOrEmpty(ErrMessage))
-            {
                 this.Height = this.Height + txtErrMessage.Height;
-            }
             else
-            {
                 this.Height = this.Height - txtErrMessage.Height;
-            }
 
             this.CenterToScreen();
         }

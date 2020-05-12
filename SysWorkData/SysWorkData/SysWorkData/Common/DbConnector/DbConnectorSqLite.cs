@@ -8,11 +8,12 @@ using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.DbConnector
 {
+
     /// <summary>
     /// Implementation of AbstractDbConnector Class for SQLite
-    /// <seealso cref="SysWork.Data.Common.DbConnector.AbstractDbConnector" />
     /// </summary>
-    class DbConnectorSqLite : AbstractDbConnector
+    /// <seealso cref="SysWork.Data.Common.DbConnector.AbstractDBConnector" />
+    class DbConnectorSqLite : AbstractDBConnector
     {
         /// <summary>
         /// try to connect to the specified parameters.

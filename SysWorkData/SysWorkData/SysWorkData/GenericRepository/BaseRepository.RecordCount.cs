@@ -414,8 +414,8 @@ namespace SysWork.Data.GenericRepository
                 if (dbTransaction != null)
                     dbCommand.Transaction = dbTransaction;
 
-                foreach (var parameters in query.QueryParameters)
-                    dbCommand.Parameters.Add(CreateIDbDataParameter("@" + parameters.Key, parameters.Value));
+                foreach (var parameter in query.QueryParameters)
+                    dbCommand.Parameters.Add(CreateIDbDataParameter("@" + parameter.Key, parameter.Value));
 
                 if (_dataBaseEngine == EDataBaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();

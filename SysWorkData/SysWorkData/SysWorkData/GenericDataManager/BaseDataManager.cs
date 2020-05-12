@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Data.Common;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.Utilities;
@@ -131,6 +132,27 @@ namespace SysWork.Data.GenericDataManager
             return new DbExecutor(_connectionString, _dataBaseEngine);
         }
 
+        /// <summary>
+        /// Gets the database executor.
+        /// </summary>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <returns></returns>
+        public DbExecutor GetDbExecutor(DbConnection dbConnection)
+        {
+            return new DbExecutor(dbConnection);
+        }
+
+        /// <summary>
+        /// Gets the database executor.
+        /// </summary>
+        /// <param name="dbTransaction">The database transaction.</param>
+        /// <returns></returns>
+        public DbExecutor GetDbExecutor(DbTransaction dbTransaction)
+        {
+            return new DbExecutor(dbTransaction);
+        }
+
+
         /// <summary>Gets an DbConnection, corresponding to the database engine</summary>
         /// <returns></returns>
         public DbConnection GetDbConnection()
@@ -150,21 +172,13 @@ namespace SysWork.Data.GenericDataManager
 
         private DbConnection GetPersistentDbConnection()
         {
-            if (_persistentConnection == null)
+            if ((_persistentConnection == null) || (_persistentConnection.State != ConnectionState.Open))
             {
                 _persistentConnection = GetDbConnection();
-            }
-            else
-            {
-                if (_persistentConnection.State != System.Data.ConnectionState.Open)
-                    _persistentConnection = GetDbConnection();
-            }
-
-            if (_persistentConnection.State != System.Data.ConnectionState.Open)
                 _persistentConnection.Open();
+            }
 
             return _persistentConnection;
         }
-
     }
 }

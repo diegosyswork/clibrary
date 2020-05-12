@@ -9,9 +9,9 @@ namespace SysWork.Data.Common.DbConnector
 {
     /// <summary>
     /// Implementation of AbstractDbConnector Class for OleDb
-    /// <seealso cref="SysWork.Data.Common.DbConnector.AbstractDbConnector" />
     /// </summary>
-    public class DbConnectorOleDb : AbstractDbConnector
+    /// <seealso cref="SysWork.Data.Common.DbConnector.AbstractDBConnector" />
+    public class DbConnectorOleDb : AbstractDBConnector
     {
         /// <summary>
         /// try to connect to the specified parameters.

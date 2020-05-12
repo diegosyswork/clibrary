@@ -23,6 +23,6 @@
         /// <summary>
         /// The equals
         /// </summary>
-        Equals
+        Equals,
     }
 }

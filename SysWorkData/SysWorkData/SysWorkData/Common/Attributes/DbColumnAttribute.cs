@@ -46,7 +46,7 @@ namespace SysWork.Data.Common.Attributes
         public string ColumnName { get; set; } = null;
         
         /// <summary>
-        /// Sets true if requieres explicit conversion.
+        /// Sets true if requieres conversion.
         /// </summary>
         public bool Convert { get; set; }
         

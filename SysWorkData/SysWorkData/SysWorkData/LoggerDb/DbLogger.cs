@@ -3,7 +3,6 @@ using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
 using System.Text;
-using SysWork.Data.Common;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.Utilities;
 using SysWork.Data.Common.ValueObjects;

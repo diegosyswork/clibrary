@@ -4,13 +4,13 @@ namespace SysWork.Data.Common.Attributes
 {
     #region DOCUMENTATION Class
     /// <summary>
-    /// Use this class to decorate the properties of a class that represents a database view. 
+    /// Use this class to decorate a class that represents a database view. 
     /// Supports view names with special characters.
     /// </summary>
     /// <example>
     /// <code>
     /// <![CDATA[
-    /// [DbView(Name = "Persons")]
+    /// [DbView(Name = "PersonsView")]
     /// public class Person
     /// {
     ///     [DbColumn]

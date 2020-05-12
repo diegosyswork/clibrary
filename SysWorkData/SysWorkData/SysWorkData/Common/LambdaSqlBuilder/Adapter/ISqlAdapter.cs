@@ -1,4 +1,6 @@
 ﻿/* License: http://www.apache.org/licenses/LICENSE-2.0 */
+using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
+
 namespace SysWork.Data.Common.LambdaSqlBuilder.Adapter
 {
     /// <summary>

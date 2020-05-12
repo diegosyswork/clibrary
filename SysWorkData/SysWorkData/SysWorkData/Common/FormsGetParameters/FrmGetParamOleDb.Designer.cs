@@ -1,6 +1,6 @@
 ﻿namespace SysWork.Data.Common.FormsGetParam
 {
-    partial class FrmGetParamOleDb
+    internal partial class FrmGetParamOleDb
     {
         /// <summary>
         /// Required designer variable.
@@ -42,7 +42,7 @@
             // lblErrMessage
             // 
             this.lblErrMessage.AutoSize = true;
-            this.lblErrMessage.Location = new System.Drawing.Point(12, 196);
+            this.lblErrMessage.Location = new System.Drawing.Point(12, 244);
             this.lblErrMessage.MaximumSize = new System.Drawing.Size(232, 0);
             this.lblErrMessage.MinimumSize = new System.Drawing.Size(450, 0);
             this.lblErrMessage.Name = "lblErrMessage";
@@ -53,7 +53,7 @@
             // btnOk
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnOk.Location = new System.Drawing.Point(146, 212);
+            this.btnOk.Location = new System.Drawing.Point(214, 260);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(85, 21);
             this.btnOk.TabIndex = 21;
@@ -65,7 +65,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(268, 212);
+            this.btnCancel.Location = new System.Drawing.Point(342, 260);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(85, 21);
             this.btnCancel.TabIndex = 20;
@@ -77,7 +77,7 @@
             // 
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.pictureBox1.Image = global::SysWork.Data.Properties.Resources.connector_icon_oledb;
-            this.pictureBox1.Location = new System.Drawing.Point(191, -7);
+            this.pictureBox1.Location = new System.Drawing.Point(250, -9);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(125, 135);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -90,7 +90,7 @@
             this.grpConnectionString.Controls.Add(this.label8);
             this.grpConnectionString.Location = new System.Drawing.Point(12, 134);
             this.grpConnectionString.Name = "grpConnectionString";
-            this.grpConnectionString.Size = new System.Drawing.Size(458, 54);
+            this.grpConnectionString.Size = new System.Drawing.Size(590, 100);
             this.grpConnectionString.TabIndex = 24;
             this.grpConnectionString.TabStop = false;
             this.grpConnectionString.Text = "Datos de Conexion";
@@ -98,8 +98,10 @@
             // txtConnectionString
             // 
             this.txtConnectionString.Location = new System.Drawing.Point(108, 19);
+            this.txtConnectionString.Multiline = true;
             this.txtConnectionString.Name = "txtConnectionString";
-            this.txtConnectionString.Size = new System.Drawing.Size(344, 20);
+            this.txtConnectionString.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtConnectionString.Size = new System.Drawing.Size(474, 70);
             this.txtConnectionString.TabIndex = 9;
             // 
             // label8
@@ -115,7 +117,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(482, 245);
+            this.ClientSize = new System.Drawing.Size(614, 296);
             this.ControlBox = false;
             this.Controls.Add(this.grpConnectionString);
             this.Controls.Add(this.btnOk);

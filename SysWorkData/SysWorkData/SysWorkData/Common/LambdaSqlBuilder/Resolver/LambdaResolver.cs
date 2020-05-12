@@ -39,11 +39,7 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
             var member = GetMemberExpression(expression);
             var column = member.Member.GetCustomAttributes(false).OfType<DbColumnAttribute>().FirstOrDefault();
             var columnName = column.ColumnName ?? member.Member.Name;
-            // TODO: 
-            //if (column != null)
-            //    return column.Name;
-            //else
-            //    return member.Member.Name;
+
             return columnName;
         }
 
@@ -52,14 +48,14 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
             return GetTableOrViewName(typeof(T));
         }
 
+        /// <summary>
+        /// Gets the name of the table or view. If DbTable and DbView are not present, returs the name of class (Type Name).
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>
+        /// </returns>
         public static string GetTableOrViewName(Type type)
         {
-            //var table = type.GetCustomAttributes(false).OfType<DbTableAttribute>().FirstOrDefault();
-            //if (table != null)
-            //    return table.Name;
-            // else
-            //     return type.Name;
-
             var table = type.GetCustomAttributes(false).OfType<DbTableAttribute>().FirstOrDefault();
             var view = type.GetCustomAttributes(false).OfType<DbViewAttribute>().FirstOrDefault();
 
@@ -94,9 +90,10 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
                     return GetMemberExpression((expression as UnaryExpression).Operand);
             }
 
+
             throw new ArgumentException("Member expression expected");
         }
-
+        
         #endregion
     }
 }
