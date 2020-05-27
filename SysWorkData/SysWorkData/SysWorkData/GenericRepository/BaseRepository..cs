@@ -210,6 +210,16 @@ namespace SysWork.Data.GenericRepository
         }
 
         /// <summary>
+        /// Return new instance of SqlLam.
+        /// </summary>
+        /// <returns></returns>
+        protected SqlLam<TEntity> BaseSqlLam()
+        {
+            SetSqlLamAdapter();
+            return new SqlLam<TEntity>();
+        }
+
+        /// <summary>
         /// Creates an query parameters list.
         /// </summary>
         /// <returns></returns>

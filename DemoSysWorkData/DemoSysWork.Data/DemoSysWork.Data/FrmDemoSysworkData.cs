@@ -1291,17 +1291,17 @@ namespace Demo.SysWork.Data
         {
             LogText(Environment.NewLine + "///      START ExistsTable Method DEMO         ///" + Environment.NewLine);
 
-            string table = "Persons";
-            LogText(string.Format("Table {0} exists ={1} ", table, DbUtil.ExistsTable(DataManager.DataBaseEngine, DataManager.ConnectionString, table)));
+            string tableName = "Persons";
+            LogText(string.Format("Table {0} exists ={1} ", tableName, DbUtil.ExistsTable(DataManager.DataBaseEngine, DataManager.ConnectionString, tableName)));
 
-            table = "States";
-            LogText(string.Format("Table {0} exists ={1} ", table, DbUtil.ExistsTable(DataManager.DataBaseEngine, DataManager.ConnectionString, table)));
+            tableName = "States";
+            LogText(string.Format("Table {0} exists ={1} ", tableName, DbUtil.ExistsTable(DataManager.DataBaseEngine, DataManager.ConnectionString, tableName)));
 
-            table = "State";
-            LogText(string.Format("Table {0} exists ={1} ", table, DbUtil.ExistsTable(DataManager.DataBaseEngine, DataManager.ConnectionString, table)));
+            tableName = "State";
+            LogText(string.Format("Table {0} exists ={1} ", tableName, DbUtil.ExistsTable(DataManager.DataBaseEngine, DataManager.ConnectionString, tableName)));
 
-            table = "OtherTable";
-            LogText(string.Format("Table {0} exists ={1} ",table, DbUtil.ExistsTable(DataManager.DataBaseEngine, DataManager.ConnectionString, table)));
+            tableName = "OtherTable";
+            LogText(string.Format("Table {0} exists ={1} ",tableName, DbUtil.ExistsTable(DataManager.DataBaseEngine, DataManager.ConnectionString, tableName)));
 
             LogText(Environment.NewLine + "///      END ExistsTable Method DEMO         ///" + Environment.NewLine);
         }

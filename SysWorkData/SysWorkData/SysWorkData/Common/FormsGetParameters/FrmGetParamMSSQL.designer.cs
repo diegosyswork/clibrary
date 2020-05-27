@@ -121,7 +121,7 @@
             this.grpManualParameters.Controls.Add(this.label1);
             this.grpManualParameters.Location = new System.Drawing.Point(12, 133);
             this.grpManualParameters.Name = "grpManualParameters";
-            this.grpManualParameters.Size = new System.Drawing.Size(478, 129);
+            this.grpManualParameters.Size = new System.Drawing.Size(480, 129);
             this.grpManualParameters.TabIndex = 13;
             this.grpManualParameters.TabStop = false;
             this.grpManualParameters.Text = "Datos de Conexion";
@@ -130,7 +130,7 @@
             // 
             this.txtDataBase.Location = new System.Drawing.Point(108, 97);
             this.txtDataBase.Name = "txtDataBase";
-            this.txtDataBase.Size = new System.Drawing.Size(359, 20);
+            this.txtDataBase.Size = new System.Drawing.Size(361, 20);
             this.txtDataBase.TabIndex = 15;
             // 
             // label4
@@ -147,7 +147,7 @@
             this.txtPassword.Location = new System.Drawing.Point(108, 71);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(359, 20);
+            this.txtPassword.Size = new System.Drawing.Size(361, 20);
             this.txtPassword.TabIndex = 13;
             // 
             // label3
@@ -163,7 +163,7 @@
             // 
             this.txtLogin.Location = new System.Drawing.Point(108, 45);
             this.txtLogin.Name = "txtLogin";
-            this.txtLogin.Size = new System.Drawing.Size(359, 20);
+            this.txtLogin.Size = new System.Drawing.Size(361, 20);
             this.txtLogin.TabIndex = 11;
             // 
             // label2
@@ -179,7 +179,7 @@
             // 
             this.txtServer.Location = new System.Drawing.Point(108, 19);
             this.txtServer.Name = "txtServer";
-            this.txtServer.Size = new System.Drawing.Size(359, 20);
+            this.txtServer.Size = new System.Drawing.Size(361, 20);
             this.txtServer.TabIndex = 9;
             // 
             // label1
