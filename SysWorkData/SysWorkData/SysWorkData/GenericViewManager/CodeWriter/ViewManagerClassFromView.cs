@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using SysWork.Data.Common;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.ValueObjects;
 
@@ -84,10 +83,10 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
         {
             string ret = "";
 
-            ret += "\t\t public " + _entityName + "BaseViewManager (string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString,dataBaseEngine)" + Environment.NewLine;
-            ret += "\t\t {" + Environment.NewLine;
-            ret += "\t\t " + Environment.NewLine;
-            ret += "\t\t }" + Environment.NewLine;
+            ret += "\t\tpublic " + _entityName + "BaseViewManager (string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString,dataBaseEngine)" + Environment.NewLine;
+            ret += "\t\t{" + Environment.NewLine;
+            ret += "\t\t" + Environment.NewLine;
+            ret += "\t\t}" + Environment.NewLine;
 
             return ret;
         }
@@ -106,7 +105,6 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
             ret += "\t/// GetDataTableByLambdaExpressionFilter, \r\n";
             ret += "\t/// GetListByGenericWhereFilter, \r\n";
             ret += "\t/// GetDataTableByGenericWhereFilter, \r\n";
-            ret += "\t/// Find \r\n";
             ret += "\t/// Find \r\n";
             ret += "\t/// </summary>\r\n";
 

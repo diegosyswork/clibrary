@@ -456,7 +456,7 @@ namespace SysWork.Data.Common.Utilities
         ///     .AddFieldWithValue("Description","MANAOS UVA x 2.25 LT")
         ///     .AddFieldWithValue("IdCategory",5)
         ///     .AddFieldWithValue("Cost",155.4)
-        ///  .ExecuteScalar();
+        ///   .ExecuteScalar();
         /// ]]>
         /// </code> 
         /// </example>

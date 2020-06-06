@@ -101,6 +101,8 @@
     <Compile Include="Common\Attributes\DbColumnAttribute.cs" />
     <Compile Include="Common\Attributes\DbTableAttribute.cs" />
     <Compile Include="Common\Attributes\DbViewAttribute.cs" />
+    <Compile Include="GenericDataManager\CodeWriter\CodeWriterHelper.cs" />
+    <Compile Include="GenericDataManager\CodeWriter\DataManagerClassWriter.cs" />
     <Compile Include="GenericRepository\BaseRepository..cs" />
     <Compile Include="GenericRepository\BaseRepository.Add.cs" />
     <Compile Include="GenericRepository\BaseRepository.AddRange.cs" />

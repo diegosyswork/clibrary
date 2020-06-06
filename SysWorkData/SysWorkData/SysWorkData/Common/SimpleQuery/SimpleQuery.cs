@@ -6,6 +6,8 @@ using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.SimpleQuery
 {
+    // TODO: Crear Ejemplos del uso de los metodos de esta clase.
+
     /// <summary>
     /// Static class to Read Data Quickly.
     /// </summary>
@@ -94,7 +96,5 @@ namespace SysWork.Data.Common.SimpleQuery
                 return iter.Current;
             }
         }
-
-        // TODO: Crear Ejemplos del uso de los metodos de esta clase.
     }
 }

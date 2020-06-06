@@ -9,7 +9,6 @@ using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.Mapper
 {
-    ///TODO: Revisar la documentacion y crear ejemplo del uso de los metodos.
     /// <summary>
     /// Class to map entities from a datareader. 
     /// To perform the mapping use the DbColumn <see cref="DbColumnAttribute"/>decorator.
@@ -143,9 +142,6 @@ namespace SysWork.Data.Common.Mapper
             else
                 _propertyInfo = obj.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
 
-            //obj = default(TEntity);
-            //if (reader.Read())
-            //{
             obj = new TEntity();
             foreach (PropertyInfo i in _propertyInfo)
             {
@@ -176,7 +172,7 @@ namespace SysWork.Data.Common.Mapper
                     throw exception;
                 }
             }
-            //}
+
             return obj;
         }
 

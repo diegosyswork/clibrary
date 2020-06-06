@@ -7,7 +7,6 @@ using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
-using SysWork.Data.Common;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.ValueObjects;
@@ -28,6 +27,14 @@ namespace SysWork.Data.GenericRepository.CodeWriter
 
         private string _dbTableName;
         private SyntaxProvider _syntaxProvider;
+
+        /// <summary>
+        /// Gets the name of the repository.
+        /// </summary>
+        /// <value>
+        /// The name of the repository.
+        /// </value>
+        public string RepositoryName { get { return _className; } private set { } }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RepositoryClassFromTable"/> class. 
@@ -74,10 +81,10 @@ namespace SysWork.Data.GenericRepository.CodeWriter
             builder.AppendLine(CodeWriterHelper.AddUsing("System.Collections.Generic"));
             builder.AppendLine(CodeWriterHelper.AddUsing("System.Linq"));
             builder.AppendLine(CodeWriterHelper.AddUsing("System.Text"));
-            //builder.AppendLine(CodeWriterHelper.AddUsing("System.Threading.Tasks"));
             builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.Common"));
             builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.GenericRepository"));
             builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.Common.Attributes"));
+            builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.Common.ValueObjects"));
             builder.AppendLine(CodeWriterHelper.AddUsing(_nameSpace + ".Entities"));
             builder.AppendLine(CodeWriterHelper.StartNamespace(_nameSpace + ".Repositories"));
             builder.AppendLine(AddSummary());
@@ -391,10 +398,10 @@ namespace SysWork.Data.GenericRepository.CodeWriter
         {
             string ret = "";
 
-            ret += "\t\t public " + _entityName + "Repository (string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString,dataBaseEngine)" + Environment.NewLine;
-            ret += "\t\t {" + Environment.NewLine;
-            ret += "\t\t " + Environment.NewLine;
-            ret += "\t\t }" + Environment.NewLine;
+            ret += "\t\tpublic " + _entityName + "Repository (string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString,dataBaseEngine)" + Environment.NewLine;
+            ret += "\t\t{" + Environment.NewLine;
+            ret += "\t\t" + Environment.NewLine;
+            ret += "\t\t}" + Environment.NewLine;
 
             return ret;
         }
@@ -421,7 +428,6 @@ namespace SysWork.Data.GenericRepository.CodeWriter
             ret += "\t/// GetDataTableByLambdaExpressionFilter, \r\n";
             ret += "\t/// GetListByGenericWhereFilter, \r\n";
             ret += "\t/// GetDataTableByGenericWhereFilter, \r\n";
-            ret += "\t/// Find \r\n";
             ret += "\t/// Find \r\n";
             ret += "\t/// </summary>\r\n";
 

@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.OleDb;
 using System.Reflection;
-using SysWork.Data.Common;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.Attributes;
 using SysWork.Data.GenericRepository.Exceptions;

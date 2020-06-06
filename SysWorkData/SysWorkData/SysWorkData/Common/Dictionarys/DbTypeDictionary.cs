@@ -50,6 +50,7 @@ namespace SysWork.Data.Common.Dictionarys
             { "WChar", DbType.String },
             { "varwchar", DbType.String },
             { "longvarwchar", DbType.String },
+            { "timestamp", DbType.DateTime},
             { "tinyint", DbType.Int32 }
         };
     }

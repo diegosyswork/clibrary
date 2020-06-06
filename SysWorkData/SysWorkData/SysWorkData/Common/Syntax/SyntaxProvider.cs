@@ -238,8 +238,5 @@ namespace SysWork.Data.Common.Syntax
 
             return result;
         }
-
-
-
     }
 }

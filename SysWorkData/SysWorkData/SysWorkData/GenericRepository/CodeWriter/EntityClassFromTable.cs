@@ -131,10 +131,10 @@ namespace SysWork.Data.GenericRepository.CodeWriter
 
         private string AddSummary()
         {
-            string ret = "\t/// <summary>\r\n";
-            ret += "\t /// This class was created automatically with the class EntityClassFromDb.\r\n";
-            ret += "\t /// Please check the DbTypes and the field names.\r\n";
-            ret += "\t /// </summary>\r\n";
+            string ret = "\t\t/// <summary>\r\n";
+            ret += "\t\t/// This class was created automatically with the class EntityClassFromDb.\r\n";
+            ret += "\t\t/// Please check the DbTypes and the field names.\r\n";
+            ret += "\t\t/// </summary>\r\n";
 
             return ret;
         }
