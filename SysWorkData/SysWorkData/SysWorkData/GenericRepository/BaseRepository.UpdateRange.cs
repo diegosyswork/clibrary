@@ -133,17 +133,18 @@ namespace SysWork.Data.GenericRepository
 
                     parameterName = "@param_" + i.Name;
 
-                    if (!customAttibute.IsPrimary)
-                    {
+                    if (!customAttibute.IsIdentity)
                         parameterList.Append(string.Format("{0} = {1},", columnName, parameterName));
-                    }
-                    else
+
+                    if (customAttibute.IsPrimary)
                     {
                         if (where.ToString() != String.Empty)
                             where.Append(" AND ");
 
                         where.Append(string.Format("({0} = {1})", columnName, parameterName));
                     }
+
+
                     ColumnDbInfo cdbi = (ColumnDbInfo)_columnListWithDbInfo[i.Name];
                     dbCommand.Parameters.Add(CreateIDbDataParameter(parameterName, cdbi.DbType, i.GetValue(entity), cdbi.MaxLenght));
                 }

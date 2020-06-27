@@ -115,7 +115,7 @@ namespace SysWork.Data.GenericRepository
 
                 parameterName = "@param_" + i.Name;
 
-                if (customAttribute.IsPrimary)
+                if (customAttribute.IsIdentity)
                 {
                     if (where.ToString() != String.Empty)
                         where.Append(" AND ");

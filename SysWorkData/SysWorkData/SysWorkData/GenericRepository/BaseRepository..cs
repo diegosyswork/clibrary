@@ -282,7 +282,7 @@ namespace SysWork.Data.GenericRepository
             }
             catch (Exception)
             {
-                throw;
+                throw new IndexOutOfRangeException(string.Format("The column {0} in the table {1} not exists",columnName,TableName));
             }
 
             columnData.MaxLenght = null;

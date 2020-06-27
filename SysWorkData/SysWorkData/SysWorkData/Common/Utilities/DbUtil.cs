@@ -198,10 +198,10 @@ namespace SysWork.Data.Common.Utilities
                     throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
 
                 // For DEBUG mode, show the result of GetSchema Method
-                foreach (DataRow dataRow in dtColumns.Rows)
-                {
-                    Console.WriteLine($"COLUMN_NAME = {dataRow["COLUMN_NAME"]} TABLE_NAME = {dataRow["TABLE_NAME"]}");
-                }
+                //foreach (DataRow dataRow in dtColumns.Rows)
+                //{
+                //   Console.WriteLine($"COLUMN_NAME = {dataRow["COLUMN_NAME"]} TABLE_NAME = {dataRow["TABLE_NAME"]}");
+                //}
                 
                 // For compatibility with SQLite filter the TABLE_NAME, because the restriction does't work.
                 exists = dtColumns.Select(String.Format("COLUMN_NAME = '{0}' AND TABLE_NAME = '{1}'", columnName, tableName)).Length != 0;
@@ -482,7 +482,6 @@ namespace SysWork.Data.Common.Utilities
             }
             catch (Exception e)
             {
-                Console.Write(e.StackTrace);
                 return false;
             }
             return true;

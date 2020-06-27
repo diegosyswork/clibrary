@@ -64,7 +64,7 @@ namespace SysWork.Data.GenericRepository
             foreach (var pi in ListObjectPropertyInfo)
             {
                 var pk = pi.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
-                if (pk != null && pk.IsPrimary)
+                if (pk != null && pk.IsIdentity)
                 {
                     var columnName = _syntaxProvider.GetSecureColumnName(pk.ColumnName ?? pi.Name);
 

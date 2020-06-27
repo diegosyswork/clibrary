@@ -42,6 +42,7 @@ namespace SysWork.Data.Common.Dictionarys
             { "string", DbType.String },
             { "varchar", DbType.String },
             { "nvarchar", DbType.String },
+            { "longtext", DbType.String },
             { "nchar", DbType.String },
             { "char", DbType.AnsiStringFixedLength},
             { "ntext", DbType.String },

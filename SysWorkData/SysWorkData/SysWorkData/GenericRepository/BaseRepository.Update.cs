@@ -118,11 +118,10 @@ namespace SysWork.Data.GenericRepository
                 parameterName = "@param_" + i.Name;
                 var columnName = _syntaxProvider.GetSecureColumnName(customAttribute.ColumnName ?? i.Name);
 
-                if (!customAttribute.IsPrimary)
-                {
+                if (!customAttribute.IsIdentity)
                     parameterList.Append(string.Format("{0} = {1},", columnName, parameterName));
-                }
-                else
+
+                if (customAttribute.IsPrimary)
                 {
                     hasPrimary = true;
 
