@@ -4,7 +4,7 @@ using SysWork.Data.Common.ValueObjects;
 /// <summary>
 /// 
 /// </summary>
-namespace SysWork.Data.Common.Dictionarys
+namespace SysWork.Data.Common.Dictionaries
 {
     /// <summary>
     /// Character dictionary with which the names of database objects 

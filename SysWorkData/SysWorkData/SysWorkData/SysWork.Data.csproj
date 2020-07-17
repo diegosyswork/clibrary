@@ -40,6 +40,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Common\Attributes\Helpers\DbColumnHelper.cs" />
     <Compile Include="Common\DbConnector\AbstractDBConnector.cs" />
     <Compile Include="Common\ValueObjects\EConnectorParameterTypeUsed.cs" />
     <Compile Include="Common\Interfaces\Actions\IRecordCount.cs" />
@@ -51,9 +52,9 @@
     <Compile Include="Common\DbConnector\DbConnectorMySql.cs" />
     <Compile Include="Common\DbConnector\DbConnectorOleDb.cs" />
     <Compile Include="Common\DbConnector\DbConnectorSqLite.cs" />
-    <Compile Include="Common\Dictionarys\DbObjectNameCharReplacerDictionary.cs" />
-    <Compile Include="Common\Dictionarys\DbObjectNameStartsEnders.cs" />
-    <Compile Include="Common\Dictionarys\DbTypeDictionary.cs" />
+    <Compile Include="Common\Dictionaries\DbObjectNameCharReplacerDictionary.cs" />
+    <Compile Include="Common\Dictionaries\DbObjectNameStartsEnders.cs" />
+    <Compile Include="Common\Dictionaries\DbTypeDictionary.cs" />
     <Compile Include="Common\FormsGetParameters\FrmGetParamOleDb.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -10,7 +10,7 @@ using System.Text;
 using SysWork.Data.Common.Attributes;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.DbInfo;
-using SysWork.Data.Common.Dictionarys;
+using SysWork.Data.Common.Dictionaries;
 using SysWork.Data.Common.Filters;
 using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;

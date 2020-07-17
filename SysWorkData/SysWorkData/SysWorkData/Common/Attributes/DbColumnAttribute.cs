@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using SysWork.Data.Common.Syntax;
+using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.Attributes
 {

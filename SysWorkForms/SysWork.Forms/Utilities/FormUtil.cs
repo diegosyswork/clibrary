@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace SysWork.Forms.Utilities
 {
-    public enum EFormState
+    public enum EEditModeState
     {
         AllowEdit,
         NoAllowEdit
@@ -165,6 +165,7 @@ namespace SysWork.Forms.Utilities
             msk.Mask = "00/00/0000";
             msk.Text = "";
         }
+
         public static bool ValidateDateFormatMaskedTextBox(MaskedTextBox msk, out string errMessage, bool required = false)
         {
             errMessage = "";

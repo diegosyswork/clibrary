@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.Attributes;
 using SysWork.Data.Common.ValueObjects;
+using SysWork.Data.Common.Attributes.Helpers;
 
 namespace SysWork.Data.Common.Filters
 {
@@ -226,21 +225,7 @@ namespace SysWork.Data.Common.Filters
         /// <typeparam name="TEntity">The type of the entity.</typeparam>
         public void SetColumnsForSelect<TEntity>() where TEntity : class, new()
         {
-            TEntity entity = new TEntity();
-            StringBuilder sbColumnsSelect = new StringBuilder();
-
-            foreach (PropertyInfo i in entity.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList())
-            {
-                var customAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
-                string columnName = _syntaxProvider.GetSecureColumnName(customAttribute.ColumnName ?? i.Name);
-
-                sbColumnsSelect.Append(string.Format("{0},", columnName));
-            }
-
-            if (sbColumnsSelect.Length > 0)
-                sbColumnsSelect.Remove(sbColumnsSelect.Length - 1, 1);
-
-            _columnsForSelect = sbColumnsSelect.ToString();
+            _columnsForSelect = DbColumnHelper.GetColumnsForSelect<TEntity>();
         }
 
         /// <summary>

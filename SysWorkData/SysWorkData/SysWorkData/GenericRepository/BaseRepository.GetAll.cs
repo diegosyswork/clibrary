@@ -87,7 +87,6 @@ namespace SysWork.Data.GenericRepository
             }
 
             return collection;
-
         }
     }
 }

@@ -4,7 +4,6 @@ using System.IO;
 using System.Windows.Forms;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.ObjectResolver;
-using SysWork.Forms.FormsABM;
 using SysWork.Util.Logger;
 using TestFormsABM.Data;
 
@@ -31,7 +30,6 @@ namespace TestFormsABM
             Repository = _daoCliente;
 
             InitFormControls();
-
 
             codClienteTextBox.Validating += ValidaControl;
             razonSocialTextBox.Validating += ValidaControl;

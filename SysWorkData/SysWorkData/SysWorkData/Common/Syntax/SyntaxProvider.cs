@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using SysWork.Data.Common.Dictionarys;
+using SysWork.Data.Common.Dictionaries;
 using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.Syntax

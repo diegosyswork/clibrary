@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 
-namespace SysWork.Data.Common.Dictionarys
+namespace SysWork.Data.Common.Dictionaries
 {
     /// <summary>
     /// Dictionary of equivalences between database data types and DbType

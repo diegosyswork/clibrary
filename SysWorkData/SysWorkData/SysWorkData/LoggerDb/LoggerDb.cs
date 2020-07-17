@@ -2,7 +2,6 @@
 using System.Data;
 using System.Diagnostics;
 using System.Text;
-using SysWork.Data.Common;
 using SysWork.Data.Common.Utilities;
 using SysWork.Data.GenericRepository;
 using SysWork.Data.Common.Attributes;

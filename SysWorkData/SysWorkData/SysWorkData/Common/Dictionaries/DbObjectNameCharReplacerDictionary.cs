@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SysWork.Data.Common.Dictionarys
+namespace SysWork.Data.Common.Dictionaries
 {
     /// <summary>
     /// Dictionary to replace special characters in database object names.
