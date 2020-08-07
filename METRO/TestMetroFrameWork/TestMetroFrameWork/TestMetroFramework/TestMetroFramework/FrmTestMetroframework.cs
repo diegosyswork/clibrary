@@ -23,11 +23,12 @@ namespace TestMetroFramework
         private void FrmTestMetroframework_Load(object sender, EventArgs e)
         {
             CmbComprobante.SelectedIndex = 0;
-            CmbConndicionVenta.SelectedIndex = 0;
+            CmbCondicionVenta.SelectedIndex = 0;
             CmbListaPrecio.SelectedIndex = 0;
             CmbVendedor.SelectedIndex = 0;
 
             LoadData();
+
             GridArticulos.AutoGenerateColumns = false;
             GridArticulos.Columns["ColCodigo"].DataPropertyName = "CodArticulo";
             GridArticulos.Columns["ColDescripcion"].DataPropertyName = "Descripcion";
@@ -115,18 +116,18 @@ namespace TestMetroFramework
             DetalleGrilla cust = GridArticulos.Rows[e.RowIndex].DataBoundItem as DetalleGrilla;
             if (cust != null)
             {
-                PicImagenProducto.Image = RoundCorners(Image.FromFile($@"d:\recibir\{cust.CodArticulo}.png"), 500);
+                PicImagenArticuloPOS.Image = RoundCorners(Image.FromFile($@"d:\recibir\{cust.CodArticulo}.png"), 500);
 
-                LblImporteArticulo.Text = string.Format("{0:###,###,##0.00}", cust.Unitario);
-                LblDescripcionArticulo.Text = string.Format("{0:###,###,##0.00}", cust.Cantidad) + " x " + cust.Descripcion.ToUpper();
+                LblImporteArticuloPOS.Text = string.Format("{0:###,###,##0.00}", cust.Unitario);
+                LblDescripcionArticuloPOS.Text = string.Format("{0:###,###,##0.00}", cust.Cantidad) + " x " + cust.Descripcion.ToUpper();
             }
         }
 
         private void GridArticulos_RowLeave(object sender, DataGridViewCellEventArgs e)
         {
-            PicImagenProducto.Image = null;
-            LblImporteArticulo.Text = "";
-            LblDescripcionArticulo.Text = "";
+            PicImagenArticuloPOS.Image = null;
+            LblImporteArticuloPOS.Text = "";
+            LblDescripcionArticuloPOS.Text = "";
 
         }
 

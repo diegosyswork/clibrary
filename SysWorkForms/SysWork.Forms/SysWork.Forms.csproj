@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\ICRUDForm.cs" />
+    <Compile Include="Interfaces\ICRUDFormWListview.cs" />
     <Compile Include="Utilities\DataEntryUtil.cs" />
     <Compile Include="Utilities\FormUtil.cs" />
     <Compile Include="Utilities\ListViewColumnSorter.cs" />

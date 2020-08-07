@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
-using SysWork.Data.Common;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.Filters;
 using SysWork.Data.GenericRepository.Exceptions;
@@ -12,7 +11,7 @@ using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.GenericRepository
 {
-   public abstract partial class BaseRepository<TEntity> : IGetListByGenericWhereFilter<TEntity>
+    public abstract partial class BaseRepository<TEntity> : IGetListByGenericWhereFilter<TEntity>
    {
         public IList<TEntity> GetListByGenericWhereFilter(GenericWhereFilter whereFilter)
         {

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoSysWork.Data", "DemoSys
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysWork.Data", "..\..\SysWorkData\SysWorkData\SysWorkData\SysWork.Data.csproj", "{885F2F8D-05A7-49DC-BC26-DCC00CA47C6E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SysWork.Data.DbConnector", "..\..\SysWorkDataDbConnector\SysWork.Data.DbConnector\SysWork.Data.DbConnector.csproj", "{82F1B0AA-7E76-405C-9C1F-6D6197C5918C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{885F2F8D-05A7-49DC-BC26-DCC00CA47C6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{885F2F8D-05A7-49DC-BC26-DCC00CA47C6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{885F2F8D-05A7-49DC-BC26-DCC00CA47C6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82F1B0AA-7E76-405C-9C1F-6D6197C5918C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82F1B0AA-7E76-405C-9C1F-6D6197C5918C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82F1B0AA-7E76-405C-9C1F-6D6197C5918C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82F1B0AA-7E76-405C-9C1F-6D6197C5918C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

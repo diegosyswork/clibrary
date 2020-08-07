@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -12,22 +13,42 @@ namespace SysWork.Forms.Utilities
 
     public static class FormUtil
     {
-        /// <summary>
-        /// Limpia los controles (TextBox, ComboBox,CheckBox,RadioButton)
-        /// </summary>
-        /// <param name="container">Control contenedor que se recorrera</param>
-        /// <param name="excludedNamesControl">lista de controles separada por comas que no seran tenidos en cuenta</param>
-        public static void CleanControls(Control container, params string[] excludedNamesControl)
+        public static void CleanControls(Control container)
         {
-            var list = excludedNamesControl.ToList();
+            var list = new List<string>();
+            CleanControls(container, list);
+        }
 
+        public static void CleanControls(Control container, params Control[] excludedControls)
+        {
+            var list = new List<string>();
+            foreach (var item in excludedControls)
+                list.Add(item.Name);
+        }
+
+        public static void CleanControls(Control container, string[] excludedControls)
+        {
+            CleanControls(container, excludedControls.ToList());
+        }
+
+        public static void CleanControls(Control container, List<Control> excludedControls)
+        {
+            var list = new List<string>();
+            foreach (var item in excludedControls)
+                list.Add(item.Name);
+
+            CleanControls(container,list);
+        }
+
+        public static void CleanControls(Control container, List<string> excludedControls)
+        {
             foreach (Control control in container.Controls)
             {
-                if (!list.Exists(c => control.Name == c))
+                if (!excludedControls.Exists(c => control.Name == c))
                 {
                     if (control.Controls.Count > 0)
                     {
-                        CleanControls(control, excludedNamesControl);
+                        CleanControls(control, excludedControls);
                     }
                     else
                     {
@@ -60,62 +81,58 @@ namespace SysWork.Forms.Utilities
                 }
             }
         }
-        /// <summary>
-        /// Establece si los controles de un formulario se pueden editar
-        /// Solo lo hace en (TextBox, MaskedTextBox, CheckBox, ComboBox)
-        /// </summary>
-        /// <param name="container">Control contenedor que se recorrera</param>
-        /// <param name="allowEdit">permite la edicion</param>
-        /// <param name="excludedNameControls">lista de controles separada por coma que no seran tenidos en cuenta</param>
-        /// <param name="inverseStateNameControls">lista de controles separada por coma que deberan funcionar a la inversa de allowEdit </param>
-        public static void EditModeControls(Control container, bool allowEdit, string excludedNameControls, string inverseStateNameControls)
+        public static void EditModeControls(Control container, EEditModeState editModeState, List<string> uniqueKeyControls)
         {
+            var excludedControlsNames = new List<string>();
+            EditModeControls(container, editModeState, uniqueKeyControls, excludedControlsNames);
+        }
+        public static void EditModeControls(Control container, EEditModeState editModeState, List<Control> uniqueKeyControls)
+        {
+            var listUniqueKeyControls = new List<String>();
+            foreach (var item in uniqueKeyControls)
+                listUniqueKeyControls.Add(item.Name);
 
-            string[] localExcludedNameControls = new string[1];
-            string[] localInverseStateNameControls = new string[1];
+            var excludedControlsNames = new List<string>();
+            EditModeControls(container, editModeState,  listUniqueKeyControls, excludedControlsNames);
+        }
 
-            if (!string.IsNullOrEmpty(excludedNameControls))
-                localExcludedNameControls = excludedNameControls.Split(',');
-
-            if (!string.IsNullOrEmpty(inverseStateNameControls))
-                localInverseStateNameControls = inverseStateNameControls.Split(',');
-
-            var listExcluded = localExcludedNameControls.ToList();
-            var listInverse = localInverseStateNameControls.ToList();
+        public static void EditModeControls(Control container, EEditModeState editModeState, List<string> uniqueKeyControls, List<string> excludedControlsNames)
+        {
+            bool allowEdit = (editModeState == EEditModeState.AllowEdit);
 
             foreach (Control control in container.Controls)
             {
-                if (!listExcluded.Exists(c => control.Name == c))
+                if (!excludedControlsNames.Exists(c => control.Name == c))
                 {
                     if (control.Controls.Count > 0)
                     {
-                        EditModeControls(control, allowEdit, excludedNameControls, inverseStateNameControls);
+                        EditModeControls(control, editModeState , uniqueKeyControls,excludedControlsNames);
                     }
                     else
                     {
                         if (control is TextBox)
                         {
-                            ((TextBox)control).ReadOnly = (listInverse.Exists(i => control.Name == i)) ? allowEdit : !allowEdit;
+                            ((TextBox)control).ReadOnly = (uniqueKeyControls.Exists(i => control.Name == i)) ? allowEdit : !allowEdit;
                         }
                         else if (control is RadioButton)
                         {
-                            ((RadioButton)control).Enabled = (listInverse.Exists(i => control.Name == i)) ? !allowEdit : allowEdit;
+                            ((RadioButton)control).Enabled = (uniqueKeyControls.Exists(i => control.Name == i)) ? !allowEdit : allowEdit;
                         }
                         else if (control is CheckBox)
                         {
-                            ((CheckBox)control).Enabled = (listInverse.Exists(i => control.Name == i)) ? !allowEdit : allowEdit;
+                            ((CheckBox)control).Enabled = (uniqueKeyControls.Exists(i => control.Name == i)) ? !allowEdit : allowEdit;
                         }
                         else if (control is ComboBox)
                         {
-                            ((ComboBox)control).Enabled = (listInverse.Exists(i => control.Name == i)) ? !allowEdit : allowEdit;
+                            ((ComboBox)control).Enabled = (uniqueKeyControls.Exists(i => control.Name == i)) ? !allowEdit : allowEdit;
                         }
                         else if (control is MaskedTextBox)
                         {
-                            ((MaskedTextBox)control).ReadOnly = (listInverse.Exists(i => control.Name == i)) ? allowEdit : !allowEdit;
+                            ((MaskedTextBox)control).ReadOnly = (uniqueKeyControls.Exists(i => control.Name == i)) ? allowEdit : !allowEdit;
                         }
                         else if (control is ListView)
                         {
-                            ((ListView)control).Enabled = (listInverse.Exists(i => control.Name == i)) ? !allowEdit : allowEdit;
+                            ((ListView)control).Enabled = (uniqueKeyControls.Exists(i => control.Name == i)) ? !allowEdit : allowEdit;
                         }
                     }
                 }
@@ -194,49 +211,37 @@ namespace SysWork.Forms.Utilities
         public static void ListViewCheckAll(ListView listView)
         {
             foreach (ListViewItem item in listView.Items)
-            {
                 item.Checked = true;
-            }
         }
 
         public static void ListViewUnCheckAll(ListView listView)
         {
             foreach (int index in listView.CheckedIndices)
-            {
                 listView.Items[index].Checked = false;
-            }
         }
 
         public static void ListViewInverseCheck(ListView listView)
         {
             foreach (ListViewItem item in listView.Items)
-            {
                 item.Checked = !item.Checked;
-            }
         }
 
         public static void ListViewSelectAll(ListView listView)
         {
             foreach (ListViewItem item in listView.Items)
-            {
                 item.Selected = true;
-            }
         }
 
         public static void ListViewUnSelectAll(ListView listView)
         {
             foreach (int index in listView.SelectedIndices)
-            {
                 listView.Items[index].Checked = false;
-            }
         }
 
         public static void ListViewInverseSelect(ListView listView)
         {
             foreach (ListViewItem item in listView.Items)
-            {
                 item.Selected = !item.Selected;
-            }
         }
 
         public static bool ValidateDateFormatMaskedFromTo(MaskedTextBox msk1, MaskedTextBox msk2, out string errMessage, string nombreParametro = null)

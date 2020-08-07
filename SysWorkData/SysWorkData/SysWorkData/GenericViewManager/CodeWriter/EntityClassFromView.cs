@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
+using System.Data.OleDb;
+using System.Reflection;
 using System.Text;
 using SysWork.Data.Common;
 using SysWork.Data.Common.DataObjectProvider;
+using SysWork.Data.Common.Dictionaries;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.ValueObjects;
 
@@ -74,53 +77,54 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
             builder.AppendLine(CodeWriterViewHelper.StartClass(_className));
             builder.AppendLine(AddSummary());
 
-
+            DataTable columns;
             using (DbConnection dbConnection = StaticDbObjectProvider.GetDbConnection(_databaseEngine, _connectionString))
             {
                 dbConnection.Open();
 
-                string dbCommandText = string.Format(_syntaxProvider.GetQuerySelectTop0(_dbViewName));
-                var dbCommand = dbConnection.CreateCommand();
-                dbCommand.CommandText = dbCommandText;
+                if (_databaseEngine == EDataBaseEngine.OleDb || _databaseEngine == EDataBaseEngine.MySql)
+                    columns = dbConnection.GetSchema("Columns", new[] { null, null, _dbViewName, null });
+                else
+                    columns = dbConnection.GetSchema("Columns", new[] { dbConnection.Database, null, _dbViewName, null });
 
-                DataTable schema = dbCommand.ExecuteReader(CommandBehavior.KeyInfo).GetSchemaTable();
+                columns.DefaultView.Sort = "ORDINAL_POSITION ASC";
+                columns = columns.DefaultView.ToTable();
 
-                foreach (DataRow dataRow in schema.Rows)
+                foreach (DataRow dataRow in columns.Rows)
                 {
-                    bool isPrimary = (bool)dataRow["IsKey"];
-                    bool isIdentity = false;
-                    switch (_databaseEngine)
-                    {
-                        case EDataBaseEngine.MSSqlServer:
-                            isIdentity = (bool)dataRow["IsIdentity"];
-                            break;
-                        case EDataBaseEngine.SqLite:
-                            isIdentity = (bool)dataRow["IsAutoIncrement"];
-                            break;
-                        case EDataBaseEngine.OleDb:
-                            isIdentity = (bool)dataRow["IsAutoIncrement"];
-                            break;
-                        case EDataBaseEngine.MySql:
-                            isIdentity = (bool)dataRow["IsAutoIncrement"];
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException("The databaseEngine is not supported by this method (GetTextClass)");
-                    }
-
-                    bool allowDbNull = (bool)dataRow["AllowDbNull"];
-                    string columnName = dataRow["ColumnName"].ToString();
-                    string columnDataType = dataRow["DataType"].ToString();
-
+                    string columnName = dataRow["COLUMN_NAME"].ToString();
                     string propertyName = columnName;
                     propertyName = propertyName.Replace(" ", "").Replace("-", "").Replace("/", "_");
 
-                    string dataType = CodeWriterViewHelper.GetDataType(columnDataType, allowDbNull);
+                    var dbType = dataRow["DATA_TYPE"];
+                    var nullable = dataRow["IS_NULLABLE"].ToString().ToLower();
+                    var isNullable = (!nullable.Equals("no")) && (!nullable.Equals("false"));
 
-                    builder.AppendLine(CodeWriterViewHelper.AddDbColumnAttribute(isIdentity, isPrimary, (propertyName != columnName) ? columnName : null));
+                    var dataType = "";
+                    if (_databaseEngine== EDataBaseEngine.OleDb)
+                    {
+                        if (DbTypeDictionary.DbColumnTypeToDbTypeEnum.TryGetValue(((OleDbType)dbType).ToString(), out DbType dBTypeValue))
+                            dataType = dBTypeValue.ToString();
+                        else
+                            throw new ArgumentOutOfRangeException("The datatype is not recognited. See the DbColumnTypeToDbTypeEnum Dictionary");
+                    }
+                    else
+                    {
+                        if (DbTypeDictionary.DbColumnTypeToDbTypeEnum.TryGetValue(dbType.ToString(), out DbType dBTypeValue))
+                            dataType = dBTypeValue.ToString();
+                        else
+                            throw new ArgumentOutOfRangeException("The datatype is not recognited. See the DbColumnTypeToDbTypeEnum Dictionary");
+                    }
+
+                    dataType = CodeWriterViewHelper.GetDataType(dataType, isNullable);
+
+                    builder.AppendLine(CodeWriterViewHelper.AddDbColumnAttribute((propertyName != columnName) ? columnName : null));
                     builder.AppendLine(CodeWriterViewHelper.AddPublicProperty(dataType, propertyName));
                 }
-            }
 
+                dbConnection.Close();
+
+            }
             builder.AppendLine(CodeWriterViewHelper.EndClass());
             builder.AppendLine(CodeWriterViewHelper.EndNamespace());
 
@@ -129,10 +133,10 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
 
         private string AddSummary()
         {
-            string ret = "\t/// <summary>\r\n";
-            ret += "\t /// This class was created automatically with the class EntityClassFromView.\r\n";
-            ret += "\t /// Please check the DbTypes and the field names.\r\n";
-            ret += "\t /// </summary>\r\n";
+            string ret = "\t\t/// <summary>\r\n";
+            ret += "\t\t/// This class was created automatically with the class EntityClassFromView.\r\n";
+            ret += "\t\t/// Please check the DbTypes and the field names.\r\n";
+            ret += "\t\t/// </summary>\r\n";
 
             return ret;
         }

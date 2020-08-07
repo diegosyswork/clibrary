@@ -6,7 +6,6 @@ using SysWork.Data.Common.ValueObjects;
 namespace SysWork.Data.GenericViewManager.CodeWriter
 {
     /// <summary>
-    /// 
     /// </summary>
     public class ViewManagerClassFromView
     {

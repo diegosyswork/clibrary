@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 using SysWork.Forms.Utilities;
 
@@ -28,7 +29,7 @@ namespace SysWork.Forms.Interfaces
         /// <value>
         ///   <c>true</c> if [no validate]; otherwise, <c>false</c>.
         /// </value>
-        bool _NoValidate { get; set; }
+        bool _DoNotValidateForm { get; set; }
 
         /// <summary>
         /// Gets or sets the unique key controls.
@@ -39,9 +40,9 @@ namespace SysWork.Forms.Interfaces
         List<Control> _UniqueKeyControls { get; set; }
 
         /// <summary>
-        /// Gets the repositories.
+        /// Gets the data objects.
         /// </summary>
-        void GetRepositories();
+        void GetDataObjects();
 
         /// <summary>
         /// Initializes the controls.
@@ -51,7 +52,7 @@ namespace SysWork.Forms.Interfaces
         /// <summary>
         /// Cleans the controls.
         /// </summary>
-        void CleanControls();
+        void InitializeCRUDForm();
 
         /// <summary>
         /// Sets the unique controls.
@@ -59,17 +60,18 @@ namespace SysWork.Forms.Interfaces
         void SetUniqueControls();
 
         /// <summary>
-        /// Validates the control.
-        /// </summary>
-        /// <param name="control">The control.</param>
-        /// <returns></returns>
-        bool ValidateControl(Control control);
-
-        /// <summary>
         /// Sets the state of the edit mode.
         /// </summary>
         /// <param name="editMode">The edit mode.</param>
         void SetEditModeState(EEditModeState editMode);
+
+        void SetValidateControlEvent();
+        /// <summary>
+        /// Validates the control.
+        /// </summary>
+        /// <param name="control">The control.</param>
+        /// <returns></returns>
+        void ValidateControl(object control, CancelEventArgs e);
 
         /// <summary>
         /// Entities the values to controls.
@@ -98,18 +100,6 @@ namespace SysWork.Forms.Interfaces
         bool IsValidDataForDelete();
 
         /// <summary>
-        /// Calls the asociated report.
-        /// </summary>
-        void CallReport();
-
-        /// <summary>
-        /// Queries the control.
-        /// </summary>
-        /// <param name="control">The control.</param>
-        /// <returns></returns>
-        bool QueryControl(Control control);
-
-        /// <summary>
         /// Saves the entity.
         /// </summary>
         /// <param name="errMessage">The error message.</param>
@@ -122,5 +112,17 @@ namespace SysWork.Forms.Interfaces
         /// <param name="errMessage">The error message.</param>
         /// <returns></returns>
         bool DeleteData(out string errMessage);
+        
+        /// <summary>
+        /// Calls the asociated report.
+        /// </summary>
+        void CallReport();
+
+        /// <summary>
+        /// Queries the control.
+        /// </summary>
+        /// <param name="control">The control.</param>
+        /// <returns></returns>
+        bool QueryControl(Control control);
     }
 }

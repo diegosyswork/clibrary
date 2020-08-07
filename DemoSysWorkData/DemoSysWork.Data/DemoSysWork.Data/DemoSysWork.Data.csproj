@@ -116,6 +116,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\SysWorkDataDbConnector\SysWork.Data.DbConnector\SysWork.Data.DbConnector.csproj">
+      <Project>{82f1b0aa-7e76-405c-9c1f-6d6197c5918c}</Project>
+      <Name>SysWork.Data.DbConnector</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\SysWorkData\SysWorkData\SysWorkData\SysWork.Data.csproj">
       <Project>{885f2f8d-05a7-49dc-bc26-dcc00ca47c6e}</Project>
       <Name>SysWork.Data</Name>

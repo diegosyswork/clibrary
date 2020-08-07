@@ -72,7 +72,7 @@
             this.CmbVendedor = new MetroFramework.Controls.MetroComboBox();
             this.panelCondicionVenta = new System.Windows.Forms.Panel();
             this.LblCondicionVenta = new MetroFramework.Controls.MetroLabel();
-            this.CmbConndicionVenta = new MetroFramework.Controls.MetroComboBox();
+            this.CmbCondicionVenta = new MetroFramework.Controls.MetroComboBox();
             this.PanelLista = new System.Windows.Forms.Panel();
             this.CmbListaPrecio = new MetroFramework.Controls.MetroComboBox();
             this.LblLista = new MetroFramework.Controls.MetroLabel();
@@ -82,9 +82,9 @@
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
-            this.PicImagenProducto = new System.Windows.Forms.PictureBox();
-            this.LblImporteArticulo = new MetroFramework.Controls.MetroLabel();
-            this.metroTextBox5 = new MetroFramework.Controls.MetroTextBox();
+            this.PicImagenArticuloPOS = new System.Windows.Forms.PictureBox();
+            this.LblImporteArticuloPOS = new MetroFramework.Controls.MetroLabel();
+            this.TxtCodArticuloPOS = new MetroFramework.Controls.MetroTextBox();
             this.panelGrilla = new MetroFramework.Controls.MetroPanel();
             this.GridArticulos = new MetroFramework.Controls.MetroGrid();
             this.ColCodigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -93,7 +93,7 @@
             this.ColUnitario = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColDescuento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColTotal = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.LblDescripcionArticulo = new MetroFramework.Controls.MetroLabel();
+            this.LblDescripcionArticuloPOS = new MetroFramework.Controls.MetroLabel();
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
             this.LblImporteTotal = new MetroFramework.Controls.MetroLabel();
@@ -110,7 +110,7 @@
             this.panelCondicionVenta.SuspendLayout();
             this.PanelLista.SuspendLayout();
             this.metroToolStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PicImagenProducto)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PicImagenArticuloPOS)).BeginInit();
             this.panelGrilla.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridArticulos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
@@ -575,7 +575,7 @@
             // panelCondicionVenta
             // 
             this.panelCondicionVenta.Controls.Add(this.LblCondicionVenta);
-            this.panelCondicionVenta.Controls.Add(this.CmbConndicionVenta);
+            this.panelCondicionVenta.Controls.Add(this.CmbCondicionVenta);
             this.panelCondicionVenta.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelCondicionVenta.Location = new System.Drawing.Point(353, 113);
             this.panelCondicionVenta.Name = "panelCondicionVenta";
@@ -591,25 +591,25 @@
             this.LblCondicionVenta.TabIndex = 25;
             this.LblCondicionVenta.Text = "Condicion Venta";
             // 
-            // CmbConndicionVenta
+            // CmbCondicionVenta
             // 
-            this.CmbConndicionVenta.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.CmbCondicionVenta.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.CmbConndicionVenta.FontSize = MetroFramework.MetroComboBoxSize.Small;
-            this.CmbConndicionVenta.FontWeight = MetroFramework.MetroComboBoxWeight.Light;
-            this.CmbConndicionVenta.FormattingEnabled = true;
-            this.CmbConndicionVenta.IntegralHeight = false;
-            this.CmbConndicionVenta.ItemHeight = 19;
-            this.CmbConndicionVenta.Items.AddRange(new object[] {
+            this.CmbCondicionVenta.FontSize = MetroFramework.MetroComboBoxSize.Small;
+            this.CmbCondicionVenta.FontWeight = MetroFramework.MetroComboBoxWeight.Light;
+            this.CmbCondicionVenta.FormattingEnabled = true;
+            this.CmbCondicionVenta.IntegralHeight = false;
+            this.CmbCondicionVenta.ItemHeight = 19;
+            this.CmbCondicionVenta.Items.AddRange(new object[] {
             "Contado",
             "Cuenta Corriente",
             "Cheque 15 Dias FF",
             "Cheque 30 Dias FF"});
-            this.CmbConndicionVenta.Location = new System.Drawing.Point(117, 3);
-            this.CmbConndicionVenta.Name = "CmbConndicionVenta";
-            this.CmbConndicionVenta.Size = new System.Drawing.Size(287, 25);
-            this.CmbConndicionVenta.TabIndex = 24;
-            this.CmbConndicionVenta.UseSelectable = true;
+            this.CmbCondicionVenta.Location = new System.Drawing.Point(117, 3);
+            this.CmbCondicionVenta.Name = "CmbCondicionVenta";
+            this.CmbCondicionVenta.Size = new System.Drawing.Size(287, 25);
+            this.CmbCondicionVenta.TabIndex = 24;
+            this.CmbCondicionVenta.UseSelectable = true;
             // 
             // PanelLista
             // 
@@ -716,58 +716,58 @@
             this.toolStripButton5.Text = "toolStripButton5";
             this.toolStripButton5.Click += new System.EventHandler(this.toolStripButton5_Click);
             // 
-            // PicImagenProducto
+            // PicImagenArticuloPOS
             // 
-            this.PicImagenProducto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.PicImagenProducto.Location = new System.Drawing.Point(898, 283);
-            this.PicImagenProducto.Name = "PicImagenProducto";
-            this.PicImagenProducto.Size = new System.Drawing.Size(100, 100);
-            this.PicImagenProducto.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.PicImagenProducto.TabIndex = 7;
-            this.PicImagenProducto.TabStop = false;
+            this.PicImagenArticuloPOS.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.PicImagenArticuloPOS.Location = new System.Drawing.Point(898, 283);
+            this.PicImagenArticuloPOS.Name = "PicImagenArticuloPOS";
+            this.PicImagenArticuloPOS.Size = new System.Drawing.Size(100, 100);
+            this.PicImagenArticuloPOS.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.PicImagenArticuloPOS.TabIndex = 7;
+            this.PicImagenArticuloPOS.TabStop = false;
             // 
-            // LblImporteArticulo
+            // LblImporteArticuloPOS
             // 
-            this.LblImporteArticulo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.LblImporteArticulo.FontSize = MetroFramework.MetroLabelSize.Tall;
-            this.LblImporteArticulo.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.LblImporteArticulo.Location = new System.Drawing.Point(861, 249);
-            this.LblImporteArticulo.Name = "LblImporteArticulo";
-            this.LblImporteArticulo.Size = new System.Drawing.Size(140, 34);
-            this.LblImporteArticulo.TabIndex = 8;
-            this.LblImporteArticulo.Text = "$ 289.00";
-            this.LblImporteArticulo.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            this.LblImporteArticulo.UseStyleColors = true;
+            this.LblImporteArticuloPOS.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.LblImporteArticuloPOS.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.LblImporteArticuloPOS.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.LblImporteArticuloPOS.Location = new System.Drawing.Point(861, 249);
+            this.LblImporteArticuloPOS.Name = "LblImporteArticuloPOS";
+            this.LblImporteArticuloPOS.Size = new System.Drawing.Size(140, 34);
+            this.LblImporteArticuloPOS.TabIndex = 8;
+            this.LblImporteArticuloPOS.Text = "$ 289.00";
+            this.LblImporteArticuloPOS.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.LblImporteArticuloPOS.UseStyleColors = true;
             // 
-            // metroTextBox5
-            // 
-            // 
+            // TxtCodArticuloPOS
             // 
             // 
-            this.metroTextBox5.CustomButton.Image = null;
-            this.metroTextBox5.CustomButton.Location = new System.Drawing.Point(234, 1);
-            this.metroTextBox5.CustomButton.Name = "";
-            this.metroTextBox5.CustomButton.Size = new System.Drawing.Size(27, 27);
-            this.metroTextBox5.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
-            this.metroTextBox5.CustomButton.TabIndex = 1;
-            this.metroTextBox5.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
-            this.metroTextBox5.CustomButton.UseSelectable = true;
-            this.metroTextBox5.CustomButton.Visible = false;
-            this.metroTextBox5.Lines = new string[0];
-            this.metroTextBox5.Location = new System.Drawing.Point(8, 251);
-            this.metroTextBox5.MaxLength = 32767;
-            this.metroTextBox5.Name = "metroTextBox5";
-            this.metroTextBox5.PasswordChar = '\0';
-            this.metroTextBox5.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.metroTextBox5.SelectedText = "";
-            this.metroTextBox5.SelectionLength = 0;
-            this.metroTextBox5.SelectionStart = 0;
-            this.metroTextBox5.ShortcutsEnabled = true;
-            this.metroTextBox5.Size = new System.Drawing.Size(262, 29);
-            this.metroTextBox5.TabIndex = 9;
-            this.metroTextBox5.UseSelectable = true;
-            this.metroTextBox5.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
-            this.metroTextBox5.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
+            // 
+            // 
+            this.TxtCodArticuloPOS.CustomButton.Image = null;
+            this.TxtCodArticuloPOS.CustomButton.Location = new System.Drawing.Point(234, 1);
+            this.TxtCodArticuloPOS.CustomButton.Name = "";
+            this.TxtCodArticuloPOS.CustomButton.Size = new System.Drawing.Size(27, 27);
+            this.TxtCodArticuloPOS.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
+            this.TxtCodArticuloPOS.CustomButton.TabIndex = 1;
+            this.TxtCodArticuloPOS.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.TxtCodArticuloPOS.CustomButton.UseSelectable = true;
+            this.TxtCodArticuloPOS.CustomButton.Visible = false;
+            this.TxtCodArticuloPOS.Lines = new string[0];
+            this.TxtCodArticuloPOS.Location = new System.Drawing.Point(8, 251);
+            this.TxtCodArticuloPOS.MaxLength = 32767;
+            this.TxtCodArticuloPOS.Name = "TxtCodArticuloPOS";
+            this.TxtCodArticuloPOS.PasswordChar = '\0';
+            this.TxtCodArticuloPOS.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.TxtCodArticuloPOS.SelectedText = "";
+            this.TxtCodArticuloPOS.SelectionLength = 0;
+            this.TxtCodArticuloPOS.SelectionStart = 0;
+            this.TxtCodArticuloPOS.ShortcutsEnabled = true;
+            this.TxtCodArticuloPOS.Size = new System.Drawing.Size(262, 29);
+            this.TxtCodArticuloPOS.TabIndex = 9;
+            this.TxtCodArticuloPOS.UseSelectable = true;
+            this.TxtCodArticuloPOS.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+            this.TxtCodArticuloPOS.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
             // 
             // panelGrilla
             // 
@@ -888,18 +888,18 @@
             this.ColTotal.HeaderText = "TOTAL";
             this.ColTotal.Name = "ColTotal";
             // 
-            // LblDescripcionArticulo
+            // LblDescripcionArticuloPOS
             // 
-            this.LblDescripcionArticulo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.LblDescripcionArticuloPOS.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.LblDescripcionArticulo.FontSize = MetroFramework.MetroLabelSize.Tall;
-            this.LblDescripcionArticulo.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.LblDescripcionArticulo.Location = new System.Drawing.Point(276, 249);
-            this.LblDescripcionArticulo.Name = "LblDescripcionArticulo";
-            this.LblDescripcionArticulo.Size = new System.Drawing.Size(616, 34);
-            this.LblDescripcionArticulo.TabIndex = 11;
-            this.LblDescripcionArticulo.Text = "2 x SHAMPOO DAVE CUIDADO TOTAL x 900 ml";
-            this.LblDescripcionArticulo.UseStyleColors = true;
+            this.LblDescripcionArticuloPOS.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.LblDescripcionArticuloPOS.FontWeight = MetroFramework.MetroLabelWeight.Regular;
+            this.LblDescripcionArticuloPOS.Location = new System.Drawing.Point(276, 249);
+            this.LblDescripcionArticuloPOS.Name = "LblDescripcionArticuloPOS";
+            this.LblDescripcionArticuloPOS.Size = new System.Drawing.Size(616, 34);
+            this.LblDescripcionArticuloPOS.TabIndex = 11;
+            this.LblDescripcionArticuloPOS.Text = "2 x SHAMPOO DAVE CUIDADO TOTAL x 900 ml";
+            this.LblDescripcionArticuloPOS.UseStyleColors = true;
             // 
             // metroLabel1
             // 
@@ -990,11 +990,11 @@
             this.Controls.Add(this.LblImporteTotal);
             this.Controls.Add(this.metroLabel2);
             this.Controls.Add(this.metroLabel1);
-            this.Controls.Add(this.LblDescripcionArticulo);
+            this.Controls.Add(this.LblDescripcionArticuloPOS);
             this.Controls.Add(this.panelGrilla);
-            this.Controls.Add(this.metroTextBox5);
-            this.Controls.Add(this.LblImporteArticulo);
-            this.Controls.Add(this.PicImagenProducto);
+            this.Controls.Add(this.TxtCodArticuloPOS);
+            this.Controls.Add(this.LblImporteArticuloPOS);
+            this.Controls.Add(this.PicImagenArticuloPOS);
             this.Controls.Add(this.metroToolStrip1);
             this.Controls.Add(this.layoutEncabezado);
             this.MinimumSize = new System.Drawing.Size(1024, 726);
@@ -1022,7 +1022,7 @@
             this.PanelLista.PerformLayout();
             this.metroToolStrip1.ResumeLayout(false);
             this.metroToolStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PicImagenProducto)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PicImagenArticuloPOS)).EndInit();
             this.panelGrilla.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.GridArticulos)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
@@ -1066,7 +1066,7 @@
         private MetroFramework.Controls.MetroComboBox CmbVendedor;
         private System.Windows.Forms.Panel panelCondicionVenta;
         private MetroFramework.Controls.MetroLabel LblCondicionVenta;
-        private MetroFramework.Controls.MetroComboBox CmbConndicionVenta;
+        private MetroFramework.Controls.MetroComboBox CmbCondicionVenta;
         private System.Windows.Forms.Panel PanelLista;
         private MetroFramework.Controls.MetroComboBox CmbListaPrecio;
         private MetroFramework.Controls.MetroLabel LblLista;
@@ -1076,12 +1076,12 @@
         private System.Windows.Forms.ToolStripButton toolStripButton3;
         private System.Windows.Forms.ToolStripButton toolStripButton4;
         private System.Windows.Forms.ToolStripButton toolStripButton5;
-        private System.Windows.Forms.PictureBox PicImagenProducto;
-        private MetroFramework.Controls.MetroLabel LblImporteArticulo;
-        private MetroFramework.Controls.MetroTextBox metroTextBox5;
+        private System.Windows.Forms.PictureBox PicImagenArticuloPOS;
+        private MetroFramework.Controls.MetroLabel LblImporteArticuloPOS;
+        private MetroFramework.Controls.MetroTextBox TxtCodArticuloPOS;
         private MetroFramework.Controls.MetroPanel panelGrilla;
         private MetroFramework.Controls.MetroGrid GridArticulos;
-        private MetroFramework.Controls.MetroLabel LblDescripcionArticulo;
+        private MetroFramework.Controls.MetroLabel LblDescripcionArticuloPOS;
         private MetroFramework.Controls.MetroLabel LblImporteTotal;
         private MetroFramework.Controls.MetroLabel metroLabel2;
         private MetroFramework.Controls.MetroLabel metroLabel1;

@@ -3025,8 +3025,8 @@ namespace SysWork.Data.GenericRepository
                 string addRangeQuery = "";
                 foreach (PropertyInfo i in ListObjectPropertyInfo)
                 {
-                    var customAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
-                    if (!customAttribute.IsIdentity)
+                    var dbColumn = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
+                    if (!dbColumn.IsIdentity)
                     {
                         hasIdentity = true;
 

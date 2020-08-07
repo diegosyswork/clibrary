@@ -51,29 +51,24 @@ namespace SysWork.Data.Common.Mapper
         {
             _syntaxProvider = new SyntaxProvider(dataBaseEngine);
 
-            T obj = new T();
+            IList<PropertyInfo> _propertyInfo = 
+                                listObjectPropertyInfo ?? 
+                                new T().GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
 
-            IList<PropertyInfo> _propertyInfo;
-
-            if (listObjectPropertyInfo != null)
-                _propertyInfo = listObjectPropertyInfo;
-            else
-                _propertyInfo = obj.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
-
-            IList<T> collection = new List<T>();
+            IList<T> result = new List<T>();
            
             while (reader.Read())
             {
-                obj = new T();
+                T obj = new T();
 
                 foreach (PropertyInfo i in _propertyInfo)
                 {
                     try
                     {
-                        var custumAttribute = (DbColumnAttribute)i.GetCustomAttribute(typeof(DbColumnAttribute));
-                        var columnName = custumAttribute.ColumnName ?? i.Name;
+                        var dbColumn = (DbColumnAttribute)i.GetCustomAttribute(typeof(DbColumnAttribute));
+                        var columnName = dbColumn.ColumnName ?? i.Name;
 
-                        if ((custumAttribute).Convert)
+                        if ((dbColumn).Convert)
                         {
                             if (reader[columnName] != DBNull.Value)
                                 i.SetValue(obj, Convert.ChangeType(reader[columnName], i.PropertyType));
@@ -95,10 +90,12 @@ namespace SysWork.Data.Common.Mapper
                         throw exception;
                     }
                 }
-                collection.Add(obj);
+
+                result.Add(obj);
             }
-            return collection;
+            return result;
         }
+
         /// <summary>
         /// Maps the single.
         /// </summary>
@@ -135,22 +132,19 @@ namespace SysWork.Data.Common.Mapper
             _syntaxProvider = new SyntaxProvider(dataBaseEngine);
 
             TEntity obj = new TEntity();
-            IList<PropertyInfo> _propertyInfo;
 
-            if (listObjectPropertyInfo != null)
-                _propertyInfo = listObjectPropertyInfo;
-            else
-                _propertyInfo = obj.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
+            IList<PropertyInfo> _propertyInfo = 
+                                listObjectPropertyInfo ??
+                                obj.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
 
-            obj = new TEntity();
             foreach (PropertyInfo i in _propertyInfo)
             {
                 try
                 {
-                    var custumAttribute = (DbColumnAttribute)i.GetCustomAttribute(typeof(DbColumnAttribute));
-                    var columnName = custumAttribute.ColumnName ?? i.Name;
+                    var dbColumn = (DbColumnAttribute)i.GetCustomAttribute(typeof(DbColumnAttribute));
+                    var columnName = dbColumn.ColumnName ?? i.Name;
 
-                    if (custumAttribute.Convert)
+                    if (dbColumn.Convert)
                     {
                         if (reader[columnName] != DBNull.Value)
                             i.SetValue(obj, Convert.ChangeType(reader[columnName], i.PropertyType));
@@ -197,23 +191,16 @@ namespace SysWork.Data.Common.Mapper
         public TEntity MapSingle<TEntity>(IDataRecord dataRecord, IList<PropertyInfo> listObjectPropertyInfo) where TEntity : class, new()
         {
             TEntity obj = new TEntity();
+            IList<PropertyInfo> _propertyInfo = listObjectPropertyInfo ?? obj.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
 
-            IList<PropertyInfo> _propertyInfo;
-
-            if (listObjectPropertyInfo != null)
-                _propertyInfo = listObjectPropertyInfo;
-            else
-                _propertyInfo = obj.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
-
-            obj = new TEntity();
             foreach (PropertyInfo i in _propertyInfo)
             {
                 try
                 {
-                    var custumAttribute = (DbColumnAttribute)i.GetCustomAttribute(typeof(DbColumnAttribute));
-                    var columName = custumAttribute.ColumnName ?? i.Name;
+                    var dbColumn = (DbColumnAttribute)i.GetCustomAttribute(typeof(DbColumnAttribute));
+                    var columName = dbColumn.ColumnName ?? i.Name;
 
-                    if (custumAttribute.Convert)
+                    if (dbColumn.Convert)
                     {
                         if (dataRecord[columName] != DBNull.Value)
                             i.SetValue(obj, Convert.ChangeType(dataRecord[columName], i.PropertyType));

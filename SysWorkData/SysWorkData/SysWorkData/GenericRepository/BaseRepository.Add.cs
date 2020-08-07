@@ -1013,8 +1013,8 @@ namespace SysWork.Data.GenericRepository
             StringBuilder parameterList = new StringBuilder();
             foreach (PropertyInfo i in ListObjectPropertyInfo)
             {
-                var customAttibute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
-                if (!customAttibute.IsIdentity)
+                var dbColumn = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
+                if (!dbColumn.IsIdentity)
                 {
                     string parameterName = "@param_" + i.Name;
 

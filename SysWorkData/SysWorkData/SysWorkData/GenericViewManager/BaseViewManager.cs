@@ -2,19 +2,15 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.OleDb;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using SysWork.Data.Common.DataObjectProvider;
-using SysWork.Data.GenericRepository.Exceptions;
-using SysWork.Data.Common.Mapper;
 using SysWork.Data.Common.Attributes;
 using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 using SysWork.Data.Common.Filters;
 using SysWork.Data.Common.Syntax;
-using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.GenericViewManager
@@ -165,106 +161,6 @@ namespace SysWork.Data.GenericViewManager
         /// </summary>
         /// <param name="whereFilter">The where filter.</param>
         /// <returns></returns>
-        public IList<TEntity> GetListByGenericWhereFilter(GenericWhereFilter whereFilter)
-        {
-            return GetListByGenericWhereFilter(whereFilter, null, null);
-        }
-
-        /// <summary>
-        /// Gets the list by generic generic where filter.
-        /// </summary>
-        /// <param name="whereFilter">The where filter.</param>
-        /// <param name="paramDbConnection">The parameter database connection.</param>
-        /// <returns></returns>
-        public IList<TEntity> GetListByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection)
-        {
-            return GetListByGenericWhereFilter(whereFilter, paramDbConnection,null);
-        }
-
-        /// <summary>
-        /// Gets the list by generic generic where filter.
-        /// </summary>
-        /// <param name="whereFilter">The where filter.</param>
-        /// <param name="paramDbTransaction">The parameter database transaction.</param>
-        /// <returns></returns>
-        public IList<TEntity> GetListByGenericWhereFilter(GenericWhereFilter whereFilter, IDbTransaction paramDbTransaction)
-        {
-            return GetListByGenericWhereFilter(whereFilter, null, paramDbTransaction);
-        }
-
-        /// <summary>
-        /// Gets the list by generic where filter.
-        /// </summary>
-        /// <param name="whereFilter">The where filter.</param>
-        /// <param name="paramDbConnection">The parameter database connection.</param>
-        /// <param name="paramDbTransaction">The parameter database transaction.</param>
-        /// <returns></returns>
-        /// <exception cref="RepositoryException"></exception>
-        public IList<TEntity> GetListByGenericWhereFilter(GenericWhereFilter whereFilter, IDbConnection paramDbConnection, IDbTransaction paramDbTransaction)
-        {
-            IList<TEntity> result = new List<TEntity>();
-
-            bool closeConnection = ((paramDbConnection == null) && (paramDbTransaction == null));
-
-            if (paramDbConnection == null && paramDbTransaction != null)
-                paramDbConnection = paramDbTransaction.Connection;
-
-            IDbConnection dbConnection = paramDbConnection ?? BaseIDbConnection();
-            IDbCommand dbCommand = dbConnection.CreateCommand();
-
-            try
-            {
-                if (dbConnection.State != ConnectionState.Open)
-                    dbConnection.Open();
-
-                if (paramDbTransaction != null)
-                    dbCommand.Transaction = paramDbTransaction;
-
-                dbCommand.CommandText = whereFilter.SelectQueryString;
-
-                foreach (var param in whereFilter.Parameters)
-                {
-                    var dbParameter = dbCommand.CreateParameter();
-                    dbParameter.ParameterName = param.Key;
-                    dbParameter.Value = param.Value ?? (Object)DBNull.Value;
-
-                    if (whereFilter.ParametersSize.TryGetValue(dbParameter.ParameterName, out int paramSize))
-                        if (paramSize != 0)
-                            dbParameter.Size = paramSize;
-
-                    if (whereFilter.ParametersDbTye.TryGetValue(dbParameter.ParameterName, out DbType dbType))
-                        dbParameter.DbType = dbType;
-
-                    dbCommand.Parameters.Add(dbParameter);
-                }
-
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
-                    ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
-
-                IDataReader reader = dbCommand.ExecuteReader();
-                result = new MapDataReaderToEntity().Map<TEntity>(reader, ListObjectPropertyInfo, _dataBaseEngine);
-
-                reader.Close();
-                reader.Dispose();
-                dbCommand.Dispose();
-
-            }
-            catch (Exception exception)
-            {
-                throw new RepositoryException(exception, dbCommand);
-            }
-            finally
-            {
-                if ((dbConnection != null) && (dbConnection.State == ConnectionState.Open) && (closeConnection))
-                {
-                    dbConnection.Close();
-                    dbConnection.Dispose();
-                }
-            }
-            return result;
-        }
-
-
         private string GetViewNameFromEntity(Type type)
         {
             var DbView = type.GetCustomAttributes(false).OfType<DbViewAttribute>().FirstOrDefault();
@@ -285,17 +181,12 @@ namespace SysWork.Data.GenericViewManager
 
             StringBuilder sbColumnsSelect = new StringBuilder();
 
-            using (DbConnection conn = GetDbConnection())
+            foreach (PropertyInfo i in ListObjectPropertyInfo)
             {
-                conn.Open();
+                var customAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
+                string columnName = _syntaxProvider.GetSecureColumnName(customAttribute.ColumnName ?? i.Name);
 
-                foreach (PropertyInfo i in ListObjectPropertyInfo)
-                {
-                    var customAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
-                    string columnName = _syntaxProvider.GetSecureColumnName(customAttribute.ColumnName ?? i.Name);
-
-                    sbColumnsSelect.Append(string.Format("{0},", columnName));
-                }
+                sbColumnsSelect.Append(string.Format("{0},", columnName));
             }
 
             if (sbColumnsSelect.Length > 0)
@@ -303,7 +194,6 @@ namespace SysWork.Data.GenericViewManager
 
             ColumnsForSelect = sbColumnsSelect.ToString();
         }
-
 
         /// <summary>
         /// Gets the generic where filter.

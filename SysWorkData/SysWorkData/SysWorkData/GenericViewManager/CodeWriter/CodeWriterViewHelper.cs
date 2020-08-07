@@ -92,7 +92,7 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
             dataType = dataType.Replace("System.", "");
             if (dataType == "Boolean")
                 dataType = "bool";
-            else if (dataType == "Int32")
+            else if (dataType == "Int32" || dataType == "Int64")
                 dataType = "long";
             else if (dataType != "DateTime")
                 dataType = dataType.ToLower();
@@ -106,17 +106,13 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
         /// <summary>
         /// Adds the database column attribute.
         /// </summary>
-        /// <param name="isIdentity">if set to <c>true</c> [is identity].</param>
-        /// <param name="isPrimary">if set to <c>true</c> [is primary].</param>
         /// <param name="ColumnName"></param>
         /// <returns></returns>
-        public static string AddDbColumnAttribute(bool isIdentity = false, bool isPrimary = false, string ColumnName = null)
+        public static string AddDbColumnAttribute(string ColumnName = null)
         {
             string ret = "";
 
             ret = "\t\t[DbColumn(";
-            ret += isIdentity ? "IsIdentity = true" : "";
-            ret += isPrimary ? (isIdentity ? "," : "") + " IsPrimary = true" : "";
             ret += ColumnName != null ? " ColumnName = \"" + ColumnName + "\"" : "";
             ret += ")]";
             return ret;
