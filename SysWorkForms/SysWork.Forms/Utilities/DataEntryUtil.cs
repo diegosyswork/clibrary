@@ -4,6 +4,7 @@ namespace SysWork.Forms.Utilities
 {
     public static class DataEntryUtil
     {
+
         public static bool IsValidEmail(string mail)
         {
             string pattern = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";

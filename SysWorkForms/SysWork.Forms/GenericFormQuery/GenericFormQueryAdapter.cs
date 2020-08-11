@@ -68,26 +68,18 @@ namespace SysWork.Forms.GenericFormQuery
                 else
                 {
                     if (!CheckBoxes && !MultiSelect)
-                    {
                         EntityForm = (T)ListViewForm.SelectedItems[0].Tag;
-                    }
                     else
                     {
+
                         EntityListForm= new List<T>();
+
                         if (CheckBoxes)
-                        {
                             foreach (var index in frmGenericFormQuery.listView1.CheckedIndices)
-                            {
                                 EntityListForm.Add((T)frmGenericFormQuery.listView1.Items[(int)index].Tag);
-                            }
-                        }
                         else
-                        {
                             foreach (var index in frmGenericFormQuery.listView1.SelectedIndices)
-                            {
                                 EntityListForm.Add((T)frmGenericFormQuery.listView1.Items[(int)index].Tag);
-                            }
-                        }
                     }
                 }
             }

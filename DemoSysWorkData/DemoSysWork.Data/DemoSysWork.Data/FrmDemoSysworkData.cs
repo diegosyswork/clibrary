@@ -1527,5 +1527,30 @@ namespace Demo.SysWork.Data
 
             LogText(Environment.NewLine + "///      START GenericWhereFilter DEMO         ///" + Environment.NewLine);
         }
+
+        private void BtnTestMapper_Click(object sender, EventArgs e)
+        {
+            LogText(Environment.NewLine + "///      START MapperDemo         ///" + Environment.NewLine);
+
+            var list = new List<Person>();
+            for (int p = 0; p < 10000; p++)
+                list.Add(GetRandomPerson());
+
+            LogText(Environment.NewLine + "AddRange 10.000");
+            try
+            {
+                _personRepository.AddRange(list);
+                DbLogger.LogInfo(EDbInfoTag.InsertInfo, "100 persons was added");
+                LogText("10.000 persons was added");
+            }
+            catch (RepositoryException gre)
+            {
+                DbLogger.LogError(EDbErrorTag.InsertError, "Error AddRange", gre);
+            }
+
+            list = _personRepository.GetAll().ToList();
+
+
+        }
     }
 }

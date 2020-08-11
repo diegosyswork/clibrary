@@ -13,7 +13,7 @@ namespace SysWork.Forms.Interfaces
         /// <value>
         ///   <c>true</c> if this instance is final valition; otherwise, <c>false</c>.
         /// </value>
-        bool _IsFinalValition { get; set; }
+        bool _IsFinalValidation { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this instance is loading data.

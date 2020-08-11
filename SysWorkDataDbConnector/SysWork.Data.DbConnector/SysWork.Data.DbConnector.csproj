@@ -93,42 +93,42 @@
     <Compile Include="DbConnector\DbConnectorOleDb.cs" />
     <Compile Include="DbConnector\DbConnectorSqLite.cs" />
     <Compile Include="DbConnector\Interfaces\IDbConnector.cs" />
-    <Compile Include="FormsGetParameters\FrmGetParamMSSQL.cs">
+    <Compile Include="Forms\GetParameters\FrmGetParamMSSQL.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormsGetParameters\FrmGetParamMSSQL.designer.cs">
+    <Compile Include="Forms\GetParameters\FrmGetParamMSSQL.designer.cs">
       <DependentUpon>FrmGetParamMSSQL.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormsGetParameters\FrmGetParamMySQL.cs">
+    <Compile Include="Forms\GetParameters\FrmGetParamMySQL.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormsGetParameters\FrmGetParamMySQL.designer.cs">
+    <Compile Include="Forms\GetParameters\FrmGetParamMySQL.designer.cs">
       <DependentUpon>FrmGetParamMySQL.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormsGetParameters\FrmGetParamOleDb.cs">
+    <Compile Include="Forms\GetParameters\FrmGetParamOleDb.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormsGetParameters\FrmGetParamOleDb.Designer.cs">
+    <Compile Include="Forms\GetParameters\FrmGetParamOleDb.Designer.cs">
       <DependentUpon>FrmGetParamOleDb.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormsGetParameters\FrmGetParamSQLite.cs">
+    <Compile Include="Forms\GetParameters\FrmGetParamSQLite.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormsGetParameters\FrmGetParamSQLite.Designer.cs">
+    <Compile Include="Forms\GetParameters\FrmGetParamSQLite.Designer.cs">
       <DependentUpon>FrmGetParamSQLite.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\ConnectorUtilities.cs" />
-    <EmbeddedResource Include="FormsGetParameters\FrmGetParamMSSQL.resx">
+    <EmbeddedResource Include="Forms\GetParameters\FrmGetParamMSSQL.resx">
       <DependentUpon>FrmGetParamMSSQL.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormsGetParameters\FrmGetParamMySQL.resx">
+    <EmbeddedResource Include="Forms\GetParameters\FrmGetParamMySQL.resx">
       <DependentUpon>FrmGetParamMySQL.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormsGetParameters\FrmGetParamOleDb.resx">
+    <EmbeddedResource Include="Forms\GetParameters\FrmGetParamOleDb.resx">
       <DependentUpon>FrmGetParamOleDb.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormsGetParameters\FrmGetParamSQLite.resx">
+    <EmbeddedResource Include="Forms\GetParameters\FrmGetParamSQLite.resx">
       <DependentUpon>FrmGetParamSQLite.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

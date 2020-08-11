@@ -112,7 +112,7 @@ namespace SysWork.Data.GenericViewManager
                     dbCommand.Transaction = dbTransaction;
 
                 IDataReader reader = dbCommand.ExecuteReader();
-                collection = new MapDataReaderToEntity().Map<TEntity>(reader, ListObjectPropertyInfo, _dataBaseEngine);
+                collection = _mapper.Map<TEntity>(reader, EntityProperties, _dataBaseEngine);
 
                 reader.Close(); reader.Dispose();
                 dbCommand.Dispose();

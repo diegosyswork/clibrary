@@ -126,17 +126,17 @@ namespace SysWork.Data.GenericRepository
                 string parameterName;
                 dbCommand = dbConnectionInUse.CreateCommand();
 
-                foreach (PropertyInfo i in ListObjectPropertyInfo)
+                foreach (PropertyInfo i in EntityProperties)
                 {
-                    var customAttibute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
-                    var columnName = _syntaxProvider.GetSecureColumnName(customAttibute.ColumnName ?? i.Name);
+                    var dbColumn = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
+                    var columnName = _syntaxProvider.GetSecureColumnName(dbColumn.ColumnName ?? i.Name);
 
                     parameterName = "@param_" + i.Name;
 
-                    if (!customAttibute.IsIdentity)
+                    if (!dbColumn.IsIdentity)
                         parameterList.Append(string.Format("{0} = {1},", columnName, parameterName));
 
-                    if (customAttibute.IsPrimary)
+                    if (dbColumn.IsPrimary)
                     {
                         if (where.ToString() != String.Empty)
                             where.Append(" AND ");

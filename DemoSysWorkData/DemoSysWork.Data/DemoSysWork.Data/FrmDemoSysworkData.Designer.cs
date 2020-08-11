@@ -37,6 +37,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.GrpDetails = new System.Windows.Forms.GroupBox();
+            this.BtnGetByGenericWhere = new System.Windows.Forms.Button();
+            this.BtnGetListByGenericWhere = new System.Windows.Forms.Button();
+            this.BtnDeleteByGenericWhere = new System.Windows.Forms.Button();
             this.BtnTestWhereFilter = new System.Windows.Forms.Button();
             this.BtnTestDbExecutor = new System.Windows.Forms.Button();
             this.BtnRepositoryClassFromDb = new System.Windows.Forms.Button();
@@ -66,9 +69,7 @@
             this.BtnExistsTable = new System.Windows.Forms.Button();
             this.BtnUpdate = new System.Windows.Forms.Button();
             this.BtnAdd = new System.Windows.Forms.Button();
-            this.BtnDeleteByGenericWhere = new System.Windows.Forms.Button();
-            this.BtnGetListByGenericWhere = new System.Windows.Forms.Button();
-            this.BtnGetByGenericWhere = new System.Windows.Forms.Button();
+            this.BtnTestMapper = new System.Windows.Forms.Button();
             this.GrpParameters.SuspendLayout();
             this.GrpDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -168,6 +169,7 @@
             this.GrpDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.GrpDetails.Controls.Add(this.BtnTestMapper);
             this.GrpDetails.Controls.Add(this.BtnGetByGenericWhere);
             this.GrpDetails.Controls.Add(this.BtnGetListByGenericWhere);
             this.GrpDetails.Controls.Add(this.BtnDeleteByGenericWhere);
@@ -205,6 +207,33 @@
             this.GrpDetails.Size = new System.Drawing.Size(876, 438);
             this.GrpDetails.TabIndex = 93;
             this.GrpDetails.TabStop = false;
+            // 
+            // BtnGetByGenericWhere
+            // 
+            this.BtnGetByGenericWhere.Location = new System.Drawing.Point(6, 326);
+            this.BtnGetByGenericWhere.Name = "BtnGetByGenericWhere";
+            this.BtnGetByGenericWhere.Size = new System.Drawing.Size(238, 21);
+            this.BtnGetByGenericWhere.TabIndex = 146;
+            this.BtnGetByGenericWhere.Text = "Get By Generic Where";
+            this.BtnGetByGenericWhere.UseVisualStyleBackColor = true;
+            // 
+            // BtnGetListByGenericWhere
+            // 
+            this.BtnGetListByGenericWhere.Location = new System.Drawing.Point(88, 247);
+            this.BtnGetListByGenericWhere.Name = "BtnGetListByGenericWhere";
+            this.BtnGetListByGenericWhere.Size = new System.Drawing.Size(156, 21);
+            this.BtnGetListByGenericWhere.TabIndex = 145;
+            this.BtnGetListByGenericWhere.Text = "Get List by Generic Where";
+            this.BtnGetListByGenericWhere.UseVisualStyleBackColor = true;
+            // 
+            // BtnDeleteByGenericWhere
+            // 
+            this.BtnDeleteByGenericWhere.Location = new System.Drawing.Point(88, 193);
+            this.BtnDeleteByGenericWhere.Name = "BtnDeleteByGenericWhere";
+            this.BtnDeleteByGenericWhere.Size = new System.Drawing.Size(156, 21);
+            this.BtnDeleteByGenericWhere.TabIndex = 144;
+            this.BtnDeleteByGenericWhere.Text = "Delete By Generic Where";
+            this.BtnDeleteByGenericWhere.UseVisualStyleBackColor = true;
             // 
             // BtnTestWhereFilter
             // 
@@ -492,32 +521,15 @@
             this.BtnAdd.UseVisualStyleBackColor = true;
             this.BtnAdd.Click += new System.EventHandler(this.BtnAdd_Click);
             // 
-            // BtnDeleteByGenericWhere
+            // BtnTestMapper
             // 
-            this.BtnDeleteByGenericWhere.Location = new System.Drawing.Point(88, 193);
-            this.BtnDeleteByGenericWhere.Name = "BtnDeleteByGenericWhere";
-            this.BtnDeleteByGenericWhere.Size = new System.Drawing.Size(156, 21);
-            this.BtnDeleteByGenericWhere.TabIndex = 144;
-            this.BtnDeleteByGenericWhere.Text = "Delete By Generic Where";
-            this.BtnDeleteByGenericWhere.UseVisualStyleBackColor = true;
-            // 
-            // BtnGetListByGenericWhere
-            // 
-            this.BtnGetListByGenericWhere.Location = new System.Drawing.Point(88, 247);
-            this.BtnGetListByGenericWhere.Name = "BtnGetListByGenericWhere";
-            this.BtnGetListByGenericWhere.Size = new System.Drawing.Size(156, 21);
-            this.BtnGetListByGenericWhere.TabIndex = 145;
-            this.BtnGetListByGenericWhere.Text = "Get List by Generic Where";
-            this.BtnGetListByGenericWhere.UseVisualStyleBackColor = true;
-            // 
-            // BtnGetByGenericWhere
-            // 
-            this.BtnGetByGenericWhere.Location = new System.Drawing.Point(6, 326);
-            this.BtnGetByGenericWhere.Name = "BtnGetByGenericWhere";
-            this.BtnGetByGenericWhere.Size = new System.Drawing.Size(238, 21);
-            this.BtnGetByGenericWhere.TabIndex = 146;
-            this.BtnGetByGenericWhere.Text = "Get By Generic Where";
-            this.BtnGetByGenericWhere.UseVisualStyleBackColor = true;
+            this.BtnTestMapper.Location = new System.Drawing.Point(250, 252);
+            this.BtnTestMapper.Name = "BtnTestMapper";
+            this.BtnTestMapper.Size = new System.Drawing.Size(238, 21);
+            this.BtnTestMapper.TabIndex = 147;
+            this.BtnTestMapper.Text = "Test Mapper";
+            this.BtnTestMapper.UseVisualStyleBackColor = true;
+            this.BtnTestMapper.Click += new System.EventHandler(this.BtnTestMapper_Click);
             // 
             // FrmDemoSysworkData
             // 
@@ -582,6 +594,7 @@
         private System.Windows.Forms.Button BtnDeleteByGenericWhere;
         private System.Windows.Forms.Button BtnGetListByGenericWhere;
         private System.Windows.Forms.Button BtnGetByGenericWhere;
+        private System.Windows.Forms.Button BtnTestMapper;
     }
 }
 

@@ -637,7 +637,12 @@ namespace SysWork.Data.Common.Utilities
         #endregion 
         public long ExecuteNonQuery()
         {
-            return ExecuteNonQuery(_dbConnection, _dbTransaction,null);
+            return ExecuteNonQuery(_dbConnection, _dbTransaction, null,CommandType.Text);
+        }
+
+        public long ExecuteNonQuery(CommandType commandType)
+        {
+            return ExecuteNonQuery(_dbConnection, _dbTransaction, null, commandType);
         }
 
         #region DOCUMENTATION ExecuteNonQuery(int dbCommandTimeOut)
@@ -691,10 +696,14 @@ namespace SysWork.Data.Common.Utilities
         #endregion 
         public long ExecuteNonQuery(int dbCommandTimeOut)
         {
-            return ExecuteNonQuery(_dbConnection, _dbTransaction, dbCommandTimeOut);
+            return ExecuteNonQuery(_dbConnection, _dbTransaction, dbCommandTimeOut,CommandType.Text);
+        }
+        public long ExecuteNonQuery(int dbCommandTimeOut, CommandType commandType)
+        {
+            return ExecuteNonQuery(_dbConnection, _dbTransaction, dbCommandTimeOut, commandType);
         }
 
-        private long ExecuteNonQuery(IDbConnection dbConnection, IDbTransaction dbTransaction, int? dbCommandTimeOut)
+        private long ExecuteNonQuery(IDbConnection dbConnection, IDbTransaction dbTransaction, int? dbCommandTimeOut, CommandType commandType)
         {
             if (_isInsertQuery) NormalizeInsertQuery();
             if (_isUpdateQuery) NormalizeUpdateQuery();
@@ -717,6 +726,7 @@ namespace SysWork.Data.Common.Utilities
 
                 dbCommand.CommandText = _sqlQuery;
                 dbCommand.CommandTimeout = dbCommandTimeOut ?? _defaultCommandTimeOut;
+                dbCommand.CommandType = commandType;
 
                 foreach (var param in _queryParameters)
                 {
@@ -821,9 +831,13 @@ namespace SysWork.Data.Common.Utilities
         #endregion
         public object ExecuteScalar()
         {
-            return ExecuteScalar(_dbConnection, _dbTransaction, null);
+            return ExecuteScalar(_dbConnection, _dbTransaction, null,CommandType.Text);
         }
 
+        public object ExecuteScalar(CommandType commandType)
+        {
+            return ExecuteScalar(_dbConnection, _dbTransaction, null, commandType);
+        }
 
         #region DOCUMENTATION ExecuteScalar(int dbCommandTimeOut)
         /// <summary>
@@ -891,8 +905,13 @@ namespace SysWork.Data.Common.Utilities
         #endregion 
         public object ExecuteScalar(int dbCommandTimeOut)
         {
-            return ExecuteScalar(_dbConnection, _dbTransaction, dbCommandTimeOut);
+            return ExecuteScalar(_dbConnection, _dbTransaction, dbCommandTimeOut,CommandType.Text);
         }
+        public object ExecuteScalar(int dbCommandTimeOut, CommandType commandType)
+        {
+            return ExecuteScalar(_dbConnection, _dbTransaction, dbCommandTimeOut, commandType);
+        }
+
         #region DOCUMENTATION private ExecuteScalarIDbConnection paramConnection, IDbTransaction dbTransaction, int dbCommandTimeOut = -1)
         /// <summary>
         /// Run an IDbCommand with the SQLQuery using the ExecuteScalar() method and use the IDbConnection and the IDbTransaction provided.
@@ -900,6 +919,7 @@ namespace SysWork.Data.Common.Utilities
         /// <param name="dbConnection">The parameter connection.</param>
         /// <param name="dbTransaction">The database transaction.</param>
         /// <param name="dbCommandTimeOut">CommandTimeOut for this execution</param>
+        /// <param name="commandType"></param>
         /// <example>
         /// <code>
         /// 
@@ -926,7 +946,7 @@ namespace SysWork.Data.Common.Utilities
         /// An object that must then be converted to obtain the query result value.
         /// </returns>
         #endregion
-        private object ExecuteScalar(IDbConnection dbConnection, IDbTransaction dbTransaction, int? dbCommandTimeOut)
+        private object ExecuteScalar(IDbConnection dbConnection, IDbTransaction dbTransaction, int? dbCommandTimeOut, CommandType commandType)
         {
             if (_isInsertQuery) NormalizeInsertQuery();
             if (_isUpdateQuery) NormalizeUpdateQuery();
@@ -949,6 +969,7 @@ namespace SysWork.Data.Common.Utilities
                 
                 dbCommand.CommandText = _sqlQuery;
                 dbCommand.CommandTimeout = dbCommandTimeOut ?? _defaultCommandTimeOut;
+                dbCommand.CommandType = commandType;
 
                 foreach (var param in _queryParameters)
                 {
@@ -1046,7 +1067,12 @@ namespace SysWork.Data.Common.Utilities
         #endregion
         public IDataReader ExecuteReader()
         {
-            return ExecuteReader(_dbConnection, _dbTransaction,null);
+            return ExecuteReader(_dbConnection, _dbTransaction,null, CommandType.Text);
+        }
+
+        public IDataReader ExecuteReader(CommandType commandType)
+        {
+            return ExecuteReader(_dbConnection, _dbTransaction, null, commandType);
         }
 
         #region DOCUMENTATION ExecuteReader(int dbCommandTextTimeOut)
@@ -1104,7 +1130,11 @@ namespace SysWork.Data.Common.Utilities
         #endregion
         public IDataReader ExecuteReader(int dbCommandTimeOut)
         {
-            return ExecuteReader(_dbConnection, _dbTransaction, dbCommandTimeOut);
+            return ExecuteReader(_dbConnection, _dbTransaction, dbCommandTimeOut,CommandType.Text);
+        }
+        public IDataReader ExecuteReader(int dbCommandTimeOut,CommandType commandType)
+        {
+            return ExecuteReader(_dbConnection, _dbTransaction, dbCommandTimeOut, commandType);
         }
 
         /// <summary>
@@ -1113,8 +1143,9 @@ namespace SysWork.Data.Common.Utilities
         /// <param name="dbConnection">The parameter connection.</param>
         /// <param name="dbTransaction">The database transaction.</param>
         /// <param name="dbCommandTimeout">The DbCommand timeout for this execution.</param>
+        /// <param name="commandType"></param>
         /// <returns></returns>
-        private IDataReader ExecuteReader(IDbConnection dbConnection, IDbTransaction dbTransaction, int? dbCommandTimeout)
+        private IDataReader ExecuteReader(IDbConnection dbConnection, IDbTransaction dbTransaction, int? dbCommandTimeout, CommandType commandType)
         {
             bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
             if (dbCommandTimeout == -1) dbCommandTimeout = DefaultCommandTimeOut;
@@ -1135,6 +1166,7 @@ namespace SysWork.Data.Common.Utilities
 
                 dbCommand.CommandText = _sqlQuery;
                 dbCommand.CommandTimeout = dbCommandTimeout ?? _defaultCommandTimeOut;
+                dbCommand.CommandType = commandType;
 
                 foreach (var param in _queryParameters)
                 {

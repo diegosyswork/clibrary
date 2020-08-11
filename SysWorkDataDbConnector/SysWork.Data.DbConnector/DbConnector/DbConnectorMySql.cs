@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using SysWork.Data.Common.FormsGetParam;
+using SysWork.Data.Common.Forms.GetParameters;
 using SysWork.Data.Common.Utilities;
 using MySql.Data.MySqlClient;
 using SysWork.Data.Common.ValueObjects;

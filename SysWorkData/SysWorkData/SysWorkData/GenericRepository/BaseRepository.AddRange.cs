@@ -3023,7 +3023,7 @@ namespace SysWork.Data.GenericRepository
                 dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
 
                 string addRangeQuery = "";
-                foreach (PropertyInfo i in ListObjectPropertyInfo)
+                foreach (PropertyInfo i in EntityProperties)
                 {
                     var dbColumn = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
                     if (!dbColumn.IsIdentity)

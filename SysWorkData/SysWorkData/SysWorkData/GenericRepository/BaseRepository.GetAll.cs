@@ -46,7 +46,7 @@ namespace SysWork.Data.GenericRepository
 
         public IList<TEntity> GetAll(IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
         {
-            IList<TEntity> collection = new List<TEntity>();
+            IList<TEntity> result = new List<TEntity>();
 
             bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
@@ -68,7 +68,7 @@ namespace SysWork.Data.GenericRepository
                     dbCommand.Transaction = dbTransaction;
 
                 IDataReader reader = dbCommand.ExecuteReader();
-                collection = new MapDataReaderToEntity().Map<TEntity>(reader, ListObjectPropertyInfo, _dataBaseEngine);
+                result = _mapper.Map<TEntity>(reader, EntityProperties, _dataBaseEngine);
 
                 reader.Close(); reader.Dispose();
                 dbCommand.Dispose();
@@ -86,7 +86,7 @@ namespace SysWork.Data.GenericRepository
                 }
             }
 
-            return collection;
+            return result;
         }
     }
 }

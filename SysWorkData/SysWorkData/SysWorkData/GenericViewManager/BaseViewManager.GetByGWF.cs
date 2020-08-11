@@ -91,7 +91,7 @@ namespace SysWork.Data.GenericViewManager
 
                 IDataReader reader = dbCommand.ExecuteReader(CommandBehavior.SingleRow);
                 if (reader.Read())
-                    entity = new MapDataReaderToEntity().MapSingle<TEntity>(reader, ListObjectPropertyInfo);
+                    entity = _mapper.MapSingle<TEntity>(reader, EntityProperties);
                 else
                     entity = default(TEntity);
 

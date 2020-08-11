@@ -2,7 +2,7 @@
 using System.Data.SQLite;
 using System.IO;
 using System.Windows.Forms;
-using SysWork.Data.Common.FormsGetParam;
+using SysWork.Data.Common.Forms.GetParameters;
 using SysWork.Data.Common.Utilities;
 using SysWork.Data.Common.ValueObjects;
 using SysWork.Data.DbConnector.Utilities;

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Reflection;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.Attributes;
 using SysWork.Data.Common.ValueObjects;
+using SysWork.Data.Common.Attributes.Helpers;
 
 namespace SysWork.Data.Common.Mapper
 {
@@ -15,6 +15,16 @@ namespace SysWork.Data.Common.Mapper
     /// </summary>
     public class MapDataReaderToEntity
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether [use type cache].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [use type cache]; otherwise, <c>false</c>.
+        /// </value>
+        public bool UseTypeCache { get; set; } = true;
+
+        static Dictionary<Type, IList<PropertyInfo>> _typeCache = null;
+
         private SyntaxProvider _syntaxProvider;
 
         /// <summary>
@@ -44,24 +54,26 @@ namespace SysWork.Data.Common.Mapper
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="reader">The reader.</param>
-        /// <param name="listObjectPropertyInfo">The list object property information.</param>
+        /// <param name="properties">The list object property information.</param>
         /// <param name="dataBaseEngine">The data base engine.</param>
         /// <returns></returns>
-        public IList<T> Map<T>(IDataReader reader, IList<PropertyInfo> listObjectPropertyInfo, EDataBaseEngine dataBaseEngine) where T : class, new()
+        public IList<T> Map<T>(IDataReader reader, IList<PropertyInfo> properties, EDataBaseEngine dataBaseEngine) where T : class, new()
         {
             _syntaxProvider = new SyntaxProvider(dataBaseEngine);
 
-            IList<PropertyInfo> _propertyInfo = 
-                                listObjectPropertyInfo ?? 
-                                new T().GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
+            T aux = new T();
+
+            if (UseTypeCache) AddType(aux);
+            var _properties = properties ?? 
+                             (UseTypeCache ? GetCacheProperties(aux) :
+                             DbColumnHelper.GetProperties(aux));
 
             IList<T> result = new List<T>();
-           
             while (reader.Read())
             {
                 T obj = new T();
 
-                foreach (PropertyInfo i in _propertyInfo)
+                foreach (PropertyInfo i in _properties)
                 {
                     try
                     {
@@ -96,6 +108,7 @@ namespace SysWork.Data.Common.Mapper
             return result;
         }
 
+
         /// <summary>
         /// Maps the single.
         /// </summary>
@@ -124,20 +137,21 @@ namespace SysWork.Data.Common.Mapper
         /// </summary>
         /// <typeparam name="TEntity">The type of the entity.</typeparam>
         /// <param name="reader">The reader.</param>
-        /// <param name="listObjectPropertyInfo">The list object property information.</param>
+        /// <param name="properties">The list object property information.</param>
         /// <param name="dataBaseEngine">The data base engine.</param>
         /// <returns></returns>
-        public TEntity MapSingle<TEntity>(IDataReader reader, IList<PropertyInfo> listObjectPropertyInfo, EDataBaseEngine dataBaseEngine) where TEntity : class, new()
+        public TEntity MapSingle<TEntity>(IDataReader reader, IList<PropertyInfo> properties, EDataBaseEngine dataBaseEngine) where TEntity : class, new()
         {
             _syntaxProvider = new SyntaxProvider(dataBaseEngine);
 
             TEntity obj = new TEntity();
 
-            IList<PropertyInfo> _propertyInfo = 
-                                listObjectPropertyInfo ??
-                                obj.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
+            if (UseTypeCache) AddType(obj);
+            var _properties = properties ??
+                             (UseTypeCache ? GetCacheProperties(obj) :
+                             DbColumnHelper.GetProperties(obj));
 
-            foreach (PropertyInfo i in _propertyInfo)
+            foreach (PropertyInfo i in _properties)
             {
                 try
                 {
@@ -186,14 +200,18 @@ namespace SysWork.Data.Common.Mapper
         /// </summary>
         /// <typeparam name="TEntity">The type of the entity.</typeparam>
         /// <param name="dataRecord">The data record.</param>
-        /// <param name="listObjectPropertyInfo">The list object property information.</param>
+        /// <param name="properties">The list object property information.</param>
         /// <returns></returns>
-        public TEntity MapSingle<TEntity>(IDataRecord dataRecord, IList<PropertyInfo> listObjectPropertyInfo) where TEntity : class, new()
+        public TEntity MapSingle<TEntity>(IDataRecord dataRecord, IList<PropertyInfo> properties) where TEntity : class, new()
         {
             TEntity obj = new TEntity();
-            IList<PropertyInfo> _propertyInfo = listObjectPropertyInfo ?? obj.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
 
-            foreach (PropertyInfo i in _propertyInfo)
+            if (UseTypeCache) AddType(obj);
+            var _properties = properties ??
+                             (UseTypeCache ? GetCacheProperties(obj) :
+                             DbColumnHelper.GetProperties(obj));
+
+            foreach (PropertyInfo i in _properties)
             {
                 try
                 {
@@ -224,5 +242,33 @@ namespace SysWork.Data.Common.Mapper
             }
             return obj;
         }
+        
+        /// <summary>
+        /// Cleans the type of the cache.
+        /// </summary>
+        public void CleanCacheType()
+        {
+            _typeCache = new Dictionary<Type, IList<PropertyInfo>>();
+        }
+
+        private void AddType<T>(T entity)
+        {
+            if (_typeCache == null)
+                CleanCacheType();
+
+            Type type = entity.GetType();
+            if (!_typeCache.ContainsKey(type))
+                _typeCache.Add(type, DbColumnHelper.GetProperties(entity));
+        }
+
+        private IList<PropertyInfo> GetCacheProperties<T>(T t)
+        {
+            Type type = t.GetType();
+            if (_typeCache.TryGetValue(type, out IList<PropertyInfo> properties))
+                return properties;
+            else
+                throw new IndexOutOfRangeException($"The type {type.Assembly.ToString() + type.FullName.ToString()} is not in cache");
+        }
+
     }
 }

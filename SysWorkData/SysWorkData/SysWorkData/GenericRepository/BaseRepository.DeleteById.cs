@@ -108,7 +108,7 @@ namespace SysWork.Data.GenericRepository
             StringBuilder where = new StringBuilder();
 
             string parameterName;
-            foreach (PropertyInfo i in ListObjectPropertyInfo)
+            foreach (PropertyInfo i in EntityProperties)
             {
                 var customAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
                 var columnName = _syntaxProvider.GetSecureColumnName(customAttribute.ColumnName ?? i.Name);

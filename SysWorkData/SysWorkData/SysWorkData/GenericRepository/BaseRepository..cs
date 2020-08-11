@@ -8,12 +8,14 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using SysWork.Data.Common.Attributes;
+using SysWork.Data.Common.Attributes.Helpers;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.DbInfo;
 using SysWork.Data.Common.Dictionaries;
 using SysWork.Data.Common.Filters;
 using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
+using SysWork.Data.Common.Mapper;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.Utilities;
 using SysWork.Data.Common.ValueObjects;
@@ -92,7 +94,7 @@ namespace SysWork.Data.GenericRepository
         /// <summary>
         /// Get the propertyInfo of the columns.
         /// </summary>
-        public IList<PropertyInfo> ListObjectPropertyInfo { get; private set; }
+        public IList<PropertyInfo> EntityProperties { get; private set; }
 
         /// <summary>
         /// Get a list of the columns to perform a INSERT sentence on the represented table, separated by commas. The Identity columns are excluded.
@@ -104,6 +106,7 @@ namespace SysWork.Data.GenericRepository
         /// </summary>
         public string ColumnsForSelect { get; private set; }
 
+        private MapDataReaderToEntity _mapper;
 
         private int _defaultCommandTimeout = 30;
         /// <summary>
@@ -140,12 +143,15 @@ namespace SysWork.Data.GenericRepository
             _syntaxProvider = new SyntaxProvider(_dataBaseEngine);
             _dbObjectProvider = new DbObjectProvider(_dataBaseEngine);
 
+            _mapper = new MapDataReaderToEntity();
+            _mapper.UseTypeCache = false;
+
             TEntity entity = new TEntity();
-            ListObjectPropertyInfo = GetPropertyInfoList(entity);
+            EntityProperties = DbColumnHelper.GetProperties(entity);
 
             TableName = GetTableNameFromEntity(entity.GetType());
 
-            if ((ListObjectPropertyInfo == null) || (ListObjectPropertyInfo.Count == 0))
+            if ((EntityProperties == null) || (EntityProperties.Count == 0))
             {
                 throw new Exception(string.Format("The Entity {0}, has not linked attibutes to table: {1}, Use [DbColumn] attribute to link properties to the table.", entity.GetType().Name, TableName));
             }
@@ -240,7 +246,7 @@ namespace SysWork.Data.GenericRepository
             {
                 conn.Open();
 
-                foreach (PropertyInfo i in ListObjectPropertyInfo)
+                foreach (PropertyInfo i in EntityProperties)
                 {
                     var customAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
                     string columnName = _syntaxProvider.GetSecureColumnName(customAttribute.ColumnName ?? i.Name);
@@ -364,11 +370,6 @@ namespace SysWork.Data.GenericRepository
                 dataParameter.Size = (int)size;
 
             return dataParameter;
-        }
-
-        private IList<PropertyInfo> GetPropertyInfoList(TEntity entity)
-        {
-            return entity.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
         }
 
         private void SetSqlLamAdapter()

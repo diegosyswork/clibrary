@@ -61,7 +61,7 @@ namespace SysWork.Data.GenericRepository
             IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
             IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
-            foreach (var pi in ListObjectPropertyInfo)
+            foreach (var pi in EntityProperties)
             {
                 var pk = pi.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
                 if (pk != null && pk.IsIdentity)
@@ -99,7 +99,7 @@ namespace SysWork.Data.GenericRepository
                         dbCommand.Transaction = dbTransaction;
 
                     IDataReader reader = dbCommand.ExecuteReader();
-                    entities = new MapDataReaderToEntity().Map<TEntity>(reader, ListObjectPropertyInfo, _dataBaseEngine);
+                    entities = _mapper.Map<TEntity>(reader, EntityProperties, _dataBaseEngine);
 
                     reader.Close();
                     reader.Dispose();

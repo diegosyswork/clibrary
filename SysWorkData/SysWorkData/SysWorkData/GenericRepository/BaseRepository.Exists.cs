@@ -91,7 +91,7 @@ namespace SysWork.Data.GenericRepository
                 if (_dataBaseEngine == EDataBaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
-                IDataReader reader = dbCommand.ExecuteReader(CommandBehavior.SingleRow);
+                var reader = dbCommand.ExecuteReader(CommandBehavior.SingleRow);
                 result = reader.Read();
 
                 reader.Close();

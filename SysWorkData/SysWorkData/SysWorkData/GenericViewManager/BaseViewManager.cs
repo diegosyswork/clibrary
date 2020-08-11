@@ -12,6 +12,7 @@ using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 using SysWork.Data.Common.Filters;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.ValueObjects;
+using SysWork.Data.Common.Mapper;
 
 namespace SysWork.Data.GenericViewManager
 {
@@ -49,12 +50,14 @@ namespace SysWork.Data.GenericViewManager
         /// <summary>
         /// Get the propertyInfo of the columns.
         /// </summary>
-        public IList<PropertyInfo> ListObjectPropertyInfo { get; private set; }
+        public IList<PropertyInfo> EntityProperties { get; private set; }
 
         /// <summary>
         /// Get a list of the columns to perform a SELECT sentence on the represented table, separated by commas.
         /// </summary>
         public string ColumnsForSelect { get; private set; }
+
+        private MapDataReaderToEntity _mapper;
 
         private int _defaultCommandTimeout = 30;
         /// <summary>
@@ -90,12 +93,15 @@ namespace SysWork.Data.GenericViewManager
             DataObjectProvider = new DbObjectProvider(_dataBaseEngine);
             _syntaxProvider = new SyntaxProvider(_dataBaseEngine);
 
+            _mapper = new MapDataReaderToEntity();
+            _mapper.UseTypeCache = false;
+
             TEntity entity = new TEntity();
-            ListObjectPropertyInfo = GetPropertyInfoList(entity);
+            EntityProperties = GetPropertyInfoList(entity);
 
             ViewName = GetViewNameFromEntity(entity.GetType());
 
-            if ((ListObjectPropertyInfo == null) || (ListObjectPropertyInfo.Count == 0))
+            if ((EntityProperties == null) || (EntityProperties.Count == 0))
             {
                 throw new Exception(string.Format("The Entity {0}, has not linked attibutes to table: {1}, Use [DbColumn] attribute to link properties to the table.", entity.GetType().Name, ViewName));
             }
@@ -181,7 +187,7 @@ namespace SysWork.Data.GenericViewManager
 
             StringBuilder sbColumnsSelect = new StringBuilder();
 
-            foreach (PropertyInfo i in ListObjectPropertyInfo)
+            foreach (PropertyInfo i in EntityProperties)
             {
                 var customAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
                 string columnName = _syntaxProvider.GetSecureColumnName(customAttribute.ColumnName ?? i.Name);

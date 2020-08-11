@@ -1011,7 +1011,7 @@ namespace SysWork.Data.GenericRepository
             IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
             StringBuilder parameterList = new StringBuilder();
-            foreach (PropertyInfo i in ListObjectPropertyInfo)
+            foreach (PropertyInfo i in EntityProperties)
             {
                 var dbColumn = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
                 if (!dbColumn.IsIdentity)

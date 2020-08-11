@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using SysWork.Data.Common.Syntax;
@@ -32,7 +33,7 @@ namespace SysWork.Data.Common.Attributes.Helpers
             var sbColumnsSelect = new StringBuilder();
             var syntaxProvider = new SyntaxProvider(dataBaseEngine);
 
-            foreach (PropertyInfo i in entity.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList())
+            foreach (PropertyInfo i in GetProperties(entity))
             {
                 var customAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
                 string columnName = syntaxProvider.GetSecureColumnName(customAttribute.ColumnName ?? i.Name);
@@ -65,12 +66,12 @@ namespace SysWork.Data.Common.Attributes.Helpers
             var syntaxProvider = new SyntaxProvider(dataBaseEngine);
 
             string columnName ="";
-            foreach (PropertyInfo i in entity.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList())
+            foreach (PropertyInfo i in GetProperties(entity))
             {
-                var customAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
-                columnName = syntaxProvider.GetSecureColumnName(customAttribute.ColumnName ?? i.Name);
+                var dbColumn = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
+                columnName = syntaxProvider.GetSecureColumnName(dbColumn.ColumnName ?? i.Name);
 
-                if (!customAttribute.IsIdentity)
+                if (!dbColumn.IsIdentity)
                     sbColumnsInsert.Append(string.Format("{0},", columnName));
             }
 
@@ -80,5 +81,15 @@ namespace SysWork.Data.Common.Attributes.Helpers
             return sbColumnsInsert.ToString();
         }
 
+        /// <summary>
+        /// Gets the entity properties.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="t">The t.</param>
+        /// <returns></returns>
+        public static  IList<PropertyInfo> GetProperties<T>(T t)
+        {
+            return t.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
+        }
     }
 }

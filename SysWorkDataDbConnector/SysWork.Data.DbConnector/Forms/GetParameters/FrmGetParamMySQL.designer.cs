@@ -1,6 +1,6 @@
-﻿namespace SysWork.Data.Common.FormsGetParam
+﻿namespace SysWork.Data.Common.Forms.GetParameters
 {
-    partial class FrmGetParamSQL
+    partial class FrmGetParamMySQL
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@
         {
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOk = new System.Windows.Forms.Button();
-            this.lblErrMessage = new System.Windows.Forms.Label();
+            this.txtErrMessage = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.rbtnParametrosManuales = new System.Windows.Forms.RadioButton();
             this.grpManualParameters = new System.Windows.Forms.GroupBox();
@@ -55,7 +55,7 @@
             // 
             this.btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(308, 418);
+            this.btnCancel.Location = new System.Drawing.Point(309, 418);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(85, 21);
             this.btnCancel.TabIndex = 8;
@@ -66,7 +66,7 @@
             // btnOk
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnOk.Location = new System.Drawing.Point(164, 418);
+            this.btnOk.Location = new System.Drawing.Point(165, 418);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(85, 21);
             this.btnOk.TabIndex = 9;
@@ -74,22 +74,22 @@
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.BtnAceptar_Click);
             // 
-            // lblErrMessage
+            // txtErrMessage
             // 
-            this.lblErrMessage.AutoSize = true;
-            this.lblErrMessage.Location = new System.Drawing.Point(12, 402);
-            this.lblErrMessage.MaximumSize = new System.Drawing.Size(232, 0);
-            this.lblErrMessage.MinimumSize = new System.Drawing.Size(410, 0);
-            this.lblErrMessage.Name = "lblErrMessage";
-            this.lblErrMessage.Size = new System.Drawing.Size(410, 13);
-            this.lblErrMessage.TabIndex = 11;
-            this.lblErrMessage.Text = "Ha Ocurrido el siguiente error: ";
+            this.txtErrMessage.AutoSize = true;
+            this.txtErrMessage.Location = new System.Drawing.Point(12, 402);
+            this.txtErrMessage.MaximumSize = new System.Drawing.Size(232, 0);
+            this.txtErrMessage.MinimumSize = new System.Drawing.Size(410, 0);
+            this.txtErrMessage.Name = "txtErrMessage";
+            this.txtErrMessage.Size = new System.Drawing.Size(410, 13);
+            this.txtErrMessage.TabIndex = 11;
+            this.txtErrMessage.Text = "Ha Ocurrido el siguiente error: ";
             // 
             // pictureBox1
             // 
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.pictureBox1.Image = global::SysWork.Data.DbConnector.Properties.Resources.connector_icon_mssqlserver;
-            this.pictureBox1.Location = new System.Drawing.Point(198, -8);
+            this.pictureBox1.Image = global::SysWork.Data.DbConnector.Properties.Resources.connector_icon_mysql;
+            this.pictureBox1.Location = new System.Drawing.Point(199, -8);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(125, 135);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -130,7 +130,7 @@
             // 
             this.txtDataBase.Location = new System.Drawing.Point(108, 97);
             this.txtDataBase.Name = "txtDataBase";
-            this.txtDataBase.Size = new System.Drawing.Size(361, 20);
+            this.txtDataBase.Size = new System.Drawing.Size(365, 20);
             this.txtDataBase.TabIndex = 15;
             // 
             // label4
@@ -147,7 +147,7 @@
             this.txtPassword.Location = new System.Drawing.Point(108, 71);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
-            this.txtPassword.Size = new System.Drawing.Size(361, 20);
+            this.txtPassword.Size = new System.Drawing.Size(365, 20);
             this.txtPassword.TabIndex = 13;
             // 
             // label3
@@ -163,7 +163,7 @@
             // 
             this.txtLogin.Location = new System.Drawing.Point(108, 45);
             this.txtLogin.Name = "txtLogin";
-            this.txtLogin.Size = new System.Drawing.Size(361, 20);
+            this.txtLogin.Size = new System.Drawing.Size(365, 20);
             this.txtLogin.TabIndex = 11;
             // 
             // label2
@@ -179,7 +179,7 @@
             // 
             this.txtServer.Location = new System.Drawing.Point(108, 19);
             this.txtServer.Name = "txtServer";
-            this.txtServer.Size = new System.Drawing.Size(361, 20);
+            this.txtServer.Size = new System.Drawing.Size(365, 20);
             this.txtServer.TabIndex = 9;
             // 
             // label1
@@ -232,12 +232,11 @@
             this.rbtnConnectionString.UseVisualStyleBackColor = true;
             this.rbtnConnectionString.CheckedChanged += new System.EventHandler(this.RbtnConnectionString_CheckedChanged);
             // 
-            // FrmGetParamSQL
+            // FrmGetParamMySQL
             // 
             this.AcceptButton = this.btnOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(504, 451);
             this.ControlBox = false;
@@ -248,12 +247,12 @@
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.lblErrMessage);
+            this.Controls.Add(this.txtErrMessage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.Name = "FrmGetParamSQL";
+            this.Name = "FrmGetParamMySQL";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Parametros de Conexion MSSQLServer";
-            this.Load += new System.EventHandler(this.FrmGetParamMSSQL_Load);
+            this.Text = "Parametros de Conexion MySQL";
+            this.Load += new System.EventHandler(this.FrmGetParamMySQL_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.grpManualParameters.ResumeLayout(false);
             this.grpManualParameters.PerformLayout();
@@ -268,7 +267,7 @@
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label lblErrMessage;
+        private System.Windows.Forms.Label txtErrMessage;
         private System.Windows.Forms.RadioButton rbtnParametrosManuales;
         private System.Windows.Forms.GroupBox grpManualParameters;
         private System.Windows.Forms.TextBox txtDataBase;

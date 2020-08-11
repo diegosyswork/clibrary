@@ -112,16 +112,16 @@ namespace SysWork.Data.GenericRepository
             bool hasPrimary = false;
 
             string parameterName;
-            foreach (PropertyInfo i in ListObjectPropertyInfo)
+            foreach (PropertyInfo i in EntityProperties)
             {
-                var customAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
+                var dbColumn = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
                 parameterName = "@param_" + i.Name;
-                var columnName = _syntaxProvider.GetSecureColumnName(customAttribute.ColumnName ?? i.Name);
+                var columnName = _syntaxProvider.GetSecureColumnName(dbColumn.ColumnName ?? i.Name);
 
-                if (!customAttribute.IsIdentity)
+                if (!dbColumn.IsIdentity)
                     parameterList.Append(string.Format("{0} = {1},", columnName, parameterName));
 
-                if (customAttribute.IsPrimary)
+                if (dbColumn.IsPrimary)
                 {
                     hasPrimary = true;
 

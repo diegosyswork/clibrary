@@ -1,4 +1,4 @@
-﻿namespace SysWork.Data.Common.FormsGetParam
+﻿namespace SysWork.Data.Common.Forms.GetParameters
 {
     internal partial class FrmGetParamSQLite
     {
