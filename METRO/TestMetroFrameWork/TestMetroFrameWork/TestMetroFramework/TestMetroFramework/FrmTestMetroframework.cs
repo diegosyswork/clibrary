@@ -95,8 +95,6 @@ namespace TestMetroFramework
 
         private Image RoundCorners(Image image, int cornerRadius)
         {
-
-
             Bitmap roundedImage = new Bitmap(image.Width, image.Height);
 
             GraphicsPath graphicsPath = new GraphicsPath();

@@ -1071,9 +1071,7 @@ namespace Demo.SysWork.Data
 
             var test = new SqlLam<Person>().Where(p => ((p.FirstName.StartsWith("A") ) || (p.FirstName.StartsWith("b")) || (p.FirstName.StartsWith("E") )));
 
-
             LogText("Result in datagridView");
-
             LogText(Environment.NewLine + "///      END SqlLam Method DEMO         ///");
         }
 
@@ -1383,8 +1381,8 @@ namespace Demo.SysWork.Data
 
             var reader = new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
                .Query($"SELECT {_personRepository.ColumnsForSelect} FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
-               .AddParameter("@FromDate", new DateTime(2000, 01, 01))
-               .AddParameter("@ToDate", new DateTime(2010, 12, 31))
+               .AddParameter("@FromDate", new DateTime(2000, 01, 01),DbType.DateTime)
+               .AddParameter("@ToDate", new DateTime(2010, 12, 31), DbType.DateTime)
                .ExecuteReader();
 
             var mappedList = new MapDataReaderToEntity().Map<Person>(reader);
@@ -1450,6 +1448,21 @@ namespace Demo.SysWork.Data
                 .AddParameter("@ToDate", new DateTime(2010, 12, 31))
                 .ExecuteNonQuery();
             LogText($"Delete persons born between 01/01/2000 and 31/12/2010 recordAffected = {deleteQuery}");
+
+
+            var storeExecDelete = new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
+                .Query("DELETE_Person")
+                .AddParameter("@IdPerson", 3252)
+                .AddParameter("@Name", "Jhon Perez", DbType.String,200, ParameterDirection.Input)
+                .AddOutputParameter("@DateTime", DbType.DateTime)
+                .AddOutputParameter("@Exists", DbType.Boolean)
+                .AddParameter("@ErrorMsg", "", DbType.String,200);
+
+            var resultStoreExecDelete = storeExecDelete.ExecuteNonQuery(CommandType.StoredProcedure);
+            foreach (var item in storeExecDelete.DbParameters)
+            {
+                
+            }
 
             LogText(Environment.NewLine + "///      END DbExecutor Method DEMO         ///" + Environment.NewLine);
         }

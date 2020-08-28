@@ -18,7 +18,7 @@ namespace SysWork.Data.Common.Utilities
     /// 
     /// This class implements the builder pattern to help execute structured queries. 
     /// Supports ExecuteNonQuery(), ExecuteScalar() and ExecuteReader() and multiple database engines.
-    /// Helps to create INSERT and UPDATE Querys.
+    /// Helps to create INSERT, UPDATE and DELETE Querys. Or execute RAWs Querys
     /// 
     /// </summary>
     /// <remarks>
@@ -27,7 +27,6 @@ namespace SysWork.Data.Common.Utilities
     /// <example>
     /// <code>
     /// <![CDATA[
-    /// 
     ///   var connectionString = "MyConnectrionString";
     ///   
     ///   var recordsAffected = new DbExecutor(connectionString)
@@ -179,11 +178,13 @@ namespace SysWork.Data.Common.Utilities
         private void ConstructorResolver(DbConnection dbConnection,DbTransaction dbTransaction, string connectionString, EDataBaseEngine dataBaseEngine)
         {
             _dbConnection = dbConnection;
-            _connectionString = connectionString;
             _dbTransaction = dbTransaction;
+            _connectionString = connectionString;
             _dataBaseEngine = dataBaseEngine;
+
             _dataObjectProvider = new DbObjectProvider(dataBaseEngine);
             _syntaxProvider = new SyntaxProvider(dataBaseEngine);
+
             _queryParameters = new Dictionary<string, object>();
             _queryParameterSize = new Dictionary<string, int>();
             _queryParameterDbTye = new Dictionary<string, DbType>();
@@ -300,6 +301,43 @@ namespace SysWork.Data.Common.Utilities
         }
 
         /// <summary>
+        /// Deletes the query.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        /// <returns></returns>
+        public DbExecutor DeleteQuery(string tableName)
+        {
+            return DeleteQuery(tableName, null);
+        }
+
+        /// <summary>
+        /// Deletes the query.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        /// <param name="where">The where.</param>
+        /// <returns></returns>
+        public DbExecutor DeleteQuery(string tableName, string where)
+        {
+            _isUpdateQuery = true;
+
+            if ((!string.IsNullOrEmpty(where)) && (!string.IsNullOrWhiteSpace(where)))
+            {
+                where = where.Trim();
+                if (!where.StartsWith("WHERE"))
+                    where = " WHERE " + where;
+            }
+            else
+            {
+                where = "";
+            }
+
+            var commandText = string.Format("DELETE FROM {0} {1}", tableName, where);
+
+            _sqlQuery = commandText;
+            return this;
+        }
+
+        /// <summary>
         /// Adds a parameter.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -333,6 +371,42 @@ namespace SysWork.Data.Common.Utilities
 
             return this;
         }
+        /// <summary>
+        /// Adds the output parameter.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        public DbExecutor AddOutputParameter(string name, DbType dbType)
+        {
+            if (!_queryParameters.ContainsKey(name))
+                _queryParameters.Add(name, null);
+
+            if (!_queryParameterDbTye.ContainsKey(name))
+                _queryParameterDbTye.Add(name,dbType);
+
+            if (!_queryParameterDirection.ContainsKey(name))
+                _queryParameterDirection.Add(name, ParameterDirection.Output);
+
+            return this;
+        }
+
+        public DbExecutor AddOutputParameter(string name, DbType dbType,int size)
+        {
+            if (!_queryParameters.ContainsKey(name))
+                _queryParameters.Add(name, null);
+
+            if (!_queryParameterDbTye.ContainsKey(name))
+                _queryParameterDbTye.Add(name, dbType);
+
+            if (!_queryParameterDirection.ContainsKey(name))
+                _queryParameterDirection.Add(name, ParameterDirection.Output);
+
+            if (!_queryParameterSize.ContainsKey(name))
+                _queryParameterSize.Add(name, size);
+
+            return this;
+        }
+
 
         /// <summary>
         /// Adds the parameter.
@@ -796,6 +870,7 @@ namespace SysWork.Data.Common.Utilities
         {
             return ExecuteNonQuery(_dbConnection, _dbTransaction, dbCommandTimeOut,CommandType.Text);
         }
+
         public long ExecuteNonQuery(int dbCommandTimeOut, CommandType commandType)
         {
             return ExecuteNonQuery(_dbConnection, _dbTransaction, dbCommandTimeOut, commandType);
@@ -841,6 +916,7 @@ namespace SysWork.Data.Common.Utilities
 
                     if (_queryParameterDirection.TryGetValue(dbParameter.ParameterName, out ParameterDirection parameterDirection))
                         dbParameter.Direction = parameterDirection;
+
 
                     dbCommand.Parameters.Add(dbParameter);
                 }
@@ -1093,9 +1169,7 @@ namespace SysWork.Data.Common.Utilities
                     dbCommand.Parameters.Add(dbParameter);
                 }
 
-                DbParameters.Clear();
-                foreach (var parameter in dbCommand.Parameters)
-                    DbParameters.Add(parameter);
+                DbParameters = dbCommand.Parameters;
 
                 if (_dataBaseEngine == EDataBaseEngine.OleDb)
                 {
@@ -1297,9 +1371,7 @@ namespace SysWork.Data.Common.Utilities
                     dbCommand.Parameters.Add(dbParameter);
                 }
 
-                DbParameters.Clear();
-                foreach (var parameter in dbCommand.Parameters)
-                    DbParameters.Add(parameter);
+                DbParameters = dbCommand.Parameters;
 
                 if (_dataBaseEngine == EDataBaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
