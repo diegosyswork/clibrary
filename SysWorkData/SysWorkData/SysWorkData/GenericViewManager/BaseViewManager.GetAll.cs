@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using SysWork.Data.Common.Interfaces.Actions;
-using SysWork.Data.Common.Mapper;
 using SysWork.Data.GenericRepository.Exceptions;
 
 namespace SysWork.Data.GenericViewManager

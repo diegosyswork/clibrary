@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
+using System.Reflection;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.Attributes.Helpers
 {
     /// <summary>
-    /// 
     /// </summary>
     public static class DbColumnHelper
     {
@@ -47,12 +46,15 @@ namespace SysWork.Data.Common.Attributes.Helpers
             return sbColumnsSelect.ToString();
         }
 
-
+        /// <summary>
+        /// Gets the columns for insert.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <returns></returns>
         public static string GetColumnsForInsert<TEntity>() where TEntity : class, new()
         {
             return GetColumnsForInsert<TEntity>(EDataBaseEngine.MSSqlServer);
         }
-
         /// <summary>
         /// Gets the columns for insert.
         /// </summary>

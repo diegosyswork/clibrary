@@ -13,6 +13,7 @@ using SysWork.Data.Common.Filters;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.ValueObjects;
 using SysWork.Data.Common.Mapper;
+using SysWork.Data.Common.Attributes.Helpers;
 
 namespace SysWork.Data.GenericViewManager
 {
@@ -97,7 +98,7 @@ namespace SysWork.Data.GenericViewManager
             _mapper.UseTypeCache = false;
 
             TEntity entity = new TEntity();
-            EntityProperties = GetPropertyInfoList(entity);
+            EntityProperties = DbColumnHelper.GetProperties(entity);
 
             ViewName = GetViewNameFromEntity(entity.GetType());
 
@@ -174,11 +175,6 @@ namespace SysWork.Data.GenericViewManager
                 return DbView.Name ?? type.Name;
             else
                 throw new Exception(string.Format("The Entity {0}, has not linked to any view, Use [DbView] attribute to link it to a view.", type.Name));
-        }
-
-        private IList<PropertyInfo> GetPropertyInfoList(TEntity entity)
-        {
-            return entity.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
         }
 
         private void GetDbColumns()

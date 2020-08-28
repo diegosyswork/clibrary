@@ -1382,25 +1382,26 @@ namespace Demo.SysWork.Data
             LogText("Select persons born between 01/01/2000 and 31/12/2010");
 
             var reader = new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
-                .Query($"SELECT {_personRepository.ColumnsForSelect} FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
-                .AddParameter("@FromDate", new DateTime(2000, 01, 01))
-                .AddParameter("@ToDate", new DateTime(2010, 12, 31))
-                .ExecuteReader();
+               .Query($"SELECT {_personRepository.ColumnsForSelect} FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
+               .AddParameter("@FromDate", new DateTime(2000, 01, 01))
+               .AddParameter("@ToDate", new DateTime(2010, 12, 31))
+               .ExecuteReader();
 
             var mappedList = new MapDataReaderToEntity().Map<Person>(reader);
 
 
             /*SUPER ABBREVIATED
-            var mappedList = new MapDataReaderToEntity().Map<Person>(new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
-                .Query($"SELECT {_personRepository.ColumnsForSelect} FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
-                .AddParameter("@FromDate", new DateTime(2000, 01, 01))
-                .AddParameter("@ToDate", new DateTime(2010, 12, 31))
+                var mappedList = new MapDataReaderToEntity().Map<Person>(new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
+                    .Query($"SELECT {_personRepository.ColumnsForSelect} FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
+                    .AddParameter("@FromDate", new DateTime(2000, 01, 01))
+                    .AddParameter("@ToDate", new DateTime(2010, 12, 31))
                 .ExecuteReader());
              */
 
             dataGridView1.DataSource = null;
             dataGridView1.DataSource = mappedList;
             dataGridView1.Refresh();
+
             /*
             LogText("Select persons born between 01/01/2000 and 31/12/2010 using GetTypedList<Person>()");
             dataGridView1.DataSource = null;
@@ -1423,7 +1424,7 @@ namespace Demo.SysWork.Data
                 .AddFieldWithValue("BirthDate", new DateTime(1980, 5, 24))
                 .AddFieldWithValue("Active", true)
                 .AddFieldWithValue("Long Name Field", "Test")
-                .ExecuteScalar();
+            .ExecuteScalar();
 
             idPerson = DbUtil.ParseToLong(result);
             LogText($"The idPerson {idPerson} was inserted");
@@ -1549,8 +1550,6 @@ namespace Demo.SysWork.Data
             }
 
             list = _personRepository.GetAll().ToList();
-
-
         }
     }
 }

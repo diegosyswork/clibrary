@@ -6,15 +6,14 @@ using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.SimpleQuery
 {
-    // TODO: Crear Ejemplos del uso de los metodos de esta clase.
-
+    
     /// <summary>
     /// Static class to Read Data Quickly.
     /// </summary>
     public static class SimpleQuery
     {
         /// <summary>
-        /// Executes the specified commandText in a DbConnection (MSSqlServer).
+        /// Executes the specified commandText in a DbConnection.
         /// </summary>
         /// <param name="dbConnection">The database connection.</param>
         /// <param name="commandText">The command text.</param>
@@ -63,20 +62,17 @@ namespace SysWork.Data.Common.SimpleQuery
         /// <returns></returns>
         private static IEnumerable<dynamic> Execute(EDataBaseEngine dataBaseEngine, DbConnection dbConnection, string commandText,bool closeConnection = true)
         {
-            using (var connection = dbConnection)
-            {
-                if (connection.State != ConnectionState.Open)
-                    connection.Open();
+            if (dbConnection.State != ConnectionState.Open)
+                dbConnection.Open();
 
-                using (var dbCommand = connection.CreateCommand())
+            using (var dbCommand = dbConnection.CreateCommand())
+            {
+                dbCommand.CommandText = commandText;
+                using (DbDataReader dataReader = dbCommand.ExecuteReader(closeConnection ? CommandBehavior.CloseConnection: CommandBehavior.Default))
                 {
-                    dbCommand.CommandText = commandText;
-                    using (DbDataReader dataReader = dbCommand.ExecuteReader(closeConnection ? CommandBehavior.CloseConnection: CommandBehavior.Default))
+                    foreach (IDataRecord record in dataReader)
                     {
-                        foreach (IDataRecord record in dataReader)
-                        {
-                            yield return new DataRecordDynamicWrapper(record);
-                        }
+                        yield return new DataRecordDynamicWrapper(record);
                     }
                 }
             }

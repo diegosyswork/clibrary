@@ -152,9 +152,7 @@ namespace SysWork.Data.GenericRepository
             TableName = GetTableNameFromEntity(entity.GetType());
 
             if ((EntityProperties == null) || (EntityProperties.Count == 0))
-            {
                 throw new Exception(string.Format("The Entity {0}, has not linked attibutes to table: {1}, Use [DbColumn] attribute to link properties to the table.", entity.GetType().Name, TableName));
-            }
 
             GetDbColumnsAndAtributes();
         }

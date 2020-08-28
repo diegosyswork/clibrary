@@ -529,10 +529,8 @@ namespace SysWork.Data.LoggerDb
         public static bool LogInfo(EDbInfoTag eInfoTag, string summary, string details, IDbCommand dbCommand, string result)
         {
             string sqlStatement = (dbCommand != null) ? DbUtil.ConvertCommandParamatersToLiteralValues(dbCommand) : null;
-
             return DbLog(eInfoTag, summary, details, sqlStatement: sqlStatement, result: result);
         }
-
 
         private static bool DbLog(Object tag, string summary = null, string details = null,
             string method = null, string _class = null, string sqlStatement = null, string parameters = null, string exception = null,
@@ -606,6 +604,5 @@ namespace SysWork.Data.LoggerDb
             }
             return true;
         }
-
     }
 }

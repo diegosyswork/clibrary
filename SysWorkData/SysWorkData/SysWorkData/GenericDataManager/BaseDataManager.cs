@@ -71,6 +71,15 @@ namespace SysWork.Data.GenericDataManager
         }
 
         /// <summary>
+        /// Gets the instance of this singleton. Abbreviation for GetInstance
+        /// </summary>
+        /// <returns></returns>
+        public static T I()
+        {
+            return GetInstance();
+        }
+
+        /// <summary>
         /// Creates an instance of T via reflection since T's constructor is expected to be private.
         /// </summary>
         /// <returns></returns>

@@ -23,10 +23,13 @@ namespace SysWork.Data.Common.Syntax
 
 
         /// <summary>
-        /// Gets the name of the table.
+        /// Gets an secure name for a table according to the database engine. 
+        /// For example if the table name is "TABLE ONE" it will return [TABLE ONE] for MSSqlServer 
+        /// and `TABLE ONE` for MySql. 
         /// </summary>
         /// <param name="TableName">Name of the table.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// </returns>
         public string GetSecureTableName(string TableName)
         {
             string secureTableName = TableName;
@@ -40,8 +43,9 @@ namespace SysWork.Data.Common.Syntax
         }
 
         /// <summary>
-        /// Gets an secure name of view, if this contains special characters adds brackets 
-        /// or equivalent in the databaseEngine.
+        /// Gets an secure name for a view according to the database engine. 
+        /// For example if the view name is "PERSONS PER COUNTRY" it will return [PERSONS PER COUNTRY] for MSSqlServer 
+        /// and `PERSONS PER COUNTRY` for MySql. 
         /// </summary>
         /// <param name="ViewName">Name of the view.</param>
         /// <returns></returns>
@@ -58,7 +62,9 @@ namespace SysWork.Data.Common.Syntax
         }
 
         /// <summary>
-        /// Gets the name of the column.
+        /// Gets an secure name for a column according to the database engine.
+        /// For example if the column name is "LAST NAME" it will return [LAST NAME] for MSSqlServer 
+        /// and `LAST NAME` for MySql. 
         /// </summary>
         /// <param name="ColumnName">Name of the column.</param>
         /// <param name="prefixTable">The prefix table.</param>
@@ -127,9 +133,8 @@ namespace SysWork.Data.Common.Syntax
         {
             string newName = fieldName;
             foreach (var item in DbObjectNameCharReplacerDictionary.CharacterEquivalence)
-            {
                 newName = newName.Replace(item.Key, item.Value);
-            }
+
             return newName;
         }
 
@@ -143,9 +148,8 @@ namespace SysWork.Data.Common.Syntax
         {
             string newName = parameterName;
             foreach (var item in DbObjectNameCharReplacerDictionary.CharacterEquivalence)
-            {
                 newName = newName.Replace(item.Value, item.Key);
-            }
+
             return newName;
         }
 

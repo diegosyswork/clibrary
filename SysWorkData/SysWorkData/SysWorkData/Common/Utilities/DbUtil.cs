@@ -70,9 +70,9 @@ namespace SysWork.Data.Common.Utilities
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
         /// <returns>List of tables in string format.</returns>
-        public static List<string> GetListTables(string connectionString)
+        public static List<string> GetTables(string connectionString)
         {
-            return GetListTables(EDataBaseEngine.MSSqlServer, connectionString);
+            return GetTables(EDataBaseEngine.MSSqlServer, connectionString);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace SysWork.Data.Common.Utilities
         /// <param name="connectionString">The connection string.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
-        public static List<string> GetListTables(EDataBaseEngine dataBaseEngine, string connectionString)
+        public static List<string> GetTables(EDataBaseEngine dataBaseEngine, string connectionString)
         {
             using (DbConnection connection = StaticDbObjectProvider.GetDbConnection(dataBaseEngine,connectionString))
             {
@@ -101,10 +101,10 @@ namespace SysWork.Data.Common.Utilities
                     throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
 
                 List<string> tables = new List<string>();
+
                 foreach (DataRow row in schema.Rows)
-                {
                     tables.Add(row[2].ToString());
-                }
+
                 connection.Close();
 
                 return tables;
@@ -116,9 +116,9 @@ namespace SysWork.Data.Common.Utilities
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
         /// <returns></returns>
-        public static List<string> GetListViews(string connectionString)
+        public static List<string> GetViews(string connectionString)
         {
-            return GetListViews(EDataBaseEngine.MSSqlServer, connectionString);
+            return GetViews(EDataBaseEngine.MSSqlServer, connectionString);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace SysWork.Data.Common.Utilities
         /// <param name="connectionString">The connection string.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
-        public static List<string> GetListViews(EDataBaseEngine dataBaseEngine, string connectionString)
+        public static List<string> GetViews(EDataBaseEngine dataBaseEngine, string connectionString)
         {
             using (DbConnection connection = StaticDbObjectProvider.GetDbConnection(dataBaseEngine, connectionString))
             {
@@ -148,9 +148,8 @@ namespace SysWork.Data.Common.Utilities
 
                 List<string> views = new List<string>();
                 foreach (DataRow row in schema.Rows)
-                {
                     views.Add(row[2].ToString());
-                }
+
                 connection.Close();
 
                 return views;
@@ -501,9 +500,8 @@ namespace SysWork.Data.Common.Utilities
             foreach (T item in data)
             {
                 for (int i = 0; i < values.Length; i++)
-                {
                     values[i] = props[i].GetValue(item);
-                }
+
                 table.Rows.Add(values);
             }
             return table;

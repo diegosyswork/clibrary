@@ -13,6 +13,9 @@ using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.GenericRepository
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public abstract partial class BaseRepository<TEntity> : IAdd<TEntity>
     {
         #region DOCUMENTATION Add(TEntity entity)

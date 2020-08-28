@@ -14,7 +14,7 @@ namespace SysWork.Data.Common.Utilities
     #region DOCUMENTATION Class
     /// <summary>
     /// 
-    /// Class to facilitate Querys.
+    /// Class to facilitate Queries execution.
     /// 
     /// This class implements the builder pattern to help execute structured queries. 
     /// Supports ExecuteNonQuery(), ExecuteScalar() and ExecuteReader() and multiple database engines.
@@ -87,6 +87,7 @@ namespace SysWork.Data.Common.Utilities
         private IDictionary<string, object> _queryParameters;
         private IDictionary<string, int> _queryParameterSize;
         private IDictionary<string, DbType> _queryParameterDbTye;
+        private IDictionary<string, ParameterDirection> _queryParameterDirection;
 
         private DbObjectProvider _dataObjectProvider;
         private SyntaxProvider _syntaxProvider;
@@ -98,7 +99,15 @@ namespace SysWork.Data.Common.Utilities
         /// <value>
         /// The default command time out.
         /// </value>
-        public int DefaultCommandTimeOut { get { return _defaultCommandTimeOut; } set { _defaultCommandTimeOut = value; } } 
+        public int DefaultCommandTimeOut { get { return _defaultCommandTimeOut; } set { _defaultCommandTimeOut = value; } }
+
+        /// <summary>
+        /// Gets the Command parameters.
+        /// </summary>
+        /// <value>
+        /// The Command parameters.
+        /// </value>
+        public IDataParameterCollection DbParameters { get; private set; }
 
         /// <summary>
         /// Gets the SQL query.
@@ -178,6 +187,7 @@ namespace SysWork.Data.Common.Utilities
             _queryParameters = new Dictionary<string, object>();
             _queryParameterSize = new Dictionary<string, int>();
             _queryParameterDbTye = new Dictionary<string, DbType>();
+            _queryParameterDirection = new Dictionary<string, ParameterDirection>();
         }
 
         /// <summary>
@@ -325,6 +335,28 @@ namespace SysWork.Data.Common.Utilities
         }
 
         /// <summary>
+        /// Adds the parameter.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="parameterDirection">The parameter direction.</param>
+        /// <returns></returns>
+        public DbExecutor AddParameter(string name, object value, ParameterDirection parameterDirection)
+        {
+            if (!_queryParameters.ContainsKey(name))
+                _queryParameters.Add(name, value);
+
+            if (!_queryParameterSize.ContainsKey(name))
+                _queryParameterSize.Add(name, 0);
+
+            if (!_queryParameterDirection.ContainsKey(name))
+                _queryParameterDirection.Add(name, parameterDirection);
+
+
+            return this;
+        }
+
+        /// <summary>
         /// Adds a parameter.
         /// </summary>
         /// <param name="name">The name.</param>
@@ -351,6 +383,27 @@ namespace SysWork.Data.Common.Utilities
 
             if (!_queryParameterSize.ContainsKey(name))
                 _queryParameterSize.Add(name, size);
+
+            return this;
+        }
+        /// <summary>
+        /// Adds the parameter.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="size">The size.</param>
+        /// <param name="parameterDirection">The parameter direction.</param>
+        /// <returns></returns>
+        public DbExecutor AddParameter(string name, object value, int size,ParameterDirection parameterDirection)
+        {
+            if (!_queryParameters.ContainsKey(name))
+                _queryParameters.Add(name, value);
+
+            if (!_queryParameterSize.ContainsKey(name))
+                _queryParameterSize.Add(name, size);
+
+            if (!_queryParameterDirection.ContainsKey(name))
+                _queryParameterDirection.Add(name, parameterDirection);
 
             return this;
         }
@@ -382,9 +435,29 @@ namespace SysWork.Data.Common.Utilities
             if (!_queryParameters.ContainsKey(name))
                 _queryParameters.Add(name, value);
 
+            if (!_queryParameterDbTye.ContainsKey(name))
+                _queryParameterDbTye.Add(name, dbType);
+
+            return this;
+        }
+        /// <summary>
+        /// Adds the parameter.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="dbType">Type of the database.</param>
+        /// <param name="parameterDirection">The parameter direction.</param>
+        /// <returns></returns>
+        public DbExecutor AddParameter(string name, object value, DbType dbType, ParameterDirection parameterDirection)
+        {
+            if (!_queryParameters.ContainsKey(name))
+                _queryParameters.Add(name, value);
 
             if (!_queryParameterDbTye.ContainsKey(name))
                 _queryParameterDbTye.Add(name, dbType);
+
+            if (!_queryParameterDirection.ContainsKey(name))
+                _queryParameterDirection.Add(name, parameterDirection);
 
             return this;
         }
@@ -413,7 +486,6 @@ namespace SysWork.Data.Common.Utilities
         /// </returns>
         public DbExecutor AddParameter(string name, object value, DbType dbType, int size)
         {
-            
             if (!_queryParameters.ContainsKey(name))
                 _queryParameters.Add(name, value);
 
@@ -422,6 +494,32 @@ namespace SysWork.Data.Common.Utilities
 
             if (!_queryParameterDbTye.ContainsKey(name))
                 _queryParameterDbTye.Add(name, dbType);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Adds the parameter.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="dbType">Type of the database.</param>
+        /// <param name="size">The size.</param>
+        /// <param name="parameterDirection">The parameter direction.</param>
+        /// <returns></returns>
+        public DbExecutor AddParameter(string name, object value, DbType dbType, int size,ParameterDirection parameterDirection)
+        {
+            if (!_queryParameters.ContainsKey(name))
+                _queryParameters.Add(name, value);
+
+            if (!_queryParameterSize.ContainsKey(name))
+                _queryParameterSize.Add(name, size);
+
+            if (!_queryParameterDbTye.ContainsKey(name))
+                _queryParameterDbTye.Add(name, dbType);
+
+            if (!_queryParameterDirection.ContainsKey(name))
+                _queryParameterDirection.Add(name, parameterDirection);
 
             return this;
         }
@@ -741,8 +839,13 @@ namespace SysWork.Data.Common.Utilities
                     if (_queryParameterDbTye.TryGetValue(dbParameter.ParameterName, out DbType dbType))
                         dbParameter.DbType = dbType;
 
+                    if (_queryParameterDirection.TryGetValue(dbParameter.ParameterName, out ParameterDirection parameterDirection))
+                        dbParameter.Direction = parameterDirection;
+
                     dbCommand.Parameters.Add(dbParameter);
                 }
+
+                DbParameters = dbCommand.Parameters;
 
                 if (_dataBaseEngine == EDataBaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
@@ -984,8 +1087,15 @@ namespace SysWork.Data.Common.Utilities
                     if (_queryParameterDbTye.TryGetValue(dbParameter.ParameterName, out DbType dbType))
                         dbParameter.DbType = dbType;
 
+                    if (_queryParameterDirection.TryGetValue(dbParameter.ParameterName, out ParameterDirection parameterDirection))
+                        dbParameter.Direction = parameterDirection;
+
                     dbCommand.Parameters.Add(dbParameter);
                 }
+
+                DbParameters.Clear();
+                foreach (var parameter in dbCommand.Parameters)
+                    DbParameters.Add(parameter);
 
                 if (_dataBaseEngine == EDataBaseEngine.OleDb)
                 {
@@ -1181,10 +1291,16 @@ namespace SysWork.Data.Common.Utilities
                     if (_queryParameterDbTye.TryGetValue(dbParameter.ParameterName, out DbType dbType))
                         dbParameter.DbType = dbType;
 
+                    if (_queryParameterDirection.TryGetValue(dbParameter.ParameterName, out ParameterDirection parameterDirection))
+                        dbParameter.Direction = parameterDirection;
 
                     dbCommand.Parameters.Add(dbParameter);
                 }
-                
+
+                DbParameters.Clear();
+                foreach (var parameter in dbCommand.Parameters)
+                    DbParameters.Add(parameter);
+
                 if (_dataBaseEngine == EDataBaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
@@ -1215,10 +1331,8 @@ namespace SysWork.Data.Common.Utilities
             var listFieldsAndParameters = new List<string>();
 
             foreach (var key in list)
-            {
                 if (key.StartsWith(_DbExecutorParameterPrefix))
                     listFieldsAndParameters.Add(_syntaxProvider.GetSecureColumnName(_syntaxProvider.SecureParameterNameToField(key.Replace(_DbExecutorParameterPrefix, ""))) + " = " + key);
-            }
 
             _sqlQuery = _sqlQuery.Replace("/LIST_OF_FIELDS_AND_VALUES/", string.Join(",", listFieldsAndParameters));
         }
@@ -1240,7 +1354,6 @@ namespace SysWork.Data.Common.Utilities
                     listParametersNames.Add(key);
                 }
             }
-
             _sqlQuery = _sqlQuery.Replace("/LIST_OF_FIELDS_NAMES/", string.Join(",", listFields));
             _sqlQuery = _sqlQuery.Replace("/LIST_OF_PARAMETERS_NAMES/", string.Join(",", listParametersNames));
         }
