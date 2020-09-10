@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
+using SysWork.MetroControls.MetroToolbars;
 
 namespace TestMetroFramework
 {
@@ -32,6 +33,7 @@ namespace TestMetroFramework
             GridArticulos.AutoGenerateColumns = false;
             GridArticulos.Columns["ColCodigo"].DataPropertyName = "CodArticulo";
             GridArticulos.Columns["ColDescripcion"].DataPropertyName = "Descripcion";
+            GridArticulos.Columns["ColLista"].DataPropertyName = "Unitario";
             GridArticulos.Columns["ColCantidad"].DataPropertyName = "Cantidad";
             GridArticulos.Columns["ColUnitario"].DataPropertyName = "Unitario";
             GridArticulos.Columns["ColDescuento"].DataPropertyName = "Descuento";
@@ -40,6 +42,11 @@ namespace TestMetroFramework
             GridArticulos.DataSource = _lista;
 
             LblImporteTotal.Text = _lista.Sum(a => a.Total).ToString("$ ###,###,##0.00");
+
+            metroToolbarCRUD1.Theme = metroStyleManager1.Theme == MetroThemeStyle.Dark ? MetroTheme.Dark : MetroTheme.Light;
+            metroToolbarDisplaySettings1.Theme = metroToolbarCRUD1.Theme;
+
+            this.UseEnterKeyToValidate = true;
         }
 
         private void LoadData()
@@ -129,21 +136,82 @@ namespace TestMetroFramework
 
         }
 
-        private void toolStripButton5_Click(object sender, EventArgs e)
-        {
-            metroStyleManager1.Theme = metroStyleManager1.Theme == MetroFramework.MetroThemeStyle.Dark ? MetroFramework.MetroThemeStyle.Light : MetroFramework.MetroThemeStyle.Dark;
-        }
-
-        private void toolStripButton4_Click(object sender, EventArgs e)
-        {
-            var m = new Random();
-            int next = m.Next(0, 13);
-            metroStyleManager1.Style = (MetroColorStyle)next;
-        }
-
         private void TxtCodigoCliente_Validating(object sender, CancelEventArgs e)
         {
-            errorProvider1.SetError(TxtCodigoCliente, "errr");
+            errorProvider1.SetError(TxtCodigoCliente, "Error en la carga del cliente");
+        }
+
+        private void metroButton1_Click(object sender, EventArgs e)
+        {
+            //TestDialog t = new TestDialog();
+            //t.ShowDialog();
+
+            MetroMessageBox.Show(this,"No hay conexion con AFIP, reintenta en unos momentos", "Aviso al operador", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MetroMessageBox.Show(this, "No hay conexion con AFIP, reintenta en unos momentos", "Aviso al operador", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+            MetroMessageBox.Show(this, "No hay conexion con AFIP, reintenta en unos momentos", "Aviso al operador", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+            MetroMessageBox.Show(this, "No hay conexion con AFIP, reintenta en unos momentos", "Aviso al operador", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            MetroMessageBox.Show(this, "No hay conexion con AFIP, reintenta en unos momentos", "Aviso al operador", MessageBoxButtons.OKCancel, MessageBoxIcon.Stop);
+            MetroMessageBox.Show(this, "No hay conexion con AFIP, reintenta en unos momentos", "Aviso al operador", MessageBoxButtons.OKCancel, MessageBoxIcon.Hand);
+            MetroMessageBox.Show(this, "No hay conexion con AFIP, reintenta en unos momentos", "Aviso al operador", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk);
+            MetroMessageBox.Show(this, "No hay conexion con AFIP, reintenta en unos momentos", "Aviso al operador", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+
+        }
+
+        private void metroToolbarDisplaySettings1_ActionSelected(object sender, MetroToolbarDisplaySettingsClickEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case MetroToolbarDisplaySettingsAction.ChangeTheme:
+                    metroStyleManager1.Theme = metroStyleManager1.Theme == MetroThemeStyle.Dark ? MetroFramework.MetroThemeStyle.Light : MetroFramework.MetroThemeStyle.Dark;
+                    metroToolbarCRUD1.Theme = metroStyleManager1.Theme == MetroThemeStyle.Dark ? MetroTheme.Dark : MetroTheme.Light;
+                    metroToolbarDisplaySettings1.Theme = metroToolbarCRUD1.Theme;
+                    break;
+                case MetroToolbarDisplaySettingsAction.ChangeStyle:
+                        var m = new Random();
+                        int next = m.Next(0, 13);
+                        var style = (MetroColorStyle)next;
+                        metroStyleManager1.Style = style;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void metroToolbarCRUD1_ActionSelected(object sender, MetroToolbarCRUDlickEventArgs e)
+        {
+            switch (e.Action)
+            {
+                case MetroToolbarCRUDAction.New:
+                    var f = new FrmTestPrincipal();
+                    f.Show();
+                    break;
+                case MetroToolbarCRUDAction.Delete:
+                    break;
+                case MetroToolbarCRUDAction.Refresh:
+                    break;
+                case MetroToolbarCRUDAction.Search:
+                    break;
+                case MetroToolbarCRUDAction.ImportExport:
+                    break;
+                case MetroToolbarCRUDAction.Report:
+                    var r = new FrmTestReport();
+                    r.SetAppearance(this.metroStyleManager1.Theme, this.metroStyleManager1.Style);
+                    r.Show();
+                    break;
+                case MetroToolbarCRUDAction.Initialize:
+                    break;
+                case MetroToolbarCRUDAction.Save:
+                    break;
+                case MetroToolbarCRUDAction.Exit:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void TxtCodigoCliente_ButtonClick(object sender, EventArgs e)
+        {
+            MetroMessageBox.Show(this, "Seleccionaste el cliente", "Carga de comprobantes de Ventas", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 
@@ -151,6 +219,7 @@ namespace TestMetroFramework
     {
         public string CodArticulo { get; set; }
         public string Descripcion { get; set; }
+        public string CodLista { get; set; }
         public Decimal Cantidad { get; set; }
         public Decimal Unitario { get; set; }
         public Decimal Descuento { get; set; }

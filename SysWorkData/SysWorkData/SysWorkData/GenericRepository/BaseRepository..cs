@@ -27,6 +27,7 @@ using SysWork.Data.Common.ValueObjects;
 #pragma warning restore 1587
 namespace SysWork.Data.GenericRepository
 {
+
     #region DOCUMENTATION Class
     /// <summary>
     /// Abstract class to be partially implemented. It allows CRUD operations to be performed on database 
@@ -63,6 +64,7 @@ namespace SysWork.Data.GenericRepository
     #endregion
     public abstract partial class BaseRepository<TEntity> where TEntity : class, new()
     {
+
         private string _connectionString;
         /// <summary>
         /// Gets the active ConnectionString.
@@ -212,6 +214,25 @@ namespace SysWork.Data.GenericRepository
         {
             return new DbExecutor(_connectionString, _dataBaseEngine);
         }
+        /// <summary>
+        /// A new instance of DbExecute instantiated according to the database engine. Using a DbConnection.
+        /// </summary>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <returns></returns>
+        protected DbExecutor BaseDbExecutor(DbConnection dbConnection)
+        {
+            return new DbExecutor(dbConnection);
+        }
+
+        /// <summary>
+        /// A new instance of DbExecute instantiated according to the database engine. Using a DbTransaction.
+        /// </summary>
+        /// <param name="dbTransaction">The database transaction.</param>
+        /// <returns></returns>
+        protected DbExecutor BaseDbExecutor(DbTransaction dbTransaction)
+        {
+            return new DbExecutor(dbTransaction);
+        }
 
         /// <summary>
         /// Return new instance of SqlLam.
@@ -243,7 +264,6 @@ namespace SysWork.Data.GenericRepository
             using (DbConnection conn = BaseDbConnection())
             {
                 conn.Open();
-
                 foreach (PropertyInfo i in EntityProperties)
                 {
                     var customAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
@@ -257,6 +277,7 @@ namespace SysWork.Data.GenericRepository
                     string schemaColumnName = _syntaxProvider.RemoveStartersAndEndersColumnName(customAttribute.ColumnName ?? i.Name);
                     _columnListWithDbInfo.Add(i.Name, GetColumnDbInfo(schemaColumnName, conn));
                 }
+                conn.Close();
             }
 
             if (sbColumnsInsert.Length > 0)
@@ -383,5 +404,6 @@ namespace SysWork.Data.GenericRepository
             else
                 throw new ArgumentOutOfRangeException("The databaseEngine is not supported by this method");
         }
+
     }
 }

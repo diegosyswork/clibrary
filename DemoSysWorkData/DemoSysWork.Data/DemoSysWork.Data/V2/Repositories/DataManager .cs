@@ -1,4 +1,5 @@
 ﻿
+using System;
 using SysWork.Data.GenericDataManager;
 using SysWork.Data.GenericDataManager.Intefaces;
 
@@ -9,11 +10,15 @@ namespace Demo.SysWork.Data.Repositories
     /// </summary>
     public class DataManager : BaseDataManager<DataManager>, IDataManager
     {
+
         /// <summary>
         /// Add Repositories to Manage.
         /// </summary>
-        public PersonRepository PersonRepository {get; private set;}
-        public StateRepository StateRepository {get; private set;}
+
+        private Lazy<PersonRepository> _personRepository;
+        public PersonRepository PersonRepository { get => _personRepository.Value;}
+        private Lazy<StateRepository> _stateRepository;
+        public StateRepository StateRepository { get => _stateRepository.Value;}
 
         public VManagerPersonsWithStates VManagerPersonsWithStates { get; private set; }
 
@@ -22,6 +27,7 @@ namespace Demo.SysWork.Data.Repositories
         /// </summary>
         private DataManager()
         {
+
         }
 
         /// <summary>
@@ -29,8 +35,8 @@ namespace Demo.SysWork.Data.Repositories
         /// </summary>
         void IDataManager.InitDataObjects()
         {
-            StateRepository = new StateRepository(ConnectionString, DataBaseEngine);
-            PersonRepository = new PersonRepository(ConnectionString, DataBaseEngine);
+            _stateRepository = new Lazy<StateRepository>(()=>new StateRepository(ConnectionString, DataBaseEngine));
+            _personRepository = new Lazy<PersonRepository>(() => new PersonRepository(ConnectionString, DataBaseEngine));
             VManagerPersonsWithStates = new VManagerPersonsWithStates(ConnectionString, DataBaseEngine);
         }
     }

@@ -78,10 +78,25 @@ namespace MetroFramework.Demo
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
+            this.metroTabPage8 = new MetroFramework.Controls.MetroTabPage();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.metroButton4 = new MetroFramework.Controls.MetroButton();
+            this.metroLabel24 = new MetroFramework.Controls.MetroLabel();
+            this.metroLabel23 = new MetroFramework.Controls.MetroLabel();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.metroListView1 = new MetroFramework.Controls.MetroListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.metroStyleManager = new MetroFramework.Components.MetroStyleManager(this.components);
             this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
             this.button1 = new System.Windows.Forms.Button();
             this.metroGroupBox1 = new MetroFramework.Controls.MetroGroupBox();
-            this.metroStyleManager = new MetroFramework.Components.MetroStyleManager(this.components);
             this.metroButtonStyled1 = new MetroFramework.Controls.MetroButtonStyled();
             this.metroDropDownButton1 = new MetroFramework.Controls.MetroDropDownButton();
             this.metroContextMenu1 = new MetroFramework.Controls.MetroContextMenu(this.components);
@@ -111,21 +126,6 @@ namespace MetroFramework.Demo
             this.metroTileSwitch = new MetroFramework.Controls.MetroTile();
             this.metroTile2 = new MetroFramework.Controls.MetroTile();
             this.metroTile1 = new MetroFramework.Controls.MetroTile();
-            this.metroTabPage8 = new MetroFramework.Controls.MetroTabPage();
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.treeView1 = new System.Windows.Forms.TreeView();
-            this.metroButton4 = new MetroFramework.Controls.MetroButton();
-            this.metroLabel24 = new MetroFramework.Controls.MetroLabel();
-            this.metroLabel23 = new MetroFramework.Controls.MetroLabel();
-            this.listBox1 = new System.Windows.Forms.ListBox();
-            this.metroListView1 = new MetroFramework.Controls.MetroListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.metroTabPage4 = new MetroFramework.Controls.MetroTabPage();
             this.metroTextBox4 = new MetroFramework.Controls.MetroTextBox();
             this.metroTextBox3 = new MetroFramework.Controls.MetroTextBox();
@@ -223,10 +223,10 @@ namespace MetroFramework.Demo
             this.metroRendererManager2 = new MetroFramework.Components.MetroRendererManager(this.components);
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.metroTabControl1.SuspendLayout();
-            this.metroTabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager)).BeginInit();
-            this.metroContextMenu1.SuspendLayout();
             this.metroTabPage8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager)).BeginInit();
+            this.metroTabPage1.SuspendLayout();
+            this.metroContextMenu1.SuspendLayout();
             this.metroTabPage4.SuspendLayout();
             this.metroTabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.metroNumericUpDown1)).BeginInit();
@@ -246,9 +246,9 @@ namespace MetroFramework.Demo
             // 
             // metroTabControl1
             // 
+            this.metroTabControl1.Controls.Add(this.metroTabPage4);
             this.metroTabControl1.Controls.Add(this.metroTabPage8);
             this.metroTabControl1.Controls.Add(this.metroTabPage1);
-            this.metroTabControl1.Controls.Add(this.metroTabPage4);
             this.metroTabControl1.Controls.Add(this.metroTabPage2);
             this.metroTabControl1.Controls.Add(this.metroTabPage6);
             this.metroTabControl1.Controls.Add(this.metroTabPage10);
@@ -258,10 +258,229 @@ namespace MetroFramework.Demo
             this.metroTabControl1.Controls.Add(this.metroTabPage9);
             this.metroTabControl1.Location = new System.Drawing.Point(17, 63);
             this.metroTabControl1.Name = "metroTabControl1";
-            this.metroTabControl1.SelectedIndex = 2;
+            this.metroTabControl1.SelectedIndex = 9;
             this.metroTabControl1.Size = new System.Drawing.Size(734, 397);
             this.metroTabControl1.TabIndex = 0;
             this.metroTabControl1.UseSelectable = true;
+            // 
+            // metroTabPage8
+            // 
+            this.metroTabPage8.Controls.Add(this.listView1);
+            this.metroTabPage8.Controls.Add(this.treeView1);
+            this.metroTabPage8.Controls.Add(this.metroButton4);
+            this.metroTabPage8.Controls.Add(this.metroLabel24);
+            this.metroTabPage8.Controls.Add(this.metroLabel23);
+            this.metroTabPage8.Controls.Add(this.listBox1);
+            this.metroTabPage8.Controls.Add(this.metroListView1);
+            this.metroTabPage8.HorizontalScrollbarBarColor = true;
+            this.metroTabPage8.HorizontalScrollbarHighlightOnWheel = false;
+            this.metroTabPage8.HorizontalScrollbarSize = 10;
+            this.metroTabPage8.Location = new System.Drawing.Point(4, 38);
+            this.metroTabPage8.Name = "metroTabPage8";
+            this.metroTabPage8.Size = new System.Drawing.Size(726, 355);
+            this.metroTabPage8.TabIndex = 7;
+            this.metroTabPage8.Text = "Lists";
+            this.metroTabPage8.VerticalScrollbarBarColor = true;
+            this.metroTabPage8.VerticalScrollbarHighlightOnWheel = false;
+            this.metroTabPage8.VerticalScrollbarSize = 10;
+            // 
+            // listView1
+            // 
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader4,
+            this.columnHeader5,
+            this.columnHeader6});
+            this.listView1.FullRowSelect = true;
+            this.listView1.GridLines = true;
+            this.listView1.HideSelection = false;
+            this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
+            listViewItem1,
+            listViewItem2,
+            listViewItem3});
+            this.listView1.Location = new System.Drawing.Point(435, 202);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(201, 69);
+            this.listView1.SmallImageList = this.imageList1;
+            this.listView1.TabIndex = 50;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Width = 136;
+            // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "AGCBKOMP.ICO");
+            this.imageList1.Images.SetKeyName(1, "Anul1.ico");
+            this.imageList1.Images.SetKeyName(2, "Anul2.ico");
+            // 
+            // treeView1
+            // 
+            this.metroStyleExtender2.SetApplyMetroTheme(this.treeView1, true);
+            this.metroStyleExtender.SetApplyMetroTheme(this.treeView1, true);
+            this.metroStyleExtender1.SetApplyMetroTheme(this.treeView1, true);
+            this.treeView1.ImageIndex = 0;
+            this.treeView1.ImageList = this.imageList1;
+            this.treeView1.Location = new System.Drawing.Point(467, 124);
+            this.treeView1.Name = "treeView1";
+            treeNode1.Name = "Nodo1";
+            treeNode1.Text = "Nodo1";
+            treeNode2.Name = "Nodo2";
+            treeNode2.Text = "Nodo2";
+            treeNode3.Name = "Nodo3";
+            treeNode3.Text = "Nodo3";
+            treeNode4.Name = "Nodo4";
+            treeNode4.Text = "Nodo4";
+            treeNode5.Name = "Nodo0";
+            treeNode5.Text = "Nodo0";
+            treeNode6.Name = "Nodo5";
+            treeNode6.Text = "Nodo5";
+            treeNode7.Name = "Nodo7";
+            treeNode7.Text = "Nodo7";
+            treeNode8.Name = "Nodo8";
+            treeNode8.Text = "Nodo8";
+            treeNode9.Name = "Nodo10";
+            treeNode9.Text = "Nodo10";
+            treeNode10.Name = "Nodo11";
+            treeNode10.Text = "Nodo11";
+            treeNode11.Name = "Nodo12";
+            treeNode11.Text = "Nodo12";
+            treeNode12.Name = "Nodo14";
+            treeNode12.Text = "Nodo14";
+            treeNode13.Name = "Nodo15";
+            treeNode13.Text = "Nodo15";
+            treeNode14.Name = "Nodo16";
+            treeNode14.Text = "Nodo16";
+            treeNode15.Name = "Nodo13";
+            treeNode15.Text = "Nodo13";
+            treeNode16.Name = "Nodo9";
+            treeNode16.Text = "Nodo9";
+            treeNode17.Name = "Nodo6";
+            treeNode17.Text = "Nodo6";
+            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode5,
+            treeNode6,
+            treeNode17});
+            this.treeView1.SelectedImageIndex = 0;
+            this.treeView1.Size = new System.Drawing.Size(184, 87);
+            this.treeView1.TabIndex = 49;
+            // 
+            // metroButton4
+            // 
+            this.metroButton4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.metroButton4.Location = new System.Drawing.Point(601, 20);
+            this.metroButton4.Name = "metroButton4";
+            this.metroButton4.Size = new System.Drawing.Size(125, 21);
+            this.metroButton4.TabIndex = 48;
+            this.metroButton4.Text = "Change View";
+            this.metroButton4.UseSelectable = true;
+            this.metroButton4.Click += new System.EventHandler(this.metroButton4_Click_1);
+            // 
+            // metroLabel24
+            // 
+            this.metroLabel24.AutoSize = true;
+            this.metroLabel24.Location = new System.Drawing.Point(3, 22);
+            this.metroLabel24.Name = "metroLabel24";
+            this.metroLabel24.Size = new System.Drawing.Size(54, 19);
+            this.metroLabel24.TabIndex = 47;
+            this.metroLabel24.Text = "ListView";
+            // 
+            // metroLabel23
+            // 
+            this.metroLabel23.AutoSize = true;
+            this.metroLabel23.Location = new System.Drawing.Point(4, 181);
+            this.metroLabel23.Name = "metroLabel23";
+            this.metroLabel23.Size = new System.Drawing.Size(122, 19);
+            this.metroLabel23.TabIndex = 46;
+            this.metroLabel23.Text = "ListBox (ApplyStyle)";
+            // 
+            // listBox1
+            // 
+            this.metroStyleExtender2.SetApplyMetroTheme(this.listBox1, true);
+            this.metroStyleExtender.SetApplyMetroTheme(this.listBox1, true);
+            this.metroStyleExtender1.SetApplyMetroTheme(this.listBox1, true);
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Items.AddRange(new object[] {
+            "1",
+            "23",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7"});
+            this.listBox1.Location = new System.Drawing.Point(3, 202);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(426, 69);
+            this.listBox1.TabIndex = 45;
+            // 
+            // metroListView1
+            // 
+            this.metroListView1.AlternateRowColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.metroListView1.AlternateRowColorEnabled = true;
+            this.metroListView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.metroListView1.AutoSizeLastColumn = true;
+            this.metroListView1.CheckBoxes = true;
+            this.metroListView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3});
+            this.metroListView1.EnableDragDrop = false;
+            this.metroListView1.EnableHeaderGlow = false;
+            this.metroListView1.EnableHeaderHotTrack = false;
+            this.metroListView1.EnableHeaderRendering = true;
+            this.metroListView1.EnableSelectionBorder = false;
+            this.metroListView1.EnableSorting = true;
+            this.metroListView1.EnableVistaCheckBoxes = true;
+            this.metroListView1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.metroListView1.FontSize = MetroFramework.MetroListViewSize.Medium;
+            this.metroListView1.FontWeight = MetroFramework.MetroListViewWeight.Regular;
+            this.metroListView1.ForceLeftAlign = false;
+            this.metroListView1.FullRowSelect = true;
+            this.metroListView1.HideSelection = false;
+            this.metroListView1.ItemHeight = 0;
+            listViewItem4.StateImageIndex = 0;
+            listViewItem5.StateImageIndex = 0;
+            this.metroListView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
+            listViewItem4,
+            listViewItem5});
+            this.metroListView1.LineAfter = -1;
+            this.metroListView1.LineBefore = -1;
+            this.metroListView1.Location = new System.Drawing.Point(3, 44);
+            this.metroListView1.Name = "metroListView1";
+            this.metroListView1.OwnerDraw = true;
+            this.metroListView1.SelectEntireRowOnSubItem = true;
+            this.metroListView1.Size = new System.Drawing.Size(734, 134);
+            this.metroListView1.Style = MetroFramework.MetroColorStyle.Blue;
+            this.metroListView1.StyleManager = this.metroStyleManager;
+            this.metroListView1.TabIndex = 2;
+            this.metroListView1.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.metroListView1.UseCompatibleStateImageBehavior = false;
+            this.metroListView1.UseCustomBackColor = false;
+            this.metroListView1.UseCustomForeColor = false;
+            this.metroListView1.UseSelectable = false;
+            this.metroListView1.UseStyleColors = false;
+            this.metroListView1.View = System.Windows.Forms.View.Details;
+            this.metroListView1.VScrollbar = null;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Width = 189;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Width = 173;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Width = 211;
+            // 
+            // metroStyleManager
+            // 
+            this.metroStyleManager.Owner = this;
             // 
             // metroTabPage1
             // 
@@ -336,10 +555,6 @@ namespace MetroFramework.Demo
             this.metroGroupBox1.Text = "metroGroupBox1";
             this.metroGroupBox1.Theme = MetroFramework.MetroThemeStyle.Light;
             this.metroGroupBox1.UseStyleColors = false;
-            // 
-            // metroStyleManager
-            // 
-            this.metroStyleManager.Owner = this;
             // 
             // metroButtonStyled1
             // 
@@ -641,221 +856,6 @@ namespace MetroFramework.Demo
             this.metroTile1.UseStyleColors = true;
             this.metroTile1.UseTileImage = true;
             this.metroTile1.Click += new System.EventHandler(this.metroTile1_Click);
-            // 
-            // metroTabPage8
-            // 
-            this.metroTabPage8.Controls.Add(this.listView1);
-            this.metroTabPage8.Controls.Add(this.treeView1);
-            this.metroTabPage8.Controls.Add(this.metroButton4);
-            this.metroTabPage8.Controls.Add(this.metroLabel24);
-            this.metroTabPage8.Controls.Add(this.metroLabel23);
-            this.metroTabPage8.Controls.Add(this.listBox1);
-            this.metroTabPage8.Controls.Add(this.metroListView1);
-            this.metroTabPage8.HorizontalScrollbarBarColor = true;
-            this.metroTabPage8.HorizontalScrollbarHighlightOnWheel = false;
-            this.metroTabPage8.HorizontalScrollbarSize = 10;
-            this.metroTabPage8.Location = new System.Drawing.Point(4, 38);
-            this.metroTabPage8.Name = "metroTabPage8";
-            this.metroTabPage8.Size = new System.Drawing.Size(726, 355);
-            this.metroTabPage8.TabIndex = 7;
-            this.metroTabPage8.Text = "Lists";
-            this.metroTabPage8.VerticalScrollbarBarColor = true;
-            this.metroTabPage8.VerticalScrollbarHighlightOnWheel = false;
-            this.metroTabPage8.VerticalScrollbarSize = 10;
-            // 
-            // listView1
-            // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader4,
-            this.columnHeader5,
-            this.columnHeader6});
-            this.listView1.FullRowSelect = true;
-            this.listView1.GridLines = true;
-            this.listView1.HideSelection = false;
-            this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2,
-            listViewItem3});
-            this.listView1.Location = new System.Drawing.Point(435, 202);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(201, 69);
-            this.listView1.SmallImageList = this.imageList1;
-            this.listView1.TabIndex = 50;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Width = 136;
-            // 
-            // imageList1
-            // 
-            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "AGCBKOMP.ICO");
-            this.imageList1.Images.SetKeyName(1, "Anul1.ico");
-            this.imageList1.Images.SetKeyName(2, "Anul2.ico");
-            // 
-            // treeView1
-            // 
-            this.metroStyleExtender2.SetApplyMetroTheme(this.treeView1, true);
-            this.metroStyleExtender.SetApplyMetroTheme(this.treeView1, true);
-            this.metroStyleExtender1.SetApplyMetroTheme(this.treeView1, true);
-            this.treeView1.ImageIndex = 0;
-            this.treeView1.ImageList = this.imageList1;
-            this.treeView1.Location = new System.Drawing.Point(467, 124);
-            this.treeView1.Name = "treeView1";
-            treeNode1.Name = "Nodo1";
-            treeNode1.Text = "Nodo1";
-            treeNode2.Name = "Nodo2";
-            treeNode2.Text = "Nodo2";
-            treeNode3.Name = "Nodo3";
-            treeNode3.Text = "Nodo3";
-            treeNode4.Name = "Nodo4";
-            treeNode4.Text = "Nodo4";
-            treeNode5.Name = "Nodo0";
-            treeNode5.Text = "Nodo0";
-            treeNode6.Name = "Nodo5";
-            treeNode6.Text = "Nodo5";
-            treeNode7.Name = "Nodo7";
-            treeNode7.Text = "Nodo7";
-            treeNode8.Name = "Nodo8";
-            treeNode8.Text = "Nodo8";
-            treeNode9.Name = "Nodo10";
-            treeNode9.Text = "Nodo10";
-            treeNode10.Name = "Nodo11";
-            treeNode10.Text = "Nodo11";
-            treeNode11.Name = "Nodo12";
-            treeNode11.Text = "Nodo12";
-            treeNode12.Name = "Nodo14";
-            treeNode12.Text = "Nodo14";
-            treeNode13.Name = "Nodo15";
-            treeNode13.Text = "Nodo15";
-            treeNode14.Name = "Nodo16";
-            treeNode14.Text = "Nodo16";
-            treeNode15.Name = "Nodo13";
-            treeNode15.Text = "Nodo13";
-            treeNode16.Name = "Nodo9";
-            treeNode16.Text = "Nodo9";
-            treeNode17.Name = "Nodo6";
-            treeNode17.Text = "Nodo6";
-            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode5,
-            treeNode6,
-            treeNode17});
-            this.treeView1.SelectedImageIndex = 0;
-            this.treeView1.Size = new System.Drawing.Size(184, 87);
-            this.treeView1.TabIndex = 49;
-            // 
-            // metroButton4
-            // 
-            this.metroButton4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroButton4.Location = new System.Drawing.Point(601, 20);
-            this.metroButton4.Name = "metroButton4";
-            this.metroButton4.Size = new System.Drawing.Size(125, 21);
-            this.metroButton4.TabIndex = 48;
-            this.metroButton4.Text = "Change View";
-            this.metroButton4.UseSelectable = true;
-            this.metroButton4.Click += new System.EventHandler(this.metroButton4_Click_1);
-            // 
-            // metroLabel24
-            // 
-            this.metroLabel24.AutoSize = true;
-            this.metroLabel24.Location = new System.Drawing.Point(3, 22);
-            this.metroLabel24.Name = "metroLabel24";
-            this.metroLabel24.Size = new System.Drawing.Size(54, 19);
-            this.metroLabel24.TabIndex = 47;
-            this.metroLabel24.Text = "ListView";
-            // 
-            // metroLabel23
-            // 
-            this.metroLabel23.AutoSize = true;
-            this.metroLabel23.Location = new System.Drawing.Point(4, 181);
-            this.metroLabel23.Name = "metroLabel23";
-            this.metroLabel23.Size = new System.Drawing.Size(122, 19);
-            this.metroLabel23.TabIndex = 46;
-            this.metroLabel23.Text = "ListBox (ApplyStyle)";
-            // 
-            // listBox1
-            // 
-            this.metroStyleExtender2.SetApplyMetroTheme(this.listBox1, true);
-            this.metroStyleExtender.SetApplyMetroTheme(this.listBox1, true);
-            this.metroStyleExtender1.SetApplyMetroTheme(this.listBox1, true);
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Items.AddRange(new object[] {
-            "1",
-            "23",
-            "3",
-            "4",
-            "5",
-            "6",
-            "7"});
-            this.listBox1.Location = new System.Drawing.Point(3, 202);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(426, 69);
-            this.listBox1.TabIndex = 45;
-            // 
-            // metroListView1
-            // 
-            this.metroListView1.AlternateRowColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.metroListView1.AlternateRowColorEnabled = true;
-            this.metroListView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroListView1.AutoSizeLastColumn = true;
-            this.metroListView1.CheckBoxes = true;
-            this.metroListView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3});
-            this.metroListView1.EnableDragDrop = false;
-            this.metroListView1.EnableHeaderGlow = false;
-            this.metroListView1.EnableHeaderHotTrack = false;
-            this.metroListView1.EnableHeaderRendering = true;
-            this.metroListView1.EnableSelectionBorder = false;
-            this.metroListView1.EnableSorting = true;
-            this.metroListView1.EnableVistaCheckBoxes = true;
-            this.metroListView1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.metroListView1.FontSize = MetroFramework.MetroListViewSize.Medium;
-            this.metroListView1.FontWeight = MetroFramework.MetroListViewWeight.Regular;
-            this.metroListView1.ForceLeftAlign = false;
-            this.metroListView1.FullRowSelect = true;
-            this.metroListView1.HideSelection = false;
-            this.metroListView1.ItemHeight = 0;
-            listViewItem4.StateImageIndex = 0;
-            listViewItem5.StateImageIndex = 0;
-            this.metroListView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem4,
-            listViewItem5});
-            this.metroListView1.LineAfter = -1;
-            this.metroListView1.LineBefore = -1;
-            this.metroListView1.Location = new System.Drawing.Point(3, 44);
-            this.metroListView1.Name = "metroListView1";
-            this.metroListView1.OwnerDraw = true;
-            this.metroListView1.SelectEntireRowOnSubItem = true;
-            this.metroListView1.Size = new System.Drawing.Size(734, 134);
-            this.metroListView1.Style = MetroFramework.MetroColorStyle.Blue;
-            this.metroListView1.StyleManager = this.metroStyleManager;
-            this.metroListView1.TabIndex = 2;
-            this.metroListView1.Theme = MetroFramework.MetroThemeStyle.Light;
-            this.metroListView1.UseCompatibleStateImageBehavior = false;
-            this.metroListView1.UseCustomBackColor = false;
-            this.metroListView1.UseCustomForeColor = false;
-            this.metroListView1.UseSelectable = false;
-            this.metroListView1.UseStyleColors = false;
-            this.metroListView1.View = System.Windows.Forms.View.Details;
-            this.metroListView1.VScrollbar = null;
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Width = 189;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Width = 173;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Width = 211;
             // 
             // metroTabPage4
             // 
@@ -1183,7 +1183,7 @@ namespace MetroFramework.Demo
             // 
             this.metroDateTime2.Enabled = false;
             this.metroDateTime2.Location = new System.Drawing.Point(201, 87);
-            this.metroDateTime2.MinimumSize = new System.Drawing.Size(4, 29);
+            this.metroDateTime2.MinimumSize = new System.Drawing.Size(0, 29);
             this.metroDateTime2.Name = "metroDateTime2";
             this.metroDateTime2.Size = new System.Drawing.Size(213, 29);
             this.metroDateTime2.TabIndex = 20;
@@ -1200,7 +1200,7 @@ namespace MetroFramework.Demo
             // metroDateTime1
             // 
             this.metroDateTime1.Location = new System.Drawing.Point(201, 51);
-            this.metroDateTime1.MinimumSize = new System.Drawing.Size(4, 29);
+            this.metroDateTime1.MinimumSize = new System.Drawing.Size(0, 29);
             this.metroDateTime1.Name = "metroDateTime1";
             this.metroDateTime1.Size = new System.Drawing.Size(213, 29);
             this.metroDateTime1.TabIndex = 18;
@@ -1827,7 +1827,7 @@ namespace MetroFramework.Demo
             this.metroGrid1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(211)))), ((int)(((byte)(255)))));
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
@@ -1837,7 +1837,7 @@ namespace MetroFramework.Demo
             this.metroGrid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(136)))), ((int)(((byte)(136)))));
             dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(211)))), ((int)(((byte)(255)))));
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
@@ -1845,7 +1845,7 @@ namespace MetroFramework.Demo
             this.metroGrid1.DefaultCellStyle = dataGridViewCellStyle2;
             this.metroGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.metroGrid1.EnableHeadersVisualStyles = false;
-            this.metroGrid1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.metroGrid1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.metroGrid1.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.metroGrid1.HighLightPercentage = 0.5F;
             this.metroGrid1.Location = new System.Drawing.Point(0, 5);
@@ -1853,7 +1853,7 @@ namespace MetroFramework.Demo
             this.metroGrid1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(36)))), ((int)(((byte)(211)))), ((int)(((byte)(255)))));
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
@@ -1982,7 +1982,7 @@ namespace MetroFramework.Demo
             this.metroTile9.ActiveControl = null;
             this.metroTile9.BackColor = System.Drawing.Color.Yellow;
             this.metroTile9.ForeColor = System.Drawing.Color.Red;
-            this.metroTile9.Location = new System.Drawing.Point(343, 67);
+            this.metroTile9.Location = new System.Drawing.Point(336, 14);
             this.metroTile9.Name = "metroTile9";
             this.metroTile9.Size = new System.Drawing.Size(129, 129);
             this.metroTile9.Style = MetroFramework.MetroColorStyle.Red;
@@ -2000,7 +2000,7 @@ namespace MetroFramework.Demo
             this.metroTile8.ActiveControl = null;
             this.metroTile8.BackColor = System.Drawing.Color.Yellow;
             this.metroTile8.ForeColor = System.Drawing.Color.Red;
-            this.metroTile8.Location = new System.Drawing.Point(9, 67);
+            this.metroTile8.Location = new System.Drawing.Point(2, 14);
             this.metroTile8.Name = "metroTile8";
             this.metroTile8.Size = new System.Drawing.Size(150, 124);
             this.metroTile8.Style = MetroFramework.MetroColorStyle.Orange;
@@ -2019,7 +2019,7 @@ namespace MetroFramework.Demo
             this.metroTile6.ActiveControl = null;
             this.metroTile6.BackColor = System.Drawing.Color.Yellow;
             this.metroTile6.ForeColor = System.Drawing.Color.Red;
-            this.metroTile6.Location = new System.Drawing.Point(9, 197);
+            this.metroTile6.Location = new System.Drawing.Point(2, 144);
             this.metroTile6.Name = "metroTile6";
             this.metroTile6.Size = new System.Drawing.Size(150, 174);
             this.metroTile6.Style = MetroFramework.MetroColorStyle.Green;
@@ -2038,7 +2038,7 @@ namespace MetroFramework.Demo
             this.metroTile7.ActiveControl = null;
             this.metroTile7.BackColor = System.Drawing.Color.Yellow;
             this.metroTile7.ForeColor = System.Drawing.Color.Red;
-            this.metroTile7.Location = new System.Drawing.Point(165, 67);
+            this.metroTile7.Location = new System.Drawing.Point(158, 14);
             this.metroTile7.Name = "metroTile7";
             this.metroTile7.Size = new System.Drawing.Size(172, 221);
             this.metroTile7.TabIndex = 29;
@@ -2090,12 +2090,12 @@ namespace MetroFramework.Demo
             this.Text = "SYSWORK ERP";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.metroTabControl1.ResumeLayout(false);
-            this.metroTabPage1.ResumeLayout(false);
-            this.metroTabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager)).EndInit();
-            this.metroContextMenu1.ResumeLayout(false);
             this.metroTabPage8.ResumeLayout(false);
             this.metroTabPage8.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager)).EndInit();
+            this.metroTabPage1.ResumeLayout(false);
+            this.metroTabPage1.PerformLayout();
+            this.metroContextMenu1.ResumeLayout(false);
             this.metroTabPage4.ResumeLayout(false);
             this.metroTabPage4.PerformLayout();
             this.metroTabPage2.ResumeLayout(false);

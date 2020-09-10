@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace SysWork.Data.GenericViewManager.CodeWriter
 {
@@ -141,38 +142,95 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
         /// <returns></returns>
         public static string ViewNameToClassName(string viewName)
         {
+            string result = "";
+            string[] words = CamelCaseToSpaceSeparated(viewName);
+            foreach (var word in words)
+                result += SingularizeWord(word);
+
+            return result;
+
+        }
+        private static string SingularizeWord(string word)
+        {
             string ret = "";
-            if (viewName.ToLower().EndsWith("as"))
+            if (word.ToLower().EndsWith("as"))
             {
-                ret = viewName.Substring(0, viewName.Length - 1);
+                ret = word.Substring(0, word.Length - 1);
             }
-            else if (viewName.ToLower().EndsWith("es"))
+            else if (word.ToLower().EndsWith("jes"))
             {
-                ret = viewName.Substring(0, viewName.Length - 2);
+                ret = word.Substring(0, word.Length - 1);
+            }
+            else if (word.ToLower().EndsWith("lles"))
+            {
+                ret = word.Substring(0, word.Length - 1);
+            }
+            else if (word.ToLower().EndsWith("ls"))
+            {
+                ret = word.Substring(0, word.Length - 1);
+            }
+            else if (word.ToLower().EndsWith("rnes"))
+            {
+                ret = word.Substring(0, word.Length - 1);
+            }
+            else if (word.ToLower().EndsWith("bles"))
+            {
+                ret = word.Substring(0, word.Length - 1);
+            }
+            else if (word.ToLower().EndsWith("es"))
+            {
+                ret = word.Substring(0, word.Length - 2);
                 if (ret.EndsWith("t"))
                     ret += "e";
             }
-            else if (viewName.ToLower().EndsWith("is"))
+            else if (word.ToLower().EndsWith("is"))
             {
-                ret = viewName.Substring(0, viewName.Length - 1);
+                ret = word.Substring(0, word.Length - 1);
 
             }
-            else if (viewName.ToLower().EndsWith("os"))
+            else if (word.ToLower().EndsWith("os"))
             {
-                ret = viewName.Substring(0, viewName.Length - 1);
+                ret = word.Substring(0, word.Length - 1);
             }
-            else if (viewName.ToLower().EndsWith("us"))
+            else if (word.ToLower().EndsWith("us"))
             {
-                ret = viewName.Substring(0, viewName.Length - 1);
+                ret = word.Substring(0, word.Length - 1);
             }
             else
             {
-                ret = viewName;
+                ret = word;
             }
 
             ret = ret.Substring(0, 1).ToUpper() + ret.Substring(1);
 
             return ret;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="camelCaseString"></param>
+        /// <returns></returns>
+        public static string[] CamelCaseToSpaceSeparated(string camelCaseString)
+        {
+            if (string.IsNullOrEmpty(camelCaseString))
+            {
+                return new string[0];
+            }
+
+            var res = new StringBuilder();
+            res.Append(camelCaseString[0]);
+            for (var i = 1; i < camelCaseString.Length; i++)
+            {
+                if (char.IsUpper(camelCaseString[i]))
+                {
+                    res.Append(' ');
+                }
+                res.Append(camelCaseString[i]);
+
+            }
+            return res.ToString().Split(' ');
+        }
+
     }
 }

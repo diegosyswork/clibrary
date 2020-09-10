@@ -19,7 +19,6 @@ namespace SysWork.Data.Common.LambdaSqlBuilder
         internal static ISqlAdapter _defaultAdapter = new SqlServer2012Adapter();
         internal SqlQueryBuilder _builder;
         internal LambdaResolver _resolver;
-
         /// <summary>
         /// Gets the SQL builder.
         /// </summary>

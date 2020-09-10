@@ -58,11 +58,10 @@ namespace SysWork.Data.GenericDataManager
         /// </summary>
         public static T GetInstance()
         {
-            ValidateInstanceCreation();
-
-
             if (_TInstance == null)
             {
+                ValidateInstanceCreation();
+
                 _TInstance = CreateInstanceOfT();
                 _TInstance.InitDataObjects();
             }

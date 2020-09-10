@@ -184,6 +184,9 @@ namespace MetroFramework.Forms
             }
         }
 
+        private bool _useEnterKeyToValidate = true;
+        public bool UseEnterKeyToValidate { get { return _useEnterKeyToValidate; } set { _useEnterKeyToValidate = value; } }
+
         private bool isResizable = true;
         [Category(MetroDefaults.PropertyCategory.Appearance)]
         public bool Resizable
@@ -305,6 +308,24 @@ namespace MetroFramework.Forms
             StartPosition = FormStartPosition.CenterScreen;
             TransparencyKey = Color.Lavender;
         }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (_useEnterKeyToValidate)
+            {
+                if (keyData == Keys.Enter && this.AcceptButton == null)
+                {
+                    TextBoxBase box = this.ActiveControl as TextBoxBase;
+                    if (box == null || !box.Multiline)
+                    {
+                        this.SelectNextControl(this.ActiveControl, true, true, true, true);
+                        return true;
+                    }
+                }
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
 
         protected override void Dispose(bool disposing)
         {

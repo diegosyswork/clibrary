@@ -56,6 +56,15 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
             _syntaxProvider = new SyntaxProvider(_databaseEngine);
         }
 
+        private string GetRepositoryVariable(string repositoryName)
+        {
+            return "_" + repositoryName[0].ToString().ToLower() + repositoryName.Substring(1);
+        }
+        private string GetViewManagerVariable(string viewManagerName)
+        {
+            return "_" + viewManagerName[0].ToString().ToLower() + viewManagerName.Substring(1);
+        }
+
         private string GetTextClass()
         {
             StringBuilder builder = new StringBuilder();
@@ -110,17 +119,21 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
         {
             string ret = "";
 
-            ret += $"\t\tpublic {repositoryName} {repositoryName} {{get; private set;}}" + Environment.NewLine;
+            //Ver. 1.0   ret += $"\t\tpublic {repositoryName} {repositoryName} {{get; private set;}}" + Environment.NewLine;
+
+            ret += $"\t\tprivate Lazy<{repositoryName}> {GetRepositoryVariable(repositoryName)};" + Environment.NewLine;
+            ret += $"\t\tpublic {repositoryName} {repositoryName} {{get => {GetRepositoryVariable(repositoryName)}.Value;}}" + Environment.NewLine + Environment.NewLine;
 
             return ret;
         }
 
-        private string AddViewManager(string viewManager)
+        private string AddViewManager(string viewManagerName)
         {
             string ret = "";
 
-            ret += $"\t\tpublic {viewManager} {viewManager} {{get; private set;}}" + Environment.NewLine;
-
+            //Ver 1.0 ret += $"\t\tpublic {viewManager} {viewManager} {{get; private set;}}" + Environment.NewLine;
+            ret += $"\t\tprivate Lazy<{viewManagerName}> {GetViewManagerVariable(viewManagerName)};" + Environment.NewLine;
+            ret += $"\t\tpublic {viewManagerName} {viewManagerName} {{get => {GetViewManagerVariable(viewManagerName)}.Value;}}" + Environment.NewLine;
             return ret;
         }
 
@@ -157,15 +170,16 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
         {
             string ret = "";
 
-            ret += $"\t\t\t{repositoryName}  = new {repositoryName}(ConnectionString,DataBaseEngine);" + Environment.NewLine;
-
+            //Ver 1.0 ret += $"\t\t\t{repositoryName}  = new {repositoryName}(ConnectionString,DataBaseEngine);" + Environment.NewLine;
+            ret += $"\t\t\t{GetRepositoryVariable(repositoryName)}  = new Lazy<{repositoryName}>(()=>new {repositoryName}(ConnectionString,DataBaseEngine));" + Environment.NewLine;
             return ret;
         }
         private string AddViewManagerInstance(string viewManagerName)
         {
             string ret = "";
 
-            ret += $"\t\t\t{viewManagerName}  = new {viewManagerName}(ConnectionString,DataBaseEngine);" + Environment.NewLine;
+            //Ver 1.0 ret += $"\t\t\t{viewManagerName}  = new {viewManagerName}(ConnectionString,DataBaseEngine);" + Environment.NewLine;
+            ret += $"\t\t\t{GetViewManagerVariable(viewManagerName)}  = new Lazy<{viewManagerName}>(()=>new {viewManagerName}(ConnectionString,DataBaseEngine));" + Environment.NewLine;
 
             return ret;
         }

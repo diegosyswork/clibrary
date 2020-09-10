@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace SysWork.Data.GenericRepository.CodeWriter
 {
@@ -144,38 +145,96 @@ namespace SysWork.Data.GenericRepository.CodeWriter
         /// <returns></returns>
         public static string TableNameToClassName(string tableName)
         {
+            string result = "";
+            string[] words = CamelCaseToSpaceSeparated(tableName);
+            foreach (var word in words)
+                result += SingularizeWord(word);
+
+            return result;
+
+        }
+        private static string SingularizeWord(string word)
+        {
             string ret = "";
-            if (tableName.ToLower().EndsWith("as"))
+            if (word.ToLower().EndsWith("as"))
             {
-                ret = tableName.Substring(0, tableName.Length - 1);
+                ret = word.Substring(0, word.Length - 1);
             }
-            else if (tableName.ToLower().EndsWith("es"))
+            else if (word.ToLower().EndsWith("jes"))
             {
-                ret = tableName.Substring(0, tableName.Length - 2);
+                ret = word.Substring(0, word.Length - 1);
+            }
+            else if (word.ToLower().EndsWith("lles"))
+            {
+                ret = word.Substring(0, word.Length - 1);
+            }
+            else if (word.ToLower().EndsWith("ls"))
+            {
+                ret = word.Substring(0, word.Length - 1);
+            }
+            else if (word.ToLower().EndsWith("rnes"))
+            {
+                ret = word.Substring(0, word.Length - 1);
+            }
+            else if (word.ToLower().EndsWith("bles"))
+            {
+                ret = word.Substring(0, word.Length - 1);
+            }
+            else if (word.ToLower().EndsWith("es"))
+            {
+                ret = word.Substring(0, word.Length - 2);
                 if (ret.EndsWith("t"))
                     ret += "e";
             }
-            else if (tableName.ToLower().EndsWith("is"))
+            else if (word.ToLower().EndsWith("is"))
             {
-                ret = tableName.Substring(0, tableName.Length - 1);
+                ret = word.Substring(0, word.Length - 1);
 
             }
-            else if (tableName.ToLower().EndsWith("os"))
+            else if (word.ToLower().EndsWith("os"))
             {
-                ret = tableName.Substring(0, tableName.Length - 1);
+                ret = word.Substring(0, word.Length - 1);
             }
-            else if (tableName.ToLower().EndsWith("us"))
+            else if (word.ToLower().EndsWith("us"))
             {
-                ret = tableName.Substring(0, tableName.Length - 1);
+                ret = word.Substring(0, word.Length - 1);
             }
             else
             {
-                ret = tableName;
+                ret = word;
             }
 
             ret = ret.Substring(0, 1).ToUpper() + ret.Substring(1);
 
             return ret;
         }
+
+        /// <summary>
+        /// Camels the case to space separated.
+        /// </summary>
+        /// <param name="camelCaseString">The camel case string.</param>
+        /// <returns></returns>
+        public static string[] CamelCaseToSpaceSeparated(string camelCaseString)
+        {
+            if (string.IsNullOrEmpty(camelCaseString))
+            {
+                return new string[0];
+            }
+
+            var res = new StringBuilder();
+            res.Append(camelCaseString[0]);
+            for (var i = 1; i < camelCaseString.Length; i++)
+            {
+                if (char.IsUpper(camelCaseString[i]))
+                {
+                    res.Append(' ');
+                }
+                res.Append(camelCaseString[i]);
+
+            }
+            return res.ToString().Split(' ');
+        }
+
+
     }
 }

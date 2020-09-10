@@ -66,6 +66,7 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
             builder.AppendLine(CodeWriterViewHelper.AddUsing("SysWork.Data.Common"));
             builder.AppendLine(CodeWriterViewHelper.AddUsing("SysWork.Data.GenericViewManager"));
             builder.AppendLine(CodeWriterViewHelper.AddUsing("SysWork.Data.Common.Attributes"));
+            builder.AppendLine(CodeWriterViewHelper.AddUsing("SysWork.Data.Common.ValueObjects"));
             builder.AppendLine(CodeWriterViewHelper.AddUsing(_nameSpace + ".Entities"));
             builder.AppendLine(CodeWriterViewHelper.StartNamespace(_nameSpace + ".ViewManagers"));
             builder.AppendLine(AddSummary());
@@ -82,7 +83,7 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
         {
             string ret = "";
 
-            ret += "\t\tpublic " + _entityName + "BaseViewManager (string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString,dataBaseEngine)" + Environment.NewLine;
+            ret += "\t\tpublic " + _entityName + "ViewManager (string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString,dataBaseEngine)" + Environment.NewLine;
             ret += "\t\t{" + Environment.NewLine;
             ret += "\t\t" + Environment.NewLine;
             ret += "\t\t}" + Environment.NewLine;
