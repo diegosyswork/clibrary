@@ -1078,7 +1078,8 @@ namespace MetroFramework.Controls
         }
 
         #region MetroTextButton
-        [ToolboxItem(false)]
+        //OJO
+        [ToolboxItem(true)]
         public class MetroTextButton : Button, IMetroControl
         {
             #region Interface

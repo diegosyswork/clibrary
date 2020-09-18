@@ -263,6 +263,16 @@ namespace TestMetroFramework.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap outline_favorite_border_white_18dp {
+            get {
+                object obj = ResourceManager.GetObject("outline_favorite_border_white_18dp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap outline_handyman_white_24dp {
             get {
                 object obj = ResourceManager.GetObject("outline_handyman_white_24dp", resourceCulture);
@@ -333,9 +343,49 @@ namespace TestMetroFramework.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap outline_navigate_before_white_18dp {
+            get {
+                object obj = ResourceManager.GetObject("outline_navigate_before_white_18dp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap outline_note_add_white_48dp {
             get {
                 object obj = ResourceManager.GetObject("outline_note_add_white_48dp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap outline_receipt_long_white_18dp {
+            get {
+                object obj = ResourceManager.GetObject("outline_receipt_long_white_18dp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap outline_receipt_long_white_18dp1 {
+            get {
+                object obj = ResourceManager.GetObject("outline_receipt_long_white_18dp1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap outline_receipt_long_white_18dp2 {
+            get {
+                object obj = ResourceManager.GetObject("outline_receipt_long_white_18dp2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -433,6 +483,16 @@ namespace TestMetroFramework.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap RECIBO {
+            get {
+                object obj = ResourceManager.GetObject("RECIBO", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ReporteVentas {
             get {
                 object obj = ResourceManager.GetObject("ReporteVentas", resourceCulture);
@@ -456,6 +516,36 @@ namespace TestMetroFramework.Properties {
         internal static System.Drawing.Bitmap save_241 {
             get {
                 object obj = ResourceManager.GetObject("save-241", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap scan__1_ {
+            get {
+                object obj = ResourceManager.GetObject("scan (1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap scan_24 {
+            get {
+                object obj = ResourceManager.GetObject("scan_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap scan_241 {
+            get {
+                object obj = ResourceManager.GetObject("scan_241", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

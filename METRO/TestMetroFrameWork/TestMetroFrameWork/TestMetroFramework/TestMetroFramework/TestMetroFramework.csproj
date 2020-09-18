@@ -52,6 +52,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -297,6 +298,33 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\outline_home_white_18dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\outline_favorite_border_white_18dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\outline_navigate_before_white_18dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\outline_receipt_long_white_18dp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RECIBO.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\outline_receipt_long_white_18dp1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\outline_receipt_long_white_18dp2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\scan %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\scan_24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\scan_241.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

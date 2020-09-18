@@ -29,15 +29,15 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.metroRendererManager1 = new MetroFramework.Components.MetroRendererManager(this.components);
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
@@ -55,6 +55,8 @@
             this.LblComprobante = new MetroFramework.Controls.MetroLabel();
             this.CmbComprobante = new MetroFramework.Controls.MetroComboBox();
             this.panelCliente = new System.Windows.Forms.Panel();
+            this.metroLabel9 = new MetroFramework.Controls.MetroLabel();
+            this.metroLabel8 = new MetroFramework.Controls.MetroLabel();
             this.LblDatosCliente2 = new MetroFramework.Controls.MetroLabel();
             this.LblDatosCliente1 = new MetroFramework.Controls.MetroLabel();
             this.LblRazonSocial = new MetroFramework.Controls.MetroLabel();
@@ -68,17 +70,17 @@
             this.LblFecha = new MetroFramework.Controls.MetroLabel();
             this.DtpFecha = new MetroFramework.Controls.MetroDateTime();
             this.panelVendedor = new System.Windows.Forms.Panel();
+            this.CmbListaPrecio = new MetroFramework.Controls.MetroComboBox();
+            this.LblLista = new MetroFramework.Controls.MetroLabel();
             this.LblVendedor = new MetroFramework.Controls.MetroLabel();
             this.CmbVendedor = new MetroFramework.Controls.MetroComboBox();
             this.panelCondicionVenta = new System.Windows.Forms.Panel();
             this.LblCondicionVenta = new MetroFramework.Controls.MetroLabel();
             this.CmbCondicionVenta = new MetroFramework.Controls.MetroComboBox();
             this.PanelLista = new System.Windows.Forms.Panel();
-            this.CmbListaPrecio = new MetroFramework.Controls.MetroComboBox();
-            this.LblLista = new MetroFramework.Controls.MetroLabel();
-            this.PicImagenArticuloPOS = new System.Windows.Forms.PictureBox();
+            this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
+            this.metroComboBox1 = new MetroFramework.Controls.MetroComboBox();
             this.LblImporteArticuloPOS = new MetroFramework.Controls.MetroLabel();
-            this.TxtCodArticuloPOS = new MetroFramework.Controls.MetroTextBox();
             this.panelGrilla = new MetroFramework.Controls.MetroPanel();
             this.GridArticulos = new MetroFramework.Controls.MetroGrid();
             this.ColCodigo = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -103,6 +105,8 @@
             this.metroToolbarCRUD1 = new SysWork.MetroControls.MetroToolbars.MetroToolbarCRUD();
             this.metroToolbarDisplaySettings1 = new SysWork.MetroControls.MetroToolbars.MetroToolbarDisplaySettings();
             this.metroToolTip1 = new MetroFramework.Components.MetroToolTip();
+            this.TxtCodArticuloPOS = new MetroFramework.Controls.MetroTextBox();
+            this.PicImagenArticuloPOS = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).BeginInit();
             this.layoutEncabezado.SuspendLayout();
             this.panelComprobante.SuspendLayout();
@@ -111,10 +115,10 @@
             this.panelVendedor.SuspendLayout();
             this.panelCondicionVenta.SuspendLayout();
             this.PanelLista.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PicImagenArticuloPOS)).BeginInit();
             this.panelGrilla.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridArticulos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PicImagenArticuloPOS)).BeginInit();
             this.SuspendLayout();
             // 
             // metroRendererManager1
@@ -135,24 +139,25 @@
             this.layoutEncabezado.ColumnCount = 3;
             this.layoutEncabezado.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 350F));
             this.layoutEncabezado.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.layoutEncabezado.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 230F));
+            this.layoutEncabezado.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 193F));
             this.layoutEncabezado.Controls.Add(this.panelComprobante, 0, 0);
             this.layoutEncabezado.Controls.Add(this.panelCliente, 1, 0);
             this.layoutEncabezado.Controls.Add(this.panelFechas, 2, 0);
             this.layoutEncabezado.Controls.Add(this.panelVendedor, 0, 1);
             this.layoutEncabezado.Controls.Add(this.panelCondicionVenta, 1, 1);
             this.layoutEncabezado.Controls.Add(this.PanelLista, 2, 1);
-            this.layoutEncabezado.Location = new System.Drawing.Point(8, 77);
+            this.layoutEncabezado.Location = new System.Drawing.Point(8, 63);
             this.layoutEncabezado.Name = "layoutEncabezado";
-            this.layoutEncabezado.RowCount = 2;
-            this.layoutEncabezado.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 110F));
-            this.layoutEncabezado.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.layoutEncabezado.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.layoutEncabezado.Size = new System.Drawing.Size(993, 158);
+            this.layoutEncabezado.RowCount = 3;
+            this.layoutEncabezado.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 115F));
+            this.layoutEncabezado.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 72F));
+            this.layoutEncabezado.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8F));
+            this.layoutEncabezado.Size = new System.Drawing.Size(993, 195);
             this.layoutEncabezado.TabIndex = 2;
             // 
             // panelComprobante
             // 
+            this.panelComprobante.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelComprobante.Controls.Add(this.LblTCAplicacion);
             this.panelComprobante.Controls.Add(this.LblAplicacion);
             this.panelComprobante.Controls.Add(this.LblNumero);
@@ -167,7 +172,7 @@
             this.panelComprobante.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelComprobante.Location = new System.Drawing.Point(3, 3);
             this.panelComprobante.Name = "panelComprobante";
-            this.panelComprobante.Size = new System.Drawing.Size(344, 104);
+            this.panelComprobante.Size = new System.Drawing.Size(344, 109);
             this.panelComprobante.TabIndex = 0;
             // 
             // LblTCAplicacion
@@ -383,12 +388,15 @@
             "Nota de Debito"});
             this.CmbComprobante.Location = new System.Drawing.Point(119, 3);
             this.CmbComprobante.Name = "CmbComprobante";
-            this.CmbComprobante.Size = new System.Drawing.Size(222, 29);
+            this.CmbComprobante.Size = new System.Drawing.Size(211, 29);
             this.CmbComprobante.TabIndex = 20;
             this.CmbComprobante.UseSelectable = true;
             // 
             // panelCliente
             // 
+            this.panelCliente.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelCliente.Controls.Add(this.metroLabel9);
+            this.panelCliente.Controls.Add(this.metroLabel8);
             this.panelCliente.Controls.Add(this.LblDatosCliente2);
             this.panelCliente.Controls.Add(this.LblDatosCliente1);
             this.panelCliente.Controls.Add(this.LblRazonSocial);
@@ -397,8 +405,30 @@
             this.panelCliente.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelCliente.Location = new System.Drawing.Point(353, 3);
             this.panelCliente.Name = "panelCliente";
-            this.panelCliente.Size = new System.Drawing.Size(407, 104);
+            this.panelCliente.Size = new System.Drawing.Size(444, 109);
             this.panelCliente.TabIndex = 1;
+            // 
+            // metroLabel9
+            // 
+            this.metroLabel9.AutoSize = true;
+            this.metroLabel9.FontSize = MetroFramework.MetroLabelSize.Small;
+            this.metroLabel9.Location = new System.Drawing.Point(4, 46);
+            this.metroLabel9.Name = "metroLabel9";
+            this.metroLabel9.Size = new System.Drawing.Size(54, 15);
+            this.metroLabel9.TabIndex = 31;
+            this.metroLabel9.Text = "D. fiscales";
+            this.metroLabel9.UseStyleColors = true;
+            // 
+            // metroLabel8
+            // 
+            this.metroLabel8.AutoSize = true;
+            this.metroLabel8.FontSize = MetroFramework.MetroLabelSize.Small;
+            this.metroLabel8.Location = new System.Drawing.Point(3, 69);
+            this.metroLabel8.Name = "metroLabel8";
+            this.metroLabel8.Size = new System.Drawing.Size(52, 15);
+            this.metroLabel8.TabIndex = 30;
+            this.metroLabel8.Text = "Direccion";
+            this.metroLabel8.UseStyleColors = true;
             // 
             // LblDatosCliente2
             // 
@@ -407,7 +437,7 @@
             this.LblDatosCliente2.FontSize = MetroFramework.MetroLabelSize.Small;
             this.LblDatosCliente2.Location = new System.Drawing.Point(62, 69);
             this.LblDatosCliente2.Name = "LblDatosCliente2";
-            this.LblDatosCliente2.Size = new System.Drawing.Size(342, 29);
+            this.LblDatosCliente2.Size = new System.Drawing.Size(364, 29);
             this.LblDatosCliente2.TabIndex = 14;
             this.LblDatosCliente2.Text = "Piedra Buena 7684, Martin Coronado (B1682A42), Buenos Aires, Argentina";
             // 
@@ -417,7 +447,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LblDatosCliente1.Location = new System.Drawing.Point(62, 43);
             this.LblDatosCliente1.Name = "LblDatosCliente1";
-            this.LblDatosCliente1.Size = new System.Drawing.Size(342, 21);
+            this.LblDatosCliente1.Size = new System.Drawing.Size(364, 21);
             this.LblDatosCliente1.TabIndex = 13;
             this.LblDatosCliente1.Text = "Iva Consumidor Final / CUIT: 00-00000000-0";
             // 
@@ -427,9 +457,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LblRazonSocial.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.LblRazonSocial.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.LblRazonSocial.Location = new System.Drawing.Point(186, 6);
+            this.LblRazonSocial.Location = new System.Drawing.Point(178, 6);
             this.LblRazonSocial.Name = "LblRazonSocial";
-            this.LblRazonSocial.Size = new System.Drawing.Size(218, 26);
+            this.LblRazonSocial.Size = new System.Drawing.Size(248, 26);
             this.LblRazonSocial.TabIndex = 12;
             this.LblRazonSocial.Text = "ARTECOLA ARGENTINA S.A.";
             this.LblRazonSocial.UseStyleColors = true;
@@ -440,7 +470,7 @@
             // 
             // 
             this.TxtCodigoCliente.CustomButton.Image = global::TestMetroFramework.Properties.Resources.outline_search_white_18dp;
-            this.TxtCodigoCliente.CustomButton.Location = new System.Drawing.Point(74, 2);
+            this.TxtCodigoCliente.CustomButton.Location = new System.Drawing.Point(72, 2);
             this.TxtCodigoCliente.CustomButton.Name = "";
             this.TxtCodigoCliente.CustomButton.Size = new System.Drawing.Size(21, 21);
             this.TxtCodigoCliente.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
@@ -448,22 +478,22 @@
             this.TxtCodigoCliente.CustomButton.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.TxtCodigoCliente.CustomButton.UseSelectable = true;
             this.TxtCodigoCliente.CustomButton.UseVisualStyleBackColor = false;
-            this.TxtCodigoCliente.Lines = new string[] {
-        "00001"};
+            this.TxtCodigoCliente.Lines = new string[0];
             this.TxtCodigoCliente.Location = new System.Drawing.Point(62, 6);
             this.TxtCodigoCliente.MaxLength = 32767;
             this.TxtCodigoCliente.Name = "TxtCodigoCliente";
             this.TxtCodigoCliente.PasswordChar = '\0';
+            this.TxtCodigoCliente.PromptText = "Ej: 00001";
             this.TxtCodigoCliente.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.TxtCodigoCliente.SelectedText = "";
             this.TxtCodigoCliente.SelectionLength = 0;
             this.TxtCodigoCliente.SelectionStart = 0;
             this.TxtCodigoCliente.ShortcutsEnabled = true;
             this.TxtCodigoCliente.ShowButton = true;
-            this.TxtCodigoCliente.Size = new System.Drawing.Size(98, 26);
+            this.TxtCodigoCliente.Size = new System.Drawing.Size(96, 26);
             this.TxtCodigoCliente.TabIndex = 11;
-            this.TxtCodigoCliente.Text = "00001";
             this.TxtCodigoCliente.UseSelectable = true;
+            this.TxtCodigoCliente.WaterMark = "Ej: 00001";
             this.TxtCodigoCliente.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
             this.TxtCodigoCliente.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
             this.TxtCodigoCliente.ButtonClick += new MetroFramework.Controls.MetroTextBox.ButClick(this.TxtCodigoCliente_ButtonClick);
@@ -472,7 +502,7 @@
             // LblCliente
             // 
             this.LblCliente.AutoSize = true;
-            this.LblCliente.Location = new System.Drawing.Point(3, 6);
+            this.LblCliente.Location = new System.Drawing.Point(3, 9);
             this.LblCliente.Name = "LblCliente";
             this.LblCliente.Size = new System.Drawing.Size(58, 19);
             this.LblCliente.TabIndex = 10;
@@ -481,6 +511,7 @@
             // 
             // panelFechas
             // 
+            this.panelFechas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelFechas.Controls.Add(this.LblEntrega);
             this.panelFechas.Controls.Add(this.DtpEntrega);
             this.panelFechas.Controls.Add(this.LblVencimiento);
@@ -488,9 +519,9 @@
             this.panelFechas.Controls.Add(this.LblFecha);
             this.panelFechas.Controls.Add(this.DtpFecha);
             this.panelFechas.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelFechas.Location = new System.Drawing.Point(766, 3);
+            this.panelFechas.Location = new System.Drawing.Point(803, 3);
             this.panelFechas.Name = "panelFechas";
-            this.panelFechas.Size = new System.Drawing.Size(224, 104);
+            this.panelFechas.Size = new System.Drawing.Size(187, 109);
             this.panelFechas.TabIndex = 2;
             // 
             // LblEntrega
@@ -505,11 +536,12 @@
             // 
             // DtpEntrega
             // 
+            this.DtpEntrega.FontSize = MetroFramework.MetroDateTimeSize.Small;
             this.DtpEntrega.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DtpEntrega.Location = new System.Drawing.Point(87, 73);
-            this.DtpEntrega.MinimumSize = new System.Drawing.Size(4, 29);
+            this.DtpEntrega.MinimumSize = new System.Drawing.Size(4, 25);
             this.DtpEntrega.Name = "DtpEntrega";
-            this.DtpEntrega.Size = new System.Drawing.Size(119, 29);
+            this.DtpEntrega.Size = new System.Drawing.Size(90, 25);
             this.DtpEntrega.TabIndex = 27;
             // 
             // LblVencimiento
@@ -524,11 +556,12 @@
             // 
             // DtpVencimiento
             // 
+            this.DtpVencimiento.FontSize = MetroFramework.MetroDateTimeSize.Small;
             this.DtpVencimiento.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DtpVencimiento.Location = new System.Drawing.Point(87, 36);
-            this.DtpVencimiento.MinimumSize = new System.Drawing.Size(4, 29);
+            this.DtpVencimiento.MinimumSize = new System.Drawing.Size(4, 25);
             this.DtpVencimiento.Name = "DtpVencimiento";
-            this.DtpVencimiento.Size = new System.Drawing.Size(119, 29);
+            this.DtpVencimiento.Size = new System.Drawing.Size(90, 25);
             this.DtpVencimiento.TabIndex = 25;
             // 
             // LblFecha
@@ -543,22 +576,52 @@
             // 
             // DtpFecha
             // 
+            this.DtpFecha.FontSize = MetroFramework.MetroDateTimeSize.Small;
             this.DtpFecha.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DtpFecha.Location = new System.Drawing.Point(87, 3);
-            this.DtpFecha.MinimumSize = new System.Drawing.Size(4, 29);
+            this.DtpFecha.MinimumSize = new System.Drawing.Size(4, 25);
             this.DtpFecha.Name = "DtpFecha";
-            this.DtpFecha.Size = new System.Drawing.Size(119, 29);
+            this.DtpFecha.Size = new System.Drawing.Size(90, 25);
             this.DtpFecha.TabIndex = 23;
             // 
             // panelVendedor
             // 
+            this.panelVendedor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelVendedor.Controls.Add(this.CmbListaPrecio);
+            this.panelVendedor.Controls.Add(this.LblLista);
             this.panelVendedor.Controls.Add(this.LblVendedor);
             this.panelVendedor.Controls.Add(this.CmbVendedor);
             this.panelVendedor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelVendedor.Location = new System.Drawing.Point(3, 113);
+            this.panelVendedor.Location = new System.Drawing.Point(3, 118);
             this.panelVendedor.Name = "panelVendedor";
-            this.panelVendedor.Size = new System.Drawing.Size(344, 42);
+            this.panelVendedor.Size = new System.Drawing.Size(344, 66);
             this.panelVendedor.TabIndex = 3;
+            // 
+            // CmbListaPrecio
+            // 
+            this.CmbListaPrecio.FontSize = MetroFramework.MetroComboBoxSize.Small;
+            this.CmbListaPrecio.FontWeight = MetroFramework.MetroComboBoxWeight.Light;
+            this.CmbListaPrecio.FormattingEnabled = true;
+            this.CmbListaPrecio.ItemHeight = 19;
+            this.CmbListaPrecio.Items.AddRange(new object[] {
+            "Lista Base",
+            "Lista Mayoristas",
+            "Lista Distribuidores",
+            "Lista Revendedores"});
+            this.CmbListaPrecio.Location = new System.Drawing.Point(119, 33);
+            this.CmbListaPrecio.Name = "CmbListaPrecio";
+            this.CmbListaPrecio.Size = new System.Drawing.Size(168, 25);
+            this.CmbListaPrecio.TabIndex = 27;
+            this.CmbListaPrecio.UseSelectable = true;
+            // 
+            // LblLista
+            // 
+            this.LblLista.AutoSize = true;
+            this.LblLista.Location = new System.Drawing.Point(5, 31);
+            this.LblLista.Name = "LblLista";
+            this.LblLista.Size = new System.Drawing.Size(34, 19);
+            this.LblLista.TabIndex = 26;
+            this.LblLista.Text = "&Lista";
             // 
             // LblVendedor
             // 
@@ -582,18 +645,19 @@
             "Otro Vendedor"});
             this.CmbVendedor.Location = new System.Drawing.Point(119, 3);
             this.CmbVendedor.Name = "CmbVendedor";
-            this.CmbVendedor.Size = new System.Drawing.Size(222, 25);
+            this.CmbVendedor.Size = new System.Drawing.Size(211, 25);
             this.CmbVendedor.TabIndex = 22;
             this.CmbVendedor.UseSelectable = true;
             // 
             // panelCondicionVenta
             // 
+            this.panelCondicionVenta.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelCondicionVenta.Controls.Add(this.LblCondicionVenta);
             this.panelCondicionVenta.Controls.Add(this.CmbCondicionVenta);
             this.panelCondicionVenta.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelCondicionVenta.Location = new System.Drawing.Point(353, 113);
+            this.panelCondicionVenta.Location = new System.Drawing.Point(353, 118);
             this.panelCondicionVenta.Name = "panelCondicionVenta";
-            this.panelCondicionVenta.Size = new System.Drawing.Size(407, 42);
+            this.panelCondicionVenta.Size = new System.Drawing.Size(444, 66);
             this.panelCondicionVenta.TabIndex = 4;
             // 
             // LblCondicionVenta
@@ -621,98 +685,59 @@
             "Cheque 30 Dias FF"});
             this.CmbCondicionVenta.Location = new System.Drawing.Point(117, 3);
             this.CmbCondicionVenta.Name = "CmbCondicionVenta";
-            this.CmbCondicionVenta.Size = new System.Drawing.Size(287, 25);
+            this.CmbCondicionVenta.Size = new System.Drawing.Size(309, 25);
             this.CmbCondicionVenta.TabIndex = 24;
             this.CmbCondicionVenta.UseSelectable = true;
             // 
             // PanelLista
             // 
-            this.PanelLista.Controls.Add(this.CmbListaPrecio);
-            this.PanelLista.Controls.Add(this.LblLista);
+            this.PanelLista.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PanelLista.Controls.Add(this.metroLabel3);
+            this.PanelLista.Controls.Add(this.metroComboBox1);
             this.PanelLista.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PanelLista.Location = new System.Drawing.Point(766, 113);
+            this.PanelLista.Location = new System.Drawing.Point(803, 118);
             this.PanelLista.Name = "PanelLista";
-            this.PanelLista.Size = new System.Drawing.Size(224, 42);
+            this.PanelLista.Size = new System.Drawing.Size(187, 66);
             this.PanelLista.TabIndex = 5;
             // 
-            // CmbListaPrecio
+            // metroLabel3
             // 
-            this.CmbListaPrecio.FontSize = MetroFramework.MetroComboBoxSize.Small;
-            this.CmbListaPrecio.FontWeight = MetroFramework.MetroComboBoxWeight.Light;
-            this.CmbListaPrecio.FormattingEnabled = true;
-            this.CmbListaPrecio.ItemHeight = 19;
-            this.CmbListaPrecio.Items.AddRange(new object[] {
-            "Lista Base",
-            "Lista Mayoristas",
-            "Lista Distribuidores",
-            "Lista Revendedores"});
-            this.CmbListaPrecio.Location = new System.Drawing.Point(38, 3);
-            this.CmbListaPrecio.Name = "CmbListaPrecio";
-            this.CmbListaPrecio.Size = new System.Drawing.Size(168, 25);
-            this.CmbListaPrecio.TabIndex = 27;
-            this.CmbListaPrecio.UseSelectable = true;
+            this.metroLabel3.AutoSize = true;
+            this.metroLabel3.Location = new System.Drawing.Point(4, 3);
+            this.metroLabel3.Name = "metroLabel3";
+            this.metroLabel3.Size = new System.Drawing.Size(58, 19);
+            this.metroLabel3.TabIndex = 27;
+            this.metroLabel3.Text = "Moneda";
             // 
-            // LblLista
+            // metroComboBox1
             // 
-            this.LblLista.AutoSize = true;
-            this.LblLista.Location = new System.Drawing.Point(3, 3);
-            this.LblLista.Name = "LblLista";
-            this.LblLista.Size = new System.Drawing.Size(34, 19);
-            this.LblLista.TabIndex = 26;
-            this.LblLista.Text = "&Lista";
-            // 
-            // PicImagenArticuloPOS
-            // 
-            this.PicImagenArticuloPOS.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.PicImagenArticuloPOS.Location = new System.Drawing.Point(898, 283);
-            this.PicImagenArticuloPOS.Name = "PicImagenArticuloPOS";
-            this.PicImagenArticuloPOS.Size = new System.Drawing.Size(100, 100);
-            this.PicImagenArticuloPOS.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.PicImagenArticuloPOS.TabIndex = 7;
-            this.PicImagenArticuloPOS.TabStop = false;
+            this.metroComboBox1.FontSize = MetroFramework.MetroComboBoxSize.Small;
+            this.metroComboBox1.FontWeight = MetroFramework.MetroComboBoxWeight.Light;
+            this.metroComboBox1.FormattingEnabled = true;
+            this.metroComboBox1.ItemHeight = 19;
+            this.metroComboBox1.Items.AddRange(new object[] {
+            "Dani",
+            "Diego",
+            "Juan Pablo",
+            "Otro Vendedor"});
+            this.metroComboBox1.Location = new System.Drawing.Point(88, 3);
+            this.metroComboBox1.Name = "metroComboBox1";
+            this.metroComboBox1.Size = new System.Drawing.Size(89, 25);
+            this.metroComboBox1.TabIndex = 26;
+            this.metroComboBox1.UseSelectable = true;
             // 
             // LblImporteArticuloPOS
             // 
             this.LblImporteArticuloPOS.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.LblImporteArticuloPOS.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.LblImporteArticuloPOS.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.LblImporteArticuloPOS.Location = new System.Drawing.Point(861, 249);
+            this.LblImporteArticuloPOS.Location = new System.Drawing.Point(897, 266);
             this.LblImporteArticuloPOS.Name = "LblImporteArticuloPOS";
-            this.LblImporteArticuloPOS.Size = new System.Drawing.Size(140, 34);
+            this.LblImporteArticuloPOS.Size = new System.Drawing.Size(104, 34);
             this.LblImporteArticuloPOS.TabIndex = 8;
             this.LblImporteArticuloPOS.Text = "$ 289.00";
             this.LblImporteArticuloPOS.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.LblImporteArticuloPOS.UseStyleColors = true;
-            // 
-            // TxtCodArticuloPOS
-            // 
-            // 
-            // 
-            // 
-            this.TxtCodArticuloPOS.CustomButton.Image = null;
-            this.TxtCodArticuloPOS.CustomButton.Location = new System.Drawing.Point(234, 1);
-            this.TxtCodArticuloPOS.CustomButton.Name = "";
-            this.TxtCodArticuloPOS.CustomButton.Size = new System.Drawing.Size(27, 27);
-            this.TxtCodArticuloPOS.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
-            this.TxtCodArticuloPOS.CustomButton.TabIndex = 1;
-            this.TxtCodArticuloPOS.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
-            this.TxtCodArticuloPOS.CustomButton.UseSelectable = true;
-            this.TxtCodArticuloPOS.CustomButton.Visible = false;
-            this.TxtCodArticuloPOS.Lines = new string[0];
-            this.TxtCodArticuloPOS.Location = new System.Drawing.Point(8, 251);
-            this.TxtCodArticuloPOS.MaxLength = 32767;
-            this.TxtCodArticuloPOS.Name = "TxtCodArticuloPOS";
-            this.TxtCodArticuloPOS.PasswordChar = '\0';
-            this.TxtCodArticuloPOS.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.TxtCodArticuloPOS.SelectedText = "";
-            this.TxtCodArticuloPOS.SelectionLength = 0;
-            this.TxtCodArticuloPOS.SelectionStart = 0;
-            this.TxtCodArticuloPOS.ShortcutsEnabled = true;
-            this.TxtCodArticuloPOS.Size = new System.Drawing.Size(262, 29);
-            this.TxtCodArticuloPOS.TabIndex = 9;
-            this.TxtCodArticuloPOS.UseSelectable = true;
-            this.TxtCodArticuloPOS.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
-            this.TxtCodArticuloPOS.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
             // 
             // panelGrilla
             // 
@@ -724,9 +749,9 @@
             this.panelGrilla.HorizontalScrollbarBarColor = true;
             this.panelGrilla.HorizontalScrollbarHighlightOnWheel = false;
             this.panelGrilla.HorizontalScrollbarSize = 10;
-            this.panelGrilla.Location = new System.Drawing.Point(8, 286);
+            this.panelGrilla.Location = new System.Drawing.Point(9, 296);
             this.panelGrilla.Name = "panelGrilla";
-            this.panelGrilla.Size = new System.Drawing.Size(884, 309);
+            this.panelGrilla.Size = new System.Drawing.Size(884, 292);
             this.panelGrilla.TabIndex = 10;
             this.panelGrilla.VerticalScrollbarBarColor = true;
             this.panelGrilla.VerticalScrollbarHighlightOnWheel = false;
@@ -739,14 +764,14 @@
             this.GridArticulos.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.GridArticulos.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.GridArticulos.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.GridArticulos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.GridArticulos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
             this.GridArticulos.ColumnHeadersHeight = 22;
             this.GridArticulos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.GridArticulos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -757,14 +782,14 @@
             this.ColUnitario,
             this.ColDescuento,
             this.ColTotal});
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(136)))), ((int)(((byte)(136)))));
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.GridArticulos.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle17.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            dataGridViewCellStyle17.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(136)))), ((int)(((byte)(136)))));
+            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
+            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.GridArticulos.DefaultCellStyle = dataGridViewCellStyle17;
             this.GridArticulos.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GridArticulos.EnableHeadersVisualStyles = false;
             this.GridArticulos.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
@@ -772,26 +797,26 @@
             this.GridArticulos.Location = new System.Drawing.Point(0, 0);
             this.GridArticulos.Name = "GridArticulos";
             this.GridArticulos.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.GridArticulos.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
+            dataGridViewCellStyle18.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            dataGridViewCellStyle18.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle18.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
+            dataGridViewCellStyle18.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.GridArticulos.RowHeadersDefaultCellStyle = dataGridViewCellStyle18;
             this.GridArticulos.RowHeadersVisible = false;
             this.GridArticulos.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.GridArticulos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.GridArticulos.Size = new System.Drawing.Size(882, 307);
+            this.GridArticulos.Size = new System.Drawing.Size(882, 290);
             this.GridArticulos.TabIndex = 11;
             this.GridArticulos.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridArticulos_RowEnter);
             this.GridArticulos.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridArticulos_RowLeave);
             // 
             // ColCodigo
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.ColCodigo.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.ColCodigo.DefaultCellStyle = dataGridViewCellStyle11;
             this.ColCodigo.HeaderText = "CODIGO";
             this.ColCodigo.Name = "ColCodigo";
             this.ColCodigo.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -800,8 +825,8 @@
             // ColDescripcion
             // 
             this.ColDescripcion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.ColDescripcion.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.ColDescripcion.DefaultCellStyle = dataGridViewCellStyle12;
             this.ColDescripcion.HeaderText = "DESCRIPCION";
             this.ColDescripcion.Name = "ColDescripcion";
             // 
@@ -812,30 +837,30 @@
             // 
             // ColCantidad
             // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ColCantidad.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ColCantidad.DefaultCellStyle = dataGridViewCellStyle13;
             this.ColCantidad.HeaderText = "CANTIDAD";
             this.ColCantidad.Name = "ColCantidad";
             // 
             // ColUnitario
             // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ColUnitario.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ColUnitario.DefaultCellStyle = dataGridViewCellStyle14;
             this.ColUnitario.HeaderText = "UNITARIO";
             this.ColUnitario.Name = "ColUnitario";
             // 
             // ColDescuento
             // 
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ColDescuento.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ColDescuento.DefaultCellStyle = dataGridViewCellStyle15;
             this.ColDescuento.HeaderText = "% DTO.";
             this.ColDescuento.Name = "ColDescuento";
             // 
             // ColTotal
             // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle7.NullValue = "0";
-            this.ColTotal.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle16.NullValue = "0";
+            this.ColTotal.DefaultCellStyle = dataGridViewCellStyle16;
             this.ColTotal.HeaderText = "TOTAL";
             this.ColTotal.Name = "ColTotal";
             // 
@@ -845,9 +870,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.LblDescripcionArticuloPOS.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.LblDescripcionArticuloPOS.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.LblDescripcionArticuloPOS.Location = new System.Drawing.Point(276, 249);
+            this.LblDescripcionArticuloPOS.Location = new System.Drawing.Point(275, 264);
             this.LblDescripcionArticuloPOS.Name = "LblDescripcionArticuloPOS";
-            this.LblDescripcionArticuloPOS.Size = new System.Drawing.Size(616, 34);
+            this.LblDescripcionArticuloPOS.Size = new System.Drawing.Size(616, 26);
             this.LblDescripcionArticuloPOS.TabIndex = 11;
             this.LblDescripcionArticuloPOS.Text = "2 x SHAMPOO DAVE CUIDADO TOTAL x 900 ml";
             this.LblDescripcionArticuloPOS.UseStyleColors = true;
@@ -855,6 +880,7 @@
             // metroLabel1
             // 
             this.metroLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.metroLabel1.FontWeight = MetroFramework.MetroLabelWeight.Regular;
             this.metroLabel1.Location = new System.Drawing.Point(757, 609);
             this.metroLabel1.Name = "metroLabel1";
             this.metroLabel1.Size = new System.Drawing.Size(134, 23);
@@ -1033,6 +1059,49 @@
             this.metroToolTip1.StyleManager = null;
             this.metroToolTip1.Theme = MetroFramework.MetroThemeStyle.Light;
             // 
+            // TxtCodArticuloPOS
+            // 
+            // 
+            // 
+            // 
+            this.TxtCodArticuloPOS.CustomButton.Image = global::TestMetroFramework.Properties.Resources.scan_241;
+            this.TxtCodArticuloPOS.CustomButton.Location = new System.Drawing.Point(238, 2);
+            this.TxtCodArticuloPOS.CustomButton.Name = "";
+            this.TxtCodArticuloPOS.CustomButton.Padding = new System.Windows.Forms.Padding(3);
+            this.TxtCodArticuloPOS.CustomButton.Size = new System.Drawing.Size(21, 21);
+            this.TxtCodArticuloPOS.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
+            this.TxtCodArticuloPOS.CustomButton.TabIndex = 1;
+            this.TxtCodArticuloPOS.CustomButton.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.TxtCodArticuloPOS.CustomButton.UseSelectable = true;
+            this.TxtCodArticuloPOS.Lines = new string[0];
+            this.TxtCodArticuloPOS.Location = new System.Drawing.Point(8, 264);
+            this.TxtCodArticuloPOS.MaxLength = 32767;
+            this.TxtCodArticuloPOS.Name = "TxtCodArticuloPOS";
+            this.TxtCodArticuloPOS.PasswordChar = '\0';
+            this.TxtCodArticuloPOS.PromptText = "Cod. Barra / Cod. Articulo";
+            this.TxtCodArticuloPOS.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.TxtCodArticuloPOS.SelectedText = "";
+            this.TxtCodArticuloPOS.SelectionLength = 0;
+            this.TxtCodArticuloPOS.SelectionStart = 0;
+            this.TxtCodArticuloPOS.ShortcutsEnabled = true;
+            this.TxtCodArticuloPOS.ShowButton = true;
+            this.TxtCodArticuloPOS.Size = new System.Drawing.Size(262, 26);
+            this.TxtCodArticuloPOS.TabIndex = 24;
+            this.TxtCodArticuloPOS.UseSelectable = true;
+            this.TxtCodArticuloPOS.WaterMark = "Cod. Barra / Cod. Articulo";
+            this.TxtCodArticuloPOS.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+            this.TxtCodArticuloPOS.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
+            // 
+            // PicImagenArticuloPOS
+            // 
+            this.PicImagenArticuloPOS.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.PicImagenArticuloPOS.Location = new System.Drawing.Point(898, 302);
+            this.PicImagenArticuloPOS.Name = "PicImagenArticuloPOS";
+            this.PicImagenArticuloPOS.Size = new System.Drawing.Size(100, 100);
+            this.PicImagenArticuloPOS.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.PicImagenArticuloPOS.TabIndex = 7;
+            this.PicImagenArticuloPOS.TabStop = false;
+            // 
             // FrmTestMetroframework
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1041,6 +1110,7 @@
             this.BackLocation = MetroFramework.Forms.BackLocation.TopRight;
             this.BackMaxSize = 25;
             this.ClientSize = new System.Drawing.Size(1024, 726);
+            this.Controls.Add(this.TxtCodArticuloPOS);
             this.Controls.Add(this.metroToolbarDisplaySettings1);
             this.Controls.Add(this.metroToolbarCRUD1);
             this.Controls.Add(this.LblIVA);
@@ -1055,7 +1125,6 @@
             this.Controls.Add(this.metroLabel1);
             this.Controls.Add(this.LblDescripcionArticuloPOS);
             this.Controls.Add(this.panelGrilla);
-            this.Controls.Add(this.TxtCodArticuloPOS);
             this.Controls.Add(this.LblImporteArticuloPOS);
             this.Controls.Add(this.PicImagenArticuloPOS);
             this.Controls.Add(this.layoutEncabezado);
@@ -1082,10 +1151,10 @@
             this.panelCondicionVenta.PerformLayout();
             this.PanelLista.ResumeLayout(false);
             this.PanelLista.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PicImagenArticuloPOS)).EndInit();
             this.panelGrilla.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.GridArticulos)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PicImagenArticuloPOS)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1131,7 +1200,6 @@
         private MetroFramework.Controls.MetroLabel LblLista;
         private System.Windows.Forms.PictureBox PicImagenArticuloPOS;
         private MetroFramework.Controls.MetroLabel LblImporteArticuloPOS;
-        private MetroFramework.Controls.MetroTextBox TxtCodArticuloPOS;
         private MetroFramework.Controls.MetroPanel panelGrilla;
         private MetroFramework.Controls.MetroLabel LblDescripcionArticuloPOS;
         private MetroFramework.Controls.MetroLabel LblImporteTotal;
@@ -1157,6 +1225,11 @@
         private SysWork.MetroControls.MetroToolbars.MetroToolbarDisplaySettings metroToolbarDisplaySettings1;
         private SysWork.MetroControls.MetroToolbars.MetroToolbarCRUD metroToolbarCRUD1;
         private MetroFramework.Components.MetroToolTip metroToolTip1;
+        private MetroFramework.Controls.MetroTextBox TxtCodArticuloPOS;
+        private MetroFramework.Controls.MetroLabel metroLabel3;
+        private MetroFramework.Controls.MetroComboBox metroComboBox1;
+        private MetroFramework.Controls.MetroLabel metroLabel9;
+        private MetroFramework.Controls.MetroLabel metroLabel8;
     }
 }
 
