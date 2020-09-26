@@ -29,16 +29,17 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.BindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.LocalBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.reportViewer1 = new Microsoft.Reporting.WinForms.ReportViewer();
-            ((System.ComponentModel.ISupportInitialize)(this.BindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LocalBindingSource)).BeginInit();
             this.SuspendLayout();
-
+            // 
             // reportViewer1
             // 
             this.reportViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.reportViewer1.Location = new System.Drawing.Point(0, 0);
             this.reportViewer1.Name = "reportViewer1";
+            this.reportViewer1.ServerReport.BearerToken = null;
             this.reportViewer1.Size = new System.Drawing.Size(731, 255);
             this.reportViewer1.TabIndex = 0;
             // 
@@ -50,14 +51,14 @@
             this.Controls.Add(this.reportViewer1);
             this.Name = "FrmReportManager";
             this.Load += new System.EventHandler(this.FrmReportManager_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.BindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LocalBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.BindingSource BindingSource;
+        private System.Windows.Forms.BindingSource LocalBindingSource;
         private Microsoft.Reporting.WinForms.ReportViewer reportViewer1;
     }
 }

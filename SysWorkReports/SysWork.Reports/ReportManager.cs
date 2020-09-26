@@ -2,62 +2,129 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing.Printing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SysWork.Reports
 {
+    /// <summary>
+    /// The destination of the report
+    /// </summary>
+    public enum ReportDestination
+    {
+        Screen,
+        Printer,
+        ExportToFile
+    }
+
+    /// <summary>
+    /// Format to export
+    /// </summary>
+    public enum ReportExportFormat
+    {
+        excel,
+        word,
+        pdf,
+        png,
+        emf
+    }
+
     public class ReportManager
     {
-        private string _reportPath;
+        private readonly string _reportPath;
         private ReportViewer _reportViewer;
         private FrmReportManager _frmReportManager;
-        
-        public String Titulo { get; set; }
-        public EDestino Destino { get; set; }
-        public EFormato Formato { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title of the form.
+        /// </summary>
+        /// <value>
+        /// The title.
+        /// </value>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Gets or sets the destination of Report (Screen, Printer, Export).
+        /// </summary>
+        /// <value>
+        /// Screen, Printer, Export.
+        /// </value>
+        public ReportDestination ReportDestination { get; set; }
+
+        /// <summary>
+        /// Gets or sets the format for export.
+        /// </summary>
+        /// <value>
+        /// The format.
+        /// </value>
+        public ReportExportFormat ReportExportFormat { get; set; }
+
+        /// <summary>
+        /// Gets or sets the report data sources.
+        /// </summary>
+        /// <value>
+        /// The report data sources.
+        /// </value>
         public List<ReportDataSource> ReportDataSources { get; set; }
+
+        /// <summary>
+        /// Gets or sets the binding source.
+        /// </summary>
+        /// <value>
+        /// The binding source.
+        /// </value>
         public BindingSource BindingSource { get; set; }
-        public bool MostrarPrintDialog { get; set; }
+        
+        /// <summary>
+        /// Gets or sets a value indicating whether [show printer dialog].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [show printer dialog]; otherwise, <c>false</c>.
+        /// </value>
+        public bool ShowPrinterDialog { get; set; }
+
+        /// <summary>
+        /// Gets or sets the printer settings.
+        /// </summary>
+        /// <value>
+        /// The printer settings.
+        /// </value>
         public PrinterSettings PrinterSettings { get; set; }
+
+        /// <summary>
+        /// Gets or sets the print controller.
+        /// </summary>
+        /// <value>
+        /// The print controller.
+        /// </value>
         public PrintController PrintController { get; set; }
 
-        public enum EDestino
-        {
-            pantalla,
-            impresora,
-            exportar
-        }
-        public enum EFormato
-        {
-            excel,
-            word,
-            pdf,
-            png,
-            emf
-        }
+        /// <summary>
+        /// Gets the report viewer.
+        /// </summary>
+        /// <value>
+        /// The report viewer.
+        /// </value>
+        public ReportViewer ReportViewer { get { return _reportViewer; }  }
 
         public ReportManager(string reportPath)
         {
-            this._reportPath = reportPath;
-            InstanciarControles();
-            InicializarVariables(); 
+            _reportPath = reportPath;
+            InitControls();
+            Init(); 
         }
 
-        private void InicializarVariables()
+        private void Init()
         {
             ReportDataSources = new List<ReportDataSource>();
         }
 
-        private void InstanciarControles() 
+        private void InitControls() 
         {
             _frmReportManager = new FrmReportManager();
-            _reportViewer = _frmReportManager.GetReportViewer();
+            _reportViewer = _frmReportManager.ReportViewer;
             _reportViewer.SetDisplayMode(DisplayMode.PrintLayout);
-            BindingSource = _frmReportManager.GetBindingSource();
-            _frmReportManager.Text = Titulo;
+            BindingSource = _frmReportManager.BindingSource;
+            _frmReportManager.Text = Title;
         }
 
         public void SetDisplayMode(DisplayMode displayMode)
@@ -65,27 +132,24 @@ namespace SysWork.Reports
             _reportViewer.SetDisplayMode(displayMode);
         }
 
-        public void Ejecutar()
+        public void RunReport()
         {
-
             _reportViewer.ProcessingMode = ProcessingMode.Local;
-            _reportViewer.LocalReport.ReportPath = this._reportPath;
+            _reportViewer.LocalReport.ReportPath = _reportPath;
 
             foreach (ReportDataSource rds in ReportDataSources) 
-            {
                 _reportViewer.LocalReport.DataSources.Add(rds);
-            }
             
             _reportViewer.RefreshReport();
 
-            switch (Destino) 
+            switch (ReportDestination) 
             {
-                case EDestino.pantalla:
+                case ReportDestination.Screen:
                     
                     _frmReportManager.Show();
                     break;
 
-                case EDestino.impresora:
+                case ReportDestination.Printer:
                     
                     ReportPrintDocument reportPrintDocument = new ReportPrintDocument(_reportViewer.LocalReport);
 
@@ -95,7 +159,7 @@ namespace SysWork.Reports
                     if (PrinterSettings != null)
                         reportPrintDocument.PrintController = PrintController;
 
-                    if (MostrarPrintDialog)
+                    if (ShowPrinterDialog)
                     {
                         PrintDialog p = new PrintDialog();
                         reportPrintDocument.PrinterSettings = p.PrinterSettings;
@@ -104,14 +168,9 @@ namespace SysWork.Reports
                     reportPrintDocument.Print();
                     break;
                 
-                case EDestino.exportar:
-
-                    break;
+                case ReportDestination.ExportToFile:
+                    throw new NotImplementedException();
             }
-        }
-        public ReportViewer GetReportViewer()
-        {
-            return _reportViewer;
         }
     }
 
@@ -122,9 +181,8 @@ namespace SysWork.Reports
 
         }
     }
-
-    /* 
-    
+}
+/* 
     TODO: Exportacion a PDF
     string _sPathFilePDF = String.Empty;
     String v_mimetype;
@@ -154,12 +212,4 @@ namespace SysWork.Reports
         newFile.Write(byteViewer, 0, byteViewer.Length);
         newFile.Close();
     }
-     
-     
-     
-     
-     
-     */
-
-
-}
+*/

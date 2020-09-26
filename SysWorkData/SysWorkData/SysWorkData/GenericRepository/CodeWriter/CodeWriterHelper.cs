@@ -208,7 +208,7 @@ namespace SysWork.Data.GenericRepository.CodeWriter
 
             return ret;
         }
-
+        
         /// <summary>
         /// Camels the case to space separated.
         /// </summary>
@@ -234,7 +234,5 @@ namespace SysWork.Data.GenericRepository.CodeWriter
             }
             return res.ToString().Split(' ');
         }
-
-
     }
 }

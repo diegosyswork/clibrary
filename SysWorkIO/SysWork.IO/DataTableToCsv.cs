@@ -9,7 +9,7 @@ namespace SysWork.IO
         public static string Export(DataTable dataTable, bool includeHeaderAsFirstRow = true, string fieldDelimiter = ";")
         {
             StringBuilder csvRows = new StringBuilder();
-            string row = "";
+            var row = "";
 
             int columns;
 
@@ -51,20 +51,18 @@ namespace SysWork.IO
                                 value = "\"" + value + "\"";
 
                             //If string contain new line character
-                            while (value.Contains("\r"))
-                            {
+                            if (value.Contains("\r"))
                                 value = value.Replace("\r", "");
-                            }
-                            while (value.Contains("\n"))
-                            {
+
+                            if (value.Contains("\n"))
                                 value = value.Replace("\n", "");
-                            }
                         }
                         row += value;
                         if (index < columns - 1)
                             row += fieldDelimiter;
                     }
-                    dataTable.Rows[rowIndex][columns - 1].ToString().ToString().Replace(fieldDelimiter, " ");
+
+                    dataTable.Rows[rowIndex][columns - 1].ToString().Replace(fieldDelimiter, " ");
                     row += Environment.NewLine;
                     csvRows.Append(row);
                 }
