@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using SysWork.Data.Common;
 using SysWork.Data.Common.SimpleQuery;
 using SysWork.Data.Common.Utilities;
-using SysWork.Data.Logger;
 using Microsoft.VisualBasic;
 using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
@@ -918,9 +917,9 @@ namespace TestSysWorkData
 
         private void BtnLoggerMySQL_Click(object sender, EventArgs e)
         {
-            LoggerDb.ConnectionString = ConnectionStringMySql;
-            LoggerDb.DataBaseEngine = EDataBaseEngine.MySql;
-            LoggerDb.Log("Test MySQL");
+            DbLogger.ConnectionString = ConnectionStringMySql;
+            DbLogger.DataBaseEngine = EDataBaseEngine.MySql;
+            DbLogger.LogInfo(EDbInfoTag.Info,"Test MySQL");
         }
 
         private void BtnLoggerOleDb_Click(object sender, EventArgs e)
@@ -952,9 +951,9 @@ namespace TestSysWorkData
 
         private void BtnLogger_Click(object sender, EventArgs e)
         {
-            LoggerDb.ConnectionString = GetSqliteConnectionString();
-            LoggerDb.DataBaseEngine = EDataBaseEngine.SqLite;
-            LoggerDb.Log("Test Sqlite");
+            DbLogger.ConnectionString = GetSqliteConnectionString();
+            DbLogger.DataBaseEngine = EDataBaseEngine.SqLite;
+            DbLogger.LogInfo(EDbInfoTag.Info,"Test Sqlite");
 
             DbLogger.ConnectionString = GetSqliteConnectionString();
             DbLogger.DataBaseEngine = EDataBaseEngine.SqLite;

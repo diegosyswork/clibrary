@@ -165,16 +165,12 @@ namespace SysWork.Data.DbConnector.Utilities
                     }
 
                     response = connectionSbOleDb.ConnectionString;
-
                     break;
 
                 default:
                     throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method");
             }
-
             return response;
         }
-
-
     }
 }

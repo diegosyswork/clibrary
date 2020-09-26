@@ -121,7 +121,7 @@
       <Name>SysWork.Data.DbConnector</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\SysWorkData\SysWorkData\SysWorkData\SysWork.Data.csproj">
-      <Project>{885f2f8d-05a7-49dc-bc26-dcc00ca47c6e}</Project>
+      <Project>{fc442041-8a45-4d9f-ad0a-d1c2c8895bd6}</Project>
       <Name>SysWork.Data</Name>
     </ProjectReference>
   </ItemGroup>

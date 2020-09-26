@@ -14,7 +14,6 @@ namespace Demo.SysWork.Data.Repositories
         /// <summary>
         /// Add Repositories to Manage.
         /// </summary>
-
         private Lazy<PersonRepository> _personRepository;
         public PersonRepository PersonRepository { get => _personRepository.Value;}
         private Lazy<StateRepository> _stateRepository;
