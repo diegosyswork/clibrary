@@ -8,6 +8,7 @@ using SysWork.Data.Common.ValueObjects;
 namespace SysWork.Data.Common.Attributes.Helpers
 {
     /// <summary>
+    /// 
     /// </summary>
     public static class DbColumnHelper
     {

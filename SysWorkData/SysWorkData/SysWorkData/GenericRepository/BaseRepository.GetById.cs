@@ -76,7 +76,7 @@ namespace SysWork.Data.GenericRepository
                     string parameterName = "@param_" + pi.Name;
                     clause.Append(string.Format("{0}={1}", columnName, id));
 
-                    ColumnDbInfo cdbi = (ColumnDbInfo)_columnListWithDbInfo[pi.Name];
+                    DbColumnInfo cdbi = (DbColumnInfo)_columnListWithDbInfo[pi.Name];
                     dbCommand.Parameters.Add(CreateIDbDataParameter(parameterName, cdbi.DbType, id, cdbi.MaxLenght));
 
                     break;

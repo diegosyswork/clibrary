@@ -145,7 +145,7 @@ namespace SysWork.Data.GenericRepository
                     }
 
 
-                    ColumnDbInfo cdbi = (ColumnDbInfo)_columnListWithDbInfo[i.Name];
+                    DbColumnInfo cdbi = (DbColumnInfo)_columnListWithDbInfo[i.Name];
                     dbCommand.Parameters.Add(CreateIDbDataParameter(parameterName, cdbi.DbType, i.GetValue(entity), cdbi.MaxLenght));
                 }
 

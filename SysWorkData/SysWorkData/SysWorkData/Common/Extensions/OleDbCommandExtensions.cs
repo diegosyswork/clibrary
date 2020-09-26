@@ -16,6 +16,7 @@ using System.Text.RegularExpressions;
     reordena la lista de parámetros en consecuencia. 
     Funciona de la misma manera para la clase OdbcCommand, solo necesita reemplazar "OleDb" con "Odbc" en el código.
 
+
     Gloria a DIOS por StackOverflow
     https://stackoverflow.com/questions/2407685/oledbparameters-and-parameter-names
 */

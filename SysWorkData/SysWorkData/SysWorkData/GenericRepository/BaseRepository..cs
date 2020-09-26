@@ -290,9 +290,9 @@ namespace SysWork.Data.GenericRepository
             ColumnsForSelect = sbColumnsSelect.ToString();
         }
 
-        private ColumnDbInfo GetColumnDbInfo(string columnName, DbConnection dbConnection)
+        private DbColumnInfo GetColumnDbInfo(string columnName, DbConnection dbConnection)
         {
-            ColumnDbInfo columnData = new ColumnDbInfo();
+            DbColumnInfo columnData = new DbColumnInfo();
 
             DataTable columnProperty;
             if (_dataBaseEngine == EDataBaseEngine.OleDb || _dataBaseEngine == EDataBaseEngine.MySql)
