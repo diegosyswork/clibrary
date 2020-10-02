@@ -6,13 +6,12 @@ using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.Attributes;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.Common.DbInfo;
-using SysWork.Data.Common.Interfaces.Actions;
 using System.Collections.Generic;
 using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.GenericRepository
 {
-    public abstract partial class BaseRepository<TEntity> : IAddRange<TEntity>
+    public abstract partial class BaseRepository<TEntity>
     {
         #region DOCUMENTATION AddRange(IList<TEntity> entities)
         /// <summary>
@@ -63,7 +62,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -85,7 +84,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -165,7 +164,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -187,7 +186,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -268,7 +267,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -290,7 +289,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -376,7 +375,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -398,7 +397,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -484,7 +483,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -506,7 +505,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -589,7 +588,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -611,7 +610,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -693,7 +692,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -715,7 +714,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -804,7 +803,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -826,7 +825,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -916,7 +915,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -938,7 +937,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -1032,7 +1031,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -1054,7 +1053,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -1148,7 +1147,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -1170,7 +1169,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -1262,7 +1261,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -1284,7 +1283,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -1374,7 +1373,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -1396,7 +1395,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -1489,7 +1488,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -1511,7 +1510,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -1610,7 +1609,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -1632,7 +1631,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -1730,7 +1729,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -1752,7 +1751,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -1851,7 +1850,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -1873,7 +1872,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -1967,7 +1966,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -1989,7 +1988,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -2084,7 +2083,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -2106,7 +2105,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -2204,7 +2203,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -2226,7 +2225,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -2325,7 +2324,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -2347,7 +2346,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -2446,7 +2445,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -2468,7 +2467,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -2567,7 +2566,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -2589,7 +2588,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -2684,7 +2683,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -2706,7 +2705,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -2803,7 +2802,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -2825,7 +2824,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -2926,7 +2925,7 @@ namespace SysWork.Data.GenericRepository
         /// 
         /// public class PersonRepository: BaseRepository<Person>
         /// {
-        ///     public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
         ///     {
         ///     }
         ///     public Person GetByPassport(string passport)
@@ -2948,7 +2947,7 @@ namespace SysWork.Data.GenericRepository
         ///     static void Main()
         ///     {
         ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDataBaseEngine.MSSqlServer;
+        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
         ///      
         ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
         ///         
@@ -3050,12 +3049,12 @@ namespace SysWork.Data.GenericRepository
                     if (dbTransaction != null)
                         dbCommand.Transaction = dbTransaction;
 
-                    if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                    if (_databaseEngine == EDatabaseEngine.OleDb)
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                     if (hasIdentity)
                     {
-                        if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                        if (_databaseEngine == EDatabaseEngine.OleDb)
                         {
                             // In case of OleDbConnection, exec the command and immediately, 
                             // exec new query to obtain the identity;

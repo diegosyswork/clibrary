@@ -5,14 +5,13 @@ using System.Data.OleDb;
 using System.Linq.Expressions;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.Filters;
-using SysWork.Data.Common.Interfaces.Actions;
 using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.ValueObjects;
 using SysWork.Data.GenericRepository.Exceptions;
 
 namespace SysWork.Data.GenericRepository
 {
-    public abstract partial class BaseRepository<TEntity> : IExists<TEntity>
+    public abstract partial class BaseRepository<TEntity>
     {
         public bool Exists(GenericWhereFilter whereFilter)
         {
@@ -88,7 +87,7 @@ namespace SysWork.Data.GenericRepository
                     dbCommand.Parameters.Add(dbParameter);
                 }
 
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                if (_databaseEngine == EDatabaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                 var reader = dbCommand.ExecuteReader(CommandBehavior.SingleRow);
@@ -181,7 +180,7 @@ namespace SysWork.Data.GenericRepository
                     dbCommand.Parameters.Add(CreateIDbDataParameter("@" + parameters.Key, parameters.Value));
 
 
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                if (_databaseEngine == EDatabaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                 IDataReader reader = dbCommand.ExecuteReader(CommandBehavior.SingleRow);

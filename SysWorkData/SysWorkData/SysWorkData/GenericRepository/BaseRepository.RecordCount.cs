@@ -5,7 +5,6 @@ using System.Data.OleDb;
 using System.Linq.Expressions;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.Filters;
-using SysWork.Data.Common.Interfaces.Actions;
 using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.Utilities;
 using SysWork.Data.Common.ValueObjects;
@@ -17,8 +16,8 @@ namespace SysWork.Data.GenericRepository
     /// Counts records in the Table.
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
-    public abstract partial class BaseRepository<TEntity> : IRecordCount<TEntity>
-    {
+    public abstract partial class BaseRepository<TEntity>
+    { 
         /// <summary>
         /// Counts all records in the Table.
         /// </summary>
@@ -118,7 +117,7 @@ namespace SysWork.Data.GenericRepository
                 dbCommand.CommandText = selectCountQuery;
                 dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
 
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                if (_databaseEngine == EDatabaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                 result = DbUtil.ParseToLong(dbCommand.ExecuteScalar());
@@ -270,7 +269,7 @@ namespace SysWork.Data.GenericRepository
                         dbCommand.Parameters.Add(dbParameter);
                     }
 
-                    if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                    if (_databaseEngine == EDatabaseEngine.OleDb)
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                     result = DbUtil.ParseToLong(dbCommand.ExecuteScalar());
@@ -416,7 +415,7 @@ namespace SysWork.Data.GenericRepository
                 foreach (var parameter in query.QueryParameters)
                     dbCommand.Parameters.Add(CreateIDbDataParameter("@" + parameter.Key, parameter.Value));
 
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                if (_databaseEngine == EDatabaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                 IDataReader reader = dbCommand.ExecuteReader(CommandBehavior.SingleRow);

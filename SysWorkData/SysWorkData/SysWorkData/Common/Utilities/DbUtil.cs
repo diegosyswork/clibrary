@@ -31,31 +31,31 @@ namespace SysWork.Data.Common.Utilities
         /// </returns>
         public static bool ExistsTable(string connectionString, string tableName)
         {
-            return ExistsTable(EDataBaseEngine.MSSqlServer, connectionString, tableName);
+            return ExistsTable(EDatabaseEngine.MSSqlServer, connectionString, tableName);
         }
 
         /// <summary>
         /// Given a connectionString, the name of a table and DatabaseEngine, determines if the table exists. 
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <param name="connectionString">The connection string.</param>
         /// <param name="tableName">Name of the table.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
-        public static bool ExistsTable(EDataBaseEngine dataBaseEngine, string connectionString, string tableName)
+        public static bool ExistsTable(EDatabaseEngine databaseEngine, string connectionString, string tableName)
         {
             bool exists = false;
 
-            using (DbConnection dbConnection = StaticDbObjectProvider.GetDbConnection(dataBaseEngine, connectionString))
+            using (DbConnection dbConnection = StaticDbObjectProvider.GetDbConnection(databaseEngine, connectionString))
             {
                 dbConnection.Open();
-                if (dataBaseEngine == EDataBaseEngine.MSSqlServer)
+                if (databaseEngine == EDatabaseEngine.MSSqlServer)
                     exists = dbConnection.GetSchema("Tables", new string[4] { null, null, tableName, "BASE TABLE" }).Rows.Count > 0;
-                else if (dataBaseEngine == EDataBaseEngine.MySql)
+                else if (databaseEngine == EDatabaseEngine.MySql)
                     exists = dbConnection.GetSchema("Tables", new string[4] { null, null, tableName, "BASE TABLE" }).Rows.Count > 0;
-                else if (dataBaseEngine == EDataBaseEngine.OleDb)
+                else if (databaseEngine == EDatabaseEngine.OleDb)
                     exists = dbConnection.GetSchema("Tables", new string[4] { null, null, tableName, "TABLE" }).Rows.Count > 0;
-                else if (dataBaseEngine == EDataBaseEngine.SqLite)
+                else if (databaseEngine == EDatabaseEngine.SqLite)
                     exists = dbConnection.GetSchema("Tables", new string[4] { null, null, tableName, "TABLE" }).Rows.Count > 0;
                 else
                     throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
@@ -72,30 +72,30 @@ namespace SysWork.Data.Common.Utilities
         /// <returns>List of tables in string format.</returns>
         public static List<string> GetTables(string connectionString)
         {
-            return GetTables(EDataBaseEngine.MSSqlServer, connectionString);
+            return GetTables(EDatabaseEngine.MSSqlServer, connectionString);
         }
 
         /// <summary>
         /// Given a connectionString and DatabaseEngine, return a list of tables in the Database.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <param name="connectionString">The connection string.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
-        public static List<string> GetTables(EDataBaseEngine dataBaseEngine, string connectionString)
+        public static List<string> GetTables(EDatabaseEngine databaseEngine, string connectionString)
         {
-            using (DbConnection connection = StaticDbObjectProvider.GetDbConnection(dataBaseEngine,connectionString))
+            using (DbConnection connection = StaticDbObjectProvider.GetDbConnection(databaseEngine,connectionString))
             {
                 connection.Open();
                 DataTable schema = null;
 
-                if (dataBaseEngine == EDataBaseEngine.MSSqlServer)
+                if (databaseEngine == EDatabaseEngine.MSSqlServer)
                     schema = connection.GetSchema("Tables", new string[] { null, null, null, "BASE TABLE" });
-                else if (dataBaseEngine == EDataBaseEngine.MySql)
+                else if (databaseEngine == EDatabaseEngine.MySql)
                     schema = connection.GetSchema("Tables", new string[] { null, null, null, "BASE TABLE" });
-                else if (dataBaseEngine == EDataBaseEngine.OleDb)
+                else if (databaseEngine == EDatabaseEngine.OleDb)
                     schema=connection.GetSchema("Tables", new string[] { null, null, null, "TABLE" });
-                else if (dataBaseEngine == EDataBaseEngine.SqLite)
+                else if (databaseEngine == EDatabaseEngine.SqLite)
                     schema = connection.GetSchema("Tables", new string[] { null, null, null, "TABLE" });
                 else
                     throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
@@ -118,30 +118,30 @@ namespace SysWork.Data.Common.Utilities
         /// <returns></returns>
         public static List<string> GetViews(string connectionString)
         {
-            return GetViews(EDataBaseEngine.MSSqlServer, connectionString);
+            return GetViews(EDatabaseEngine.MSSqlServer, connectionString);
         }
 
         /// <summary>
         /// Given a connectionString and DatabaseEngine, return a list of views in the Database.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <param name="connectionString">The connection string.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
-        public static List<string> GetViews(EDataBaseEngine dataBaseEngine, string connectionString)
+        public static List<string> GetViews(EDatabaseEngine databaseEngine, string connectionString)
         {
-            using (DbConnection connection = StaticDbObjectProvider.GetDbConnection(dataBaseEngine, connectionString))
+            using (DbConnection connection = StaticDbObjectProvider.GetDbConnection(databaseEngine, connectionString))
             {
                 connection.Open();
                 DataTable schema = null;
 
-                if (dataBaseEngine == EDataBaseEngine.MSSqlServer)
+                if (databaseEngine == EDatabaseEngine.MSSqlServer)
                     schema = connection.GetSchema("Tables", new string[] { null, null, null, "VIEW" });
-                else if (dataBaseEngine == EDataBaseEngine.MySql)
+                else if (databaseEngine == EDatabaseEngine.MySql)
                     schema = connection.GetSchema("Views", new string[] { null, null, null, null });
-                else if (dataBaseEngine == EDataBaseEngine.OleDb)
+                else if (databaseEngine == EDatabaseEngine.OleDb)
                     schema = connection.GetSchema("Views", new string[] { null, null, null });
-                else if (dataBaseEngine == EDataBaseEngine.SqLite)
+                else if (databaseEngine == EDatabaseEngine.SqLite)
                     schema = connection.GetSchema("Views", new string[] { null, null, null, null });
                 else
                     throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
@@ -163,33 +163,33 @@ namespace SysWork.Data.Common.Utilities
         /// <returns></returns>
         public static bool ExistsColumn(string connectionString, string tableName, string columnName)
         {
-            return ExistsColumn(EDataBaseEngine.MSSqlServer, connectionString, tableName, columnName);
+            return ExistsColumn(EDatabaseEngine.MSSqlServer, connectionString, tableName, columnName);
         }
 
         /// <summary>
         /// Given an connectionString, an datase engine, an table name and a column name determines if the column exists.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <param name="connectionString">The connection string.</param>
         /// <param name="tableName">Name of the table.</param>
         /// <param name="columnName">Name of the column.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
-        public static bool ExistsColumn(EDataBaseEngine dataBaseEngine, string connectionString, string tableName, string columnName)
+        public static bool ExistsColumn(EDatabaseEngine databaseEngine, string connectionString, string tableName, string columnName)
         {
             bool exists = false;
-            using (DbConnection dbConnection = StaticDbObjectProvider.GetDbConnection(dataBaseEngine, connectionString))
+            using (DbConnection dbConnection = StaticDbObjectProvider.GetDbConnection(databaseEngine, connectionString))
             {
                 dbConnection.Open();
                 DataTable dtColumns = null;
 
-                if (dataBaseEngine == EDataBaseEngine.MSSqlServer)
+                if (databaseEngine == EDatabaseEngine.MSSqlServer)
                     dtColumns = dbConnection.GetSchema("Columns", new[] { null, null, tableName, null });
-                else if (dataBaseEngine == EDataBaseEngine.MySql)
+                else if (databaseEngine == EDatabaseEngine.MySql)
                     dtColumns = dbConnection.GetSchema("Columns", new[] { null, null, tableName, null });
-                else if (dataBaseEngine == EDataBaseEngine.OleDb)
+                else if (databaseEngine == EDatabaseEngine.OleDb)
                     dtColumns = dbConnection.GetSchema("Columns", new[] { null, null, tableName, null });
-                else if (dataBaseEngine == EDataBaseEngine.SqLite)
+                else if (databaseEngine == EDatabaseEngine.SqLite)
                     dtColumns = dbConnection.GetSchema("Columns", new[] { null, tableName,null});
                 else
                     throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
@@ -210,32 +210,32 @@ namespace SysWork.Data.Common.Utilities
         /// <returns></returns>
         public static bool ExecuteBatchNonQuery(string query, string ConnectionString)
         {
-            return ExecuteBatchNonQuery(EDataBaseEngine.MSSqlServer, query, ConnectionString);
+            return ExecuteBatchNonQuery(EDatabaseEngine.MSSqlServer, query, ConnectionString);
         }
 
         /// <summary>
         /// Execute a list of sentences separated by the GO clause.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <param name="query">The query.</param>
         /// <param name="ConnectionString">The connection string.</param>
         /// <returns></returns>
-        public static bool ExecuteBatchNonQuery(EDataBaseEngine dataBaseEngine, string query, string ConnectionString)
+        public static bool ExecuteBatchNonQuery(EDatabaseEngine databaseEngine, string query, string ConnectionString)
         {
             bool result = false;
 
-            result = ExecuteBatchNonQuery(dataBaseEngine, query, StaticDbObjectProvider.GetIDbConnection(dataBaseEngine, ConnectionString));
+            result = ExecuteBatchNonQuery(databaseEngine, query, StaticDbObjectProvider.GetIDbConnection(databaseEngine, ConnectionString));
 
             return result;
         }
         /// <summary>
         /// Execute a list of sentences separated by the GO clause.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <param name="query">The query.</param>
         /// <param name="connection">The connection.</param>
         /// <returns></returns>
-        public static bool ExecuteBatchNonQuery(EDataBaseEngine dataBaseEngine, string query, IDbConnection connection)
+        public static bool ExecuteBatchNonQuery(EDatabaseEngine databaseEngine, string query, IDbConnection connection)
         {
             string sqlBatch = string.Empty;
 
@@ -286,7 +286,7 @@ namespace SysWork.Data.Common.Utilities
         /// <returns></returns>
         public static bool ConnectionSuccess(string connectionString)
         {
-            return ConnectionSuccess(EDataBaseEngine.MSSqlServer, connectionString, out string errMessage);
+            return ConnectionSuccess(EDatabaseEngine.MSSqlServer, connectionString, out string errMessage);
         }
 
         /// <summary>
@@ -297,34 +297,34 @@ namespace SysWork.Data.Common.Utilities
         /// <returns></returns>
         public static bool ConnectionSuccess(string connectionString, out string errMessage)
         {
-            return ConnectionSuccess(EDataBaseEngine.MSSqlServer, connectionString, out errMessage);
+            return ConnectionSuccess(EDatabaseEngine.MSSqlServer, connectionString, out errMessage);
         }
 
         /// <summary>
         /// Connections the success.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <param name="connectionString">The connection string.</param>
         /// <returns></returns>
-        public static bool ConnectionSuccess(EDataBaseEngine dataBaseEngine, string connectionString)
+        public static bool ConnectionSuccess(EDatabaseEngine databaseEngine, string connectionString)
         {
-            return ConnectionSuccess(dataBaseEngine, connectionString, out string errMessage);
+            return ConnectionSuccess(databaseEngine, connectionString, out string errMessage);
         }
 
 
         /// <summary>
         /// Try opening a DbConnection with the ConnectionString provided. The databaseEngine must be set.  
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <param name="connectionString">The connection string.</param>
         /// <param name="errMessage">The mensaje error.</param>
         /// <returns></returns>
-        public static bool ConnectionSuccess(EDataBaseEngine dataBaseEngine, string connectionString, out string errMessage)
+        public static bool ConnectionSuccess(EDatabaseEngine databaseEngine, string connectionString, out string errMessage)
         {
             errMessage = "";
             try
             {
-                using (IDbConnection dbConnection = StaticDbObjectProvider.GetIDbConnection(dataBaseEngine, connectionString))
+                using (IDbConnection dbConnection = StaticDbObjectProvider.GetIDbConnection(databaseEngine, connectionString))
                 {
                     dbConnection.Open();
                     dbConnection.Close();
@@ -347,7 +347,7 @@ namespace SysWork.Data.Common.Utilities
         /// </returns>
         public static bool IsValidConnectionString(string connectionString)
         {
-            return IsValidConnectionString(EDataBaseEngine.MSSqlServer, connectionString, out string errMessage);
+            return IsValidConnectionString(EDatabaseEngine.MSSqlServer, connectionString, out string errMessage);
         }
 
         /// <summary>
@@ -360,37 +360,37 @@ namespace SysWork.Data.Common.Utilities
         /// </returns>
         public static bool IsValidConnectionString(string connectionString, out string errMessage)
         {
-            return IsValidConnectionString(EDataBaseEngine.MSSqlServer, connectionString, out errMessage);
+            return IsValidConnectionString(EDatabaseEngine.MSSqlServer, connectionString, out errMessage);
         }
 
 
         /// <summary>
         /// Determines whether is valid connection string  for the specified data base engine.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <param name="connectionString">The connection string.</param>
         /// <param name="errMessage">The error message.</param>
         /// <returns>
         ///   <c>true</c> if [is valid connection string] [the specified data base engine]; otherwise, <c>false</c>.
         /// </returns>
-        public static bool IsValidConnectionString(EDataBaseEngine dataBaseEngine, string connectionString, out string errMessage)
+        public static bool IsValidConnectionString(EDatabaseEngine databaseEngine, string connectionString, out string errMessage)
         {
             bool valid = true;
             errMessage = "";
             try
             {
-                switch (dataBaseEngine)
+                switch (databaseEngine)
                 {
-                    case EDataBaseEngine.MSSqlServer:
+                    case EDatabaseEngine.MSSqlServer:
                         var sbSql = new SqlConnectionStringBuilder(connectionString);
                         break;
-                    case EDataBaseEngine.SqLite:
+                    case EDatabaseEngine.SqLite:
                         var sbSqlite = new SQLiteConnectionStringBuilder(connectionString);
                         break;
-                    case EDataBaseEngine.MySql:
+                    case EDatabaseEngine.MySql:
                         var sbMySql = new MySqlConnectionStringBuilder(connectionString);
                         break;
-                    case EDataBaseEngine.OleDb:
+                    case EDatabaseEngine.OleDb:
                         var sbOleDb = new OleDbConnectionStringBuilder(connectionString);
                         break;
                     default:

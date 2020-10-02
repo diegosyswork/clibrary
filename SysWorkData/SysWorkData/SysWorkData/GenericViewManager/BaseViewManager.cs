@@ -29,11 +29,11 @@ namespace SysWork.Data.GenericViewManager
         /// </summary>
         public string ConnectionString { get { return _connectionString; } private set { _connectionString = value; } }
 
-        private EDataBaseEngine _dataBaseEngine;
+        private EDatabaseEngine _databaseEngine;
         /// <summary>
         /// Gets the Database Engine.
         /// </summary>
-        public EDataBaseEngine DataBaseEngine { get { return _dataBaseEngine; } private set { _dataBaseEngine = value; } }
+        public EDatabaseEngine DatabaseEngine { get { return _databaseEngine; } private set { _databaseEngine = value; } }
 
         /// <summary>
         /// Gets the data object provider.
@@ -70,29 +70,29 @@ namespace SysWork.Data.GenericViewManager
         protected int DefaultCommandTimeOut { get { return _defaultCommandTimeout; } set { _defaultCommandTimeout = value; } }
         
         /// <summary>
-        /// Initializes a new instance class. Using MSSqlServer as DataBaseEngine.
+        /// Initializes a new instance class. Using MSSqlServer as DatabaseEngine.
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
         public BaseViewManager(string connectionString)
         {
-            BaseGenericViewManagerConstructorResolver(connectionString, EDataBaseEngine.MSSqlServer);
+            BaseGenericViewManagerConstructorResolver(connectionString, EDatabaseEngine.MSSqlServer);
         }
 
         /// <summary>
         /// Initializes a new instance class.
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
-        /// <param name="dataBaseEngine">The data base engine.</param>
-        public BaseViewManager(string connectionString, EDataBaseEngine dataBaseEngine)
+        /// <param name="databaseEngine">The data base engine.</param>
+        public BaseViewManager(string connectionString, EDatabaseEngine databaseEngine)
         {
-            BaseGenericViewManagerConstructorResolver(connectionString, dataBaseEngine);
+            BaseGenericViewManagerConstructorResolver(connectionString, databaseEngine);
         }
-        private void BaseGenericViewManagerConstructorResolver(string connectionString, EDataBaseEngine dataBaseEngine)
+        private void BaseGenericViewManagerConstructorResolver(string connectionString, EDatabaseEngine databaseEngine)
         {
             _connectionString = connectionString;
-            _dataBaseEngine = dataBaseEngine;
-            DataObjectProvider = new DbObjectProvider(_dataBaseEngine);
-            _syntaxProvider = new SyntaxProvider(_dataBaseEngine);
+            _databaseEngine = databaseEngine;
+            DataObjectProvider = new DbObjectProvider(_databaseEngine);
+            _syntaxProvider = new SyntaxProvider(_databaseEngine);
 
             _mapper = new MapDataReaderToEntity();
             _mapper.UseTypeCache = false;
@@ -220,13 +220,13 @@ namespace SysWork.Data.GenericViewManager
         }
         private void SetSqlLamAdapter()
         {
-            if (_dataBaseEngine == EDataBaseEngine.MSSqlServer)
+            if (_databaseEngine == EDatabaseEngine.MSSqlServer)
                 SqlLam<TEntity>.SetAdapter(SqlAdapter.SqlServer2012);
-            else if (_dataBaseEngine == EDataBaseEngine.OleDb)
+            else if (_databaseEngine == EDatabaseEngine.OleDb)
                 SqlLam<TEntity>.SetAdapter(SqlAdapter.SqlServer2012);
-            else if (_dataBaseEngine == EDataBaseEngine.MySql)
+            else if (_databaseEngine == EDatabaseEngine.MySql)
                 SqlLam<TEntity>.SetAdapter(SqlAdapter.MySql);
-            else if (_dataBaseEngine == EDataBaseEngine.SqLite)
+            else if (_databaseEngine == EDatabaseEngine.SqLite)
                 SqlLam<TEntity>.SetAdapter(SqlAdapter.SQLite);
             else
                 throw new ArgumentOutOfRangeException("The databaseEngine is not supported by this method");

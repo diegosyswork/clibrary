@@ -10,7 +10,6 @@ namespace SysWork.Forms.Interfaces
         /// </summary>
         void SetColumnsAndListViewProperties();
 
-
         /// <summary>
         /// Loads the listview data.
         /// </summary>

@@ -23,7 +23,7 @@ namespace SysWork.Data.Common.Utilities
     /// 
     /// </summary>
     /// <remarks>
-    /// <seealso cref="Common.ValueObjects.EDataBaseEngine"/>..
+    /// <seealso cref="Common.ValueObjects.EDatabaseEngine"/>..
     /// </remarks>
     /// <example>
     /// <code>
@@ -73,7 +73,7 @@ namespace SysWork.Data.Common.Utilities
     #endregion
     public class DbExecutor
     {
-        private EDataBaseEngine _dataBaseEngine;
+        private EDatabaseEngine _databaseEngine;
         private string _connectionString;
         private DbConnection _dbConnection = null;
         private DbTransaction _dbTransaction = null;
@@ -123,17 +123,17 @@ namespace SysWork.Data.Common.Utilities
         /// <param name="connectionString">The connection string.</param>
         public DbExecutor(string connectionString)
         {
-            ConstructorResolver(null,null, connectionString, EDataBaseEngine.MSSqlServer);
+            ConstructorResolver(null,null, connectionString, EDatabaseEngine.MSSqlServer);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DbExecutor"/> class.
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
-        /// <param name="dataBaseEngine">The data base engine.</param>
-        public DbExecutor(string connectionString, EDataBaseEngine dataBaseEngine)
+        /// <param name="databaseEngine">The data base engine.</param>
+        public DbExecutor(string connectionString, EDatabaseEngine databaseEngine)
         {
-            ConstructorResolver(null,null, connectionString, dataBaseEngine);
+            ConstructorResolver(null,null, connectionString, databaseEngine);
         }
 
         /// <summary>
@@ -166,25 +166,25 @@ namespace SysWork.Data.Common.Utilities
 
         private void ConstructorResolver(DbConnection dbConnection, DbTransaction dbTransaction)
         {
-            EDataBaseEngine paramEDataBaseEngine;
+            EDatabaseEngine paramEDatabaseEngine;
             DbConnection paramConnection = dbConnection;
 
             if ((paramConnection == null) && (dbTransaction != null))
                     paramConnection = dbTransaction.Connection;
 
-            paramEDataBaseEngine = StaticDbObjectProvider.GetDataBaseEngineFromDbConnection(paramConnection);
+            paramEDatabaseEngine = StaticDbObjectProvider.GetDatabaseEngineFromDbConnection(paramConnection);
 
-            ConstructorResolver(paramConnection, dbTransaction, null, paramEDataBaseEngine);
+            ConstructorResolver(paramConnection, dbTransaction, null, paramEDatabaseEngine);
         }
-        private void ConstructorResolver(DbConnection dbConnection,DbTransaction dbTransaction, string connectionString, EDataBaseEngine dataBaseEngine)
+        private void ConstructorResolver(DbConnection dbConnection,DbTransaction dbTransaction, string connectionString, EDatabaseEngine databaseEngine)
         {
             _dbConnection = dbConnection;
             _dbTransaction = dbTransaction;
             _connectionString = connectionString;
-            _dataBaseEngine = dataBaseEngine;
+            _databaseEngine = databaseEngine;
 
-            _dataObjectProvider = new DbObjectProvider(dataBaseEngine);
-            _syntaxProvider = new SyntaxProvider(dataBaseEngine);
+            _dataObjectProvider = new DbObjectProvider(databaseEngine);
+            _syntaxProvider = new SyntaxProvider(databaseEngine);
 
             _queryParameters = new Dictionary<string, object>();
             _queryParameterSize = new Dictionary<string, int>();
@@ -936,7 +936,7 @@ namespace SysWork.Data.Common.Utilities
 
                 DbParameters = dbCommand.Parameters;
 
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                if (_databaseEngine == EDatabaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                 long recordsAffected = dbCommand.ExecuteNonQuery();
@@ -1184,7 +1184,7 @@ namespace SysWork.Data.Common.Utilities
 
                 DbParameters = dbCommand.Parameters;
 
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                if (_databaseEngine == EDatabaseEngine.OleDb)
                 {
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
                     if (_isInsertQuery)
@@ -1386,7 +1386,7 @@ namespace SysWork.Data.Common.Utilities
 
                 DbParameters = dbCommand.Parameters;
 
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                if (_databaseEngine == EDatabaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                 return dbCommand.ExecuteReader(closeConnection ? CommandBehavior.CloseConnection : CommandBehavior.Default);

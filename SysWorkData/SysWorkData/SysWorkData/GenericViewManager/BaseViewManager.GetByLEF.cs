@@ -80,7 +80,7 @@ namespace SysWork.Data.GenericViewManager
                 foreach (var parameters in query.QueryParameters)
                     dbCommand.Parameters.Add(CreateIDbDataParameter("@" + parameters.Key, parameters.Value));
 
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                if (_databaseEngine == EDatabaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                 IDataReader reader = dbCommand.ExecuteReader(CommandBehavior.SingleRow);

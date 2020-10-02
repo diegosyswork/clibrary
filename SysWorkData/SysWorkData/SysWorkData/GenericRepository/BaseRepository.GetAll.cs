@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using SysWork.Data.GenericRepository.Exceptions;
-using SysWork.Data.Common.Interfaces.Actions;
-using SysWork.Data.Common.Mapper;
 
 namespace SysWork.Data.GenericRepository
 {
-    public abstract partial class BaseRepository<TEntity> : IGetAll<TEntity>
+    public abstract partial class BaseRepository<TEntity> 
     {
         public IList<TEntity> GetAll()
         {
@@ -68,7 +66,7 @@ namespace SysWork.Data.GenericRepository
                     dbCommand.Transaction = dbTransaction;
 
                 IDataReader reader = dbCommand.ExecuteReader();
-                result = _mapper.Map<TEntity>(reader, EntityProperties, _dataBaseEngine);
+                result = _mapper.Map<TEntity>(reader, EntityProperties, _databaseEngine);
 
                 reader.Close(); reader.Dispose();
                 dbCommand.Dispose();

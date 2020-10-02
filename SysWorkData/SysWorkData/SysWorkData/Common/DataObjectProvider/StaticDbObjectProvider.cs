@@ -17,21 +17,21 @@ namespace SysWork.Data.Common.DataObjectProvider
         /// <summary>
         /// Gets an IDbConnection depending of the database engine,with the connectionString provided.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <param name="ConnectionString">The connection string.</param>
         /// <returns>
         /// An instantiated IDbConnection depending of the database engine, with the connectionString provided. The object is closed.
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
-        public static IDbConnection GetIDbConnection(EDataBaseEngine dataBaseEngine, string ConnectionString)
+        public static IDbConnection GetIDbConnection(EDatabaseEngine databaseEngine, string ConnectionString)
         {
-            if (dataBaseEngine == EDataBaseEngine.MSSqlServer)
+            if (databaseEngine == EDatabaseEngine.MSSqlServer)
                 return new SqlConnection(ConnectionString);
-            else if (dataBaseEngine == EDataBaseEngine.OleDb)
+            else if (databaseEngine == EDatabaseEngine.OleDb)
                 return new OleDbConnection(ConnectionString);
-            else if (dataBaseEngine == EDataBaseEngine.SqLite)
+            else if (databaseEngine == EDatabaseEngine.SqLite)
                 return new SQLiteConnection(ConnectionString);
-            else if (dataBaseEngine == EDataBaseEngine.MySql)
+            else if (databaseEngine == EDatabaseEngine.MySql)
                 return new MySqlConnection(ConnectionString);
             else
                 throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
@@ -40,20 +40,20 @@ namespace SysWork.Data.Common.DataObjectProvider
         /// <summary>
         /// Gets an IDbConnection depending of the database engine.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <returns>
         /// An instantiated IDbConnection depending of the database engine. The object is closed.
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
-        public static IDbConnection GetIDbConnection(EDataBaseEngine dataBaseEngine)
+        public static IDbConnection GetIDbConnection(EDatabaseEngine databaseEngine)
         {
-            if (dataBaseEngine == EDataBaseEngine.MSSqlServer)
+            if (databaseEngine == EDatabaseEngine.MSSqlServer)
                 return new SqlConnection();
-            else if (dataBaseEngine == EDataBaseEngine.OleDb)
+            else if (databaseEngine == EDatabaseEngine.OleDb)
                 return new OleDbConnection();
-            else if (dataBaseEngine == EDataBaseEngine.SqLite)
+            else if (databaseEngine == EDatabaseEngine.SqLite)
                 return new SQLiteConnection();
-            else if (dataBaseEngine == EDataBaseEngine.MySql)
+            else if (databaseEngine == EDatabaseEngine.MySql)
                 return new MySqlConnection();
             else
                 throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
@@ -62,21 +62,21 @@ namespace SysWork.Data.Common.DataObjectProvider
         /// <summary>
         /// Gets an DbConnection depending of the database engine,with the connectionString provided.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <param name="ConnectionString">The connection string.</param>
         /// <returns>
         /// An instantiated DbConnection depending of the database engine, with the connectionString provided. The object is closed.
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
-        public static DbConnection GetDbConnection(EDataBaseEngine dataBaseEngine,string ConnectionString)
+        public static DbConnection GetDbConnection(EDatabaseEngine databaseEngine,string ConnectionString)
         {
-            if (dataBaseEngine == EDataBaseEngine.MSSqlServer)
+            if (databaseEngine == EDatabaseEngine.MSSqlServer)
                 return new SqlConnection(ConnectionString);
-            else if (dataBaseEngine == EDataBaseEngine.OleDb)
+            else if (databaseEngine == EDatabaseEngine.OleDb)
                 return  new OleDbConnection(ConnectionString);
-            else if (dataBaseEngine == EDataBaseEngine.SqLite)
+            else if (databaseEngine == EDatabaseEngine.SqLite)
                 return new SQLiteConnection(ConnectionString);
-            else if (dataBaseEngine == EDataBaseEngine.MySql)
+            else if (databaseEngine == EDatabaseEngine.MySql)
                 return new MySqlConnection(ConnectionString);
             else
                 throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
@@ -85,20 +85,20 @@ namespace SysWork.Data.Common.DataObjectProvider
         /// <summary>
         /// Gets an DbConnection depending of the database engine.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <returns>
         /// An instantiated DbConnection depending of the database engine. The object is closed.
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
-        public static DbConnection GetDbConnection(EDataBaseEngine dataBaseEngine)
+        public static DbConnection GetDbConnection(EDatabaseEngine databaseEngine)
         {
-            if (dataBaseEngine == EDataBaseEngine.MSSqlServer)
+            if (databaseEngine == EDatabaseEngine.MSSqlServer)
                 return new SqlConnection();
-            else if (dataBaseEngine == EDataBaseEngine.OleDb)
+            else if (databaseEngine == EDatabaseEngine.OleDb)
                 return  new OleDbConnection();
-            else if (dataBaseEngine == EDataBaseEngine.SqLite)
+            else if (databaseEngine == EDatabaseEngine.SqLite)
                 return new SQLiteConnection();
-            else if (dataBaseEngine == EDataBaseEngine.MySql)
+            else if (databaseEngine == EDatabaseEngine.MySql)
                 return new MySqlConnection();
             else
                 throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
@@ -112,16 +112,16 @@ namespace SysWork.Data.Common.DataObjectProvider
         /// An EDatabaseEngine value depending on a DbConnection object.
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">The dbConnection provided is not supported by this method.</exception>
-        public static EDataBaseEngine GetDataBaseEngineFromDbConnection(DbConnection dbConnection)
+        public static EDatabaseEngine GetDatabaseEngineFromDbConnection(DbConnection dbConnection)
         {
             if (dbConnection is SqlConnection)
-                return EDataBaseEngine.MSSqlServer;
+                return EDatabaseEngine.MSSqlServer;
             else if (dbConnection is OleDbConnection)
-                return EDataBaseEngine.OleDb;
+                return EDatabaseEngine.OleDb;
             else if (dbConnection is SQLiteConnection)
-                return EDataBaseEngine.SqLite;
+                return EDatabaseEngine.SqLite;
             else if (dbConnection is MySqlConnection)
-                return EDataBaseEngine.MySql;
+                return EDatabaseEngine.MySql;
             else
                 throw new ArgumentOutOfRangeException("The dbConnection provided is not supported by this method.");
         }
@@ -134,16 +134,16 @@ namespace SysWork.Data.Common.DataObjectProvider
         /// An EDatabaseEngine value depending on a DbCommand object.
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
-        public static EDataBaseEngine GetDataBaseEngineFromDbCommand(DbCommand dbCommand)
+        public static EDatabaseEngine GetDatabaseEngineFromDbCommand(DbCommand dbCommand)
         {
             if (dbCommand is SqlCommand)
-                return EDataBaseEngine.MSSqlServer;
+                return EDatabaseEngine.MSSqlServer;
             else if (dbCommand is OleDbCommand)
-                return EDataBaseEngine.OleDb;
+                return EDatabaseEngine.OleDb;
             else if (dbCommand is SQLiteCommand)
-                return EDataBaseEngine.SqLite;
+                return EDatabaseEngine.SqLite;
             else if (dbCommand is MySqlCommand)
-                return EDataBaseEngine.MySql;
+                return EDatabaseEngine.MySql;
             else
                 throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
         }
@@ -151,20 +151,20 @@ namespace SysWork.Data.Common.DataObjectProvider
         /// <summary>
         /// Gets an DbConnectionStringBuilder depending of the database engine.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <returns>
         /// An instantiated DbConnectionStrigBuilder depending of the database engine.
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
-        public static DbConnectionStringBuilder GetDbConnectionStringBuilder(EDataBaseEngine dataBaseEngine)
+        public static DbConnectionStringBuilder GetDbConnectionStringBuilder(EDatabaseEngine databaseEngine)
         {
-            if (dataBaseEngine == EDataBaseEngine.MSSqlServer)
+            if (databaseEngine == EDatabaseEngine.MSSqlServer)
                 return new SqlConnectionStringBuilder();
-            else if (dataBaseEngine == EDataBaseEngine.OleDb)
+            else if (databaseEngine == EDatabaseEngine.OleDb)
                 return new OleDbConnectionStringBuilder();
-            else if (dataBaseEngine == EDataBaseEngine.SqLite)
+            else if (databaseEngine == EDatabaseEngine.SqLite)
                 return new SQLiteConnectionStringBuilder();
-            else if (dataBaseEngine == EDataBaseEngine.MySql)
+            else if (databaseEngine == EDatabaseEngine.MySql)
                 return new MySqlConnectionStringBuilder();
             else
                 throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
@@ -173,18 +173,18 @@ namespace SysWork.Data.Common.DataObjectProvider
         /// <summary>
         /// Gets and DbDataAdapter data adapter.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
-        public static DbDataAdapter GetDbDataAdapter(EDataBaseEngine dataBaseEngine)
+        public static DbDataAdapter GetDbDataAdapter(EDatabaseEngine databaseEngine)
         {
-            if (dataBaseEngine == EDataBaseEngine.MSSqlServer)
+            if (databaseEngine == EDatabaseEngine.MSSqlServer)
                 return new SqlDataAdapter();
-            else if (dataBaseEngine == EDataBaseEngine.OleDb)
+            else if (databaseEngine == EDatabaseEngine.OleDb)
                 return new OleDbDataAdapter();
-            else if (dataBaseEngine == EDataBaseEngine.SqLite)
+            else if (databaseEngine == EDatabaseEngine.SqLite)
                 return new SQLiteDataAdapter();
-            else if (dataBaseEngine == EDataBaseEngine.MySql)
+            else if (databaseEngine == EDatabaseEngine.MySql)
                 return new MySqlDataAdapter();
             else
                 throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");

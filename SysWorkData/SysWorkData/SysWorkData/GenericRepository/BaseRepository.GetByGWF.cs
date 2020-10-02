@@ -10,7 +10,7 @@ using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.GenericRepository
 {
-    public abstract partial class BaseRepository<TEntity> : IGetByGenericWhereFilter<TEntity>
+    public abstract partial class BaseRepository<TEntity> 
     {
         public TEntity GetByGenericWhereFilter(GenericWhereFilter whereFilter)
         {
@@ -86,7 +86,7 @@ namespace SysWork.Data.GenericRepository
                     dbCommand.Parameters.Add(dbParameter);
                 }
 
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                if (_databaseEngine == EDatabaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                 IDataReader reader = dbCommand.ExecuteReader(CommandBehavior.SingleRow);

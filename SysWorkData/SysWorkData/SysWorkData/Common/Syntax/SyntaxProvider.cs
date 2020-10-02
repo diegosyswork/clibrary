@@ -10,15 +10,15 @@ namespace SysWork.Data.Common.Syntax
     /// </summary>
     public class SyntaxProvider
     {
-        private EDataBaseEngine _dataBaseEngine;
+        private EDatabaseEngine _databaseEngine;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SyntaxProvider"/> class.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
-        public SyntaxProvider(EDataBaseEngine dataBaseEngine)
+        /// <param name="databaseEngine">The data base engine.</param>
+        public SyntaxProvider(EDatabaseEngine databaseEngine)
         {
-            _dataBaseEngine = dataBaseEngine;
+            _databaseEngine = databaseEngine;
         }
 
 
@@ -33,7 +33,7 @@ namespace SysWork.Data.Common.Syntax
         public string GetSecureTableName(string TableName)
         {
             string secureTableName = TableName;
-            DbObjectNameStartsEnders.StartEndCharacters.TryGetValue(_dataBaseEngine, out Dictionary<string, string> chars);
+            DbObjectNameStartsEnders.StartEndCharacters.TryGetValue(_databaseEngine, out Dictionary<string, string> chars);
             chars.TryGetValue("starts", out string startsWith);
             chars.TryGetValue("ends", out string endsWith);
 
@@ -52,7 +52,7 @@ namespace SysWork.Data.Common.Syntax
         public string GetSecureViewName(string ViewName)
         {
             string secureTableName = ViewName;
-            DbObjectNameStartsEnders.StartEndCharacters.TryGetValue(_dataBaseEngine, out Dictionary<string, string> chars);
+            DbObjectNameStartsEnders.StartEndCharacters.TryGetValue(_databaseEngine, out Dictionary<string, string> chars);
             chars.TryGetValue("starts", out string startsWith);
             chars.TryGetValue("ends", out string endsWith);
 
@@ -73,7 +73,7 @@ namespace SysWork.Data.Common.Syntax
         {
             string secureColumnName = ColumnName;
 
-            DbObjectNameStartsEnders.StartEndCharacters.TryGetValue(_dataBaseEngine, out Dictionary<string, string> chars);
+            DbObjectNameStartsEnders.StartEndCharacters.TryGetValue(_databaseEngine, out Dictionary<string, string> chars);
             chars.TryGetValue("starts", out string startsWith);
             chars.TryGetValue("ends", out string endsWith);
             secureColumnName = startsWith + secureColumnName.Replace(startsWith, "").Replace(endsWith, "") + endsWith;
@@ -95,7 +95,7 @@ namespace SysWork.Data.Common.Syntax
         {
             string originalColumnName = columnName;
 
-            DbObjectNameStartsEnders.StartEndCharacters.TryGetValue(_dataBaseEngine, out Dictionary<string, string> chars);
+            DbObjectNameStartsEnders.StartEndCharacters.TryGetValue(_databaseEngine, out Dictionary<string, string> chars);
             chars.TryGetValue("starts", out string startsWith);
             chars.TryGetValue("ends", out string endsWith);
             originalColumnName = originalColumnName.Replace(startsWith, "").Replace(endsWith, "") ;
@@ -110,14 +110,14 @@ namespace SysWork.Data.Common.Syntax
         /// <exception cref="ArgumentException">The database engine is not supported by this method (GetSubQueryGetIdentity())</exception>
         public string GetSubQueryGetIdentity()
         {
-            if (_dataBaseEngine == EDataBaseEngine.MSSqlServer)
+            if (_databaseEngine == EDatabaseEngine.MSSqlServer)
                 return " SELECT SCOPE_IDENTITY()";
-            else if (_dataBaseEngine == EDataBaseEngine.OleDb)
+            else if (_databaseEngine == EDatabaseEngine.OleDb)
                 // Hay que Ejecutar por separado otra consulta solicitando @@Identity
                 return "";
-            else if (_dataBaseEngine == EDataBaseEngine.SqLite)
+            else if (_databaseEngine == EDatabaseEngine.SqLite)
                 return " ; SELECT last_insert_rowid()";
-            else if (_dataBaseEngine == EDataBaseEngine.MySql)
+            else if (_databaseEngine == EDatabaseEngine.MySql)
                 return " ; SELECT LAST_INSERT_ID()";
 
             throw new ArgumentException("The database engine is not supported by this method (GetSubQueryGetIdentity())");
@@ -162,18 +162,18 @@ namespace SysWork.Data.Common.Syntax
         public string GetQuerySelectTop0(string tableName)
         {
             string result = "";
-            switch (_dataBaseEngine)
+            switch (_databaseEngine)
             {
-                case EDataBaseEngine.MSSqlServer:
+                case EDatabaseEngine.MSSqlServer:
                     result = string.Format("SELECT TOP 0 * FROM {0}", GetSecureTableName(tableName));
                     break;
-                case EDataBaseEngine.SqLite:
+                case EDatabaseEngine.SqLite:
                     result = string.Format("SELECT * FROM {0} LIMIT 0", GetSecureTableName(tableName));
                     break;
-                case EDataBaseEngine.OleDb:
+                case EDatabaseEngine.OleDb:
                     result = string.Format("SELECT TOP 1 * FROM {0} ", GetSecureTableName(tableName));
                     break;
-                case EDataBaseEngine.MySql:
+                case EDatabaseEngine.MySql:
                     result = string.Format("SELECT * FROM {0} LIMIT 0", GetSecureTableName(tableName));
                     break;
                 default:
@@ -192,18 +192,18 @@ namespace SysWork.Data.Common.Syntax
         public string GetQuerySelectTop_1_1(string tableName)
         {
             string result = "";
-            switch (_dataBaseEngine)
+            switch (_databaseEngine)
             {
-                case EDataBaseEngine.MSSqlServer:
+                case EDatabaseEngine.MSSqlServer:
                     result = string.Format("SELECT TOP 1 1 FROM {0}", GetSecureTableName(tableName));
                     break;
-                case EDataBaseEngine.SqLite:
+                case EDatabaseEngine.SqLite:
                     result = string.Format("SELECT 1 FROM {0} LIMIT 1", GetSecureTableName(tableName));
                     break;
-                case EDataBaseEngine.OleDb:
+                case EDatabaseEngine.OleDb:
                     result = string.Format("SELECT TOP 1 1 FROM {0} ", GetSecureTableName(tableName));
                     break;
-                case EDataBaseEngine.MySql:
+                case EDatabaseEngine.MySql:
                     result = string.Format("SELECT 1 FROM {0} LIMIT 1", GetSecureTableName(tableName));
                     break;
                 default:
@@ -222,18 +222,18 @@ namespace SysWork.Data.Common.Syntax
         public string GetQuerySelectCOUNT(string tableName)
         {
             string result = "";
-            switch (_dataBaseEngine)
+            switch (_databaseEngine)
             {
-                case EDataBaseEngine.MSSqlServer:
+                case EDatabaseEngine.MSSqlServer:
                     result = string.Format("SELECT COUNT(*) FROM {0} ", GetSecureTableName(tableName));
                     break;
-                case EDataBaseEngine.SqLite:
+                case EDatabaseEngine.SqLite:
                     result = string.Format("SELECT COUNT(*) FROM {0} ", GetSecureTableName(tableName));
                     break;
-                case EDataBaseEngine.OleDb:
+                case EDatabaseEngine.OleDb:
                     result = string.Format("SELECT COUNT(*) FROM {0} ", GetSecureTableName(tableName));
                     break;
-                case EDataBaseEngine.MySql:
+                case EDatabaseEngine.MySql:
                     result = string.Format("SELECT COUNT(*) FROM {0}", GetSecureTableName(tableName));
                     break;
                 default:

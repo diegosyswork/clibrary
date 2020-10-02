@@ -10,7 +10,7 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
     public class ViewManagerClassFromView
     {
         private string _connectionString;
-        private EDataBaseEngine _databaseEngine;
+        private EDatabaseEngine _databaseEngine;
 
         private string _nameSpace;
         private string _entityName;
@@ -28,7 +28,7 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
         /// <param name="DbViewName">Name of the database view.</param>
         public ViewManagerClassFromView(string ConnectionString, string EntityName, string NameSpace, string DbViewName)
         {
-            ViewManagerClassFromViewConstructorResolver(EDataBaseEngine.MSSqlServer, ConnectionString, EntityName, NameSpace, DbViewName);
+            ViewManagerClassFromViewConstructorResolver(EDatabaseEngine.MSSqlServer, ConnectionString, EntityName, NameSpace, DbViewName);
 
         }
 
@@ -40,12 +40,12 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
         /// <param name="EntityName">Name of the entity.</param>
         /// <param name="NameSpace">The name space.</param>
         /// <param name="DbTableName">Name of the database table.</param>
-        public ViewManagerClassFromView(EDataBaseEngine databaseEngine, string ConnectionString, string EntityName, string NameSpace, string DbTableName)
+        public ViewManagerClassFromView(EDatabaseEngine databaseEngine, string ConnectionString, string EntityName, string NameSpace, string DbTableName)
         {
             ViewManagerClassFromViewConstructorResolver(databaseEngine, ConnectionString, EntityName, NameSpace, DbTableName);
         }
 
-        private void ViewManagerClassFromViewConstructorResolver(EDataBaseEngine databaseEngine, string ConnectionString, string EntityName, string NameSpace, string DbTableName)
+        private void ViewManagerClassFromViewConstructorResolver(EDatabaseEngine databaseEngine, string ConnectionString, string EntityName, string NameSpace, string DbTableName)
         {
             _connectionString = ConnectionString;
             _databaseEngine = databaseEngine;
@@ -83,7 +83,7 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
         {
             string ret = "";
 
-            ret += "\t\tpublic " + _entityName + "ViewManager (string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString,dataBaseEngine)" + Environment.NewLine;
+            ret += "\t\tpublic " + _entityName + "ViewManager (string connectionString, EDatabaseEngine databaseEngine) : base(connectionString,databaseEngine)" + Environment.NewLine;
             ret += "\t\t{" + Environment.NewLine;
             ret += "\t\t" + Environment.NewLine;
             ret += "\t\t}" + Environment.NewLine;

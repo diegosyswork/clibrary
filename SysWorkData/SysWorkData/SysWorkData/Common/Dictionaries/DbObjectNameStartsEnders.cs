@@ -18,12 +18,12 @@ namespace SysWork.Data.Common.Dictionaries
         /// should start and end, according to the DatabaseEngine. 
         /// For example "[" "]", for MSSqlserver
         /// </summary>
-        public static readonly Dictionary<EDataBaseEngine, Dictionary<string, string>> StartEndCharacters = new Dictionary<EDataBaseEngine, Dictionary<string, string>>()
+        public static readonly Dictionary<EDatabaseEngine, Dictionary<string, string>> StartEndCharacters = new Dictionary<EDatabaseEngine, Dictionary<string, string>>()
         {
-                { EDataBaseEngine.MSSqlServer, new Dictionary<string, string>() { { "starts", "[" }, { "ends", "]" } } },
-                { EDataBaseEngine.OleDb, new Dictionary<string, string>() { { "starts", "[" }, { "ends", "]" } } } ,
-                { EDataBaseEngine.SqLite, new Dictionary<string, string>() { { "starts", "[" }, { "ends", "]" } }},
-                { EDataBaseEngine.MySql, new Dictionary<string, string>() { { "starts", "`" }, { "ends", "`" } } }
+                { EDatabaseEngine.MSSqlServer, new Dictionary<string, string>() { { "starts", "[" }, { "ends", "]" } } },
+                { EDatabaseEngine.OleDb, new Dictionary<string, string>() { { "starts", "[" }, { "ends", "]" } } } ,
+                { EDatabaseEngine.SqLite, new Dictionary<string, string>() { { "starts", "[" }, { "ends", "]" } }},
+                { EDatabaseEngine.MySql, new Dictionary<string, string>() { { "starts", "`" }, { "ends", "`" } } }
         };
     }
 }

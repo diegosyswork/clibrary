@@ -10,7 +10,7 @@ using SysWork.Data.Common.Mapper;
 
 namespace SysWork.Data.GenericRepository
 {
-    public abstract partial class BaseRepository<TEntity> : IFind<TEntity>
+    public abstract partial class BaseRepository<TEntity> 
     {
         public IList<TEntity> Find(IEnumerable<object> ids)
         {
@@ -99,7 +99,7 @@ namespace SysWork.Data.GenericRepository
                         dbCommand.Transaction = dbTransaction;
 
                     IDataReader reader = dbCommand.ExecuteReader();
-                    entities = _mapper.Map<TEntity>(reader, EntityProperties, _dataBaseEngine);
+                    entities = _mapper.Map<TEntity>(reader, EntityProperties, _databaseEngine);
 
                     reader.Close();
                     reader.Dispose();

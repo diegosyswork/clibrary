@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Data;
 using System.Data.OleDb;
-using SysWork.Data.Common;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.Filters;
 using SysWork.Data.GenericRepository.Exceptions;
-using SysWork.Data.Common.Interfaces.Actions;
 using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.GenericRepository
 {
-    public abstract partial class BaseRepository<TEntity> : IDeleteByGenericWhereFilter<TEntity>
+    public abstract partial class BaseRepository<TEntity>
     {
         public bool DeleteByGenericWhereFilter(GenericWhereFilter whereFilter)
         {
@@ -119,7 +117,7 @@ namespace SysWork.Data.GenericRepository
                         dbCommand.Parameters.Add(dbParameter);
                     }
 
-                    if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                    if (_databaseEngine == EDatabaseEngine.OleDb)
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                     recordsAffected = dbCommand.ExecuteNonQuery();

@@ -20,21 +20,21 @@ namespace SysWork.Data.Common.SimpleQuery
         /// <returns>An dynamic IEnumerable.</returns>
         public static IEnumerable<dynamic> Execute(DbConnection dbConnection, string commandText)
         {
-            return Execute(StaticDbObjectProvider.GetDataBaseEngineFromDbConnection(dbConnection), dbConnection, commandText,false);
+            return Execute(StaticDbObjectProvider.GetDatabaseEngineFromDbConnection(dbConnection), dbConnection, commandText,false);
         }
 
         /// <summary>
         /// Executes the specified commandText in a DbConnection.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <param name="connectionString">The connection string.</param>
         /// <param name="commandText">The command text.</param>
         /// <param name="closeConnection">if set to <c>true</c> [close connection].</param>
         /// <returns>An dynamic IEnumerable</returns>
-        public static IEnumerable<dynamic> Execute(EDataBaseEngine dataBaseEngine, string connectionString, string commandText,bool closeConnection = true)
+        public static IEnumerable<dynamic> Execute(EDatabaseEngine databaseEngine, string connectionString, string commandText,bool closeConnection = true)
         {
-            DbConnection dbConnection = StaticDbObjectProvider.GetDbConnection(dataBaseEngine,connectionString);
-            return Execute(dataBaseEngine, dbConnection, commandText,closeConnection);
+            DbConnection dbConnection = StaticDbObjectProvider.GetDbConnection(databaseEngine,connectionString);
+            return Execute(databaseEngine, dbConnection, commandText,closeConnection);
         }
 
         /// <summary>
@@ -46,21 +46,21 @@ namespace SysWork.Data.Common.SimpleQuery
         /// <returns>An dynamic IEnumerable</returns>
         public static IEnumerable<dynamic> Execute(string connectionString, string commandText,bool closeConnection = true)
         {
-            DbConnection dbConnection = StaticDbObjectProvider.GetDbConnection(EDataBaseEngine.MSSqlServer);
+            DbConnection dbConnection = StaticDbObjectProvider.GetDbConnection(EDatabaseEngine.MSSqlServer);
             dbConnection.ConnectionString = connectionString;
 
-            return Execute(EDataBaseEngine.MSSqlServer, dbConnection, commandText, closeConnection);
+            return Execute(EDatabaseEngine.MSSqlServer, dbConnection, commandText, closeConnection);
         }
 
         /// <summary>
         /// Executes the specified commandText in a DbConnection.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <param name="dbConnection">The database connection.</param>
         /// <param name="commandText">The command text.</param>
         /// <param name="closeConnection">if set to <c>true</c> [close connection].</param>
         /// <returns></returns>
-        private static IEnumerable<dynamic> Execute(EDataBaseEngine dataBaseEngine, DbConnection dbConnection, string commandText,bool closeConnection = true)
+        private static IEnumerable<dynamic> Execute(EDatabaseEngine databaseEngine, DbConnection dbConnection, string commandText,bool closeConnection = true)
         {
             if (dbConnection.State != ConnectionState.Open)
                 dbConnection.Open();

@@ -1,20 +1,34 @@
 ﻿using System;
 using System.Data;
 using SysWork.Data.GenericRepository.Exceptions;
-using SysWork.Data.Common.Interfaces.Actions;
 
 namespace SysWork.Data.GenericRepository
 {
-    public abstract partial class BaseRepository<TEntity> : IDeleteAll<TEntity>
+    public abstract partial class BaseRepository<TEntity>
     {
+        /// <summary>
+        /// Deletes all Records.
+        /// </summary>
+        /// <returns></returns>
         public long DeleteAll()
         {
             return DeleteAll(null, null, null);
         }
+
+        /// <summary>
+        /// Deletes all records using a custom commandTimeOut.
+        /// </summary>
+        /// <param name="commandTimeOut">The command time out.</param>
+        /// <returns></returns>
         public long DeleteAll(int commandTimeOut)
         {
             return DeleteAll(null, null, commandTimeOut);
         }
+        /// <summary>
+        /// Deletes all records using an IDbConnection.
+        /// </summary>
+        /// <param name="dbConnection">The database connection.</param>
+        /// <returns></returns>
         public long DeleteAll(IDbConnection dbConnection)
         {
             return DeleteAll(dbConnection, null, null);

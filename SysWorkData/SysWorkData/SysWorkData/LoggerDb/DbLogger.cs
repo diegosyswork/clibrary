@@ -116,25 +116,25 @@ namespace SysWork.Data.LoggerDb
             }
         }
 
-        private static EDataBaseEngine _dataBaseEngine;
+        private static EDatabaseEngine _databaseEngine;
         /// <summary>
         /// Gets or sets the data base engine.
         /// </summary>
         /// <value>
         /// The data base engine.
         /// </value>
-        public static EDataBaseEngine DataBaseEngine
+        public static EDatabaseEngine DatabaseEngine
         {
             get
             {
-                return _dataBaseEngine;
+                return _databaseEngine;
             }
             set
             {
-                if ((value != DataBaseEngine) && (_dbLoggerInstance != null))
+                if ((value != DatabaseEngine) && (_dbLoggerInstance != null))
                     _dbLoggerInstance = null;
 
-                _dataBaseEngine = value;
+                _databaseEngine = value;
             }
         }
 
@@ -179,11 +179,11 @@ namespace SysWork.Data.LoggerDb
             if (string.IsNullOrEmpty(_connectionString))
                 throw new ArgumentException("The ConnectionString is not set.");
 
-            if (!DbUtil.ConnectionSuccess(_dataBaseEngine, ConnectionString, out string errMessage))
+            if (!DbUtil.ConnectionSuccess(_databaseEngine, ConnectionString, out string errMessage))
                 throw new Exception(errMessage);
 
-            if (!DbUtil.ExistsTable(_dataBaseEngine, ConnectionString, _dbLogTableName))
-                DbUtil.ExecuteBatchNonQuery(_dataBaseEngine, GetLogDbScript(), ConnectionString);
+            if (!DbUtil.ExistsTable(_databaseEngine, ConnectionString, _dbLogTableName))
+                DbUtil.ExecuteBatchNonQuery(_databaseEngine, GetLogDbScript(), ConnectionString);
 
             GetActiveConnection();
 
@@ -194,7 +194,7 @@ namespace SysWork.Data.LoggerDb
 
         private static void GetActiveConnection()
         {
-            _dbConnection = StaticDbObjectProvider.GetDbConnection(_dataBaseEngine, _connectionString);
+            _dbConnection = StaticDbObjectProvider.GetDbConnection(_databaseEngine, _connectionString);
             _dbConnection.Open();
         }
 
@@ -251,16 +251,16 @@ namespace SysWork.Data.LoggerDb
 
         private string GetLogDbScript()
         {
-            if (_dataBaseEngine == EDataBaseEngine.MSSqlServer)
+            if (_databaseEngine == EDatabaseEngine.MSSqlServer)
                 return GetLogDbScriptMSSQLServer();
-            else if (_dataBaseEngine == EDataBaseEngine.SqLite)
+            else if (_databaseEngine == EDatabaseEngine.SqLite)
                 return GetLogDbScriptSQLite();
-            else if (_dataBaseEngine == EDataBaseEngine.OleDb)
+            else if (_databaseEngine == EDatabaseEngine.OleDb)
                 return GetLogDbScriptOleDb();
-            else if (_dataBaseEngine == EDataBaseEngine.MySql)
+            else if (_databaseEngine == EDatabaseEngine.MySql)
                 return GetLogDbScriptMySql();
             else
-                throw new ArgumentOutOfRangeException("The DataBaseEngine, is not supported by this method");
+                throw new ArgumentOutOfRangeException("The DatabaseEngine, is not supported by this method");
         }
 
         private string GetLogDbScriptMySql()

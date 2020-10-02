@@ -1,11 +1,8 @@
-﻿using MySql.Data.MySqlClient;
-using System;
+﻿using System;
 using System.Configuration;
-using System.Data.OleDb;
-using System.Data.SqlClient;
-using System.Data.SQLite;
 using System.Text;
 using System.Windows.Forms;
+using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.DbConnector.Utilities
@@ -101,7 +98,7 @@ namespace SysWork.Data.DbConnector.Utilities
         /// <returns></returns>
         public static string DecryptedConnectionString(string encryptedConnectionString)
         {
-            return DecryptedConnectionString(EDataBaseEngine.MSSqlServer, encryptedConnectionString);
+            return DecryptedConnectionString(EDatabaseEngine.MSSqlServer, encryptedConnectionString);
         }
 
 
@@ -112,14 +109,14 @@ namespace SysWork.Data.DbConnector.Utilities
         /// <param name="encryptedConnectionString">The encrypted connection string.</param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method</exception>
-        public static string DecryptedConnectionString(EDataBaseEngine dataBaseEngine, string encryptedConnectionString)
+        public static string DecryptedConnectionString(EDatabaseEngine dataBaseEngine, string encryptedConnectionString)
         {
             string response = "";
+            dynamic connectionSb = StaticDbObjectProvider.GetDbConnectionStringBuilder(dataBaseEngine);
 
             switch (dataBaseEngine)
             {
-                case EDataBaseEngine.MSSqlServer:
-                    var connectionSb = new SqlConnectionStringBuilder();
+                case EDatabaseEngine.MSSqlServer:
                     connectionSb.ConnectionString = encryptedConnectionString;
 
                     connectionSb.UserID = Decrypt(connectionSb.UserID);
@@ -130,41 +127,38 @@ namespace SysWork.Data.DbConnector.Utilities
                     response = connectionSb.ConnectionString;
                     break;
 
-                case EDataBaseEngine.MySql:
-                    var connectionSbMySql = new MySqlConnectionStringBuilder();
-                    connectionSbMySql.ConnectionString = encryptedConnectionString;
+                case EDatabaseEngine.MySql:
+                    connectionSb.ConnectionString = encryptedConnectionString;
 
-                    connectionSbMySql.UserID = Decrypt(connectionSbMySql.UserID);
-                    connectionSbMySql.Password = Decrypt(connectionSbMySql.Password);
-                    connectionSbMySql.Server = Decrypt(connectionSbMySql.Server);
+                    connectionSb.UserID = Decrypt(connectionSb.UserID);
+                    connectionSb.Password = Decrypt(connectionSb.Password);
+                    connectionSb.Server = Decrypt(connectionSb.Server);
 
-                    if (!string.IsNullOrEmpty(connectionSbMySql.Database.Trim()))
-                        connectionSbMySql.Database = Decrypt(connectionSbMySql.Database);
+                    if (!string.IsNullOrEmpty(connectionSb.Database.Trim()))
+                        connectionSb.Database = Decrypt(connectionSb.Database);
 
-                    response = connectionSbMySql.ConnectionString;
+                    response = connectionSb.ConnectionString;
                     break;
 
-                case EDataBaseEngine.SqLite:
-                    var connectionSbSqlite = new SQLiteConnectionStringBuilder();
-                    connectionSbSqlite.ConnectionString = encryptedConnectionString;
+                case EDatabaseEngine.SqLite:
+                    connectionSb.ConnectionString = encryptedConnectionString;
 
-                    connectionSbSqlite.Password = Decrypt(connectionSbSqlite.Password);
-                    response = connectionSbSqlite.ConnectionString;
+                    connectionSb.Password = Decrypt(connectionSb.Password);
+                    response = connectionSb.ConnectionString;
 
                     break;
 
-                case EDataBaseEngine.OleDb:
-                    var connectionSbOleDb = new OleDbConnectionStringBuilder();
-                    connectionSbOleDb.ConnectionString = encryptedConnectionString;
+                case EDatabaseEngine.OleDb:
+                    connectionSb.ConnectionString = encryptedConnectionString;
 
-                    foreach (var key in connectionSbOleDb.Keys)
+                    foreach (var key in connectionSb.Keys)
                     {
-                        if (connectionSbOleDb.ContainsKey(key.ToString()))
-                            if (connectionSbOleDb[key.ToString()].GetType() == typeof(string))
-                                connectionSbOleDb[key.ToString()] = ConnectorUtilities.Decrypt(connectionSbOleDb[key.ToString()].ToString());
+                        if (connectionSb.ContainsKey(key.ToString()))
+                            if (connectionSb[key.ToString()].GetType() == typeof(string))
+                                connectionSb[key.ToString()] = ConnectorUtilities.Decrypt(connectionSb[key.ToString()].ToString());
                     }
 
-                    response = connectionSbOleDb.ConnectionString;
+                    response = connectionSb.ConnectionString;
                     break;
 
                 default:

@@ -64,7 +64,7 @@ namespace SysWork.Data.Common.Forms.GetParameters
             }
 
 
-            if (!DbUtil.IsValidConnectionString(EDataBaseEngine.OleDb, txtConnectionString.Text,out string errMessage))
+            if (!DbUtil.IsValidConnectionString(EDatabaseEngine.OleDb, txtConnectionString.Text,out string errMessage))
             {
                 MessageBox.Show($"Error en el formato de la cadena de conexion \r\n \r\n detalle del error: \r\n \r\n {errMessage} ", "Aviso al operador", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;

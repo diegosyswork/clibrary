@@ -5,13 +5,11 @@ using System.Data.OleDb;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.Filters;
 using SysWork.Data.GenericRepository.Exceptions;
-using SysWork.Data.Common.Interfaces.Actions;
-using SysWork.Data.Common.Mapper;
 using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.GenericRepository
 {
-    public abstract partial class BaseRepository<TEntity> : IGetListByGenericWhereFilter<TEntity>
+    public abstract partial class BaseRepository<TEntity> 
    {
         public IList<TEntity> GetListByGenericWhereFilter(GenericWhereFilter whereFilter)
         {
@@ -87,11 +85,11 @@ namespace SysWork.Data.GenericRepository
                     dbCommand.Parameters.Add(dbParameter);
                 }
 
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                if (_databaseEngine == EDatabaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                 var reader = dbCommand.ExecuteReader();
-                result = _mapper.Map<TEntity>(reader, EntityProperties, _dataBaseEngine);
+                result = _mapper.Map<TEntity>(reader, EntityProperties, _databaseEngine);
 
                 reader.Close();
                 reader.Dispose();

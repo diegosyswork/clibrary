@@ -42,8 +42,8 @@ namespace SysWork.Data.GenericDataManager
     ///    /// </summary>
     ///    void IDataManager.InitDataObjects()
     ///    {
-    ///        StateRepository = new StateRepository(ConnectionString, DataBaseEngine);
-    ///        PersonRepository = new PersonRepository(ConnectionString, DataBaseEngine);
+    ///        StateRepository = new StateRepository(ConnectionString, DatabaseEngine);
+    ///        PersonRepository = new PersonRepository(ConnectionString, DatabaseEngine);
     ///    }
     ///}
     /// ]]>
@@ -67,15 +67,6 @@ namespace SysWork.Data.GenericDataManager
             }
 
             return _TInstance;
-        }
-
-        /// <summary>
-        /// Gets the instance of this singleton. Abbreviation for GetInstance
-        /// </summary>
-        /// <returns></returns>
-        public static T I()
-        {
-            return GetInstance();
         }
 
         /// <summary>
@@ -105,21 +96,21 @@ namespace SysWork.Data.GenericDataManager
             }
         }
 
-        private static EDataBaseEngine _dataBaseEngine;
+        private static EDatabaseEngine _databaseEngine;
         /// <summary>Gets or sets the dataBase engine.</summary>
         /// <value>The EDatabaseEngine.</value>
-        public static EDataBaseEngine DataBaseEngine
+        public static EDatabaseEngine DatabaseEngine
         {
             get
             {
-                return _dataBaseEngine;
+                return _databaseEngine;
             }
             set
             {
-                if ((_dataBaseEngine != value) && (_TInstance !=null))
+                if ((_databaseEngine != value) && (_TInstance !=null))
                     _TInstance = null;
 
-                _dataBaseEngine = value;
+                _databaseEngine = value;
             }
         }
 
@@ -132,12 +123,12 @@ namespace SysWork.Data.GenericDataManager
         }
 
         /// <summary>
-        /// Returns a new instance of DbExecutor with the DataBaseEngine.
+        /// Returns a new instance of DbExecutor with the DatabaseEngine.
         /// </summary>
         /// <returns></returns>
         public DbExecutor GetDbExecutor()
         {
-            return new DbExecutor(_connectionString, _dataBaseEngine);
+            return new DbExecutor(_connectionString, _databaseEngine);
         }
 
         /// <summary>
@@ -165,7 +156,7 @@ namespace SysWork.Data.GenericDataManager
         /// <returns></returns>
         public DbConnection GetDbConnection()
         {
-            return StaticDbObjectProvider.GetDbConnection(_dataBaseEngine, _connectionString);
+            return StaticDbObjectProvider.GetDbConnection(_databaseEngine, _connectionString);
         }
 
         private DbConnection _persistentConnection = null;

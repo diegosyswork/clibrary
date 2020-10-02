@@ -87,12 +87,12 @@ namespace SysWork.Data.GenericViewManager
                     dbCommand.Parameters.Add(dbParameter);
                 }
 
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                if (_databaseEngine == EDatabaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
 
                 IDataReader reader = dbCommand.ExecuteReader();
-                result = _mapper.Map<TEntity>(reader, EntityProperties, _dataBaseEngine);
+                result = _mapper.Map<TEntity>(reader, EntityProperties, _databaseEngine);
 
                 reader.Close();
                 reader.Dispose();

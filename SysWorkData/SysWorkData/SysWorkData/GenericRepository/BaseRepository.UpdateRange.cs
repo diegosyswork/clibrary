@@ -4,17 +4,15 @@ using System.Data;
 using System.Data.OleDb;
 using System.Reflection;
 using System.Text;
-using SysWork.Data.Common;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.Attributes;
 using SysWork.Data.Common.DbInfo;
 using SysWork.Data.GenericRepository.Exceptions;
-using SysWork.Data.Common.Interfaces.Actions;
 using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.GenericRepository
 {
-    public abstract partial class BaseRepository<TEntity> : IUpdateRange<TEntity>
+    public abstract partial class BaseRepository<TEntity>
     {
         public bool UpdateRange(IList<TEntity> entities)
         {
@@ -163,7 +161,7 @@ namespace SysWork.Data.GenericRepository
                     if (dbTransaction != null)
                         dbCommand.Transaction = dbTransaction;
 
-                    if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                    if (_databaseEngine == EDatabaseEngine.OleDb)
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                     recordsAffected += dbCommand.ExecuteNonQuery();

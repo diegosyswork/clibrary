@@ -18,7 +18,7 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
     public class EntityClassFromView
     {
         private string _connectionString;
-        private EDataBaseEngine _databaseEngine;
+        private EDatabaseEngine _databaseEngine;
         private string _nameSpace;
         private string _dbViewName;
         private string _className;
@@ -27,14 +27,14 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityClassFromView"/> class.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <param name="ConnectionString">The connection string.</param>
         /// <param name="DbViewName">Name of the database view.</param>
         /// <param name="ClassName">Name of the class.</param>
         /// <param name="NameSpace">The name space.</param>
-        public EntityClassFromView(EDataBaseEngine dataBaseEngine, string ConnectionString, string DbViewName, string ClassName, string NameSpace)
+        public EntityClassFromView(EDatabaseEngine databaseEngine, string ConnectionString, string DbViewName, string ClassName, string NameSpace)
         {
-            EntityClassFromViewConstructorResolver(dataBaseEngine, ConnectionString, DbViewName, ClassName, NameSpace);
+            EntityClassFromViewConstructorResolver(databaseEngine, ConnectionString, DbViewName, ClassName, NameSpace);
         }
 
         /// <summary>
@@ -46,17 +46,17 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
         /// <param name="NameSpace">The name space.</param>
         public EntityClassFromView(string ConnectionString, string DbViewName, string ClassName, string NameSpace)
         {
-            EntityClassFromViewConstructorResolver(EDataBaseEngine.MSSqlServer, ConnectionString, DbViewName, ClassName, NameSpace);
+            EntityClassFromViewConstructorResolver(EDatabaseEngine.MSSqlServer, ConnectionString, DbViewName, ClassName, NameSpace);
         }
 
-        private void EntityClassFromViewConstructorResolver(EDataBaseEngine dataBaseEngine, string ConnectionString, string DbViewName, string ClassName, string NameSpace)
+        private void EntityClassFromViewConstructorResolver(EDatabaseEngine databaseEngine, string ConnectionString, string DbViewName, string ClassName, string NameSpace)
         {
             _connectionString = ConnectionString;
-            _databaseEngine = dataBaseEngine;
+            _databaseEngine = databaseEngine;
             _nameSpace = NameSpace;
             _dbViewName = DbViewName;
             _className = ClassName;
-            _syntaxProvider = new SyntaxProvider(dataBaseEngine);
+            _syntaxProvider = new SyntaxProvider(databaseEngine);
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
             {
                 dbConnection.Open();
 
-                if (_databaseEngine == EDataBaseEngine.OleDb || _databaseEngine == EDataBaseEngine.MySql)
+                if (_databaseEngine == EDatabaseEngine.OleDb || _databaseEngine == EDatabaseEngine.MySql)
                     columns = dbConnection.GetSchema("Columns", new[] { null, null, _dbViewName, null });
                 else
                     columns = dbConnection.GetSchema("Columns", new[] { dbConnection.Database, null, _dbViewName, null });
@@ -101,7 +101,7 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
                     var isNullable = (!nullable.Equals("no")) && (!nullable.Equals("false"));
 
                     var dataType = "";
-                    if (_databaseEngine== EDataBaseEngine.OleDb)
+                    if (_databaseEngine== EDatabaseEngine.OleDb)
                     {
                         if (DbTypeDictionary.DbColumnTypeToDbTypeEnum.TryGetValue(((OleDbType)dbType).ToString(), out DbType dBTypeValue))
                             dataType = dBTypeValue.ToString();

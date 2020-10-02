@@ -86,7 +86,7 @@ namespace SysWork.Data.GenericViewManager
                     dbCommand.Parameters.Add(dbParameter);
                 }
 
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                if (_databaseEngine == EDatabaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                 IDataReader reader = dbCommand.ExecuteReader(CommandBehavior.SingleRow);

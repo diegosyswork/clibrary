@@ -1,22 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.ValueObjects;
+using SysWork.Data.GenericDataManager.CodeWriter.Properties;
 
 namespace SysWork.Data.GenericDataManager.CodeWriter
 {
+    public enum EDatamagerStyle
+    {
+        Classic,
+        DbContext
+    }
+
     /// <summary>
     /// Write a DataManager Class
     /// </summary>
     public class DataManagerClassWriter
     {
         private string _connectionString;
-        private EDataBaseEngine _databaseEngine;
+        private EDatabaseEngine _databaseEngine;
+
+        private EDatamagerStyle _datamagerStyle;
 
         private string _nameSpace;
-        private List<string> _repositories;
-        private List<string> _viewManagers;
+        private List<DbObjectWriterProperty> _repositories;
+        private List<DbObjectWriterProperty> _viewManagers;
 
         private SyntaxProvider _syntaxProvider;
 
@@ -28,9 +38,9 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
         /// <param name="NameSpace">The name space.</param>
         /// <param name="Repositories"></param>
         /// <param name="ViewManagers"></param>
-        public DataManagerClassWriter(string ConnectionString, string NameSpace, List<string> Repositories,List<string> ViewManagers)
+        public DataManagerClassWriter(string ConnectionString, string NameSpace, List<DbObjectWriterProperty> Repositories,List<DbObjectWriterProperty> ViewManagers, EDatamagerStyle datamagerStyle)
         {
-            DataManagerClassWriterConstructorResolver(EDataBaseEngine.MSSqlServer, ConnectionString, NameSpace, Repositories, ViewManagers);
+            DataManagerClassWriterConstructorResolver(EDatabaseEngine.MSSqlServer, ConnectionString, NameSpace, Repositories, ViewManagers, datamagerStyle);
         }
 
         /// <summary>
@@ -41,15 +51,16 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
         /// <param name="NameSpace">The name space.</param>
         /// <param name="Repositories"></param>
         /// <param name="ViewManagers"></param>
-        public DataManagerClassWriter(EDataBaseEngine databaseEngine, string ConnectionString, string NameSpace, List<string> Repositories, List<string> ViewManagers)
+        public DataManagerClassWriter(EDatabaseEngine databaseEngine, string ConnectionString, string NameSpace, List<DbObjectWriterProperty> Repositories, List<DbObjectWriterProperty> ViewManagers, EDatamagerStyle datamagerStyle)
         {
-            DataManagerClassWriterConstructorResolver(databaseEngine, ConnectionString, NameSpace, Repositories, ViewManagers);
+            DataManagerClassWriterConstructorResolver(databaseEngine, ConnectionString, NameSpace, Repositories, ViewManagers, datamagerStyle);
         }
 
-        private void DataManagerClassWriterConstructorResolver(EDataBaseEngine databaseEngine, string ConnectionString, string NameSpace, List<string> Repositories, List<string> ViewManagers)
+        private void DataManagerClassWriterConstructorResolver(EDatabaseEngine databaseEngine, string ConnectionString, string NameSpace, List<DbObjectWriterProperty> Repositories, List<DbObjectWriterProperty> ViewManagers, EDatamagerStyle datamagerStyle)
         {
             _connectionString = ConnectionString;
             _databaseEngine = databaseEngine;
+            _datamagerStyle = datamagerStyle;
             _nameSpace = NameSpace;
             _repositories = Repositories;
             _viewManagers = ViewManagers;
@@ -80,7 +91,11 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
 
             builder.AppendLine(DataManagerCodeWriterHelper.StartNamespace(_nameSpace));
             builder.AppendLine(AddSummary());
-            builder.AppendLine(DataManagerCodeWriterHelper.StartClass("DataManager", "BaseDataManager<DataManager>, IDataManager"));
+            if (_datamagerStyle == EDatamagerStyle.Classic)
+                builder.AppendLine(DataManagerCodeWriterHelper.StartClass("DataManager", "BaseDataManager<DataManager>, IDataManager"));
+            else
+                builder.AppendLine(DataManagerCodeWriterHelper.StartClass("Db", "BaseDataManager<Db>, IDataManager"));
+
             builder.AppendLine(AddRepositories());
             builder.AppendLine(AddViewManagers());
             builder.AppendLine(AddPrivateConstructor());
@@ -95,6 +110,8 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
             string ret = "";
             if (_repositories != null)
             {
+                _repositories = _repositories.OrderBy(r => r.PublicPropertyName).ToList();
+
                 ret += "\t\t//Repositories" + Environment.NewLine;
                 foreach (var repository in _repositories)
                     ret += AddRepository(repository);
@@ -107,6 +124,8 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
             string ret = "";
             if (_viewManagers != null)
             {
+                _viewManagers = _viewManagers.OrderBy(r => r.PublicPropertyName).ToList();
+
                 ret += "\t\t//ViewManagers" + Environment.NewLine;
                 foreach (var viewManager in _viewManagers)
                     ret += AddViewManager(viewManager);
@@ -115,25 +134,34 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
             return ret;
         }
 
-        private string AddRepository(string repositoryName)
+        private string AddRepository(DbObjectWriterProperty repository)
         {
             string ret = "";
-
             //Ver. 1.0   ret += $"\t\tpublic {repositoryName} {repositoryName} {{get; private set;}}" + Environment.NewLine;
+            var repositoryVariable = GetRepositoryVariable(repository.ObjectName);
+            ret += $"\t\tprivate Lazy<{repository.ObjectName}> {repositoryVariable};" + Environment.NewLine;
 
-            ret += $"\t\tprivate Lazy<{repositoryName}> {GetRepositoryVariable(repositoryName)};" + Environment.NewLine;
-            ret += $"\t\tpublic {repositoryName} {repositoryName} {{get => {GetRepositoryVariable(repositoryName)}.Value;}}" + Environment.NewLine + Environment.NewLine;
+            if (_datamagerStyle == EDatamagerStyle.Classic)
+                ret += $"\t\tpublic {repository.ObjectName} {repository.PublicPropertyName} {{get => {repositoryVariable}.Value;}}" + Environment.NewLine + Environment.NewLine;
+            else
+                ret += $"\t\tpublic static {repository.ObjectName} {repository.PublicPropertyName} {{get => GetInstance().{repositoryVariable}.Value;}}" + Environment.NewLine + Environment.NewLine;
 
             return ret;
         }
 
-        private string AddViewManager(string viewManagerName)
+        private string AddViewManager(DbObjectWriterProperty viewManager)
         {
             string ret = "";
 
             //Ver 1.0 ret += $"\t\tpublic {viewManager} {viewManager} {{get; private set;}}" + Environment.NewLine;
-            ret += $"\t\tprivate Lazy<{viewManagerName}> {GetViewManagerVariable(viewManagerName)};" + Environment.NewLine;
-            ret += $"\t\tpublic {viewManagerName} {viewManagerName} {{get => {GetViewManagerVariable(viewManagerName)}.Value;}}" + Environment.NewLine;
+            var viewManagerVariable = GetRepositoryVariable(viewManager.ObjectName);
+
+            ret += $"\t\tprivate Lazy<{viewManager.ObjectName}> {viewManagerVariable};" + Environment.NewLine;
+            if (_datamagerStyle == EDatamagerStyle.Classic)
+                ret += $"\t\tpublic {viewManager} {viewManager} {{get => GetInstance().{viewManagerVariable}.Value;}}" + Environment.NewLine;
+            else
+                ret += $"\t\tpublic static {viewManager.ObjectName} {viewManager.PublicPropertyName} {{get => GetInstance().{viewManagerVariable}.Value;}}" + Environment.NewLine + Environment.NewLine;
+
             return ret;
         }
 
@@ -149,15 +177,14 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
             {
                 ret += "\t\t\t//Repositories" + Environment.NewLine;
                 foreach (var repository in _repositories)
-                    ret += AddRepositoryInstance(repository);
+                    ret += AddRepositoryInstance(repository.ObjectName);
             }
-
 
             if (_viewManagers != null)
             {
                 ret += "\r\n\t\t\t//ViewManagers" + Environment.NewLine;
                 foreach (var viewManager in _viewManagers)
-                    ret += AddViewManagerInstance(viewManager);
+                    ret += AddViewManagerInstance(viewManager.ObjectName);
             }
 
             ret += "\t\t}" + Environment.NewLine;
@@ -170,16 +197,16 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
         {
             string ret = "";
 
-            //Ver 1.0 ret += $"\t\t\t{repositoryName}  = new {repositoryName}(ConnectionString,DataBaseEngine);" + Environment.NewLine;
-            ret += $"\t\t\t{GetRepositoryVariable(repositoryName)}  = new Lazy<{repositoryName}>(()=>new {repositoryName}(ConnectionString,DataBaseEngine));" + Environment.NewLine;
+            //Ver 1.0 ret += $"\t\t\t{repositoryName}  = new {repositoryName}(ConnectionString,DatabaseEngine);" + Environment.NewLine;
+            ret += $"\t\t\t{GetRepositoryVariable(repositoryName)}  = new Lazy<{repositoryName}>(()=>new {repositoryName}(ConnectionString,DatabaseEngine));" + Environment.NewLine;
             return ret;
         }
         private string AddViewManagerInstance(string viewManagerName)
         {
             string ret = "";
 
-            //Ver 1.0 ret += $"\t\t\t{viewManagerName}  = new {viewManagerName}(ConnectionString,DataBaseEngine);" + Environment.NewLine;
-            ret += $"\t\t\t{GetViewManagerVariable(viewManagerName)}  = new Lazy<{viewManagerName}>(()=>new {viewManagerName}(ConnectionString,DataBaseEngine));" + Environment.NewLine;
+            //Ver 1.0 ret += $"\t\t\t{viewManagerName}  = new {viewManagerName}(ConnectionString,DatabaseEngine);" + Environment.NewLine;
+            ret += $"\t\t\t{GetViewManagerVariable(viewManagerName)}  = new Lazy<{viewManagerName}>(()=>new {viewManagerName}(ConnectionString,DatabaseEngine));" + Environment.NewLine;
 
             return ret;
         }
@@ -188,9 +215,13 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
         {
             string ret = "";
 
-            ret += "\t\tprivate DataManager()" + Environment.NewLine;
+            if (_datamagerStyle == EDatamagerStyle.Classic)
+                ret += "\t\tprivate DataManager()" + Environment.NewLine;
+            else
+                ret += "\t\tprivate Db()" + Environment.NewLine;
+
             ret += "\t\t{" + Environment.NewLine;
-            ret += "\t\t" + Environment.NewLine;
+            ret += "\t\t"  + Environment.NewLine;
             ret += "\t\t}" + Environment.NewLine;
 
             return ret;

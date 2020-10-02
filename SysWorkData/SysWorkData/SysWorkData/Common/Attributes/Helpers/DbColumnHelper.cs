@@ -19,7 +19,7 @@ namespace SysWork.Data.Common.Attributes.Helpers
         /// <returns></returns>
         public static string GetColumnsForSelect<TEntity>() where TEntity : class, new()
         {
-            return GetColumnsForSelect<TEntity>(EDataBaseEngine.MSSqlServer);
+            return GetColumnsForSelect<TEntity>(EDatabaseEngine.MSSqlServer);
         }
 
         /// <summary>
@@ -27,11 +27,11 @@ namespace SysWork.Data.Common.Attributes.Helpers
         /// The properties of entity must be have a DbColumn attribute
         /// </summary>
         /// <typeparam name="TEntity">The type of the entity.</typeparam>
-        public static string GetColumnsForSelect<TEntity>(EDataBaseEngine dataBaseEngine) where TEntity : class, new()
+        public static string GetColumnsForSelect<TEntity>(EDatabaseEngine databaseEngine) where TEntity : class, new()
         {
             TEntity entity = new TEntity();
             var sbColumnsSelect = new StringBuilder();
-            var syntaxProvider = new SyntaxProvider(dataBaseEngine);
+            var syntaxProvider = new SyntaxProvider(databaseEngine);
 
             foreach (PropertyInfo i in GetProperties(entity))
             {
@@ -54,19 +54,19 @@ namespace SysWork.Data.Common.Attributes.Helpers
         /// <returns></returns>
         public static string GetColumnsForInsert<TEntity>() where TEntity : class, new()
         {
-            return GetColumnsForInsert<TEntity>(EDataBaseEngine.MSSqlServer);
+            return GetColumnsForInsert<TEntity>(EDatabaseEngine.MSSqlServer);
         }
         /// <summary>
         /// Gets the columns for insert.
         /// </summary>
         /// <typeparam name="TEntity">The type of the entity.</typeparam>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <returns></returns>
-        public static string GetColumnsForInsert<TEntity>(EDataBaseEngine dataBaseEngine) where TEntity : class, new()
+        public static string GetColumnsForInsert<TEntity>(EDatabaseEngine databaseEngine) where TEntity : class, new()
         {
             TEntity entity = new TEntity();
             var sbColumnsInsert = new StringBuilder();
-            var syntaxProvider = new SyntaxProvider(dataBaseEngine);
+            var syntaxProvider = new SyntaxProvider(databaseEngine);
 
             string columnName ="";
             foreach (PropertyInfo i in GetProperties(entity))

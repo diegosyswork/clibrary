@@ -54,7 +54,7 @@ namespace SysWork.Data.Common.DbConnector
 
             if (!BeforeConnectShowDefaultsParameters)
             {
-                hasConnectionSuccess = DbUtil.ConnectionSuccess(EDataBaseEngine.OleDb, connectionSb.ConnectionString.ToString(), out errMessage);
+                hasConnectionSuccess = DbUtil.ConnectionSuccess(EDatabaseEngine.OleDb, connectionSb.ConnectionString.ToString(), out errMessage);
                 ConnectionError = errMessage;
             }
 
@@ -81,7 +81,7 @@ namespace SysWork.Data.Common.DbConnector
                         connectionSb.ConnectionString = frmGetParamOleDb.ConnectionString;
                     }
 
-                    hasConnectionSuccess = DbUtil.ConnectionSuccess(EDataBaseEngine.OleDb , connectionSb.ConnectionString.ToString(), out errMessage);
+                    hasConnectionSuccess = DbUtil.ConnectionSuccess(EDatabaseEngine.OleDb , connectionSb.ConnectionString.ToString(), out errMessage);
                     ConnectionError = errMessage;
                 }
                 else

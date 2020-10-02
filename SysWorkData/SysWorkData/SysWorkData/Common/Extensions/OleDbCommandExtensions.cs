@@ -15,8 +15,7 @@ using System.Text.RegularExpressions;
     Básicamente reemplaza todas las referencias de parámetros en la declaración de SQL con signos de interrogación y 
     reordena la lista de parámetros en consecuencia. 
     Funciona de la misma manera para la clase OdbcCommand, solo necesita reemplazar "OleDb" con "Odbc" en el código.
-
-
+    
     Gloria a DIOS por StackOverflow
     https://stackoverflow.com/questions/2407685/oledbparameters-and-parameter-names
 */

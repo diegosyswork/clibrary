@@ -77,11 +77,11 @@ namespace SysWork.Data.GenericViewManager
                 foreach (var parameters in query.QueryParameters)
                     dbCommand.Parameters.Add(CreateIDbDataParameter("@" + parameters.Key, parameters.Value));
 
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                if (_databaseEngine == EDatabaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                 IDataReader reader = dbCommand.ExecuteReader();
-                result = _mapper.Map<TEntity>(reader, EntityProperties, _dataBaseEngine);
+                result = _mapper.Map<TEntity>(reader, EntityProperties, _databaseEngine);
 
                 reader.Close();
                 reader.Dispose();

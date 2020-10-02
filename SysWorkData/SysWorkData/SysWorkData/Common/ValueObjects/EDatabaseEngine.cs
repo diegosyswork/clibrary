@@ -3,7 +3,7 @@ namespace SysWork.Data.Common.ValueObjects
     /// <summary>
     /// Supported Database Engines.
     /// </summary>
-    public enum EDataBaseEngine
+    public enum EDatabaseEngine
     {
         /// <summary>
         /// Microsoft SQL Server

@@ -35,18 +35,18 @@ namespace SysWork.Data.Common.Mapper
         /// <returns></returns>
         public IList<T> Map<T>(IDataReader reader) where T : class, new()
         {
-            return Map<T>(reader, null, EDataBaseEngine.MSSqlServer);
+            return Map<T>(reader, null, EDatabaseEngine.MSSqlServer);
         }
         /// <summary>
         /// Maps the specified reader.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="reader">The reader.</param>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <returns></returns>
-        public IList<T> Map<T>(IDataReader reader, EDataBaseEngine dataBaseEngine) where T : class, new()
+        public IList<T> Map<T>(IDataReader reader, EDatabaseEngine databaseEngine) where T : class, new()
         {
-            return Map<T>(reader, null, dataBaseEngine);
+            return Map<T>(reader, null, databaseEngine);
         }
 
         /// <summary>
@@ -55,11 +55,11 @@ namespace SysWork.Data.Common.Mapper
         /// <typeparam name="T"></typeparam>
         /// <param name="reader">The reader.</param>
         /// <param name="properties">The list object property information.</param>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <returns></returns>
-        public IList<T> Map<T>(IDataReader reader, IList<PropertyInfo> properties, EDataBaseEngine dataBaseEngine) where T : class, new()
+        public IList<T> Map<T>(IDataReader reader, IList<PropertyInfo> properties, EDatabaseEngine databaseEngine) where T : class, new()
         {
-            _syntaxProvider = new SyntaxProvider(dataBaseEngine);
+            _syntaxProvider = new SyntaxProvider(databaseEngine);
 
             T aux = new T();
 
@@ -117,7 +117,7 @@ namespace SysWork.Data.Common.Mapper
         /// <returns></returns>
         public TEntity MapSingle<TEntity>(IDataReader reader) where TEntity : class, new()
         {
-            return MapSingle<TEntity>(reader, null, EDataBaseEngine.MSSqlServer);
+            return MapSingle<TEntity>(reader, null, EDatabaseEngine.MSSqlServer);
         }
 
         /// <summary>
@@ -125,11 +125,11 @@ namespace SysWork.Data.Common.Mapper
         /// </summary>
         /// <typeparam name="TEntity">The type of the entity.</typeparam>
         /// <param name="reader">The reader.</param>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <returns></returns>
-        public TEntity MapSingle<TEntity>(IDataReader reader, EDataBaseEngine dataBaseEngine) where TEntity : class, new()
+        public TEntity MapSingle<TEntity>(IDataReader reader, EDatabaseEngine databaseEngine) where TEntity : class, new()
         {
-            return MapSingle<TEntity>(reader, null, dataBaseEngine);
+            return MapSingle<TEntity>(reader, null, databaseEngine);
         }
 
         /// <summary>
@@ -138,11 +138,11 @@ namespace SysWork.Data.Common.Mapper
         /// <typeparam name="TEntity">The type of the entity.</typeparam>
         /// <param name="reader">The reader.</param>
         /// <param name="properties">The list object property information.</param>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <returns></returns>
-        public TEntity MapSingle<TEntity>(IDataReader reader, IList<PropertyInfo> properties, EDataBaseEngine dataBaseEngine) where TEntity : class, new()
+        public TEntity MapSingle<TEntity>(IDataReader reader, IList<PropertyInfo> properties, EDatabaseEngine databaseEngine) where TEntity : class, new()
         {
-            _syntaxProvider = new SyntaxProvider(dataBaseEngine);
+            _syntaxProvider = new SyntaxProvider(databaseEngine);
 
             TEntity obj = new TEntity();
 

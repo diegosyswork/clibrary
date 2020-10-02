@@ -82,7 +82,7 @@ namespace SysWork.Data.Common.DbConnector
                         connectionSb.ConnectionString = frmGetParamSQLite.ConnectionString;
                     }
 
-                    hasConnectionSuccess = DbUtil.ConnectionSuccess(EDataBaseEngine.SqLite, connectionSb.ConnectionString.ToString(), out string mensajeError);
+                    hasConnectionSuccess = DbUtil.ConnectionSuccess(EDatabaseEngine.SqLite, connectionSb.ConnectionString.ToString(), out string mensajeError);
                     ConnectionError = mensajeError;
                 }
                 else

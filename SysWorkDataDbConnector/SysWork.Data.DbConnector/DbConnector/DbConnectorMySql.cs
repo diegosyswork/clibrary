@@ -60,7 +60,7 @@ namespace SysWork.Data.Common.DbConnector
 
             if (!BeforeConnectShowDefaultsParameters)
             {
-                hasConnectionSuccess = DbUtil.ConnectionSuccess(EDataBaseEngine.MySql, connectionSb.ConnectionString.ToString(), out errMessage);
+                hasConnectionSuccess = DbUtil.ConnectionSuccess(EDatabaseEngine.MySql, connectionSb.ConnectionString.ToString(), out errMessage);
                 ConnectionError = errMessage;
             }
 
@@ -104,7 +104,7 @@ namespace SysWork.Data.Common.DbConnector
                             connectionSb.Database = frmGetParamMySQL.DataBase;
                     }
 
-                    hasConnectionSuccess = DbUtil.ConnectionSuccess(EDataBaseEngine.MySql, connectionSb.ConnectionString.ToString(), out errMessage);
+                    hasConnectionSuccess = DbUtil.ConnectionSuccess(EDatabaseEngine.MySql, connectionSb.ConnectionString.ToString(), out errMessage);
                     ConnectionError = errMessage;
                 }
                 else

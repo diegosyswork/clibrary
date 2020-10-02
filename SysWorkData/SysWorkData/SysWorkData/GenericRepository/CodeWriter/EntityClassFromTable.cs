@@ -15,7 +15,7 @@ namespace SysWork.Data.GenericRepository.CodeWriter
     public class EntityClassFromTable
     {
         private string _connectionString;
-        private EDataBaseEngine _databaseEngine;
+        private EDatabaseEngine _databaseEngine;
         private string _nameSpace;
         private string _dbTableName;
         private string _className;
@@ -24,14 +24,14 @@ namespace SysWork.Data.GenericRepository.CodeWriter
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityClassFromTable"/> class.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <param name="ConnectionString">The connection string.</param>
         /// <param name="DbTableName">Name of the database table.</param>
         /// <param name="ClassName">Name of the class.</param>
         /// <param name="NameSpace">The name space.</param>
-        public EntityClassFromTable(EDataBaseEngine dataBaseEngine, string ConnectionString, string DbTableName, string ClassName, string NameSpace)
+        public EntityClassFromTable(EDatabaseEngine databaseEngine, string ConnectionString, string DbTableName, string ClassName, string NameSpace)
         {
-            EntityClassFromDbConstructorResolver(dataBaseEngine, ConnectionString, DbTableName, ClassName, NameSpace);
+            EntityClassFromDbConstructorResolver(databaseEngine, ConnectionString, DbTableName, ClassName, NameSpace);
         }
 
         /// <summary>
@@ -45,17 +45,17 @@ namespace SysWork.Data.GenericRepository.CodeWriter
         
         public EntityClassFromTable(string ConnectionString,string DbTableName,string ClassName,string NameSpace)
         {
-            EntityClassFromDbConstructorResolver(EDataBaseEngine.MSSqlServer, ConnectionString, DbTableName, ClassName, NameSpace);
+            EntityClassFromDbConstructorResolver(EDatabaseEngine.MSSqlServer, ConnectionString, DbTableName, ClassName, NameSpace);
         }
         
-        private void EntityClassFromDbConstructorResolver(EDataBaseEngine dataBaseEngine, string ConnectionString, string DbTableName, string ClassName, string NameSpace)
+        private void EntityClassFromDbConstructorResolver(EDatabaseEngine databaseEngine, string ConnectionString, string DbTableName, string ClassName, string NameSpace)
         {
             _connectionString = ConnectionString;
-            _databaseEngine = dataBaseEngine;
+            _databaseEngine = databaseEngine;
             _nameSpace = NameSpace;
             _dbTableName = DbTableName;
             _className = ClassName;
-            _syntaxProvider = new SyntaxProvider(dataBaseEngine);
+            _syntaxProvider = new SyntaxProvider(databaseEngine);
         }
 
         /// <summary>
@@ -93,16 +93,16 @@ namespace SysWork.Data.GenericRepository.CodeWriter
                     bool isIdentity=false;
                     switch (_databaseEngine)
                     {
-                        case EDataBaseEngine.MSSqlServer:
+                        case EDatabaseEngine.MSSqlServer:
                             isIdentity = (bool)dataRow["IsIdentity"];
                             break;
-                        case EDataBaseEngine.SqLite:
+                        case EDatabaseEngine.SqLite:
                             isIdentity = (bool)dataRow["IsAutoIncrement"];
                             break;
-                        case EDataBaseEngine.OleDb:
+                        case EDatabaseEngine.OleDb:
                             isIdentity = (bool)dataRow["IsAutoIncrement"];
                             break;
-                        case EDataBaseEngine.MySql:
+                        case EDatabaseEngine.MySql:
                             isIdentity = (bool)dataRow["IsAutoIncrement"];
                             break;
                         default:

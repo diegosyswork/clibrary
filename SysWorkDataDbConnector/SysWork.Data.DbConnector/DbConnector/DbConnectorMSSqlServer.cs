@@ -61,7 +61,7 @@ namespace SysWork.Data.Common.DbConnector
 
             if (!BeforeConnectShowDefaultsParameters)
             {
-                hasConnectionSuccess = DbUtil.ConnectionSuccess(EDataBaseEngine.MSSqlServer, connectionSb.ConnectionString.ToString(), out errMessage);
+                hasConnectionSuccess = DbUtil.ConnectionSuccess(EDatabaseEngine.MSSqlServer, connectionSb.ConnectionString.ToString(), out errMessage);
                 ConnectionError = errMessage;
             }
 
@@ -104,7 +104,7 @@ namespace SysWork.Data.Common.DbConnector
                             connectionSb.InitialCatalog = frmGetParamSQL.DataBase;
                     }
 
-                    hasConnectionSuccess = DbUtil.ConnectionSuccess(EDataBaseEngine.MSSqlServer,connectionSb.ConnectionString.ToString(), out errMessage);
+                    hasConnectionSuccess = DbUtil.ConnectionSuccess(EDatabaseEngine.MSSqlServer,connectionSb.ConnectionString.ToString(), out errMessage);
                     ConnectionError = errMessage;
                 }
                 else

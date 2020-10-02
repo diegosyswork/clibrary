@@ -19,6 +19,7 @@ using SysWork.Data.Common.Mapper;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.Utilities;
 using SysWork.Data.Common.ValueObjects;
+using SysWork.Data.GenericRepository.Interfaces;
 
 #pragma warning disable 1587
 /// <summary>
@@ -53,7 +54,7 @@ namespace SysWork.Data.GenericRepository
     /// <seealso cref="SysWork.Data.Common.Attributes"/>
     /// </summary>
     /// <remarks>
-    /// This class is multi database engine, see the supported database engines <see cref="Common.ValueObjects.EDataBaseEngine"/>. 
+    /// This class is multi database engine, see the supported database engines <see cref="Common.ValueObjects.EDatabaseEngine"/>. 
     /// 
     /// All its methods, in case of not specifying a connection, create a new one and at the end they close it.
     /// 
@@ -62,7 +63,7 @@ namespace SysWork.Data.GenericRepository
     /// In case a transaction and a connection are specified, the ones provided will be used.
     /// </remarks>
     #endregion
-    public abstract partial class BaseRepository<TEntity> where TEntity : class, new()
+    public abstract partial class BaseRepository<TEntity>:IRepository<TEntity> where TEntity : class, new()
     {
 
         private string _connectionString;
@@ -71,12 +72,12 @@ namespace SysWork.Data.GenericRepository
         /// </summary>
         public string ConnectionString { get { return _connectionString; } }
 
-        private EDataBaseEngine _dataBaseEngine;
+        private EDatabaseEngine _databaseEngine;
         /// <summary>
         /// Gets the Database Engine.
         /// </summary>
-        /// <seealso cref=" SysWork.Data.Common.ValueObjects.EDataBaseEngine"/>
-        public EDataBaseEngine DataBaseEngine { get { return _dataBaseEngine; } }
+        /// <seealso cref=" SysWork.Data.Common.ValueObjects.EDatabaseEngine"/>
+        public EDatabaseEngine DatabaseEngine { get { return _databaseEngine; } }
 
         private Hashtable _columnListWithDbInfo = new Hashtable();
 
@@ -120,30 +121,30 @@ namespace SysWork.Data.GenericRepository
         protected int DefaultCommandTimeOut {get { return _defaultCommandTimeout; } set {_defaultCommandTimeout = value;}}
 
         /// <summary>
-        /// Initializes a new instance class. Using MSSqlServer as DataBaseEngine.
+        /// Initializes a new instance class. Using MSSqlServer as DatabaseEngine.
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
         public BaseRepository(string connectionString)
         {
-            BaseRepositoryConstructorResolver(connectionString, EDataBaseEngine.MSSqlServer);
+            BaseRepositoryConstructorResolver(connectionString, EDatabaseEngine.MSSqlServer);
         }
 
         /// <summary>
         /// Initializes a new instance class.
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
-        /// <param name="dataBaseEngine">The data base engine.</param>
-        public BaseRepository(string connectionString, EDataBaseEngine dataBaseEngine)
+        /// <param name="databaseEngine">The data base engine.</param>
+        public BaseRepository(string connectionString, EDatabaseEngine databaseEngine)
         {
-            BaseRepositoryConstructorResolver(connectionString, dataBaseEngine);
+            BaseRepositoryConstructorResolver(connectionString, databaseEngine);
         }
 
-        private void BaseRepositoryConstructorResolver(string connectionString, EDataBaseEngine dataBaseEngine)
+        private void BaseRepositoryConstructorResolver(string connectionString, EDatabaseEngine databaseEngine)
         {
             _connectionString = connectionString;
-            _dataBaseEngine = dataBaseEngine;
-            _syntaxProvider = new SyntaxProvider(_dataBaseEngine);
-            _dbObjectProvider = new DbObjectProvider(_dataBaseEngine);
+            _databaseEngine = databaseEngine;
+            _syntaxProvider = new SyntaxProvider(_databaseEngine);
+            _dbObjectProvider = new DbObjectProvider(_databaseEngine);
 
             _mapper = new MapDataReaderToEntity();
             _mapper.UseTypeCache = false;
@@ -175,7 +176,7 @@ namespace SysWork.Data.GenericRepository
         /// <returns></returns>
         public GenericWhereFilter GetGenericWhereFilter()
         {
-            GenericWhereFilter whereFilter = new GenericWhereFilter(_dataBaseEngine);
+            GenericWhereFilter whereFilter = new GenericWhereFilter(_databaseEngine);
             whereFilter.SetColumnsForSelect<TEntity>();
             whereFilter.SetTableOrViewName<TEntity>();
 
@@ -212,7 +213,7 @@ namespace SysWork.Data.GenericRepository
         /// </returns>
         protected DbExecutor BaseDbExecutor()
         {
-            return new DbExecutor(_connectionString, _dataBaseEngine);
+            return new DbExecutor(_connectionString, _databaseEngine);
         }
         /// <summary>
         /// A new instance of DbExecute instantiated according to the database engine. Using a DbConnection.
@@ -295,7 +296,7 @@ namespace SysWork.Data.GenericRepository
             DbColumnInfo columnData = new DbColumnInfo();
 
             DataTable columnProperty;
-            if (_dataBaseEngine == EDataBaseEngine.OleDb || _dataBaseEngine == EDataBaseEngine.MySql)
+            if (_databaseEngine == EDatabaseEngine.OleDb || _databaseEngine == EDatabaseEngine.MySql)
                 columnProperty = dbConnection.GetSchema("Columns", new[] { null, null, TableName, columnName });
             else
                 columnProperty = dbConnection.GetSchema("Columns", new[] { dbConnection.Database, null, TableName, columnName });
@@ -316,7 +317,7 @@ namespace SysWork.Data.GenericRepository
 
             var dataType = dataRow["DATA_TYPE"];
 
-            if (_dataBaseEngine == EDataBaseEngine.OleDb)
+            if (_databaseEngine == EDatabaseEngine.OleDb)
             {
                 if (DbTypeDictionary.DbColumnTypeToDbTypeEnum.TryGetValue(((OleDbType)dataType).ToString(), out DbType dBTypeValue))
                     columnData.DbType = dBTypeValue;
@@ -393,13 +394,13 @@ namespace SysWork.Data.GenericRepository
 
         private void SetSqlLamAdapter()
         {
-            if (_dataBaseEngine == EDataBaseEngine.MSSqlServer)
+            if (_databaseEngine == EDatabaseEngine.MSSqlServer)
                 SqlLam<TEntity>.SetAdapter(SqlAdapter.SqlServer2012);
-            else if (_dataBaseEngine == EDataBaseEngine.OleDb)
+            else if (_databaseEngine == EDatabaseEngine.OleDb)
                 SqlLam<TEntity>.SetAdapter(SqlAdapter.SqlServer2012);
-            else if (_dataBaseEngine == EDataBaseEngine.MySql)
+            else if (_databaseEngine == EDatabaseEngine.MySql)
                 SqlLam<TEntity>.SetAdapter(SqlAdapter.MySql);
-            else if (_dataBaseEngine == EDataBaseEngine.SqLite)
+            else if (_databaseEngine == EDatabaseEngine.SqLite)
                 SqlLam<TEntity>.SetAdapter(SqlAdapter.SQLite);
             else
                 throw new ArgumentOutOfRangeException("The databaseEngine is not supported by this method");

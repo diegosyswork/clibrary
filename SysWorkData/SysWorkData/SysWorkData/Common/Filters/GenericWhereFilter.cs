@@ -21,7 +21,7 @@ namespace SysWork.Data.Common.Filters
     /// <code>
     /// <![CDATA[
     /// 
-    ///   var whereFilterSelect = new GenericWhereFilter(EDataBaseEngine.MSSqlServer);
+    ///   var whereFilterSelect = new GenericWhereFilter(EDatabaseEngine.MSSqlServer);
     ///   
     ///   // Sets the columns for select
     ///   whereFilterSelect.SetColumnsForSelect<TEntity>();
@@ -43,7 +43,7 @@ namespace SysWork.Data.Common.Filters
     {
         private const string _filterParameterPrefix = "@p_dbex_";
         private SyntaxProvider _syntaxProvider;
-        private EDataBaseEngine _databaseEngine;
+        private EDatabaseEngine _databaseEngine;
 
         private string _columnsForSelect;
         /// <summary>
@@ -135,19 +135,19 @@ namespace SysWork.Data.Common.Filters
         /// </summary>
         public GenericWhereFilter()
         {
-            GenericFilterQueryConstructorResolver(EDataBaseEngine.MSSqlServer);
+            GenericFilterQueryConstructorResolver(EDatabaseEngine.MSSqlServer);
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GenericWhereFilter"/> class.
         /// </summary>
         /// <param name="databaseEngine">The database engine.</param>
-        public GenericWhereFilter(EDataBaseEngine databaseEngine)
+        public GenericWhereFilter(EDatabaseEngine databaseEngine)
         {
             GenericFilterQueryConstructorResolver(databaseEngine);
         }
 
-        private void GenericFilterQueryConstructorResolver(EDataBaseEngine databaseEngine)
+        private void GenericFilterQueryConstructorResolver(EDatabaseEngine databaseEngine)
         {
             _databaseEngine = databaseEngine;
             _syntaxProvider = new SyntaxProvider(_databaseEngine);

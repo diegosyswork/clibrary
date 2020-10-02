@@ -9,7 +9,7 @@ namespace SysWork.Data.Common.DbConnector
     public class DataBaseConnector:IDbConnector
     {
         private IDbConnector _dbObjectConnector;
-        private EDataBaseEngine _dataBaseEngine { get; set; }
+        private EDatabaseEngine _dataBaseEngine { get; set; }
 
         /// <summary>
         /// Devuelve o Establece el nombre de la cadena de conexion dentro del archivos de configuracion
@@ -103,32 +103,32 @@ namespace SysWork.Data.Common.DbConnector
         /// </summary>
         public DataBaseConnector()
         {
-            ResolveConstructor(EDataBaseEngine.MSSqlServer);
+            ResolveConstructor(EDatabaseEngine.MSSqlServer);
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="DataBaseConnector"/> class.
         /// </summary>
         /// <param name="dataBaseEngine">The data base engine.</param>
-        public DataBaseConnector(EDataBaseEngine dataBaseEngine)
+        public DataBaseConnector(EDatabaseEngine dataBaseEngine)
         {
             ResolveConstructor(dataBaseEngine);
         }
 
-        private void ResolveConstructor(EDataBaseEngine dataBaseEngine)
+        private void ResolveConstructor(EDatabaseEngine dataBaseEngine)
         {
             _dataBaseEngine = dataBaseEngine;
             switch (_dataBaseEngine)
             {
-                case EDataBaseEngine.MSSqlServer:
+                case EDatabaseEngine.MSSqlServer:
                     _dbObjectConnector = new DbConnectorMSSqlServer();
                     break;
-                case EDataBaseEngine.SqLite:
+                case EDatabaseEngine.SqLite:
                     _dbObjectConnector = new DbConnectorSqLite();
                     break;
-                case EDataBaseEngine.OleDb:
+                case EDatabaseEngine.OleDb:
                     _dbObjectConnector = new DbConnectorOleDb();
                     break;
-                case EDataBaseEngine.MySql:
+                case EDatabaseEngine.MySql:
                     _dbObjectConnector = new DbConnectorMySql();
                     break;
                 default:

@@ -10,7 +10,7 @@ namespace SysWork.Data.Common.DataObjectProvider
     /// Implement the Abstract Factory Method Pattern.
     /// </summary>
     ///<remarks>
-    /// This class, depending of the dataBaseEngine <see cref="Common.ValueObjects.EDataBaseEngine"/> passed in the constructor, 
+    /// This class, depending of the databaseEngine <see cref="Common.ValueObjects.EDatabaseEngine"/> passed in the constructor, 
     /// is responsible for providing the different Database Objects 
     /// using the "DataObjectCreators" that implement AbstractDataObjectCreator.
     /// </remarks> 
@@ -21,22 +21,22 @@ namespace SysWork.Data.Common.DataObjectProvider
         /// <summary>
         /// Initializes a new instance of the <see cref="DbObjectProvider"/> class.
         /// </summary>
-        /// <param name="dataBaseEngine">The data base engine.</param>
+        /// <param name="databaseEngine">The data base engine.</param>
         /// <exception cref="ArgumentOutOfRangeException">The databaseEngine value is not supported by this method.</exception>
-        public DbObjectProvider(EDataBaseEngine dataBaseEngine)
+        public DbObjectProvider(EDatabaseEngine databaseEngine)
         {
-            switch (dataBaseEngine)
+            switch (databaseEngine)
             {
-                case EDataBaseEngine.MSSqlServer:
+                case EDatabaseEngine.MSSqlServer:
                     _dataObjectCreator = new DataObjectCreatorMSSqlServer();
                     break;
-                case EDataBaseEngine.SqLite:
+                case EDatabaseEngine.SqLite:
                     _dataObjectCreator = new DataObjectCreatorSQLite();
                     break;
-                case EDataBaseEngine.OleDb:
+                case EDatabaseEngine.OleDb:
                     _dataObjectCreator = new DataObjectCreatorOleDb();
                     break;
-                case EDataBaseEngine.MySql:
+                case EDatabaseEngine.MySql:
                     _dataObjectCreator = new DataObjectCreatorMySql();
                     break;
                 default:

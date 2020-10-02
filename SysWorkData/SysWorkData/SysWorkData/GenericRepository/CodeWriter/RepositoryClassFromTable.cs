@@ -19,7 +19,7 @@ namespace SysWork.Data.GenericRepository.CodeWriter
     public class RepositoryClassFromTable
     {
         private string _connectionString;
-        private EDataBaseEngine _databaseEngine;
+        private EDatabaseEngine _databaseEngine;
 
         private string _nameSpace;
         private string _entityName;
@@ -46,7 +46,7 @@ namespace SysWork.Data.GenericRepository.CodeWriter
         /// <param name="DbTableName">Name of the database table.</param>
         public RepositoryClassFromTable(string ConnectionString, string EntityName, string NameSpace, string DbTableName)
         {
-            RepositoryClassFromDbConstructorResolver(EDataBaseEngine.MSSqlServer, ConnectionString, EntityName, NameSpace, DbTableName);
+            RepositoryClassFromDbConstructorResolver(EDatabaseEngine.MSSqlServer, ConnectionString, EntityName, NameSpace, DbTableName);
 
         }
         
@@ -58,12 +58,12 @@ namespace SysWork.Data.GenericRepository.CodeWriter
         /// <param name="EntityName">Name of the entity.</param>
         /// <param name="NameSpace">The name space.</param>
         /// <param name="DbTableName">Name of the database table.</param>
-        public RepositoryClassFromTable(EDataBaseEngine databaseEngine, string ConnectionString, string EntityName, string NameSpace, string DbTableName)
+        public RepositoryClassFromTable(EDatabaseEngine databaseEngine, string ConnectionString, string EntityName, string NameSpace, string DbTableName)
         {
             RepositoryClassFromDbConstructorResolver(databaseEngine, ConnectionString, EntityName, NameSpace, DbTableName);
         }
 
-        private void RepositoryClassFromDbConstructorResolver(EDataBaseEngine databaseEngine, string ConnectionString, string EntityName, string NameSpace, string DbTableName)
+        private void RepositoryClassFromDbConstructorResolver(EDatabaseEngine databaseEngine, string ConnectionString, string EntityName, string NameSpace, string DbTableName)
         {
             _connectionString = ConnectionString;
             _databaseEngine = databaseEngine;
@@ -126,13 +126,13 @@ namespace SysWork.Data.GenericRepository.CodeWriter
         {
             switch (_databaseEngine)
             {
-                case EDataBaseEngine.MSSqlServer:
+                case EDatabaseEngine.MSSqlServer:
                     return GetListUniqueKeyMSSqlServer();
-                case EDataBaseEngine.SqLite:
+                case EDatabaseEngine.SqLite:
                     return GetListUniqueKeysSqlite();
-                case EDataBaseEngine.OleDb:
+                case EDatabaseEngine.OleDb:
                     return GetListUniqueKeysOleDb();
-                case EDataBaseEngine.MySql:
+                case EDatabaseEngine.MySql:
                     return GetListUniqueKeysMySql();
                 default:
                     throw new ArgumentOutOfRangeException("The databaseEngine is not supported by this method GetListUniques()");
@@ -142,13 +142,13 @@ namespace SysWork.Data.GenericRepository.CodeWriter
         {
             switch (_databaseEngine)
             {
-                case EDataBaseEngine.MSSqlServer:
+                case EDatabaseEngine.MSSqlServer:
                     return GetListColumnsUniqueMSSqlServer(uniqueKey);
-                case EDataBaseEngine.SqLite:
+                case EDatabaseEngine.SqLite:
                     return GetListColumnsUniqueSqlite(uniqueKey);
-                case EDataBaseEngine.OleDb:
+                case EDatabaseEngine.OleDb:
                     return GetListColumnsUniqueOleDb(uniqueKey);
-                case EDataBaseEngine.MySql:
+                case EDatabaseEngine.MySql:
                     return GetListColumnsUniqueMySql(uniqueKey);
                 default:
                     throw new ArgumentOutOfRangeException("The databaseEngine is not supported by this method GetListUniques()");
@@ -398,7 +398,7 @@ namespace SysWork.Data.GenericRepository.CodeWriter
         {
             string ret = "";
 
-            ret += "\t\tpublic " + _entityName + "Repository (string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString,dataBaseEngine)" + Environment.NewLine;
+            ret += "\t\tpublic " + _entityName + "Repository (string connectionString, EDatabaseEngine databaseEngine) : base(connectionString,databaseEngine)" + Environment.NewLine;
             ret += "\t\t{" + Environment.NewLine;
             ret += "\t\t" + Environment.NewLine;
             ret += "\t\t}" + Environment.NewLine;
@@ -412,25 +412,28 @@ namespace SysWork.Data.GenericRepository.CodeWriter
             string ret = "\t/// <summary>\r\n";
             ret += "\t/// This class was created automatically with the RepositoryClassFromDb class.\r\n";
             ret += "\t/// Inherited from GenericRepository which allows you to perform the following actions: \r\n";
-            ret += "\t/// Add, \r\n";
-            ret += "\t/// AddRange, \r\n";
-            ret += "\t/// Update, \r\n";
-            ret += "\t/// UpdateRange, \r\n";
-            ret += "\t/// DeleteById, \r\n";
-            ret += "\t/// DeleteAll, \r\n";
-            ret += "\t/// DeleteByLambdaExpressionFilter, \r\n";
-            ret += "\t/// DeleteByGenericWhereFilter, \r\n";
-            ret += "\t/// GetById, \r\n";
-            ret += "\t/// GetByLambdaExpressionFilter, \r\n";
-            ret += "\t/// GetByGenericWhereFilter, \r\n";
-            ret += "\t/// GetAll, \r\n";
-            ret += "\t/// GetListByLambdaExpressionFilter, \r\n";
-            ret += "\t/// GetDataTableByLambdaExpressionFilter, \r\n";
-            ret += "\t/// GetListByGenericWhereFilter, \r\n";
-            ret += "\t/// GetDataTableByGenericWhereFilter, \r\n";
-            ret += "\t/// Find \r\n";
+            ret += "\t/// Add , \r\n";
+            ret += "\t/// AddRange , \r\n";
+            ret += "\t/// DeleteAll ,\r\n";
+            ret += "\t/// DeleteByGenericWhereFilter ,\r\n";
+            ret += "\t/// DeleteById ,\r\n";
+            ret += "\t/// DeleteByLambdaExpressionFilter ,\r\n";
+            ret += "\t/// Exists ,\r\n";
+            ret += "\t/// Find ,\r\n";
+            ret += "\t/// GetAll ,\r\n";
+            ret += "\t/// GetByGenericWhereFilter ,\r\n";
+            ret += "\t/// GetById ,\r\n";
+            ret += "\t/// GetByLambdaExpressionFilter ,\r\n";
+            ret += "\t/// GetDataTableByGenericWhereFilter ,\r\n";
+            ret += "\t/// GetDataTableByLambdaExpressionFilter ,\r\n";
+            ret += "\t/// GetListByGenericWhereFilter ,\r\n";
+            ret += "\t/// GetListByLambdaExpressionFilter ,\r\n";
+            ret += "\t/// RecordCount,\r\n";
+            ret += "\t/// Update,\r\n";
+            ret += "\t/// UpdateRange.\r\n";
+            ret += "\t/// ";
+            ret += "\t/// Additionally, methods were also created for the unique keys.\r\n";
             ret += "\t/// </summary>\r\n";
-
             return ret;
         }
 

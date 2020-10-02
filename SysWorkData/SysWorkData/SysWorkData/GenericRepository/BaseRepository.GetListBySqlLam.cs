@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using System.Linq.Expressions;
@@ -11,46 +12,45 @@ namespace SysWork.Data.GenericRepository
 {
     public abstract partial class BaseRepository<TEntity> 
     {
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter)
+        public IList<TEntity> GetListBySqlLam(SqlLamBase sqlLam)
         {
-            return 0;
-        }
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, int commandTimeOut)
-        {
-            return 0;
+            return GetListBySqlLam(sqlLam, null, null, null);
         }
 
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection)
+        public IList<TEntity> GetListBySqlLam(SqlLamBase sqlLam, int commandTimeOut)
         {
-            return 0;
+            return GetListBySqlLam(sqlLam, null, null, commandTimeOut);
         }
 
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, int commandTimeOut)
+        public IList<TEntity> GetListBySqlLam(SqlLamBase sqlLam, IDbConnection dbConnection)
         {
-            return 0;
+            return GetListBySqlLam(sqlLam, dbConnection, null, null);
         }
 
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction dbTransaction)
+        public IList<TEntity> GetListBySqlLam(SqlLamBase sqlLam, IDbConnection dbConnection, int commandTimeOut)
         {
-            return 0;
+            return GetListBySqlLam(sqlLam, dbConnection, null, commandTimeOut);
         }
 
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction dbTransaction, int commandTimeOut)
+        public IList<TEntity> GetListBySqlLam(SqlLamBase sqlLam, IDbTransaction dbTransaction)
         {
-            return 0;
+            return GetListBySqlLam(sqlLam, null, dbTransaction, null);
         }
 
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, IDbTransaction dbTransaction)
+        public IList<TEntity> GetListBySqlLam(SqlLamBase sqlLam, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return 0;
+            return GetListBySqlLam(sqlLam, null, dbTransaction, commandTimeOut);
         }
 
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
+        public IList<TEntity> GetListBySqlLam(SqlLamBase sqlLam, IDbConnection dbConnection, IDbTransaction dbTransaction)
         {
+            return GetListBySqlLam(sqlLam, dbConnection, dbTransaction, null);
+        }
+
+        public IList<TEntity> GetListBySqlLam(SqlLamBase sqlLam, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
+        {
+            IList<TEntity> result = new List<TEntity>();
             SetSqlLamAdapter();
-            var query = new SqlLam<TEntity>(lambdaExpressionFilter);
-
-            long recordsAffected = 0;
 
             bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
@@ -60,9 +60,6 @@ namespace SysWork.Data.GenericRepository
             IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
             IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
-            dbCommand.CommandText = string.Format("DELETE FROM {0} {1}", _syntaxProvider.GetSecureTableName(TableName), query.QueryWhere);
-            dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
-
             try
             {
                 if (dbConnectionInUse.State != ConnectionState.Open)
@@ -71,15 +68,22 @@ namespace SysWork.Data.GenericRepository
                 if (dbTransaction != null)
                     dbCommand.Transaction = dbTransaction;
 
-                foreach (var parameters in query.QueryParameters)
+                dbCommand.CommandText = sqlLam.QueryString;
+                dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
+
+                foreach (var parameters in sqlLam.QueryParameters)
                     dbCommand.Parameters.Add(CreateIDbDataParameter("@" + parameters.Key, parameters.Value));
 
                 if (_databaseEngine == EDatabaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
+                IDataReader reader = dbCommand.ExecuteReader();
+                result = _mapper.Map<TEntity>(reader, EntityProperties, _databaseEngine);
 
-                recordsAffected = dbCommand.ExecuteNonQuery();
+                reader.Close();
+                reader.Dispose();
                 dbCommand.Dispose();
+
             }
             catch (Exception exception)
             {
@@ -93,10 +97,7 @@ namespace SysWork.Data.GenericRepository
                     dbConnectionInUse.Dispose();
                 }
             }
-            return recordsAffected;
+            return result;
         }
-
-
-
     }
 }

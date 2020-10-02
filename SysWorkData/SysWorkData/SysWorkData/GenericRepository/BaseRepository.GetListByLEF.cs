@@ -6,12 +6,11 @@ using System.Linq.Expressions;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.GenericRepository.Exceptions;
-using SysWork.Data.Common.Interfaces.Actions;
 using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.GenericRepository
 {
-    public abstract partial class BaseRepository<TEntity> : IGetListByLambdaExpressionFilter<TEntity>
+    public abstract partial class BaseRepository<TEntity> 
     {
         public IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter)
         {
@@ -76,11 +75,11 @@ namespace SysWork.Data.GenericRepository
                 foreach (var parameters in query.QueryParameters)
                     dbCommand.Parameters.Add(CreateIDbDataParameter("@" + parameters.Key, parameters.Value));
 
-                if (_dataBaseEngine == EDataBaseEngine.OleDb)
+                if (_databaseEngine == EDatabaseEngine.OleDb)
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                 IDataReader reader = dbCommand.ExecuteReader();
-                result = _mapper.Map<TEntity>(reader, EntityProperties, _dataBaseEngine);
+                result = _mapper.Map<TEntity>(reader, EntityProperties, _databaseEngine);
 
                 reader.Close();
                 reader.Dispose();
