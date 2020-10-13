@@ -77,5 +77,29 @@ namespace SysWork.Data.Common.Forms.GetParameters
             DialogResult = DialogResult.Cancel;
             this.Close();
         }
+
+        private void BtnBrowseConnection_Click(object sender, EventArgs e)
+        {
+            var ruta = @"c:\data\sample.sqlite";
+            if (MessageBox.Show(
+                "Desea buscar el archivo de base de datos?",
+                "Aviso al operador",MessageBoxButtons.YesNo,MessageBoxIcon.Question)
+                == DialogResult.Yes)
+            {
+                openFileDialog1.Title = "Abrir Base SQLite";
+                openFileDialog1.Filter = "Bases de datos SQLite V3(*.db;*.sqlite;*.db3)|*.db;*.sqlite;*.db3";
+                openFileDialog1.Multiselect = false;
+                openFileDialog1.ValidateNames = true;
+                openFileDialog1.FilterIndex = 0;
+                
+                if (openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    var filename = openFileDialog1.FileName;
+                    ruta = filename;
+                }
+            }
+
+            txtConnectionString.Text = $"data source={ruta};version=3;new=False;compress=True;pragma jounal_mode=WAL";
+        }
     }
 }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.txtErrMessage = new System.Windows.Forms.Label();
             this.btnOk = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -35,6 +36,9 @@
             this.txtConnectionString = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.BtnBrowseConnection = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.grpConnectionString.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -77,11 +81,12 @@
             // 
             // grpConnectionString
             // 
+            this.grpConnectionString.Controls.Add(this.BtnBrowseConnection);
             this.grpConnectionString.Controls.Add(this.txtConnectionString);
             this.grpConnectionString.Controls.Add(this.label8);
             this.grpConnectionString.Location = new System.Drawing.Point(12, 134);
             this.grpConnectionString.Name = "grpConnectionString";
-            this.grpConnectionString.Size = new System.Drawing.Size(590, 100);
+            this.grpConnectionString.Size = new System.Drawing.Size(590, 107);
             this.grpConnectionString.TabIndex = 26;
             this.grpConnectionString.TabStop = false;
             this.grpConnectionString.Text = "Datos de Conexion";
@@ -92,7 +97,7 @@
             this.txtConnectionString.Multiline = true;
             this.txtConnectionString.Name = "txtConnectionString";
             this.txtConnectionString.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtConnectionString.Size = new System.Drawing.Size(474, 70);
+            this.txtConnectionString.Size = new System.Drawing.Size(449, 75);
             this.txtConnectionString.TabIndex = 9;
             // 
             // label8
@@ -114,6 +119,21 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 22;
             this.pictureBox1.TabStop = false;
+            // 
+            // BtnBrowseConnection
+            // 
+            this.BtnBrowseConnection.Location = new System.Drawing.Point(561, 19);
+            this.BtnBrowseConnection.Name = "BtnBrowseConnection";
+            this.BtnBrowseConnection.Size = new System.Drawing.Size(23, 19);
+            this.BtnBrowseConnection.TabIndex = 10;
+            this.BtnBrowseConnection.Text = "...";
+            this.toolTip1.SetToolTip(this.BtnBrowseConnection, "Generar Cadena de Conexion");
+            this.BtnBrowseConnection.UseVisualStyleBackColor = true;
+            this.BtnBrowseConnection.Click += new System.EventHandler(this.BtnBrowseConnection_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // FrmGetParamSQLite
             // 
@@ -148,5 +168,8 @@
         private System.Windows.Forms.GroupBox grpConnectionString;
         private System.Windows.Forms.TextBox txtConnectionString;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button BtnBrowseConnection;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }

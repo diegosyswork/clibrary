@@ -190,6 +190,21 @@ namespace SysWork.Data.Common.DataObjectProvider
                 throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
         }
 
+        public static IDbDataParameter GetDbDataParameter(EDatabaseEngine databaseEngine)
+        {
+            if (databaseEngine == EDatabaseEngine.MSSqlServer)
+                return new SqlParameter();
+            else if (databaseEngine == EDatabaseEngine.OleDb)
+                return new OleDbParameter();
+            else if (databaseEngine == EDatabaseEngine.SqLite)
+                return new SQLiteParameter();
+            else if (databaseEngine == EDatabaseEngine.MySql)
+                return new MySqlParameter();
+            else
+                throw new ArgumentOutOfRangeException("The databaseEngine value is not supported by this method.");
+        }
+
+
     }
 
 }

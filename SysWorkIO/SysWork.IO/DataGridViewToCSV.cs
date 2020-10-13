@@ -52,14 +52,9 @@ namespace SysWork.IO
                                 value = "\"" + value + "\"";
 
                             //If string contain new line character
-                            while (value.Contains("\r"))
-                            {
-                                value = value.Replace("\r", "");
-                            }
-                            while (value.Contains("\n"))
-                            {
-                                value = value.Replace("\n", "");
-                            }
+                            value = value.Replace("\r", "");
+
+                            value = value.Replace("\n", "");
                         }
                         row += value;
                         if (columnIndex < columns - 1)
@@ -128,11 +123,9 @@ namespace SysWork.IO
                             value = "\"" + value + "\"";
 
                         //If string contain new line character
-                        while (value.Contains("\r"))
-                            value = value.Replace("\r", "");
+                        value = value.Replace("\r", "");
 
-                        while (value.Contains("\n"))
-                            value = value.Replace("\n", "");
+                        value = value.Replace("\n", "");
                     }
                     row += value;
                     if (columnIndex < columns - 1)

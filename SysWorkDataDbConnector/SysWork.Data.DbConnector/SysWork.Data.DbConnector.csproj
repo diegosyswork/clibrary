@@ -169,7 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SysWorkData\SysWorkData\SysWorkData\SysWork.Data.csproj">
-      <Project>{fc442041-8a45-4d9f-ad0a-d1c2c8895bd6}</Project>
+      <Project>{63fd5bfa-a6fd-488d-a756-9cbadca012af}</Project>
       <Name>SysWork.Data</Name>
     </ProjectReference>
   </ItemGroup>
