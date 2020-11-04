@@ -29,3 +29,5 @@ C:\SWSISTEMAS\C#Library\SysWorkUtil\SysWork.Util\obj\Debug\SysWork.Util.csproj.G
 C:\SWSISTEMAS\C#Library\SysWorkUtil\SysWork.Util\obj\Debug\SysWork.Util.csproj.CoreCompileInputs.cache
 C:\SWSISTEMAS\C#Library\SysWorkUtil\SysWork.Util\obj\Debug\SysWork.Util.dll
 C:\SWSISTEMAS\C#Library\SysWorkUtil\SysWork.Util\obj\Debug\SysWork.Util.pdb
+c:\SWSISTEMAS\C#Library\SysWorkUtil\SysWork.Util\obj\Debug\SysWork.Util.csprojAssemblyReference.cache
+c:\SWSISTEMAS\C#Library\SysWorkUtil\SysWork.Util\obj\Debug\SysWork.Util.csproj.CopyComplete

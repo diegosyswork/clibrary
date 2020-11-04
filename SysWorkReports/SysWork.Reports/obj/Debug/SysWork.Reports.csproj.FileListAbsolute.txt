@@ -63,3 +63,5 @@ C:\SWSISTEMAS\C#Library\SysWorkReports\SysWork.Reports\obj\Debug\SysWork.Reports
 C:\SWSISTEMAS\C#Library\SysWorkReports\SysWork.Reports\obj\Debug\SysWork.Reports.csproj.CoreCompileInputs.cache
 C:\SWSISTEMAS\C#Library\SysWorkReports\SysWork.Reports\obj\Debug\SysWork.Reports.dll
 C:\SWSISTEMAS\C#Library\SysWorkReports\SysWork.Reports\obj\Debug\SysWork.Reports.pdb
+c:\SWSISTEMAS\C#Library\SysWorkReports\SysWork.Reports\obj\Debug\SysWork.Reports.csprojAssemblyReference.cache
+c:\SWSISTEMAS\C#Library\SysWorkReports\SysWork.Reports\obj\Debug\SysWork.Reports.csproj.CopyComplete

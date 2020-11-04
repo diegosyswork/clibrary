@@ -29,15 +29,15 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             this.metroRendererManager1 = new MetroFramework.Components.MetroRendererManager(this.components);
             this.metroStyleExtender1 = new MetroFramework.Components.MetroStyleExtender(this.components);
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
@@ -539,7 +539,7 @@
             this.DtpEntrega.FontSize = MetroFramework.MetroDateTimeSize.Small;
             this.DtpEntrega.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DtpEntrega.Location = new System.Drawing.Point(87, 73);
-            this.DtpEntrega.MinimumSize = new System.Drawing.Size(4, 25);
+            this.DtpEntrega.MinimumSize = new System.Drawing.Size(0, 25);
             this.DtpEntrega.Name = "DtpEntrega";
             this.DtpEntrega.Size = new System.Drawing.Size(90, 25);
             this.DtpEntrega.TabIndex = 27;
@@ -559,7 +559,7 @@
             this.DtpVencimiento.FontSize = MetroFramework.MetroDateTimeSize.Small;
             this.DtpVencimiento.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DtpVencimiento.Location = new System.Drawing.Point(87, 36);
-            this.DtpVencimiento.MinimumSize = new System.Drawing.Size(4, 25);
+            this.DtpVencimiento.MinimumSize = new System.Drawing.Size(0, 25);
             this.DtpVencimiento.Name = "DtpVencimiento";
             this.DtpVencimiento.Size = new System.Drawing.Size(90, 25);
             this.DtpVencimiento.TabIndex = 25;
@@ -579,7 +579,7 @@
             this.DtpFecha.FontSize = MetroFramework.MetroDateTimeSize.Small;
             this.DtpFecha.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DtpFecha.Location = new System.Drawing.Point(87, 3);
-            this.DtpFecha.MinimumSize = new System.Drawing.Size(4, 25);
+            this.DtpFecha.MinimumSize = new System.Drawing.Size(0, 25);
             this.DtpFecha.Name = "DtpFecha";
             this.DtpFecha.Size = new System.Drawing.Size(90, 25);
             this.DtpFecha.TabIndex = 23;
@@ -634,6 +634,7 @@
             // 
             // CmbVendedor
             // 
+            this.CmbVendedor.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.CmbVendedor.FontSize = MetroFramework.MetroComboBoxSize.Small;
             this.CmbVendedor.FontWeight = MetroFramework.MetroComboBoxWeight.Light;
             this.CmbVendedor.FormattingEnabled = true;
@@ -751,7 +752,7 @@
             this.panelGrilla.HorizontalScrollbarSize = 10;
             this.panelGrilla.Location = new System.Drawing.Point(9, 296);
             this.panelGrilla.Name = "panelGrilla";
-            this.panelGrilla.Size = new System.Drawing.Size(884, 292);
+            this.panelGrilla.Size = new System.Drawing.Size(884, 274);
             this.panelGrilla.TabIndex = 10;
             this.panelGrilla.VerticalScrollbarBarColor = true;
             this.panelGrilla.VerticalScrollbarHighlightOnWheel = false;
@@ -761,17 +762,17 @@
             // 
             this.GridArticulos.AllowUserToResizeRows = false;
             this.GridArticulos.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.GridArticulos.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.GridArticulos.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.GridArticulos.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.GridArticulos.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
-            dataGridViewCellStyle10.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
-            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
-            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.GridArticulos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.GridArticulos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.GridArticulos.ColumnHeadersHeight = 22;
             this.GridArticulos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.GridArticulos.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -782,14 +783,14 @@
             this.ColUnitario,
             this.ColDescuento,
             this.ColTotal});
-            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle17.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            dataGridViewCellStyle17.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(136)))), ((int)(((byte)(136)))));
-            dataGridViewCellStyle17.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
-            dataGridViewCellStyle17.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
-            dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.GridArticulos.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(136)))), ((int)(((byte)(136)))));
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.GridArticulos.DefaultCellStyle = dataGridViewCellStyle8;
             this.GridArticulos.Dock = System.Windows.Forms.DockStyle.Fill;
             this.GridArticulos.EnableHeadersVisualStyles = false;
             this.GridArticulos.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
@@ -797,26 +798,26 @@
             this.GridArticulos.Location = new System.Drawing.Point(0, 0);
             this.GridArticulos.Name = "GridArticulos";
             this.GridArticulos.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
-            dataGridViewCellStyle18.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            dataGridViewCellStyle18.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            dataGridViewCellStyle18.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
-            dataGridViewCellStyle18.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
-            dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.GridArticulos.RowHeadersDefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.GridArticulos.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.GridArticulos.RowHeadersVisible = false;
             this.GridArticulos.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.GridArticulos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.GridArticulos.Size = new System.Drawing.Size(882, 290);
+            this.GridArticulos.Size = new System.Drawing.Size(882, 272);
             this.GridArticulos.TabIndex = 11;
             this.GridArticulos.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridArticulos_RowEnter);
             this.GridArticulos.RowLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridArticulos_RowLeave);
             // 
             // ColCodigo
             // 
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.ColCodigo.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.ColCodigo.DefaultCellStyle = dataGridViewCellStyle2;
             this.ColCodigo.HeaderText = "CODIGO";
             this.ColCodigo.Name = "ColCodigo";
             this.ColCodigo.Resizable = System.Windows.Forms.DataGridViewTriState.False;
@@ -825,8 +826,8 @@
             // ColDescripcion
             // 
             this.ColDescripcion.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.ColDescripcion.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.ColDescripcion.DefaultCellStyle = dataGridViewCellStyle3;
             this.ColDescripcion.HeaderText = "DESCRIPCION";
             this.ColDescripcion.Name = "ColDescripcion";
             // 
@@ -837,30 +838,30 @@
             // 
             // ColCantidad
             // 
-            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ColCantidad.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ColCantidad.DefaultCellStyle = dataGridViewCellStyle4;
             this.ColCantidad.HeaderText = "CANTIDAD";
             this.ColCantidad.Name = "ColCantidad";
             // 
             // ColUnitario
             // 
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ColUnitario.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ColUnitario.DefaultCellStyle = dataGridViewCellStyle5;
             this.ColUnitario.HeaderText = "UNITARIO";
             this.ColUnitario.Name = "ColUnitario";
             // 
             // ColDescuento
             // 
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.ColDescuento.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.ColDescuento.DefaultCellStyle = dataGridViewCellStyle6;
             this.ColDescuento.HeaderText = "% DTO.";
             this.ColDescuento.Name = "ColDescuento";
             // 
             // ColTotal
             // 
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle16.NullValue = "0";
-            this.ColTotal.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle7.NullValue = "0";
+            this.ColTotal.DefaultCellStyle = dataGridViewCellStyle7;
             this.ColTotal.HeaderText = "TOTAL";
             this.ColTotal.Name = "ColTotal";
             // 
@@ -881,7 +882,7 @@
             // 
             this.metroLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.metroLabel1.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.metroLabel1.Location = new System.Drawing.Point(757, 609);
+            this.metroLabel1.Location = new System.Drawing.Point(757, 591);
             this.metroLabel1.Name = "metroLabel1";
             this.metroLabel1.Size = new System.Drawing.Size(134, 23);
             this.metroLabel1.TabIndex = 12;
@@ -892,7 +893,7 @@
             // metroLabel2
             // 
             this.metroLabel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroLabel2.Location = new System.Drawing.Point(757, 656);
+            this.metroLabel2.Location = new System.Drawing.Point(757, 638);
             this.metroLabel2.Name = "metroLabel2";
             this.metroLabel2.Size = new System.Drawing.Size(134, 25);
             this.metroLabel2.TabIndex = 13;
@@ -905,7 +906,7 @@
             this.LblImporteTotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.LblImporteTotal.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.LblImporteTotal.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.LblImporteTotal.Location = new System.Drawing.Point(757, 681);
+            this.LblImporteTotal.Location = new System.Drawing.Point(757, 663);
             this.LblImporteTotal.Name = "LblImporteTotal";
             this.LblImporteTotal.Size = new System.Drawing.Size(134, 26);
             this.LblImporteTotal.TabIndex = 14;
@@ -918,7 +919,7 @@
             this.metroLabel4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.metroLabel4.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.metroLabel4.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel4.Location = new System.Drawing.Point(617, 681);
+            this.metroLabel4.Location = new System.Drawing.Point(617, 663);
             this.metroLabel4.Name = "metroLabel4";
             this.metroLabel4.Size = new System.Drawing.Size(134, 26);
             this.metroLabel4.TabIndex = 15;
@@ -929,7 +930,7 @@
             // metroLabel5
             // 
             this.metroLabel5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroLabel5.Location = new System.Drawing.Point(617, 609);
+            this.metroLabel5.Location = new System.Drawing.Point(617, 591);
             this.metroLabel5.Name = "metroLabel5";
             this.metroLabel5.Size = new System.Drawing.Size(134, 23);
             this.metroLabel5.TabIndex = 16;
@@ -940,7 +941,7 @@
             // metroLabel6
             // 
             this.metroLabel6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroLabel6.Location = new System.Drawing.Point(579, 656);
+            this.metroLabel6.Location = new System.Drawing.Point(579, 638);
             this.metroLabel6.Name = "metroLabel6";
             this.metroLabel6.Size = new System.Drawing.Size(172, 23);
             this.metroLabel6.TabIndex = 17;
@@ -956,7 +957,7 @@
             // 
             this.LblObservaciones.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.LblObservaciones.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.LblObservaciones.Location = new System.Drawing.Point(9, 609);
+            this.LblObservaciones.Location = new System.Drawing.Point(9, 591);
             this.LblObservaciones.Name = "LblObservaciones";
             this.LblObservaciones.Size = new System.Drawing.Size(140, 23);
             this.LblObservaciones.TabIndex = 18;
@@ -981,7 +982,7 @@
             this.TxtObservaciones.CustomButton.UseSelectable = true;
             this.TxtObservaciones.CustomButton.Visible = false;
             this.TxtObservaciones.Lines = new string[0];
-            this.TxtObservaciones.Location = new System.Drawing.Point(8, 631);
+            this.TxtObservaciones.Location = new System.Drawing.Point(8, 613);
             this.TxtObservaciones.MaxLength = 32767;
             this.TxtObservaciones.Multiline = true;
             this.TxtObservaciones.Name = "TxtObservaciones";
@@ -1000,7 +1001,7 @@
             // LblIVA
             // 
             this.LblIVA.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.LblIVA.Location = new System.Drawing.Point(618, 632);
+            this.LblIVA.Location = new System.Drawing.Point(618, 614);
             this.LblIVA.Name = "LblIVA";
             this.LblIVA.Size = new System.Drawing.Size(134, 23);
             this.LblIVA.TabIndex = 21;
@@ -1011,7 +1012,7 @@
             // metroLabel7
             // 
             this.metroLabel7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroLabel7.Location = new System.Drawing.Point(758, 632);
+            this.metroLabel7.Location = new System.Drawing.Point(758, 614);
             this.metroLabel7.Name = "metroLabel7";
             this.metroLabel7.Size = new System.Drawing.Size(134, 23);
             this.metroLabel7.TabIndex = 20;
@@ -1109,7 +1110,7 @@
             this.BackImagePadding = new System.Windows.Forms.Padding(0, 25, 20, 0);
             this.BackLocation = MetroFramework.Forms.BackLocation.TopRight;
             this.BackMaxSize = 25;
-            this.ClientSize = new System.Drawing.Size(1024, 726);
+            this.ClientSize = new System.Drawing.Size(1024, 708);
             this.Controls.Add(this.TxtCodArticuloPOS);
             this.Controls.Add(this.metroToolbarDisplaySettings1);
             this.Controls.Add(this.metroToolbarCRUD1);
@@ -1128,7 +1129,7 @@
             this.Controls.Add(this.LblImporteArticuloPOS);
             this.Controls.Add(this.PicImagenArticuloPOS);
             this.Controls.Add(this.layoutEncabezado);
-            this.MinimumSize = new System.Drawing.Size(1024, 726);
+            this.MinimumSize = new System.Drawing.Size(1024, 708);
             this.Name = "FrmTestMetroframework";
             this.Padding = new System.Windows.Forms.Padding(10, 60, 10, 10);
             this.ShadowType = MetroFramework.Forms.MetroFormShadowType.AeroShadow;

@@ -11,3 +11,4 @@ C:\SWSISTEMAS\C#Library\SysWork.DockingControls\obj\Debug\SysWork.Controls.Docki
 C:\SWSISTEMAS\C#Library\SysWork.DockingControls\obj\Debug\SysWork.Controls.DockingControls.csproj.CoreCompileInputs.cache
 C:\SWSISTEMAS\C#Library\SysWork.DockingControls\obj\Debug\SysWork.Controls.DockingControls.dll
 C:\SWSISTEMAS\C#Library\SysWork.DockingControls\obj\Debug\SysWork.Controls.DockingControls.pdb
+c:\SWSISTEMAS\C#Library\SysWork.DockingControls\obj\Debug\SysWork.Controls.DockingControls.csprojAssemblyReference.cache
