@@ -34,9 +34,9 @@ namespace Demo.SysWork.Data.Repositories
         /// </summary>
         void IDataManager.InitDataObjects()
         {
-            _stateRepository = new Lazy<StateRepository>(()=>new StateRepository(ConnectionString, DataBaseEngine));
-            _personRepository = new Lazy<PersonRepository>(() => new PersonRepository(ConnectionString, DataBaseEngine));
-            VManagerPersonsWithStates = new VManagerPersonsWithStates(ConnectionString, DataBaseEngine);
+            _stateRepository = new Lazy<StateRepository>(()=>new StateRepository(ConnectionString, DatabaseEngine));
+            _personRepository = new Lazy<PersonRepository>(() => new PersonRepository(ConnectionString, DatabaseEngine));
+            VManagerPersonsWithStates = new VManagerPersonsWithStates(ConnectionString, DatabaseEngine);
         }
     }
 }

@@ -32,31 +32,31 @@ namespace TestSysWorkData
         {
             InitializeComponent();
             
-            _daoPersonaSQLite = new DaoPersona (GetSqliteConnectionString(), EDataBaseEngine.SqLite);
+            _daoPersonaSQLite = new DaoPersona (GetSqliteConnectionString(), EDatabaseEngine.SqLite);
 
-            _daoPersonaMSSQL = new DaoPersona(ConnectionStringSQL, EDataBaseEngine.MSSqlServer);
+            _daoPersonaMSSQL = new DaoPersona(ConnectionStringSQL, EDatabaseEngine.MSSqlServer);
 
-            _daoPersonaOleDb = new DaoPersona(ConnectionStringOleDb,EDataBaseEngine.OleDb);
+            _daoPersonaOleDb = new DaoPersona(ConnectionStringOleDb,EDatabaseEngine.OleDb);
 
-            //_daoPersonaMySql = new DaoPersona(ConnectionStringMySql,EDataBaseEngine.MySql);
+            //_daoPersonaMySql = new DaoPersona(ConnectionStringMySql,EDatabaseEngine.MySql);
             
 
             /*
             DataManagerSQLite.ConnectionString = GetSqliteConnectionString();
-            DataManagerSQLite.DataBaseEngine = EDataBaseEngine.SqLite;
+            DataManagerSQLite.DatabaseEngine = EDatabaseEngine.SqLite;
             _daoPersonaSQLite = DataManagerSQLite.GetInstance().DaoPersonaSqlite;
 
 
             DataManagerOleDb.ConnectionString = ConnectionStringOleDb;
-            DataManagerOleDb.DataBaseEngine = EDataBaseEngine.OleDb;
+            DataManagerOleDb.DatabaseEngine = EDatabaseEngine.OleDb;
             _daoPersonaOleDb = DataManagerOleDb.GetInstance().DaoPersonaOleDb;
             
             DataManagerMySQL.ConnectionString = ConnectionStringMySql;
-            DataManagerMySQL.DataBaseEngine = EDataBaseEngine.MySql;
+            DataManagerMySQL.DatabaseEngine = EDatabaseEngine.MySql;
             _daoPersonaMySql = DataManagerMySQL.GetInstance().DaoPersonaMySql;
 
             DataManagerMSSQL.ConnectionString = ConnectionStringSQL;
-            DataManagerMSSQL.DataBaseEngine = EDataBaseEngine.MSSqlServer;
+            DataManagerMSSQL.DatabaseEngine = EDatabaseEngine.MSSqlServer;
             _daoPersonaSQL = DataManagerMSSQL.GetInstance().DaoPersonaMSSql;
             */
 
@@ -253,10 +253,10 @@ namespace TestSysWorkData
 
         private void BtnExistsTableSQLite_Click(object sender, EventArgs e)
         {
-            bool existe = (DbUtil.ExistsTable(EDataBaseEngine.SqLite, GetSqliteConnectionString(), "Personas"));
+            bool existe = (DbUtil.ExistsTable(EDatabaseEngine.SqLite, GetSqliteConnectionString(), "Personas"));
             MessageBox.Show("Existe Tabla Personas : " + existe);
 
-            existe = (DbUtil.ExistsTable(EDataBaseEngine.SqLite, GetSqliteConnectionString(), "UnaQueNoExiste"));
+            existe = (DbUtil.ExistsTable(EDatabaseEngine.SqLite, GetSqliteConnectionString(), "UnaQueNoExiste"));
             MessageBox.Show("Existe Tabla UnaQueNoExiste: " + existe);
 
         }
@@ -271,40 +271,40 @@ namespace TestSysWorkData
         }
         private void BtnExistsTableOleDb_Click(object sender, EventArgs e)
         {
-            bool existe = (DbUtil.ExistsTable(EDataBaseEngine.OleDb, ConnectionStringOleDb, "Personas"));
+            bool existe = (DbUtil.ExistsTable(EDatabaseEngine.OleDb, ConnectionStringOleDb, "Personas"));
             MessageBox.Show("Existe Tabla Personas : " + existe);
 
-            existe = (DbUtil.ExistsTable(EDataBaseEngine.OleDb, ConnectionStringOleDb, "UnaQueNoExiste"));
+            existe = (DbUtil.ExistsTable(EDatabaseEngine.OleDb, ConnectionStringOleDb, "UnaQueNoExiste"));
             MessageBox.Show("Existe Tabla UnaQueNoExiste: " + existe);
         }
         private void BtnExistsColumnSQLite_Click(object sender, EventArgs e)
         {
-            bool existe = (DbUtil.ExistsColumn(EDataBaseEngine.SqLite, GetSqliteConnectionString(), "Personas", "Dni"));
+            bool existe = (DbUtil.ExistsColumn(EDatabaseEngine.SqLite, GetSqliteConnectionString(), "Personas", "Dni"));
             MessageBox.Show("Existe Personas DNI " + existe);
 
-            existe = (DbUtil.ExistsColumn(EDataBaseEngine.SqLite, GetSqliteConnectionString(), "Personas", "mail"));
+            existe = (DbUtil.ExistsColumn(EDatabaseEngine.SqLite, GetSqliteConnectionString(), "Personas", "mail"));
             MessageBox.Show("Existe Personas mail " + existe);
         }
         private void BtnExistsColumnSQL_Click(object sender, EventArgs e)
         {
-            bool existe = (DbUtil.ExistsColumn(EDataBaseEngine.MSSqlServer, ConnectionStringSQL, "Personas", "Dni"));
+            bool existe = (DbUtil.ExistsColumn(EDatabaseEngine.MSSqlServer, ConnectionStringSQL, "Personas", "Dni"));
             MessageBox.Show("Existe Personas DNI " + existe);
 
-            existe = (DbUtil.ExistsColumn(EDataBaseEngine.MSSqlServer, ConnectionStringSQL, "Personas", "mail"));
+            existe = (DbUtil.ExistsColumn(EDatabaseEngine.MSSqlServer, ConnectionStringSQL, "Personas", "mail"));
             MessageBox.Show("Existe Personas mail " + existe);
         }
         private void BtnExistsColumnOleDb_Click(object sender, EventArgs e)
         {
-            bool existe = (DbUtil.ExistsColumn(EDataBaseEngine.OleDb, ConnectionStringOleDb, "Personas", "Dni"));
+            bool existe = (DbUtil.ExistsColumn(EDatabaseEngine.OleDb, ConnectionStringOleDb, "Personas", "Dni"));
             MessageBox.Show("Existe Personas DNI " + existe);
 
-            existe = (DbUtil.ExistsColumn(EDataBaseEngine.OleDb, ConnectionStringOleDb, "Personas", "mail"));
+            existe = (DbUtil.ExistsColumn(EDatabaseEngine.OleDb, ConnectionStringOleDb, "Personas", "mail"));
             MessageBox.Show("Existe Personas mail " + existe);
         }
 
         private void BtnSimpleQuerySQLite_Click(object sender, EventArgs e)
         {
-            var resut = SimpleQuery.Execute(EDataBaseEngine.SqLite, GetSqliteConnectionString(), "SELECT * FROM PERSONAS");
+            var resut = SimpleQuery.Execute(EDatabaseEngine.SqLite, GetSqliteConnectionString(), "SELECT * FROM PERSONAS");
             dataGridView1.DataSource = null;
 
             List<Persona> listaPersona = new List<Persona>();
@@ -318,7 +318,7 @@ namespace TestSysWorkData
         }
         private void BtnSimpleQuerySQL_Click(object sender, EventArgs e)
         {
-            var resut = SimpleQuery.Execute(EDataBaseEngine.MSSqlServer, ConnectionStringSQL, "SELECT * FROM PERSONAS");
+            var resut = SimpleQuery.Execute(EDatabaseEngine.MSSqlServer, ConnectionStringSQL, "SELECT * FROM PERSONAS");
             dataGridView1.DataSource = null;
 
             List<Persona> listaPersona = new List<Persona>();
@@ -332,7 +332,7 @@ namespace TestSysWorkData
         }
         private void BtnSimpleQueryOleDb_Click(object sender, EventArgs e)
         {
-            var resut = SimpleQuery.Execute(EDataBaseEngine.OleDb, ConnectionStringOleDb, "SELECT * FROM PERSONAS");
+            var resut = SimpleQuery.Execute(EDatabaseEngine.OleDb, ConnectionStringOleDb, "SELECT * FROM PERSONAS");
             dataGridView1.DataSource = null;
 
             List<Persona> listaPersona = new List<Persona>();
@@ -636,7 +636,7 @@ namespace TestSysWorkData
             }
             */
 
-            var DataBaseConnector = new DataBaseConnector(EDataBaseEngine.OleDb );
+            var DataBaseConnector = new DataBaseConnector(EDatabaseEngine.OleDb );
             DataBaseConnector.ConnectionStringName = "TestOleDbNew";
             DataBaseConnector.ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\SWSISTEMAS\C#Library\Test\TestSysWork.Data\TestSysWork.Data\Data\TEST-mal.accdb;Persist Security Info=False;";
             DataBaseConnector.PromptUser = true;
@@ -786,25 +786,25 @@ namespace TestSysWorkData
 
         private void BtnExistsTableMySQL_Click(object sender, EventArgs e)
         {
-            bool existe = (DbUtil.ExistsTable(EDataBaseEngine.MySql, ConnectionStringMySql, "Personas"));
+            bool existe = (DbUtil.ExistsTable(EDatabaseEngine.MySql, ConnectionStringMySql, "Personas"));
             MessageBox.Show("Existe Tabla Personas : " + existe);
 
-            existe = (DbUtil.ExistsTable(EDataBaseEngine.MySql, ConnectionStringMySql, "UnaQueNoExiste"));
+            existe = (DbUtil.ExistsTable(EDatabaseEngine.MySql, ConnectionStringMySql, "UnaQueNoExiste"));
             MessageBox.Show("Existe Tabla UnaQueNoExiste: " + existe);
         }
 
         private void BtnExistsColumnMySQL_Click(object sender, EventArgs e)
         {
-            bool existe = (DbUtil.ExistsColumn(EDataBaseEngine.MySql, ConnectionStringMySql, "Personas", "Dni"));
+            bool existe = (DbUtil.ExistsColumn(EDatabaseEngine.MySql, ConnectionStringMySql, "Personas", "Dni"));
             MessageBox.Show("Existe Personas DNI " + existe);
 
-            existe = (DbUtil.ExistsColumn(EDataBaseEngine.MySql, ConnectionStringMySql, "Personas", "mail"));
+            existe = (DbUtil.ExistsColumn(EDatabaseEngine.MySql, ConnectionStringMySql, "Personas", "mail"));
             MessageBox.Show("Existe Personas mail " + existe);
         }
 
         private void BtnSimpleQueryMySQL_Click(object sender, EventArgs e)
         {
-            var resut = SimpleQuery.Execute(EDataBaseEngine.MySql, ConnectionStringMySql, "SELECT * FROM PERSONAS");
+            var resut = SimpleQuery.Execute(EDatabaseEngine.MySql, ConnectionStringMySql, "SELECT * FROM PERSONAS");
             dataGridView1.DataSource = null;
 
             List<Persona> listaPersona = new List<Persona>();
@@ -899,7 +899,7 @@ namespace TestSysWorkData
 
         private void btnVerifyMySQL_Click(object sender, EventArgs e)
         {
-            var DataBaseConnector = new DataBaseConnector(EDataBaseEngine.MySql);
+            var DataBaseConnector = new DataBaseConnector(EDatabaseEngine.MySql);
             DataBaseConnector.ConnectionStringName = "testMySql";
             DataBaseConnector.DefaultDataSource = @"LOCALHOST";
             DataBaseConnector.DefaultUser = "TEST";
@@ -918,18 +918,18 @@ namespace TestSysWorkData
         private void BtnLoggerMySQL_Click(object sender, EventArgs e)
         {
             DbLogger.ConnectionString = ConnectionStringMySql;
-            DbLogger.DataBaseEngine = EDataBaseEngine.MySql;
+            DbLogger.DatabaseEngine = EDatabaseEngine.MySql;
             DbLogger.LogInfo(EDbInfoTag.Info,"Test MySQL");
         }
 
         private void BtnLoggerOleDb_Click(object sender, EventArgs e)
         {
             //LoggerDb.ConnectionString = ConnectionStringOleDb;
-            //LoggerDb.DataBaseEngine = EDataBaseEngine.OleDb;
+            //LoggerDb.DatabaseEngine = EDatabaseEngine.OleDb;
             //LoggerDb.Log("Test OleDb");
 
             DbLogger.ConnectionString = ConnectionStringOleDb;
-            DbLogger.DataBaseEngine = EDataBaseEngine.OleDb;
+            DbLogger.DatabaseEngine = EDatabaseEngine.OleDb;
             DbLogger.LogInfo(EDbInfoTag.Info,"Test OleDb");
 
 
@@ -939,11 +939,11 @@ namespace TestSysWorkData
         private void BtnLoggerSQL_Click(object sender, EventArgs e)
         {
             //LoggerDb.ConnectionString = ConnectionStringSQL;
-            //LoggerDb.DataBaseEngine = EDataBaseEngine.MSSqlServer;
+            //LoggerDb.DatabaseEngine = EDatabaseEngine.MSSqlServer;
             //LoggerDb.Log("Test Sql");
 
             DbLogger.ConnectionString = ConnectionStringSQL;
-            DbLogger.DataBaseEngine = EDataBaseEngine.MSSqlServer;
+            DbLogger.DatabaseEngine = EDatabaseEngine.MSSqlServer;
             DbLogger.LogInfo(EDbInfoTag.Info, "resumen");
 
 
@@ -952,11 +952,11 @@ namespace TestSysWorkData
         private void BtnLogger_Click(object sender, EventArgs e)
         {
             DbLogger.ConnectionString = GetSqliteConnectionString();
-            DbLogger.DataBaseEngine = EDataBaseEngine.SqLite;
+            DbLogger.DatabaseEngine = EDatabaseEngine.SqLite;
             DbLogger.LogInfo(EDbInfoTag.Info,"Test Sqlite");
 
             DbLogger.ConnectionString = GetSqliteConnectionString();
-            DbLogger.DataBaseEngine = EDataBaseEngine.SqLite;
+            DbLogger.DatabaseEngine = EDatabaseEngine.SqLite;
             DbLogger.LogInfo(EDbInfoTag.Info, "resumen");
 
 

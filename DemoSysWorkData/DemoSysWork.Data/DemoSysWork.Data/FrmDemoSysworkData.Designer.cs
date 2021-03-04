@@ -33,10 +33,11 @@
             this.BtnConnect = new System.Windows.Forms.Button();
             this.BtnGetParameters = new System.Windows.Forms.Button();
             this.TxtConnectionString = new System.Windows.Forms.TextBox();
-            this.CmbDataBaseEngine = new System.Windows.Forms.ComboBox();
+            this.CmbDatabaseEngine = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.GrpDetails = new System.Windows.Forms.GroupBox();
+            this.BtnTestMapper = new System.Windows.Forms.Button();
             this.BtnGetByGenericWhere = new System.Windows.Forms.Button();
             this.BtnGetListByGenericWhere = new System.Windows.Forms.Button();
             this.BtnDeleteByGenericWhere = new System.Windows.Forms.Button();
@@ -69,7 +70,7 @@
             this.BtnExistsTable = new System.Windows.Forms.Button();
             this.BtnUpdate = new System.Windows.Forms.Button();
             this.BtnAdd = new System.Windows.Forms.Button();
-            this.BtnTestMapper = new System.Windows.Forms.Button();
+            this.BtnGetAllAsync = new System.Windows.Forms.Button();
             this.GrpParameters.SuspendLayout();
             this.GrpDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -83,7 +84,7 @@
             this.GrpParameters.Controls.Add(this.BtnConnect);
             this.GrpParameters.Controls.Add(this.BtnGetParameters);
             this.GrpParameters.Controls.Add(this.TxtConnectionString);
-            this.GrpParameters.Controls.Add(this.CmbDataBaseEngine);
+            this.GrpParameters.Controls.Add(this.CmbDatabaseEngine);
             this.GrpParameters.Controls.Add(this.label2);
             this.GrpParameters.Controls.Add(this.label1);
             this.GrpParameters.Location = new System.Drawing.Point(9, 1);
@@ -135,16 +136,16 @@
             this.TxtConnectionString.Size = new System.Drawing.Size(739, 20);
             this.TxtConnectionString.TabIndex = 3;
             // 
-            // CmbDataBaseEngine
+            // CmbDatabaseEngine
             // 
-            this.CmbDataBaseEngine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.CmbDatabaseEngine.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.CmbDataBaseEngine.FormattingEnabled = true;
-            this.CmbDataBaseEngine.Location = new System.Drawing.Point(107, 19);
-            this.CmbDataBaseEngine.Name = "CmbDataBaseEngine";
-            this.CmbDataBaseEngine.Size = new System.Drawing.Size(761, 21);
-            this.CmbDataBaseEngine.TabIndex = 2;
-            this.CmbDataBaseEngine.SelectedValueChanged += new System.EventHandler(this.CmbDataBaseEngine_SelectedValueChanged);
+            this.CmbDatabaseEngine.FormattingEnabled = true;
+            this.CmbDatabaseEngine.Location = new System.Drawing.Point(107, 19);
+            this.CmbDatabaseEngine.Name = "CmbDatabaseEngine";
+            this.CmbDatabaseEngine.Size = new System.Drawing.Size(761, 21);
+            this.CmbDatabaseEngine.TabIndex = 2;
+            this.CmbDatabaseEngine.SelectedValueChanged += new System.EventHandler(this.CmbDatabaseEngine_SelectedValueChanged);
             // 
             // label2
             // 
@@ -169,6 +170,7 @@
             this.GrpDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.GrpDetails.Controls.Add(this.BtnGetAllAsync);
             this.GrpDetails.Controls.Add(this.BtnTestMapper);
             this.GrpDetails.Controls.Add(this.BtnGetByGenericWhere);
             this.GrpDetails.Controls.Add(this.BtnGetListByGenericWhere);
@@ -207,6 +209,16 @@
             this.GrpDetails.Size = new System.Drawing.Size(876, 438);
             this.GrpDetails.TabIndex = 93;
             this.GrpDetails.TabStop = false;
+            // 
+            // BtnTestMapper
+            // 
+            this.BtnTestMapper.Location = new System.Drawing.Point(250, 252);
+            this.BtnTestMapper.Name = "BtnTestMapper";
+            this.BtnTestMapper.Size = new System.Drawing.Size(238, 21);
+            this.BtnTestMapper.TabIndex = 147;
+            this.BtnTestMapper.Text = "Test Mapper";
+            this.BtnTestMapper.UseVisualStyleBackColor = true;
+            this.BtnTestMapper.Click += new System.EventHandler(this.BtnTestMapper_Click);
             // 
             // BtnGetByGenericWhere
             // 
@@ -521,15 +533,15 @@
             this.BtnAdd.UseVisualStyleBackColor = true;
             this.BtnAdd.Click += new System.EventHandler(this.BtnAdd_Click);
             // 
-            // BtnTestMapper
+            // BtnGetAllAsync
             // 
-            this.BtnTestMapper.Location = new System.Drawing.Point(250, 252);
-            this.BtnTestMapper.Name = "BtnTestMapper";
-            this.BtnTestMapper.Size = new System.Drawing.Size(238, 21);
-            this.BtnTestMapper.TabIndex = 147;
-            this.BtnTestMapper.Text = "Test Mapper";
-            this.BtnTestMapper.UseVisualStyleBackColor = true;
-            this.BtnTestMapper.Click += new System.EventHandler(this.BtnTestMapper_Click);
+            this.BtnGetAllAsync.Location = new System.Drawing.Point(250, 299);
+            this.BtnGetAllAsync.Name = "BtnGetAllAsync";
+            this.BtnGetAllAsync.Size = new System.Drawing.Size(102, 21);
+            this.BtnGetAllAsync.TabIndex = 148;
+            this.BtnGetAllAsync.Text = "Get All Async";
+            this.BtnGetAllAsync.UseVisualStyleBackColor = true;
+            this.BtnGetAllAsync.Click += new System.EventHandler(this.BtnGetAllAsync_Click);
             // 
             // FrmDemoSysworkData
             // 
@@ -558,7 +570,7 @@
         private System.Windows.Forms.Button BtnConnect;
         private System.Windows.Forms.Button BtnGetParameters;
         private System.Windows.Forms.TextBox TxtConnectionString;
-        private System.Windows.Forms.ComboBox CmbDataBaseEngine;
+        private System.Windows.Forms.ComboBox CmbDatabaseEngine;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox GrpDetails;
@@ -595,6 +607,7 @@
         private System.Windows.Forms.Button BtnGetListByGenericWhere;
         private System.Windows.Forms.Button BtnGetByGenericWhere;
         private System.Windows.Forms.Button BtnTestMapper;
+        private System.Windows.Forms.Button BtnGetAllAsync;
     }
 }
 

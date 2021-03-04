@@ -8,7 +8,7 @@ namespace GerdannaDataManager.Daos
 {
     public class DaoPersona: BaseRepository<Persona>
     {
-        public DaoPersona(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        public DaoPersona(string connectionString, EDatabaseEngine DatabaseEngine) : base(connectionString, DatabaseEngine)
         {
 
         }

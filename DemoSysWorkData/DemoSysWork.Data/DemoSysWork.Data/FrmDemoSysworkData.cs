@@ -15,6 +15,8 @@ using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.LoggerDb;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.ValueObjects;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Demo.SysWork.Data
 {
@@ -25,7 +27,8 @@ namespace Demo.SysWork.Data
         const string _defaultConnectionStringMySql = @"Server=localhost;Database=test;Uid=root;Pwd=@#!Sw58125812;persistsecurityinfo=True;";
 
         PersonRepository _personRepository;
-        
+        StateRepository _stateRepository;
+
         private string _defaultConnectionStringSQLite()
         {
             string SqliteLoggerPath = @"c:\SWSISTEMAS\C#Library\DemoSysWorkData\DemoSysWork.Data\DemoSysWork.Data\Data\TEST.sqlite";
@@ -41,7 +44,7 @@ namespace Demo.SysWork.Data
 
         private void FrmDemoSysworkData_Load(object sender, EventArgs e)
         {
-            CmbDataBaseEngine.DataSource = Enum.GetValues(typeof(EDataBaseEngine));
+            CmbDatabaseEngine.DataSource = Enum.GetValues(typeof(EDatabaseEngine));
             ControlFormState(EState.Unconnected);
             LoadConfig();
         }
@@ -56,42 +59,42 @@ namespace Demo.SysWork.Data
             TxtConnectionString.Text = Properties.Settings.Default.CfgConnectrionString;
             string cfgDatabaseEngine = Properties.Settings.Default.CfgDatabaseEngine;
             if (string.IsNullOrEmpty(cfgDatabaseEngine))
-                cfgDatabaseEngine = EDataBaseEngine.MSSqlServer.ToString();
+                cfgDatabaseEngine = EDatabaseEngine.MSSqlServer.ToString();
 
 
-            if (Enum.TryParse<EDataBaseEngine>(cfgDatabaseEngine, out EDataBaseEngine dataBaseEngine))
-                CmbDataBaseEngine.SelectedItem = dataBaseEngine;
+            if (Enum.TryParse<EDatabaseEngine>(cfgDatabaseEngine, out EDatabaseEngine DatabaseEngine))
+                CmbDatabaseEngine.SelectedItem = DatabaseEngine;
 
         }
 
         private void SaveConfig()
         {
             Properties.Settings.Default.CfgConnectrionString = TxtConnectionString.Text ;
-            Properties.Settings.Default.CfgDatabaseEngine = ((EDataBaseEngine)CmbDataBaseEngine.SelectedValue).ToString();
+            Properties.Settings.Default.CfgDatabaseEngine = ((EDatabaseEngine)CmbDatabaseEngine.SelectedValue).ToString();
             Properties.Settings.Default.Save();
         }
 
         private void BtnConnect_Click(object sender, EventArgs e)
         {
-            var databaseEngine = (EDataBaseEngine)CmbDataBaseEngine.SelectedValue;
+            var DatabaseEngine = (EDatabaseEngine)CmbDatabaseEngine.SelectedValue;
 
-            if (!DbUtil.ConnectionSuccess(databaseEngine, TxtConnectionString.Text, out string errMessage))
+            if (!DbUtil.ConnectionSuccess(DatabaseEngine, TxtConnectionString.Text, out string errMessage))
                 MessageBox.Show($"Ha ocurrido el siguiente error {errMessage}", "Aviso al operador", MessageBoxButtons.OK, MessageBoxIcon.Error);
             else
                 ControlFormState(EState.Connected);
 
-            switch (databaseEngine)
+            switch (DatabaseEngine)
             {
-                case EDataBaseEngine.MSSqlServer:
+                case EDatabaseEngine.MSSqlServer:
                     Properties.Settings.Default.MSSQLConnectionString = TxtConnectionString.Text;
                     break;
-                case EDataBaseEngine.SqLite:
+                case EDatabaseEngine.SqLite:
                     Properties.Settings.Default.SQLiteConnectionString = TxtConnectionString.Text;
                     break;
-                case EDataBaseEngine.OleDb:
+                case EDatabaseEngine.OleDb:
                     Properties.Settings.Default.OleDbConnectionString = TxtConnectionString.Text;
                     break;
-                case EDataBaseEngine.MySql:
+                case EDatabaseEngine.MySql:
                     Properties.Settings.Default.MySQLConnectionString = TxtConnectionString.Text;
                     break;
             }
@@ -99,30 +102,31 @@ namespace Demo.SysWork.Data
 
 
             LogText("Verifying Tables...");
-            if (!DbUtil.ExistsTable(databaseEngine, TxtConnectionString.Text, "States"))
-                DbUtil.ExecuteBatchNonQuery(databaseEngine, GetScriptStates(databaseEngine), TxtConnectionString.Text);
+            if (!DbUtil.ExistsTable(DatabaseEngine, TxtConnectionString.Text, "States"))
+                DbUtil.ExecuteBatchNonQuery(DatabaseEngine, GetScriptStates(DatabaseEngine), TxtConnectionString.Text);
 
-            if (!DbUtil.ExistsTable(databaseEngine, TxtConnectionString.Text, "Persons"))
-                DbUtil.ExecuteBatchNonQuery(databaseEngine, GetScriptPersons(databaseEngine), TxtConnectionString.Text);
+            if (!DbUtil.ExistsTable(DatabaseEngine, TxtConnectionString.Text, "Persons"))
+                DbUtil.ExecuteBatchNonQuery(DatabaseEngine, GetScriptPersons(DatabaseEngine), TxtConnectionString.Text);
 
             LogText("Tables ok");
 
-            DataManager.DataBaseEngine = databaseEngine;
+            DataManager.DatabaseEngine = DatabaseEngine;
             DataManager.ConnectionString = TxtConnectionString.Text;
             LogText("DataManager Setted");
 
-            DbLogger.DataBaseEngine = DataManager.DataBaseEngine;
+            DbLogger.DatabaseEngine = DataManager.DatabaseEngine;
             DbLogger.ConnectionString = DataManager.ConnectionString;
             DbLogger.AppUserName = "Diego Martinez";
             DbLogger.DbUserName = "TEST_SYSWORK_DATA";
             LogText("DbLogger Setted");
 
             _personRepository = DataManager.GetInstance().PersonRepository;
+            _stateRepository = DataManager.GetInstance().StateRepository;
         }
 
         private void BtnGetParameters_Click(object sender, EventArgs e)
         {
-            var dbConnector = new DataBaseConnector((EDataBaseEngine)CmbDataBaseEngine.SelectedValue);
+            var dbConnector = new DataBaseConnector((EDatabaseEngine)CmbDatabaseEngine.SelectedValue);
             dbConnector.ConnectionString = TxtConnectionString.Text;
             dbConnector.PromptUser = true;
             dbConnector.BeforeConnectShowDefaultsParameters = true;
@@ -141,7 +145,7 @@ namespace Demo.SysWork.Data
         void ControlFormState(EState state)
         {
             BtnConnect.Enabled = (state == EState.Unconnected);
-            CmbDataBaseEngine.Enabled = BtnConnect.Enabled;
+            CmbDatabaseEngine.Enabled = BtnConnect.Enabled;
             TxtConnectionString.Enabled = BtnConnect.Enabled;
             BtnGetParameters.Enabled = BtnConnect.Enabled;
 
@@ -155,22 +159,22 @@ namespace Demo.SysWork.Data
             ControlFormState(EState.Unconnected);
         }
 
-        private void CmbDataBaseEngine_SelectedValueChanged(object sender, EventArgs e)
+        private void CmbDatabaseEngine_SelectedValueChanged(object sender, EventArgs e)
         {
-            EDataBaseEngine databaseEngine = (EDataBaseEngine)CmbDataBaseEngine.SelectedValue;
+            EDatabaseEngine DatabaseEngine = (EDatabaseEngine)CmbDatabaseEngine.SelectedValue;
             string defaultConnectionString = "";
-            switch (databaseEngine)
+            switch (DatabaseEngine)
             {
-                case EDataBaseEngine.MSSqlServer:
+                case EDatabaseEngine.MSSqlServer:
                     defaultConnectionString = string.IsNullOrEmpty(Properties.Settings.Default.MSSQLConnectionString) ? _defaultConnectionStringMSSQL : Properties.Settings.Default.MSSQLConnectionString;
                     break;
-                case EDataBaseEngine.SqLite:
+                case EDatabaseEngine.SqLite:
                     defaultConnectionString = string.IsNullOrEmpty(Properties.Settings.Default.SQLiteConnectionString) ? _defaultConnectionStringSQLite() : Properties.Settings.Default.SQLiteConnectionString;
                     break;
-                case EDataBaseEngine.OleDb:
+                case EDatabaseEngine.OleDb:
                     defaultConnectionString = string.IsNullOrEmpty(Properties.Settings.Default.OleDbConnectionString) ? _defaultConnectionStringOleDb : Properties.Settings.Default.OleDbConnectionString;
                     break;
-                case EDataBaseEngine.MySql:
+                case EDatabaseEngine.MySql:
                     defaultConnectionString = string.IsNullOrEmpty(Properties.Settings.Default.MySQLConnectionString) ? _defaultConnectionStringMySql : Properties.Settings.Default.MySQLConnectionString;
                     break;
             }
@@ -1023,18 +1027,18 @@ namespace Demo.SysWork.Data
         {
             LogText(Environment.NewLine + "///      START SqlLam Method DEMO         ///");
 
-            switch (DataManager.DataBaseEngine)
+            switch (DataManager.DatabaseEngine)
             {
-                case EDataBaseEngine.MSSqlServer:
+                case EDatabaseEngine.MSSqlServer:
                     SqlLam<Person>.SetAdapter(SqlAdapter.SqlServer2012);
                     break;
-                case EDataBaseEngine.SqLite:
+                case EDatabaseEngine.SqLite:
                     SqlLam<Person>.SetAdapter(SqlAdapter.SQLite);
                     break;
-                case EDataBaseEngine.OleDb:
+                case EDatabaseEngine.OleDb:
                     SqlLam<Person>.SetAdapter(SqlAdapter.SqlServer2008);
                     break;
-                case EDataBaseEngine.MySql:
+                case EDatabaseEngine.MySql:
                     SqlLam<Person>.SetAdapter(SqlAdapter.MySql);
                     break;
                 default:
@@ -1079,9 +1083,9 @@ namespace Demo.SysWork.Data
         {
             LogText(Environment.NewLine + "///      START EntityClassFromDb Method DEMO         ///"+ Environment.NewLine  );
 
-            SyntaxProvider syntaxProvider = new SyntaxProvider(DataManager.DataBaseEngine);
+            SyntaxProvider syntaxProvider = new SyntaxProvider(DataManager.DatabaseEngine);
 
-            var entityClassFrom = new EntityClassFromTable(DataManager.DataBaseEngine, DataManager.ConnectionString, "Persons", "Persons", "TestNamespace");
+            var entityClassFrom = new EntityClassFromTable(DataManager.DatabaseEngine, DataManager.ConnectionString, "Persons", "Persons", "TestNamespace");
             var textClass = entityClassFrom.ToString();
             LogText(textClass);
             Clipboard.SetText(textClass);
@@ -1091,36 +1095,36 @@ namespace Demo.SysWork.Data
             LogText(Environment.NewLine + "///      END EntityClassFromDb Method DEMO         ///" + Environment.NewLine);
         }
 
-        private string GetScriptStates(EDataBaseEngine dataBaseEngine)
+        private string GetScriptStates(EDatabaseEngine DatabaseEngine)
         {
-            switch (dataBaseEngine)
+            switch (DatabaseEngine)
             {
-                case EDataBaseEngine.MSSqlServer:
+                case EDatabaseEngine.MSSqlServer:
                     return GetScriptStatesMSSqlServer();
-                case EDataBaseEngine.SqLite:
+                case EDatabaseEngine.SqLite:
                     return GetScriptStatesSQLite();
-                case EDataBaseEngine.OleDb:
+                case EDatabaseEngine.OleDb:
                     return GetScriptStatesOleDb();
-                case EDataBaseEngine.MySql:
+                case EDatabaseEngine.MySql:
                     return GetScriptStatesMySql();
                 default:
-                    throw new ArgumentOutOfRangeException("The databaseEngine is not supported by this method GetScriptStates()");
+                    throw new ArgumentOutOfRangeException("The DatabaseEngine is not supported by this method GetScriptStates()");
             }
         }
-        private string GetScriptPersons(EDataBaseEngine dataBaseEngine)
+        private string GetScriptPersons(EDatabaseEngine DatabaseEngine)
         {
-            switch (dataBaseEngine)
+            switch (DatabaseEngine)
             {
-                case EDataBaseEngine.MSSqlServer:
+                case EDatabaseEngine.MSSqlServer:
                     return GetScriptPersonMSSqlServer();
-                case EDataBaseEngine.SqLite:
+                case EDatabaseEngine.SqLite:
                     return GetScriptPersonSQLite();
-                case EDataBaseEngine.OleDb:
+                case EDatabaseEngine.OleDb:
                     return GetScriptPersonOleDb();
-                case EDataBaseEngine.MySql:
+                case EDatabaseEngine.MySql:
                     return GetScriptPersonMySql();
                 default:
-                    throw new ArgumentOutOfRangeException("The databaseEngine is not supported by this method GetScriptStates()");
+                    throw new ArgumentOutOfRangeException("The DatabaseEngine is not supported by this method GetScriptStates()");
             }
         }
         private string GetScriptStatesOleDb()
@@ -1273,9 +1277,9 @@ namespace Demo.SysWork.Data
         {
             LogText(Environment.NewLine + "///      START RepositoryClassFromDb Method DEMO         ///" + Environment.NewLine);
 
-            SyntaxProvider syntaxProvider = new SyntaxProvider(DataManager.DataBaseEngine);
+            SyntaxProvider syntaxProvider = new SyntaxProvider(DataManager.DatabaseEngine);
 
-            var repositoryClassFromDb = new RepositoryClassFromTable(DataManager.DataBaseEngine, DataManager.ConnectionString, "Person", "TestNamespace", "Persons");
+            var repositoryClassFromDb = new RepositoryClassFromTable(DataManager.DatabaseEngine, DataManager.ConnectionString, "Person", "TestNamespace", "Persons");
             var textClass = repositoryClassFromDb.ToString();
             LogText(textClass);
             Clipboard.SetText(textClass);
@@ -1290,16 +1294,16 @@ namespace Demo.SysWork.Data
             LogText(Environment.NewLine + "///      START ExistsTable Method DEMO         ///" + Environment.NewLine);
 
             string tableName = "Persons";
-            LogText(string.Format("Table {0} exists ={1} ", tableName, DbUtil.ExistsTable(DataManager.DataBaseEngine, DataManager.ConnectionString, tableName)));
+            LogText(string.Format("Table {0} exists ={1} ", tableName, DbUtil.ExistsTable(DataManager.DatabaseEngine, DataManager.ConnectionString, tableName)));
 
             tableName = "States";
-            LogText(string.Format("Table {0} exists ={1} ", tableName, DbUtil.ExistsTable(DataManager.DataBaseEngine, DataManager.ConnectionString, tableName)));
+            LogText(string.Format("Table {0} exists ={1} ", tableName, DbUtil.ExistsTable(DataManager.DatabaseEngine, DataManager.ConnectionString, tableName)));
 
             tableName = "State";
-            LogText(string.Format("Table {0} exists ={1} ", tableName, DbUtil.ExistsTable(DataManager.DataBaseEngine, DataManager.ConnectionString, tableName)));
+            LogText(string.Format("Table {0} exists ={1} ", tableName, DbUtil.ExistsTable(DataManager.DatabaseEngine, DataManager.ConnectionString, tableName)));
 
             tableName = "OtherTable";
-            LogText(string.Format("Table {0} exists ={1} ",tableName, DbUtil.ExistsTable(DataManager.DataBaseEngine, DataManager.ConnectionString, tableName)));
+            LogText(string.Format("Table {0} exists ={1} ",tableName, DbUtil.ExistsTable(DataManager.DatabaseEngine, DataManager.ConnectionString, tableName)));
 
             LogText(Environment.NewLine + "///      END ExistsTable Method DEMO         ///" + Environment.NewLine);
         }
@@ -1310,15 +1314,15 @@ namespace Demo.SysWork.Data
 
             string table = "Persons";
             string column = "IdPerson";
-            LogText(string.Format("Table: {0} Column: {1} exists ={2} ", table, column, DbUtil.ExistsColumn(DataManager.DataBaseEngine, DataManager.ConnectionString, table,column)));
+            LogText(string.Format("Table: {0} Column: {1} exists ={2} ", table, column, DbUtil.ExistsColumn(DataManager.DatabaseEngine, DataManager.ConnectionString, table,column)));
 
             table = "Persons";
             column = "Long Name Field";
-            LogText(string.Format("Table: {0} Column: {1} exists ={2} ", table, column, DbUtil.ExistsColumn(DataManager.DataBaseEngine, DataManager.ConnectionString, table, column)));
+            LogText(string.Format("Table: {0} Column: {1} exists ={2} ", table, column, DbUtil.ExistsColumn(DataManager.DatabaseEngine, DataManager.ConnectionString, table, column)));
 
             table = "Persons";
             column = "Other Field";
-            LogText(string.Format("Table: {0} Column: {1} exists ={2} ", table, column, DbUtil.ExistsColumn(DataManager.DataBaseEngine, DataManager.ConnectionString, table, column)));
+            LogText(string.Format("Table: {0} Column: {1} exists ={2} ", table, column, DbUtil.ExistsColumn(DataManager.DatabaseEngine, DataManager.ConnectionString, table, column)));
 
             LogText(Environment.NewLine + "///      END ExistsColumn Method DEMO         ///" + Environment.NewLine);
         }
@@ -1379,7 +1383,7 @@ namespace Demo.SysWork.Data
             //SELECT
             LogText("Select persons born between 01/01/2000 and 31/12/2010");
 
-            var reader = new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
+            var reader = new DbExecutor(DataManager.ConnectionString, DataManager.DatabaseEngine)
                .Query($"SELECT {_personRepository.ColumnsForSelect} FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
                .AddParameter("@FromDate", new DateTime(2000, 01, 01),DbType.DateTime)
                .AddParameter("@ToDate", new DateTime(2010, 12, 31), DbType.DateTime)
@@ -1389,7 +1393,7 @@ namespace Demo.SysWork.Data
 
 
             /*SUPER ABBREVIATED
-                var mappedList = new MapDataReaderToEntity().Map<Person>(new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
+                var mappedList = new MapDataReaderToEntity().Map<Person>(new DbExecutor(DataManager.ConnectionString, DataManager.DatabaseEngine)
                     .Query($"SELECT {_personRepository.ColumnsForSelect} FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
                     .AddParameter("@FromDate", new DateTime(2000, 01, 01))
                     .AddParameter("@ToDate", new DateTime(2010, 12, 31))
@@ -1403,7 +1407,7 @@ namespace Demo.SysWork.Data
             /*
             LogText("Select persons born between 01/01/2000 and 31/12/2010 using GetTypedList<Person>()");
             dataGridView1.DataSource = null;
-            dataGridView1.DataSource = new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
+            dataGridView1.DataSource = new DbExecutor(DataManager.ConnectionString, DataManager.DatabaseEngine)
                 .Query($"SELECT {_personRepository.ColumnsForSelect} FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
                 .AddParameter("@FromDate", new DateTime(2000, 01, 01))
                 .AddParameter("@ToDate", new DateTime(2010, 12, 31))
@@ -1414,7 +1418,7 @@ namespace Demo.SysWork.Data
             // INSERT
             LogText("Insert a new Person and Get the ID");
             long idPerson;
-            var result = new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
+            var result = new DbExecutor(DataManager.ConnectionString, DataManager.DatabaseEngine)
                 .InsertQuery("Persons")
                 .AddFieldWithValue("FirstName", "Diego")
                 .AddFieldWithValue("LastName", "Martinez")
@@ -1428,7 +1432,7 @@ namespace Demo.SysWork.Data
             LogText($"The idPerson {idPerson} was inserted");
 
             // UPDATE
-            var updateQuery = new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
+            var updateQuery = new DbExecutor(DataManager.ConnectionString, DataManager.DatabaseEngine)
                 .UpdateQuery("Persons"," IdPerson = @IdPerson")
                 .AddFieldWithValue("FirstName", "Updated-Diego")
                 .AddFieldWithValue("LastName", "Updated-Martinez")
@@ -1436,13 +1440,13 @@ namespace Demo.SysWork.Data
                 .ExecuteNonQuery();
             LogText($"The idPerson {idPerson} was Updated");
 
-            var updateQuery2 = new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
+            var updateQuery2 = new DbExecutor(DataManager.ConnectionString, DataManager.DatabaseEngine)
                 .UpdateQuery("Persons")
                 .AddFieldWithValue("Long Name Field","UPDATED!!!!")
                 .ExecuteNonQuery();
             LogText("Long Name Field was Updated for All Persons ");
 
-            var deleteQuery = new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
+            var deleteQuery = new DbExecutor(DataManager.ConnectionString, DataManager.DatabaseEngine)
                 .Query("DELETE FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
                 .AddParameter("@FromDate", new DateTime(2000, 01, 01))
                 .AddParameter("@ToDate", new DateTime(2010, 12, 31))
@@ -1450,7 +1454,7 @@ namespace Demo.SysWork.Data
             LogText($"Delete persons born between 01/01/2000 and 31/12/2010 recordAffected = {deleteQuery}");
 
 
-            var storeExecDelete = new DbExecutor(DataManager.ConnectionString, DataManager.DataBaseEngine)
+            var storeExecDelete = new DbExecutor(DataManager.ConnectionString, DataManager.DatabaseEngine)
                 .Query("DELETE_Person")
                 .AddParameter("@IdPerson", 3252)
                 .AddParameter("@Name", "Jhon Perez", DbType.String,200, ParameterDirection.Input)
@@ -1563,6 +1567,43 @@ namespace Demo.SysWork.Data
             }
 
             list = _personRepository.GetAll().ToList();
+        }
+
+        private async void  BtnGetAllAsync_Click(object sender, EventArgs e)
+        {
+            dataGridView1.DataSource = null;
+
+            var cronoSync = new Stopwatch();
+            cronoSync.Start();
+            var result2 = _stateRepository.GetAll();
+            var result1 = _personRepository.GetAll();
+            var result = _personRepository.GetAll();
+            dataGridView1.DataSource = DbUtil.ConvertToDatatable<Person>(result.ToList());
+            dataGridView1.Refresh();
+
+            cronoSync.Stop();
+            Console.WriteLine(cronoSync.Elapsed);
+
+
+            var cronoAsync = new Stopwatch();
+            cronoAsync.Start();
+
+            var resultAsync2 = _stateRepository.GetAllAsync();
+            var resultAsync1 = _personRepository.GetAllAsync();
+            var resultAsync = _personRepository.GetAllAsync();
+
+            dataGridView1.DataSource = null;
+
+            await resultAsync2;
+            await resultAsync1;
+            await resultAsync;
+
+            dataGridView1.DataSource = DbUtil.ConvertToDatatable<Person>(resultAsync.Result.ToList());
+            dataGridView1.Refresh();
+            cronoAsync.Stop();
+
+            Console.WriteLine(cronoAsync.Elapsed);
+
         }
     }
 }

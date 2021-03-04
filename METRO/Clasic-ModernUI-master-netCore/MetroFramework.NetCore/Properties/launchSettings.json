@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MetroFramework.NetCore": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}

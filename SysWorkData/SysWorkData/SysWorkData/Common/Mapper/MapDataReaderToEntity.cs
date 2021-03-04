@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
-using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.Attributes;
 using SysWork.Data.Common.ValueObjects;
 using SysWork.Data.Common.Attributes.Helpers;
+using System.Threading.Tasks;
 
 namespace SysWork.Data.Common.Mapper
 {
@@ -24,8 +24,6 @@ namespace SysWork.Data.Common.Mapper
         public bool UseTypeCache { get; set; } = true;
 
         static Dictionary<Type, IList<PropertyInfo>> _typeCache = null;
-
-        private SyntaxProvider _syntaxProvider;
 
         /// <summary>
         /// Maps the specified reader.
@@ -59,12 +57,10 @@ namespace SysWork.Data.Common.Mapper
         /// <returns></returns>
         public IList<T> Map<T>(IDataReader reader, IList<PropertyInfo> properties, EDatabaseEngine databaseEngine) where T : class, new()
         {
-            _syntaxProvider = new SyntaxProvider(databaseEngine);
-
             T aux = new T();
 
             if (UseTypeCache) AddType(aux);
-            var _properties = properties ?? 
+            var _properties = properties ??
                              (UseTypeCache ? GetCacheProperties(aux) :
                              DbColumnHelper.GetProperties(aux));
 
@@ -107,7 +103,91 @@ namespace SysWork.Data.Common.Mapper
             }
             return result;
         }
+        /// <summary>
+        /// Maps the specified reader asynchronous.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="reader">The reader.</param>
+        /// <returns></returns>
+        public async Task<IList<T>> MapAsync<T>(IDataReader reader) where T : class, new()
+        {
+            return await MapAsync<T>(reader, null, EDatabaseEngine.MSSqlServer);
+        }
 
+        /// <summary>
+        /// Maps the specified reader asynchronous.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="reader">The reader.</param>
+        /// <param name="databaseEngine">The database engine.</param>
+        /// <returns></returns>
+        public async Task<IList<T>> MapAsync<T>(IDataReader reader, EDatabaseEngine databaseEngine) where T : class, new()
+        {
+            return await MapAsync<T>(reader, null, databaseEngine);
+        }
+        /// <summary>
+        /// Maps the specified reader asynchronous.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="reader">The reader.</param>
+        /// <param name="properties">The properties.</param>
+        /// <param name="databaseEngine">The database engine.</param>
+        /// <returns></returns>
+        public async Task<IList<T>> MapAsync<T>(IDataReader reader, IList<PropertyInfo> properties, EDatabaseEngine databaseEngine) where T : class, new()
+        {
+            T aux = new T();
+
+            if (UseTypeCache) AddType(aux);
+            var _properties = properties ??
+                             (UseTypeCache ? GetCacheProperties(aux) :
+                             DbColumnHelper.GetProperties(aux));
+
+            IList<T> result = new List<T>();
+
+            var TaskMapList = new Task(() =>
+            {
+                while (reader.Read())
+                {
+                    T obj = new T();
+                    foreach (PropertyInfo i in _properties)
+                    {
+                        try
+                        {
+                            var dbColumn = (DbColumnAttribute)i.GetCustomAttribute(typeof(DbColumnAttribute));
+                            var columnName = dbColumn.ColumnName ?? i.Name;
+
+                            if ((dbColumn).Convert)
+                            {
+                                if (reader[columnName] != DBNull.Value)
+                                    i.SetValue(obj, Convert.ChangeType(reader[columnName], i.PropertyType));
+                            }
+                            else
+                            {
+                                if (reader[columnName] != DBNull.Value)
+                                {
+                                    var value = reader[columnName];
+                                    var type = Nullable.GetUnderlyingType(i.PropertyType) ?? i.PropertyType;
+                                    var safeValue = (value == null) ? null : Convert.ChangeType(value, type);
+
+                                    i.SetValue(obj, safeValue);
+                                }
+                            }
+                        }
+                        catch (Exception exception)
+                        {
+                            throw exception;
+                        }
+                    }
+
+                    result.Add(obj);
+                }
+            });
+
+            TaskMapList.Start();
+            await TaskMapList;
+
+            return result;
+        }
 
         /// <summary>
         /// Maps the single.
@@ -142,8 +222,6 @@ namespace SysWork.Data.Common.Mapper
         /// <returns></returns>
         public TEntity MapSingle<TEntity>(IDataReader reader, IList<PropertyInfo> properties, EDatabaseEngine databaseEngine) where TEntity : class, new()
         {
-            _syntaxProvider = new SyntaxProvider(databaseEngine);
-
             TEntity obj = new TEntity();
 
             if (UseTypeCache) AddType(obj);
@@ -180,6 +258,83 @@ namespace SysWork.Data.Common.Mapper
                     throw exception;
                 }
             }
+
+            return obj;
+        }
+
+        /// <summary>
+        /// Maps a single record DataReader asynchronous.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="reader">The reader.</param>
+        /// <returns></returns>
+        public async Task<TEntity> MapSingleAsync<TEntity>(IDataReader reader) where TEntity : class, new()
+        {
+            return await MapSingleAsync<TEntity>(reader, null, EDatabaseEngine.MSSqlServer);
+        }
+        /// <summary>
+        /// Maps a single record DataReader asynchronous.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="reader">The reader.</param>
+        /// <param name="databaseEngine">The database engine.</param>
+        /// <returns></returns>
+        public async Task<TEntity> MapSingleAsync<TEntity>(IDataReader reader, EDatabaseEngine databaseEngine) where TEntity : class, new()
+        {
+            return await MapSingleAsync<TEntity>(reader, null, databaseEngine);
+        }
+        /// <summary>
+        /// Maps a single record DataReader asynchronous.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="reader">The reader.</param>
+        /// <param name="properties">The properties.</param>
+        /// <param name="databaseEngine">The database engine.</param>
+        /// <returns></returns>
+        public async Task<TEntity> MapSingleAsync<TEntity>(IDataReader reader, IList<PropertyInfo> properties, EDatabaseEngine databaseEngine) where TEntity : class, new()
+        {
+            TEntity obj = new TEntity();
+
+            if (UseTypeCache) AddType(obj);
+            var _properties = properties ??
+                             (UseTypeCache ? GetCacheProperties(obj) :
+                             DbColumnHelper.GetProperties(obj));
+
+            var taskMap = new Task(()=> 
+            {
+                foreach (PropertyInfo i in _properties)
+                {
+                    try
+                    {
+                        var dbColumn = (DbColumnAttribute)i.GetCustomAttribute(typeof(DbColumnAttribute));
+                        var columnName = dbColumn.ColumnName ?? i.Name;
+
+                        if (dbColumn.Convert)
+                        {
+                            if (reader[columnName] != DBNull.Value)
+                                i.SetValue(obj, Convert.ChangeType(reader[columnName], i.PropertyType));
+                        }
+                        else
+                        {
+                            if (reader[columnName] != DBNull.Value)
+                            {
+                                var value = reader[columnName];
+                                var type = Nullable.GetUnderlyingType(i.PropertyType) ?? i.PropertyType;
+                                var safeValue = (value == null) ? null : Convert.ChangeType(value, type);
+
+                                i.SetValue(obj, safeValue);
+                            }
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        throw exception;
+                    }
+                }
+            });
+
+            taskMap.Start();
+            await taskMap;
 
             return obj;
         }
@@ -243,6 +398,71 @@ namespace SysWork.Data.Common.Mapper
             return obj;
         }
         
+        /// <summary>
+        /// Maps a DataRecord asynchronous.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="dataRecord">The data record.</param>
+        /// <returns></returns>
+        public async Task<TEntity> MapSingleAsync<TEntity>(IDataRecord dataRecord) where TEntity : class, new()
+        {
+            return await MapSingleAsync<TEntity>(dataRecord, null);
+        }
+        /// <summary>
+        /// Maps a DataRecord asynchronous.
+        /// </summary>
+        /// <typeparam name="TEntity">The type of the entity.</typeparam>
+        /// <param name="dataRecord">The data record.</param>
+        /// <param name="properties">The properties.</param>
+        /// <returns></returns>
+        public async Task<TEntity> MapSingleAsync<TEntity>(IDataRecord dataRecord, IList<PropertyInfo> properties) where TEntity : class, new()
+        {
+            TEntity obj = new TEntity();
+
+            if (UseTypeCache) AddType(obj);
+            var _properties = properties ??
+                             (UseTypeCache ? GetCacheProperties(obj) :
+                             DbColumnHelper.GetProperties(obj));
+
+            var taskMap = new Task(()=> 
+            {
+                foreach (PropertyInfo i in _properties)
+                {
+                    try
+                    {
+                        var dbColumn = (DbColumnAttribute)i.GetCustomAttribute(typeof(DbColumnAttribute));
+                        var columName = dbColumn.ColumnName ?? i.Name;
+
+                        if (dbColumn.Convert)
+                        {
+                            if (dataRecord[columName] != DBNull.Value)
+                                i.SetValue(obj, Convert.ChangeType(dataRecord[columName], i.PropertyType));
+                        }
+                        else
+                        {
+                            if (dataRecord[columName] != DBNull.Value)
+                            {
+                                var value = dataRecord[columName];
+                                var type = Nullable.GetUnderlyingType(i.PropertyType) ?? i.PropertyType;
+                                var safeValue = (value == null) ? null : Convert.ChangeType(value, type);
+
+                                i.SetValue(obj, safeValue);
+                            }
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        throw exception;
+                    }
+                }
+            });
+
+            taskMap.Start();
+            await taskMap;
+
+            return obj;
+        }
+
         /// <summary>
         /// Cleans the type of the cache.
         /// </summary>

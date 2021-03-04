@@ -6,7 +6,7 @@ namespace Demo.SysWork.Data.Repositories
 {
     public class VManagerPersonsWithStates : BaseViewManager<VW_PersonsWithStates>
     {
-        public VManagerPersonsWithStates(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        public VManagerPersonsWithStates(string connectionString, EDatabaseEngine DatabaseEngine) : base(connectionString, DatabaseEngine)
         {
         }
     }

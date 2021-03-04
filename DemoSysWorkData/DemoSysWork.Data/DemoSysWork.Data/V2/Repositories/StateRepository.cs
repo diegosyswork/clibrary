@@ -7,7 +7,7 @@ namespace Demo.SysWork.Data.Repositories
 {
     public class StateRepository : BaseRepository<State>
     {
-        public StateRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        public StateRepository(string connectionString, EDatabaseEngine DatabaseEngine) : base(connectionString, DatabaseEngine)
         {
 
         }

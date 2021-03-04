@@ -9,7 +9,7 @@ namespace Demo.SysWork.Data.Repositories
 {
     public class PersonRepository : BaseRepository<Person>
     {
-        public PersonRepository(string connectionString, EDataBaseEngine dataBaseEngine) : base(connectionString, dataBaseEngine)
+        public PersonRepository(string connectionString, EDatabaseEngine DatabaseEngine) : base(connectionString, DatabaseEngine)
         {
 
         }
