@@ -9,6 +9,8 @@ using SysWork.Data.Common.Attributes;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.Common.DbInfo;
 using SysWork.Data.Common.ValueObjects;
+using System.Threading.Tasks;
+using System.Data.Common;
 
 namespace SysWork.Data.GenericRepository
 {
@@ -124,9 +126,9 @@ namespace SysWork.Data.GenericRepository
         /// </code>
         /// </example>
         #endregion
-        public long Add(TEntity entity)
+        public async Task<long> AddAsync(TEntity entity)
         {
-            return Add(entity, null, null, null);
+            return await AddAsync(entity, null, null, null);
         }
 
         #region DOCUMENTATION Add(TEntity entity, int commandTimeOut)
@@ -239,9 +241,9 @@ namespace SysWork.Data.GenericRepository
         ///</code>
         ///</example>
         #endregion
-        public long Add(TEntity entity, int commandTimeOut)
+        public async Task<long> AddAsync(TEntity entity, int commandTimeOut)
         {
-            return Add(entity, null, null, commandTimeOut);
+            return await AddAsync(entity, null, null, commandTimeOut);
         }
 
         #region DOCUMENTATION Add(TEntity entity, IDbConnection dbConnection)
@@ -360,9 +362,9 @@ namespace SysWork.Data.GenericRepository
         /// ]]></code>
         /// </example>
         #endregion
-        public long Add(TEntity entity, IDbConnection dbConnection)
+        public async Task<long> AddAsync(TEntity entity, DbConnection dbConnection)
         {
-            return Add(entity, dbConnection, null, null);
+            return await AddAsync(entity, dbConnection, null, null);
         }
 
         #region DOCUMENTATION Add(TEntity entity, IDbConnection dbConnection, int commandTimeOut)
@@ -482,9 +484,9 @@ namespace SysWork.Data.GenericRepository
         /// ]]></code>
         /// </example>
         #endregion
-        public long Add(TEntity entity, IDbConnection dbConnection, int commandTimeOut)
+        public async Task<long> AddAsync(TEntity entity, DbConnection dbConnection, int commandTimeOut)
         {
-            return Add(entity, dbConnection, null, commandTimeOut);
+            return await AddAsync(entity, dbConnection, null, commandTimeOut);
         }
 
         #region DOCUMENTATION Add(TEntity entity, IDbTransaction dbTransaction)
@@ -608,9 +610,9 @@ namespace SysWork.Data.GenericRepository
         /// ]]></code>
         /// </example>
         #endregion
-        public long Add(TEntity entity, IDbTransaction dbTransaction)
+        public async Task<long> AddAsync(TEntity entity, DbTransaction dbTransaction)
         {
-            return Add(entity, null, dbTransaction, null);
+            return await AddAsync(entity, null, dbTransaction, null);
         }
 
         #region DOCUMENTATION Add(TEntity entity, IDbTransaction dbTransaction, int commandTimeOut)
@@ -737,9 +739,9 @@ namespace SysWork.Data.GenericRepository
         /// ]]></code>
         /// </example>
         #endregion
-        public long Add(TEntity entity, IDbTransaction dbTransaction, int commandTimeOut)
+        public async Task<long> AddAsync(TEntity entity, DbTransaction dbTransaction, int commandTimeOut)
         {
-            return Add(entity, null, dbTransaction, commandTimeOut);
+            return await AddAsync(entity, null, dbTransaction, commandTimeOut);
         }
 
         #region DOCUMENTATION Add(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction)
@@ -866,9 +868,9 @@ namespace SysWork.Data.GenericRepository
         /// ]]></code>
         /// </example>
         #endregion
-        public long Add(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction)
+        public async Task<long> AddAsync(TEntity entity, DbConnection dbConnection, DbTransaction dbTransaction)
         {
-            return Add(entity, dbConnection, dbTransaction, null);
+            return await AddAsync(entity, dbConnection, dbTransaction, null);
         }
 
         #region DOCUMENTATION Add(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
@@ -999,7 +1001,7 @@ namespace SysWork.Data.GenericRepository
         /// ]]></code>
         /// </example>
         #endregion
-        public long Add(TEntity entity, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
+        public async Task<long> AddAsync(TEntity entity, DbConnection dbConnection, DbTransaction dbTransaction, int? commandTimeOut)
         {
             long identity = 0;
             bool hasIdentity = false;
@@ -1009,8 +1011,8 @@ namespace SysWork.Data.GenericRepository
             if (dbConnection == null && dbTransaction != null)
                 dbConnection = dbTransaction.Connection;
 
-            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
-            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
+            DbConnection dbConnectionInUse = dbConnection ?? BaseDbConnection();
+            DbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
             StringBuilder parameterList = new StringBuilder();
             foreach (PropertyInfo i in EntityProperties)
@@ -1040,9 +1042,6 @@ namespace SysWork.Data.GenericRepository
                 insertQuery.Append(string.Format("INSERT INTO {0} ( {1} ) VALUES ( {2} ) {3}  ", _syntaxProvider.GetSecureTableName(TableName), ColumnsForInsert, parameterList, _syntaxProvider.GetSubQueryGetIdentity()));
                 try
                 {
-                    if (dbConnectionInUse.State != ConnectionState.Open)
-                        dbConnectionInUse.Open();
-
                     dbCommand.CommandText = insertQuery.ToString();
                     dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
 
@@ -1052,25 +1051,28 @@ namespace SysWork.Data.GenericRepository
                     if (_databaseEngine == EDatabaseEngine.OleDb)
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
+                    if (dbConnectionInUse.State != ConnectionState.Open)
+                        await dbConnectionInUse.OpenAsync();
+
                     if (hasIdentity)
                     {
                         if (_databaseEngine == EDatabaseEngine.OleDb)
                         {
                             // In case of OleDbConnection, exec the command and immediately, 
                             // exec new query to obtain the identity;
-                            dbCommand.ExecuteNonQuery();
+                            await dbCommand.ExecuteNonQueryAsync();
 
                             dbCommand.CommandText = "Select @@Identity";
-                            identity = DbUtil.ParseToLong(dbCommand.ExecuteScalar());
+                            identity = DbUtil.ParseToLong(await dbCommand.ExecuteScalarAsync());
                         }
                         else
                         {
-                            identity = DbUtil.ParseToLong(dbCommand.ExecuteScalar());
+                            identity = DbUtil.ParseToLong(await dbCommand.ExecuteScalarAsync());
                         }
                     }
                     else
                     {
-                        dbCommand.ExecuteNonQuery();
+                        await dbCommand.ExecuteNonQueryAsync();
                         identity = 0;
                     }
                     dbCommand.Dispose();
@@ -1087,250 +1089,6 @@ namespace SysWork.Data.GenericRepository
                         dbConnectionInUse.Dispose();
                     }
                 }
-            }
-            return identity;
-        }
-
-        #region DOCUMENTATION Add(TEntity entity, out string errMessage, int commandTimeOut)
-        /// <summary>
-        /// Adds a record. No thows exceptions.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        /// <param name="errMessage">The error message.</param>
-        /// <returns>
-        /// If successful, it returns the identity(Id) of the generated record.
-        /// In case it does not have an Identity type column, it returns 0.
-        /// In case of error returns -1
-        /// </returns>
-        /// <exception cref="RepositoryException"></exception>
-        /// <example>
-        /// <code><![CDATA[
-        /// using System;
-        /// using System.Data.Common;
-        /// using SysWork.Data.Common;
-        /// using SysWork.Data.Common.Utilities;
-        /// using SysWork.Data.GenericRepository;
-        /// using SysWork.Data.Common.Attributes;
-        /// using SysWork.Data.GenericRepository.Exceptions;
-        /// 
-        /// [DbTable(Name = "Persons")]
-        /// public class Person
-        /// {
-        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
-        ///     public long IdPerson { get; set; }
-        ///
-        ///     [DbColumn()]
-        ///     public string FirstName { get; set; }
-        ///
-        ///     [DbColumn()]
-        ///     public string LastName { get; set; }
-        ///
-        ///     [DbColumn()]
-        ///     public string Passport { get; set; }
-        ///
-        ///     [DbColumn()]
-        ///     public string Address { get; set; }
-        ///
-        ///     [DbColumn()]
-        ///     public long? IdState { get; set; }
-        ///
-        ///     [DbColumn()]
-        ///     public DateTime? BirthDate { get; set; }
-        ///
-        ///     [DbColumn(ColumnName = "Long Name Field")]
-        ///     public string LongNameField { get; set; }
-        ///
-        ///     [DbColumn()]
-        ///     public bool Active { get; set; }
-        /// }
-        /// 
-        /// public class PersonRepository: BaseRepository<Person>
-        /// {
-        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
-        ///     {
-        ///     }
-        ///     public Person GetByPassport(string passport)
-        ///     {
-        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
-        ///     }
-        ///     public DbExecutor GetDbExecutor()
-        ///     {
-        ///         return BaseDbExecutor();
-        ///     }
-        ///     public DbConnection GetDbConnection()
-        ///     {
-        ///         return BaseDbConnection();
-        ///     }
-        /// }
-        /// 
-        /// public class Sample
-        /// {
-        ///     static void Main()
-        ///     {
-        ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
-        ///      
-        ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
-        ///
-        ///         var p = new Person();
-        ///         p.FirstName = "Diego";
-        ///         p.LastName = "Martinez";
-        ///         p.Passport = "AR00127296";
-        ///         p.LongNameField = "Field With Long Name";
-        ///         p.Address = "Address";
-        ///         p.BirthDate = new DateTime(1980,5,24);
-        ///         p.Active = true;
-        ///         
-        ///         long id = personRepository.Add(p, out string errMessage);
-        ///         if (id!=-1)
-        ///         {
-        ///             Console.WriteLine($"The generated id is{id}");
-        ///         }
-        ///         else
-        ///         {
-        ///             Console.WriteLine($"The following error has occurred: {errMessage}}");
-        ///         }
-        ///     }
-        /// }
-        /// ]]></code>
-        /// </example>
-        #endregion
-        public long Add(TEntity entity, out string errMessage)
-        {
-            return Add(entity, out errMessage, null);
-        }
-
-
-        #region DOCUMENTATION Add(TEntity entity, out string errMessage, int commandTimeOut)
-        /// <summary>
-        /// Adds a record using custom dbCommand timeout. No thows exceptions.
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        /// <param name="errMessage">The error message.</param>
-        /// <param name="commandTimeOut">The command time out.</param>
-        /// <returns>
-        /// If successful, it returns the identity(Id) of the generated record.
-        /// In case it does not have an Identity type column, it returns 0.
-        /// In case of error returns -1
-        /// </returns>
-        /// <exception cref="RepositoryException"></exception>
-        /// <example>
-        /// <code><![CDATA[
-        /// using System;
-        /// using System.Data.Common;
-        /// using SysWork.Data.Common;
-        /// using SysWork.Data.Common.Utilities;
-        /// using SysWork.Data.GenericRepository;
-        /// using SysWork.Data.Common.Attributes;
-        /// using SysWork.Data.GenericRepository.Exceptions;
-        /// 
-        /// [DbTable(Name = "Persons")]
-        /// public class Person
-        /// {
-        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
-        ///     public long IdPerson { get; set; }
-        ///
-        ///     [DbColumn()]
-        ///     public string FirstName { get; set; }
-        ///
-        ///     [DbColumn()]
-        ///     public string LastName { get; set; }
-        ///
-        ///     [DbColumn()]
-        ///     public string Passport { get; set; }
-        ///
-        ///     [DbColumn()]
-        ///     public string Address { get; set; }
-        ///
-        ///     [DbColumn()]
-        ///     public long? IdState { get; set; }
-        ///
-        ///     [DbColumn()]
-        ///     public DateTime? BirthDate { get; set; }
-        ///
-        ///     [DbColumn(ColumnName = "Long Name Field")]
-        ///     public string LongNameField { get; set; }
-        ///
-        ///     [DbColumn()]
-        ///     public bool Active { get; set; }
-        /// }
-        /// 
-        /// public class PersonRepository: BaseRepository<Person>
-        /// {
-        ///     public PersonRepository(string connectionString, EDatabaseEngine databaseEngine) : base(connectionString, databaseEngine)
-        ///     {
-        ///     }
-        ///     public Person GetByPassport(string passport)
-        ///     {
-        ///         return GetByLambdaExpressionFilter(entity => (entity.Passport == passport));
-        ///     }
-        ///     public DbExecutor GetDbExecutor()
-        ///     {
-        ///         return BaseDbExecutor();
-        ///     }
-        ///     public DbConnection GetDbConnection()
-        ///     {
-        ///         return BaseDbConnection();
-        ///     }
-        /// }
-        /// 
-        /// public class Sample
-        /// {
-        ///     static void Main()
-        ///     {
-        ///         var connectionString = "Data Source=.;Initial Catalog=DB;User ID=MyUser;Password=MyPass";
-        ///         var databaseEngine = EDatabaseEngine.MSSqlServer;
-        ///      
-        ///         var personRepository = new PersonRepository(connectionString, databaseEngine);
-        ///
-        ///         var p = new Person();
-        ///         p.FirstName = "Diego";
-        ///         p.LastName = "Martinez";
-        ///         p.Passport = "AR00127296";
-        ///         p.LongNameField = "Field With Long Name";
-        ///         p.Address = "Address";
-        ///         p.BirthDate = new DateTime(1980,5,24);
-        ///         p.Active = true;
-        ///         
-        ///         int commandTimeOut = 60;
-        ///         
-        ///         long id = personRepository.Add(p, out string errMessage, commandTimeOut );
-        ///         if (id!=-1)
-        ///         {
-        ///             Console.WriteLine($"The generated id is{id}");
-        ///         }
-        ///         else
-        ///         {
-        ///             Console.WriteLine($"The following error has occurred: {errMessage}}");
-        ///         }
-        ///     }
-        /// }
-        /// ]]></code>
-        /// </example>
-        #endregion
-        public long Add(TEntity entity, out string errMessage, int commandTimeOut)
-        {
-            return Add(entity, out errMessage, commandTimeOut);
-        }
-
-        private long Add(TEntity entity, out string errMessage, int? commandTimeOut)
-        {
-            errMessage = "";
-            long identity = 0;
-
-            try
-            {
-                identity = Add(entity, null, null, commandTimeOut);
-            }
-            catch (RepositoryException RepositoryException)
-            {
-                errMessage = RepositoryException.OriginalException.Message;
-                identity = -1;
-            }
-            catch (Exception exception)
-            {
-                errMessage = exception.Message;
-                identity = -1;
             }
             return identity;
         }

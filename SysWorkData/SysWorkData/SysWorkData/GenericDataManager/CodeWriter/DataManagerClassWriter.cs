@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.ValueObjects;
 using SysWork.Data.GenericDataManager.CodeWriter.Properties;
 
 namespace SysWork.Data.GenericDataManager.CodeWriter
 {
+    // TODO:  Agregar la  posibilidad de crear: Clasico Singleton, DbContext Singleton, Clasico Instanciable, DbContext Instanciable, agregado el 08/03/20021
     public enum EDatamagerStyle
     {
         Classic,
@@ -27,8 +27,6 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
         private string _nameSpace;
         private List<DbObjectWriterProperty> _repositories;
         private List<DbObjectWriterProperty> _viewManagers;
-
-        private SyntaxProvider _syntaxProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataManagerClassWriter"/> class. 
@@ -64,7 +62,6 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
             _nameSpace = NameSpace;
             _repositories = Repositories;
             _viewManagers = ViewManagers;
-            _syntaxProvider = new SyntaxProvider(_databaseEngine);
         }
 
         private string GetRepositoryVariable(string repositoryName)

@@ -170,7 +170,7 @@ namespace SysWork.Data.GenericRepository
                 }
                 catch (Exception exceptionCommand)
                 {
-                    if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
+                    if ((closeConnection) && (dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open))
                     {
                         dbConnectionInUse.Close();
                         dbConnectionInUse.Dispose();

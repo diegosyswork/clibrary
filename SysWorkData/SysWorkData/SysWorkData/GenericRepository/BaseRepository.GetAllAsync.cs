@@ -1,48 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
+using System.Threading.Tasks;
 using SysWork.Data.GenericRepository.Exceptions;
 
 namespace SysWork.Data.GenericRepository
 {
     public abstract partial class BaseRepository<TEntity> 
     {
-        public IList<TEntity> GetAll()
+        public async Task<IList<TEntity>> GetAllAsync()
         {
-            return GetAll(null, null, null);
+            return await GetAllAsync(null, null, null);
         }
 
-        public IList<TEntity> GetAll(int commandTimeOut)
+        public async Task<IList<TEntity>> GetAllAsync(int commandTimeOut)
         {
-            return GetAll(null, null, commandTimeOut);
+            return await GetAllAsync(null, null, commandTimeOut);
         }
 
-        public IList<TEntity> GetAll(IDbConnection dbConnection)
+        public async Task<IList<TEntity>> GetAllAsync(DbConnection dbConnection)
         {
-            return GetAll(dbConnection, null, null);
+            return await GetAllAsync(dbConnection, null, null);
         }
 
-        public IList<TEntity> GetAll(IDbConnection dbConnection, int commandTimeOut)
+        public async Task<IList<TEntity>> GetAllAsync(DbConnection dbConnection, int commandTimeOut)
         {
-            return GetAll(dbConnection, null, commandTimeOut);
+            return await GetAllAsync(dbConnection, null, commandTimeOut);
         }
 
-        public IList<TEntity> GetAll(IDbTransaction dbTransaction)
+        public async Task<IList<TEntity>> GetAllAsync(DbTransaction dbTransaction)
         {
-            return GetAll(null, dbTransaction, null);
+            return await GetAllAsync(null, dbTransaction, null);
         }
 
-        public IList<TEntity> GetAll(IDbTransaction dbTransaction, int commandTimeOut)
+        public async Task<IList<TEntity>> GetAllAsync(DbTransaction dbTransaction, int commandTimeOut)
         {
-            return GetAll(null, dbTransaction, commandTimeOut);
+            return await GetAllAsync(null, dbTransaction, commandTimeOut);
         }
 
-        public IList<TEntity> GetAll(IDbConnection dbConnection, IDbTransaction dbTransaction)
+        public async Task<IList<TEntity>> GetAllAsync(DbConnection dbConnection, DbTransaction dbTransaction)
         {
-            return GetAll(dbConnection, dbTransaction, null);
+            return await GetAllAsync(dbConnection, dbTransaction, null);
         }
 
-        public IList<TEntity> GetAll(IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
+        public async Task<IList<TEntity>> GetAllAsync(DbConnection dbConnection, DbTransaction dbTransaction, int? commandTimeOut)
         {
             IList<TEntity> result = new List<TEntity>();
 
@@ -51,8 +53,8 @@ namespace SysWork.Data.GenericRepository
             if (dbConnection == null && dbTransaction != null)
                 dbConnection = dbTransaction.Connection;
 
-            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
-            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
+            DbConnection dbConnectionInUse = dbConnection ?? BaseDbConnection();
+            DbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
             dbCommand.CommandText = string.Format("SELECT {0} FROM {1}", ColumnsForSelect, _syntaxProvider.GetSecureTableName(TableName));
             dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
@@ -60,13 +62,13 @@ namespace SysWork.Data.GenericRepository
             try
             {
                 if (dbConnectionInUse.State != ConnectionState.Open)
-                    dbConnectionInUse.Open();
+                    await dbConnectionInUse.OpenAsync();
 
                 if (dbTransaction != null)
                     dbCommand.Transaction = dbTransaction;
 
-                IDataReader reader = dbCommand.ExecuteReader();
-                result = _mapper.Map<TEntity>(reader, EntityProperties, _databaseEngine);
+                DbDataReader reader = await  dbCommand.ExecuteReaderAsync();
+                result = await _mapper.MapAsync<TEntity>(reader, EntityProperties, _databaseEngine);
 
                 reader.Close(); reader.Dispose();
                 dbCommand.Dispose();
@@ -83,7 +85,6 @@ namespace SysWork.Data.GenericRepository
                     dbConnectionInUse.Dispose();
                 }
             }
-
             return result;
         }
     }

@@ -8,7 +8,7 @@
         /// <summary>
         /// Use manual parameters.
         /// </summary>
-        ManualParameter = 0,
+        ManualParameters = 0,
         /// <summary>
         /// Use an connectionString.
         /// </summary>

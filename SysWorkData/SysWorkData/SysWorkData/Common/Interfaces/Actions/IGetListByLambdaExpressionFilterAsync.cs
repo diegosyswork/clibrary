@@ -1,23 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Data.Common;
 using System.Linq.Expressions;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SysWork.Data.Common.Interfaces.Actions
 {
-    /// <summary>
-    /// Gets an IList with the records that match with the LambdaExpressionFilter.
-    /// </summary>
-    /// <typeparam name="TEntity">The type of the entity.</typeparam>
-    public interface IGetListByLambdaExpressionFilter<TEntity>
+    // TODO: Implementar agregado el 10/03/2021
+
+    interface IGetListByLambdaExpressionFilterAsync<TEntity>
     {
         /// <summary>
         /// Gets an IList with the records that match with the LambdaExpressionFilter.
         /// </summary>
         /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
         /// <returns></returns>
-        IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter);
+        Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter);
 
         /// <summary>
         /// Gets an IList with the records that match with the LambdaExpressionFilter using a custom dbCommand timeout.
@@ -25,7 +24,7 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
         /// <param name="commandTimeOut">The command time out.</param>
         /// <returns></returns>
-        IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, int commandTimeOut);
+        Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, int commandTimeOut);
 
         /// <summary>
         /// Gets an IList with the records that match with the LambdaExpressionFilter using an DbConnection.
@@ -33,7 +32,7 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
         /// <param name="dbConnection">The database connection.</param>
         /// <returns></returns>
-        IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection);
+        Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection);
 
         /// <summary>
         /// Gets an IList with the records that match with the LambdaExpressionFilter using an DbConnection and a custom dbCommand timeout.
@@ -42,7 +41,7 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <param name="dbConnection">The database connection.</param>
         /// <param name="commandTimeOut">The command time out.</param>
         /// <returns></returns>
-        IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, int commandTimeOut);
+        Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, int commandTimeOut);
 
         /// <summary>
         /// Gets an IList with the records that match with the LambdaExpressionFilter using an DbTransaction.
@@ -50,7 +49,7 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
         /// <param name="dbTransaction">The database transaction.</param>
         /// <returns></returns>
-        IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction dbTransaction);
+        Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbTransaction dbTransaction);
 
         /// <summary>
         /// Gets an IList with the records that match with the LambdaExpressionFilter using an DbTransaction and a custom dbCommand timeout.
@@ -59,7 +58,7 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <param name="dbTransaction">The database transaction.</param>
         /// <param name="commandTimeOut">The command time out.</param>
         /// <returns></returns>
-        IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction dbTransaction, int commandTimeOut);
+        Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbTransaction dbTransaction, int commandTimeOut);
 
         /// <summary>
         /// Gets an IList with the records that match with the LambdaExpressionFilter using an DbConnection and DbTransaction.
@@ -68,7 +67,7 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <param name="dbConnection">The database connection.</param>
         /// <param name="dbTransaction">The database transaction.</param>
         /// <returns></returns>
-        IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, IDbTransaction dbTransaction);
+        Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, DbTransaction dbTransaction);
 
         /// <summary>
         /// Gets an IList with the records that match with the LambdaExpressionFilter using an DbConnection, DbTransaction and a custom dbCommand timeout.
@@ -78,6 +77,6 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <param name="dbTransaction">The database transaction.</param>
         /// <param name="commandTimeOut">The command time out.</param>
         /// <returns></returns>
-        IList<TEntity> GetListByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut);
+        Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, DbTransaction dbTransaction, int? commandTimeOut);
     }
 }
