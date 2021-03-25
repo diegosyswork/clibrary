@@ -26,23 +26,6 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <returns></returns>
         Task<bool> DeleteByGenericWhereFilterAsync(GenericWhereFilter whereFilter, int commandTimeOut);
 
-        /// <summary>
-        /// Deletes all records that match with the GenericWhereFilter. Out parameter long returns the count of the records deleted.
-        /// </summary>
-        /// <param name="whereFilter">The where filter.</param>
-        /// <param name="recordsAffected">The records affected.</param>
-        /// <returns></returns>
-        Task<bool> DeleteByGenericWhereFilterAsync(GenericWhereFilter whereFilter, out long recordsAffected);
-
-
-        /// <summary>
-        /// Deletes all records that match with the GenericWhereFilter, using a custom dbCommand timeout. Out parameter long returns the count of the records deleted.
-        /// </summary>
-        /// <param name="whereFilter">The where filter.</param>
-        /// <param name="recordsAffected">The records affected.</param>
-        /// <param name="commandTimeOut">The command time out.</param>
-        /// <returns></returns>
-        Task<bool> DeleteByGenericWhereFilterAsync(GenericWhereFilter whereFilter, out long recordsAffected, int commandTimeOut);
 
         /// <summary>
         /// Deletes all records that match with the GenericWhereFilter, using an DbConnection.
@@ -61,24 +44,6 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <returns></returns>
         Task<bool> DeleteByGenericWhereFilterAsync(GenericWhereFilter whereFilter, DbConnection dbConnection, int commandTimeOut);
 
-        /// <summary>
-        /// Deletes all records that match with the GenericWhereFilter, using an DbConnection. Out parameter long returns the count of the records deleted.
-        /// </summary>
-        /// <param name="whereFilter">The where filter.</param>
-        /// <param name="dbConnection">The database connection.</param>
-        /// <param name="recordsAffected">The records affected.</param>
-        /// <returns></returns>
-        Task<bool> DeleteByGenericWhereFilterAsync(GenericWhereFilter whereFilter, DbConnection dbConnection, out long recordsAffected);
-
-        /// <summary>
-        /// Deletes all records that match with the GenericWhereFilter, using an DbConnection and a custom dbCommand timeout. Out parameter long returns the count of the records deleted.
-        /// </summary>
-        /// <param name="whereFilter">The where filter.</param>
-        /// <param name="dbConnection">The database connection.</param>
-        /// <param name="recordsAffected">The records affected.</param>
-        /// <param name="commandTimeOut">The command time out.</param>
-        /// <returns></returns>
-        Task<bool> DeleteByGenericWhereFilterAsync(GenericWhereFilter whereFilter, DbConnection dbConnection, out long recordsAffected, int commandTimeOut);
 
         /// <summary>
         /// Deletes all records that match with the GenericWhereFilter, using an DbTransaction.
@@ -97,34 +62,6 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <returns></returns>
         Task<bool> DeleteByGenericWhereFilterAsync(GenericWhereFilter whereFilter, DbTransaction dbTransaction, int commandTimeOut);
 
-        /// <summary>
-        /// Deletes all records that match with the GenericWhereFilter, using an DbTransaction. Out parameter long returns the count of the records deleted.
-        /// </summary>
-        /// <param name="whereFilter">The where filter.</param>
-        /// <param name="dbTransaction">The database transaction.</param>
-        /// <param name="recordsAffected">The records affected.</param>
-        /// <returns></returns>
-        Task<bool> DeleteByGenericWhereFilterAsync(GenericWhereFilter whereFilter, DbTransaction dbTransaction, out long recordsAffected);
-
-        /// <summary>
-        /// Deletes all records that match with the GenericWhereFilter, using an DbTransaction and a custom dbCommand timeout. Out parameter long returns the count of the records deleted.
-        /// </summary>
-        /// <param name="whereFilter">The where filter.</param>
-        /// <param name="dbTransaction">The database transaction.</param>
-        /// <param name="recordsAffected">The records affected.</param>
-        /// <param name="commandTimeOut">The command time out.</param>
-        /// <returns></returns>
-        Task<bool> DeleteByGenericWhereFilterAsync(GenericWhereFilter whereFilter, DbTransaction dbTransaction, out long recordsAffected, int commandTimeOut);
-
-        /// <summary>
-        /// Deletes all records that match with the GenericWhereFilter, using an DbConnection and DbTransaction. Out parameter long returns the count of the records deleted.
-        /// </summary>
-        /// <param name="whereFilter">The where filter.</param>
-        /// <param name="dbConnection">The database connection.</param>
-        /// <param name="dbTransaction">The database transaction.</param>
-        /// <param name="recordsAffected">The records affected.</param>
-        /// <returns></returns>
-        Task<bool> DeleteByGenericWhereFilterAsync(GenericWhereFilter whereFilter, DbConnection dbConnection, DbTransaction dbTransaction, out long recordsAffected);
 
         /// <summary>
         /// Deletes all records that match with the GenericWhereFilter, using an DbConnection, DbTransaction and a custom dbCommand timeout. Out parameter long returns the count of the records deleted.
@@ -135,6 +72,6 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <param name="recordsAffected">The records affected.</param>
         /// <param name="commandTimeOut">The command time out.</param>
         /// <returns></returns>
-        Task<bool> DeleteByGenericWhereFilterAsync(GenericWhereFilter whereFilter, DbConnection dbConnection, DbTransaction dbTransaction, out long recordsAffected, int? commandTimeOut);
+        Task<bool> DeleteByGenericWhereFilterAsync(GenericWhereFilter whereFilter, DbConnection dbConnection, DbTransaction dbTransaction, int? commandTimeOut);
     }
 }

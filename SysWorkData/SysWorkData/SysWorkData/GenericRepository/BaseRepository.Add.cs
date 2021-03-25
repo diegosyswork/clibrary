@@ -1040,8 +1040,6 @@ namespace SysWork.Data.GenericRepository
                 insertQuery.Append(string.Format("INSERT INTO {0} ( {1} ) VALUES ( {2} ) {3}  ", _syntaxProvider.GetSecureTableName(TableName), ColumnsForInsert, parameterList, _syntaxProvider.GetSubQueryGetIdentity()));
                 try
                 {
-                    if (dbConnectionInUse.State != ConnectionState.Open)
-                        dbConnectionInUse.Open();
 
                     dbCommand.CommandText = insertQuery.ToString();
                     dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
@@ -1051,6 +1049,9 @@ namespace SysWork.Data.GenericRepository
 
                     if (_databaseEngine == EDatabaseEngine.OleDb)
                         ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
+
+                    if (dbConnectionInUse.State != ConnectionState.Open)
+                        dbConnectionInUse.Open();
 
                     if (hasIdentity)
                     {

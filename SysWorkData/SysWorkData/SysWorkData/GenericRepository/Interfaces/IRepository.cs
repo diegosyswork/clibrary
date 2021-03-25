@@ -2,34 +2,6 @@
 
 namespace SysWork.Data.GenericRepository.Interfaces
 {
-    /// <summary>
-    /// </summary>
-    /// <typeparam name="TEntity">The type of the entity.</typeparam>
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IAdd{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IAddAsync{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IAddRange{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IAddRangeAsync{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IDeleteAll{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IDeleteAllAsync{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IDeleteByGenericWhereFilter{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IDeleteById{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IDeleteByLambdaExpressionFilter{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IExists{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IFind{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IGetAll{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IGetAllAsync{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IGetByGenericWhereFilter{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IGetById{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IGetByLambdaExpressionFilter{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IGetDataTableByGenericWhereFilter{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IGetDataTableByLambdaExpressionFilter{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IGetListByGenericWhereFilter{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IGetListByLambdaExpressionFilter{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IGetListBySqlLam{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IRecordCount{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IUpdate{TEntity}" />
-    /// <seealso cref="SysWork.Data.Common.Interfaces.Actions.IUpdateRange{TEntity}" />
-    
     public interface IRepository<TEntity> :
         IAdd<TEntity>,
         IAddAsync<TEntity>,
@@ -38,21 +10,38 @@ namespace SysWork.Data.GenericRepository.Interfaces
         IDeleteAll<TEntity>,
         IDeleteAllAsync<TEntity>,
         IDeleteByGenericWhereFilter<TEntity>,
+        IDeleteByGenericWhereFilterAsync<TEntity>,
         IDeleteById<TEntity>,
+        IDeleteByIdAsync<TEntity>,
         IDeleteByLambdaExpressionFilter<TEntity>,
+        IDeleteByLambdaExpressionFilterAsync<TEntity>,
         IExists<TEntity>,
+        IExistsAsync<TEntity>,
         IFind<TEntity>,
+        IFindAsync<TEntity>,
         IGetAll<TEntity>,
         IGetAllAsync<TEntity>,
         IGetByGenericWhereFilter<TEntity>,
+        IGetByGenericWhereFilterAsync<TEntity>,
         IGetById<TEntity>,
+        IGetByIdAsync<TEntity>,
         IGetByLambdaExpressionFilter<TEntity>,
+        IGetByLambdaExpressionFilterAsync<TEntity>,
         IGetDataTableByGenericWhereFilter<TEntity>,
+        IGetDataTableByGenericWhereFilterAsync<TEntity>,
         IGetDataTableByLambdaExpressionFilter<TEntity>,
+        IGetDataTableByLambdaExpressionFilterAsync<TEntity>,
         IGetListByGenericWhereFilter<TEntity>,
+        IGetListByGenericWhereFilterAsync<TEntity>,
         IGetListByLambdaExpressionFilter<TEntity>,
+        IGetListByLambdaExpressionFilterAsync<TEntity>,
         IGetListBySqlLam<TEntity>,
+        IGetListBySqlLamAsync<TEntity>,
         IRecordCount<TEntity>,
+        IRecordCountAsync<TEntity>,
         IUpdate<TEntity>,
-        IUpdateRange<TEntity> { }
+        IUpdateAsync<TEntity>,
+        IUpdateRange<TEntity>,
+        IUpdateRangeAsync<TEntity>
+    { }
 }

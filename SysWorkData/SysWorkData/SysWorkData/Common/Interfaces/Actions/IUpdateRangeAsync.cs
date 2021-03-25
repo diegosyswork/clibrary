@@ -8,7 +8,7 @@ namespace SysWork.Data.Common.Interfaces.Actions
     /// Updates a list of records.
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity.</typeparam>
-    public interface IUpdateRangeAsyc<TEntity>
+    public interface IUpdateRangeAsync<TEntity>
     {
         /// <summary>
         /// Updates a list of records.
@@ -78,15 +78,6 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <returns></returns>
         Task<bool> UpdateRangeAsync(IList<TEntity> entities, DbConnection dbConnection, DbTransaction dbTransaction, int commandTimeOut);
 
-        /// <summary>
-        /// Updates a list of records using an DbConnection and DbTransaction. Out long parameter returns count of recordsAffected.
-        /// </summary>
-        /// <param name="entities">The entities.</param>
-        /// <param name="dbConnection">The database connection.</param>
-        /// <param name="dbTransaction">The database transaction.</param>
-        /// <param name="recordsAffected">The records affected.</param>
-        /// <returns></returns>
-        Task<bool> UpdateRangeAsync(IList<TEntity> entities, DbConnection dbConnection, DbTransaction dbTransaction, out long recordsAffected);
     }
 
 }

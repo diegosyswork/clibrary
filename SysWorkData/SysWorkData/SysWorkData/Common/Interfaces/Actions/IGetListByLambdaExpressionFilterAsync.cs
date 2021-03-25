@@ -9,7 +9,7 @@ namespace SysWork.Data.Common.Interfaces.Actions
 {
     // TODO: Implementar agregado el 10/03/2021
 
-    interface IGetListByLambdaExpressionFilterAsync<TEntity>
+    public interface IGetListByLambdaExpressionFilterAsync<TEntity>
     {
         /// <summary>
         /// Gets an IList with the records that match with the LambdaExpressionFilter.

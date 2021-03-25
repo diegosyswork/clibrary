@@ -13,36 +13,36 @@ namespace SysWork.Data.GenericRepository
     {
         public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter)
         {
-            return 0;
+            return DeleteByLambdaExpressionFilter(lambdaExpressionFilter,null,null,null);
         }
         public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, int commandTimeOut)
         {
-            return 0;
+            return DeleteByLambdaExpressionFilter(lambdaExpressionFilter, null, null, commandTimeOut);
         }
 
         public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection)
         {
-            return 0;
+            return DeleteByLambdaExpressionFilter(lambdaExpressionFilter, dbConnection,null , null);
         }
 
         public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, int commandTimeOut)
         {
-            return 0;
+            return DeleteByLambdaExpressionFilter(lambdaExpressionFilter, dbConnection, null, commandTimeOut);
         }
 
         public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction dbTransaction)
         {
-            return 0;
+            return DeleteByLambdaExpressionFilter(lambdaExpressionFilter, null, dbTransaction, null);
         }
 
         public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return 0;
+            return DeleteByLambdaExpressionFilter(lambdaExpressionFilter, null, dbTransaction, commandTimeOut);
         }
 
         public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, IDbTransaction dbTransaction)
         {
-            return 0;
+            return DeleteByLambdaExpressionFilter(lambdaExpressionFilter, dbConnection, dbTransaction, null);
         }
 
         public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)

@@ -1605,5 +1605,49 @@ namespace Demo.SysWork.Data
             Console.WriteLine(cronoAsync.Elapsed);
 
         }
+
+        private async void BtnAddRangeAsync_Click(object sender, EventArgs e)
+        {
+            
+             var personList = new List<Person>();
+            /*for (int i = 0; i < 10000; i++)
+                personList.Add(GetRandomPerson());
+
+            var dbConnection = _personRepository.GetDbConnection();
+
+            var chrono = new Stopwatch();
+            chrono.Start();
+
+            dbConnection.Open();
+            _personRepository.AddRange(personList, dbConnection);
+            dbConnection.Close();
+            chrono.Stop();
+
+            Console.WriteLine($"Elapsed: {chrono.ElapsedMilliseconds}");
+            */
+            LogText("Create a list of 10.000 persons" );
+            personList.Clear();
+            for (int i = 0; i < 10000; i++)
+                personList.Add(GetRandomPerson());
+
+            LogText("List Created" );
+
+            var dbConnectionAsync = _personRepository.GetDbConnection();
+
+            var chronoAsync = new Stopwatch();
+            chronoAsync.Start();
+
+            await dbConnectionAsync.OpenAsync();
+
+            LogText("AddRange");
+            var task = _personRepository.AddRangeAsync(personList, dbConnectionAsync);
+
+            await task;
+
+            dbConnectionAsync.Close();
+            chronoAsync.Stop();
+            LogText($"Added 10.000 persons in: { chronoAsync.ElapsedMilliseconds} {Environment.NewLine} milliseconds");
+
+        }
     }
 }

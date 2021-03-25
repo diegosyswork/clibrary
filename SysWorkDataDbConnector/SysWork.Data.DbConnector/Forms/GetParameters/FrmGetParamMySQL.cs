@@ -106,7 +106,7 @@ namespace SysWork.Data.Common.Forms.GetParameters
 
             ConnectionString = txtConnectionString.Text;
 
-            ParameterTypeUsed = rbtnConnectionString.Checked ? EConnectorParameterTypeUsed.ConnectionString : EConnectorParameterTypeUsed.ManualParameter;
+            ParameterTypeUsed = rbtnConnectionString.Checked ? EConnectorParameterTypeUsed.ConnectionString : EConnectorParameterTypeUsed.ManualParameters;
 
             if (rbtnConnectionString.Checked)
             {

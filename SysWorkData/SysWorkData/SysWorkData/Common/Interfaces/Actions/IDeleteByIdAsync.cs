@@ -77,26 +77,5 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <param name="commandTimeOut">The command time out.</param>
         /// <returns></returns>
         Task<bool> DeleteByIdAsync(long Id, DbConnection dbConnection, DbTransaction dbTransaction, int commandTimeOut);
-
-        /// <summary>
-        /// Deletes a record by the identifier,using an DbConnection and DbTransaction. Out parameter long returns the count of the records deleted
-        /// </summary>
-        /// <param name="Id">The identifier.</param>
-        /// <param name="dbConnection">The database connection.</param>
-        /// <param name="dbTransaction">The database transaction.</param>
-        /// <param name="recordsAffected">The records affected.</param>
-        /// <returns></returns>
-        Task<bool> DeleteByIdAsync(long Id, DbConnection dbConnection, DbTransaction dbTransaction, out long recordsAffected);
-
-        /// <summary>
-        /// Deletes a record by the identifier,using an DbConnection, DbTransaction and a custom dbCommand timeout. Out parameter long returns the count of the records deleted
-        /// </summary>
-        /// <param name="Id">The identifier.</param>
-        /// <param name="dbConnection">The database connection.</param>
-        /// <param name="dbTransaction">The database transaction.</param>
-        /// <param name="recordsAffected">The records affected.</param>
-        /// <param name="commandTimeOut">The command time out.</param>
-        /// <returns></returns>
-        Task<bool> DeleteByIdAsync(long Id, DbConnection dbConnection, DbTransaction dbTransaction, out long recordsAffected, int? commandTimeOut);
     }
 }

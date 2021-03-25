@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Threading.Tasks;
 using SysWork.Data.Common.LambdaSqlBuilder;
 
@@ -33,7 +34,7 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <param name="sqlLam">The SqlLam Object.</param>
         /// <param name="dbConnection">The database connection.</param>
         /// <returns></returns>
-        Task<IList<TEntity>> GetListBySqlLamAsync(SqlLamBase sqlLam, IDbConnection dbConnection);
+        Task<IList<TEntity>> GetListBySqlLamAsync(SqlLamBase sqlLam, DbConnection dbConnection);
 
         /// <summary>
         /// Gets an IList<TEntity> with the records that match with the SqlLam Object query using an DbConnection and a custom dbCommand timeout.
@@ -42,7 +43,7 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <param name="dbConnection">The database connection.</param>
         /// <param name="commandTimeOut">The command time out.</param>
         /// <returns></returns>
-        Task<IList<TEntity>> GetListBySqlLamAsync(SqlLamBase sqlLam, IDbConnection dbConnection, int commandTimeOut);
+        Task<IList<TEntity>> GetListBySqlLamAsync(SqlLamBase sqlLam, DbConnection dbConnection, int commandTimeOut);
 
         /// <summary>
         /// Gets an IList<TEntity> with the records that match with the SqlLam Object query using an DbTransaction.
@@ -50,7 +51,7 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <param name="sqlLam">The SqlLam Object.</param>
         /// <param name="dbTransaction">The database transaction.</param>
         /// <returns></returns>
-        Task<IList<TEntity>> GetListBySqlLamAsync(SqlLamBase sqlLam, IDbTransaction dbTransaction);
+        Task<IList<TEntity>> GetListBySqlLamAsync(SqlLamBase sqlLam, DbTransaction dbTransaction);
 
         /// <summary>
         /// Gets an IList<TEntity> with the records that match with the SqlLam Object query using an DbTransaction and a custom dbCommand timeout.
@@ -59,7 +60,7 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <param name="dbTransaction">The database transaction.</param>
         /// <param name="commandTimeOut">The command time out.</param>
         /// <returns></returns>
-        Task<IList<TEntity>> GetListBySqlLamAsync(SqlLamBase sqlLam, IDbTransaction dbTransaction, int commandTimeOut);
+        Task<IList<TEntity>> GetListBySqlLamAsync(SqlLamBase sqlLam, DbTransaction dbTransaction, int commandTimeOut);
 
         /// <summary>
         /// Gets an IList<TEntity> with the records that match with the SqlLam Object query using an DbConnection and DbTransaction.
@@ -68,7 +69,7 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <param name="dbConnection">The database connection.</param>
         /// <param name="dbTransaction">The database transaction.</param>
         /// <returns></returns>
-        Task<IList<TEntity>> GetListBySqlLamAsync(SqlLamBase sqlLam, IDbConnection dbConnection, IDbTransaction dbTransaction);
+        Task<IList<TEntity>> GetListBySqlLamAsync(SqlLamBase sqlLam, DbConnection dbConnection, DbTransaction dbTransaction);
 
         /// <summary>
         /// Gets an IList<TEntity> with the records that match with the SqlLam Object query using an DbConnection, DbTransaction and a custom dbCommand timeout.
@@ -78,6 +79,6 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <param name="dbTransaction">The database transaction.</param>
         /// <param name="commandTimeOut">The command time out.</param>
         /// <returns></returns>
-        Task<IList<TEntity>> GetListBySqlLamAsync(SqlLamBase sqlLam, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut);
+        Task<IList<TEntity>> GetListBySqlLamAsync(SqlLamBase sqlLam, DbConnection dbConnection, DbTransaction dbTransaction, int? commandTimeOut);
     }
 }

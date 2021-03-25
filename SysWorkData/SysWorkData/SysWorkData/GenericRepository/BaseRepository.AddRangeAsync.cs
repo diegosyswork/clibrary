@@ -79,59 +79,58 @@ namespace SysWork.Data.GenericRepository
                 throw new RepositoryException(connectionException);
             }
 
-            foreach (TEntity entity in entities)
-            {
-                string parameterList = "";
-                dbCommand = dbConnectionInUse.CreateCommand();
-                dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
-
-                string addRangeQuery = "";
-                foreach (PropertyInfo i in EntityProperties)
+                foreach (TEntity entity in entities)
                 {
-                    var dbColumn = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
-                    if (!dbColumn.IsIdentity)
+                    string parameterList = "";
+                    dbCommand = dbConnectionInUse.CreateCommand();
+                    dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
+
+                    string addRangeQuery = "";
+                    foreach (PropertyInfo i in EntityProperties)
                     {
-                        string parameterName = "@param_" + i.Name;
-                        parameterList += string.Format("{0},", parameterName);
+                        var dbColumn = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
+                        if (!dbColumn.IsIdentity)
+                        {
+                            string parameterName = "@param_" + i.Name;
+                            parameterList += string.Format("{0},", parameterName);
 
-                        DbColumnInfo cdbi = (DbColumnInfo)_columnListWithDbInfo[i.Name];
-                        dbCommand.Parameters.Add(CreateIDbDataParameter(parameterName, cdbi.DbType, i.GetValue(entity), cdbi.MaxLenght));
-                    }
-                }
-
-                if (parameterList != string.Empty)
-                {
-                    parameterList = parameterList.Substring(0, parameterList.Length - 1);
-                    addRangeQuery = (string.Format("INSERT INTO {0} ( {1} ) VALUES ( {2} ) {3};", _syntaxProvider.GetSecureTableName(TableName), ColumnsForInsert, parameterList, _syntaxProvider.GetSubQueryGetIdentity()));
-                }
-
-                try
-                {
-                    dbCommand.CommandText = addRangeQuery;
-                    if (dbTransaction != null)
-                        dbCommand.Transaction = dbTransaction;
-
-                    if (_databaseEngine == EDatabaseEngine.OleDb)
-                        ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
-
-                    await (dbCommand.ExecuteNonQueryAsync());
-                    dbCommand.Dispose();
-                }
-                catch (Exception commandException)
-                {
-                    // In case of exception, if the command is open, close it.
-                    if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
-                    {
-                        if (dbConnectionInUse.State == ConnectionState.Open)
-                            dbConnectionInUse.Close();
-
-                        dbConnectionInUse.Dispose();
+                            DbColumnInfo cdbi = (DbColumnInfo)_columnListWithDbInfo[i.Name];
+                            dbCommand.Parameters.Add(CreateIDbDataParameter(parameterName, cdbi.DbType, i.GetValue(entity), cdbi.MaxLenght));
+                        }
                     }
 
-                    throw new RepositoryException(commandException, dbCommand);
-                }
-            }
+                    if (parameterList != string.Empty)
+                    {
+                        parameterList = parameterList.Substring(0, parameterList.Length - 1);
+                        addRangeQuery = (string.Format("INSERT INTO {0} ( {1} ) VALUES ( {2} ) {3};", _syntaxProvider.GetSecureTableName(TableName), ColumnsForInsert, parameterList, _syntaxProvider.GetSubQueryGetIdentity()));
+                    }
 
+                    try
+                    {
+                        dbCommand.CommandText = addRangeQuery;
+                        if (dbTransaction != null)
+                            dbCommand.Transaction = dbTransaction;
+
+                        if (_databaseEngine == EDatabaseEngine.OleDb)
+                            ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
+
+                        await (dbCommand.ExecuteNonQueryAsync());
+                        dbCommand.Dispose();
+                    }
+                    catch (Exception commandException)
+                    {
+                        // In case of exception, if the command is open, close it.
+                        if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
+                        {
+                            if (dbConnectionInUse.State == ConnectionState.Open)
+                                dbConnectionInUse.Close();
+
+                            dbConnectionInUse.Dispose();
+                        }
+
+                        throw new RepositoryException(commandException, dbCommand);
+                    }
+                }
 
             if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
             {

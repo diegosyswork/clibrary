@@ -40,7 +40,7 @@ namespace SysWork.Data.Common.DbConnector
                 connectionSb.UserID = DefaultUser ?? "";
                 connectionSb.Password = DefaultPassword ?? "";
                 connectionSb.InitialCatalog = DefaultDatabase ?? "";
-                ConnectorParameterTypeUsed = EConnectorParameterTypeUsed.ManualParameter;
+                ConnectorParameterTypeUsed = EConnectorParameterTypeUsed.ManualParameters;
             }
             else
             {
