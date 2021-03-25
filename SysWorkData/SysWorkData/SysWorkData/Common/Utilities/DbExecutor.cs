@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
 using System.Linq;
+using System.Threading.Tasks;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.LambdaSqlBuilder;
@@ -52,14 +53,14 @@ namespace SysWork.Data.Common.Utilities
     ///     .AddParameter("IdCategory",5)
     ///  .ExecuteNonQuery();
     ///  
-    ///   var reader = new DbExecutor(connectionString)
+    ///  var reader = new DbExecutor(connectionString)
     ///     .Query("SELECT Products WHERE IdCategory = @pIdCategory")
     ///     .AddParameter("@pIdCategory",5)
     ///     .ExecuteReader();
-    ///   while(reader.Read())
-    ///   {
+    ///  while(reader.Read())
+    ///  {
     ///       // do something.
-    ///   }
+    ///  }
     ///   
     ///   var resul = new DbExecutor(connectionString)
     ///     .Query("SELECT COUNT(*) as qty FROM Products WHERE IdCategory = @pIdCategory")
@@ -226,10 +227,10 @@ namespace SysWork.Data.Common.Utilities
         /// <code>
         /// <![CDATA[
         ///   var id = new DbExecutor(connectionString)
-        ///     .InsertQuery("Products")
-        ///     .AddFieldWithValue("Cost",155.4)
-        ///     .AddFieldWithValue("IdProduct",77978788)
-        ///     .AddFieldWithValue("IdCategory",5)
+        ///         .InsertQuery("Products")
+        ///         .AddFieldWithValue("Cost",155.4)
+        ///         .AddFieldWithValue("IdProduct",77978788)
+        ///         .AddFieldWithValue("IdCategory",5)
         ///   .ExecuteScalar();
         /// ]]>
         /// </code>
@@ -255,10 +256,10 @@ namespace SysWork.Data.Common.Utilities
         /// <code>
         /// <![CDATA[
         ///   new DbExecutor(connectionString)
-        ///     .UpdateQuery("Products"," WHERE IdCategory = @pIdCategory AND active = 0")
-        ///     .AddFieldWithValue("Cost", 0)
-        ///     .AddFieldWithValue("Price", 0)
-        ///     .AddParameter("@pIdCategory",5)
+        ///         .UpdateQuery("Products"," WHERE IdCategory = @pIdCategory AND active = 0")
+        ///         .AddFieldWithValue("Cost", 0)
+        ///         .AddFieldWithValue("Price", 0)
+        ///         .AddParameter("@pIdCategory",5)
         ///  .ExecuteNonQuery();
         /// ]]>
         /// </code>
@@ -559,12 +560,12 @@ namespace SysWork.Data.Common.Utilities
         /// <example>
         /// <code>
         /// <![CDATA[
-        ///   var result = new DbExecutor(connectionString)
+        /// var result = new DbExecutor(connectionString)
         ///     .Query("INSERT INTO products (ProductCode, Description,ExpirationDate) VALUES (@pProductCode,@pDescription,@pExpirationDate)")
         ///     .AddParameter("@pProductCode","779778745581")
         ///     .AddParameter("@pDescription","MANAOS UVA x 2.25 LTS",DbType.String, 50)
         ///     .AddParameter("@pExpirationDate","2021-01-01",DbType.DateTime)
-        ///  .ExecuteScalar();
+        /// .ExecuteScalar();
         /// ]]>
         /// </code> 
         /// </example>
@@ -822,12 +823,20 @@ namespace SysWork.Data.Common.Utilities
         #endregion 
         public long ExecuteNonQuery()
         {
-            return ExecuteNonQuery(_dbConnection, _dbTransaction, null,CommandType.Text);
+            return ExecuteNonQuery(_dbConnection, _dbTransaction, null, CommandType.Text);
+        }
+        public async Task<long> ExecuteNonQueryAsync()
+        {
+            return await ExecuteNonQueryAsync(_dbConnection, _dbTransaction, null, CommandType.Text);
         }
 
         public long ExecuteNonQuery(CommandType commandType)
         {
             return ExecuteNonQuery(_dbConnection, _dbTransaction, null, commandType);
+        }
+        public async Task<long> ExecuteNonQueryAsync(CommandType commandType)
+        {
+            return await ExecuteNonQueryAsync(_dbConnection, _dbTransaction, null, commandType);
         }
 
         #region DOCUMENTATION ExecuteNonQuery(int dbCommandTimeOut)
@@ -881,12 +890,20 @@ namespace SysWork.Data.Common.Utilities
         #endregion 
         public long ExecuteNonQuery(int dbCommandTimeOut)
         {
-            return ExecuteNonQuery(_dbConnection, _dbTransaction, dbCommandTimeOut,CommandType.Text);
+            return ExecuteNonQuery(_dbConnection, _dbTransaction, dbCommandTimeOut, CommandType.Text);
+        }
+        public async Task<long> ExecuteNonQueryAsync(int dbCommandTimeOut)
+        {
+            return await ExecuteNonQueryAsync(_dbConnection, _dbTransaction, dbCommandTimeOut, CommandType.Text);
         }
 
         public long ExecuteNonQuery(int dbCommandTimeOut, CommandType commandType)
         {
             return ExecuteNonQuery(_dbConnection, _dbTransaction, dbCommandTimeOut, commandType);
+        }
+        public async Task<long> ExecuteNonQueryAsync(int dbCommandTimeOut, CommandType commandType)
+        {
+            return await ExecuteNonQueryAsync(_dbConnection, _dbTransaction, dbCommandTimeOut, commandType);
         }
 
         private long ExecuteNonQuery(IDbConnection dbConnection, IDbTransaction dbTransaction, int? dbCommandTimeOut, CommandType commandType)
@@ -940,7 +957,74 @@ namespace SysWork.Data.Common.Utilities
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                 long recordsAffected = dbCommand.ExecuteNonQuery();
-                
+
+                return recordsAffected;
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+            finally
+            {
+                if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
+                {
+                    dbConnectionInUse.Close();
+                    dbConnectionInUse.Dispose();
+                }
+            }
+        }
+        private async Task<long> ExecuteNonQueryAsync(DbConnection dbConnection, DbTransaction dbTransaction, int? dbCommandTimeOut, CommandType commandType)
+        {
+            if (_isInsertQuery) NormalizeInsertQuery();
+            if (_isUpdateQuery) NormalizeUpdateQuery();
+
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
+
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
+
+            DbConnection dbConnectionInUse = dbConnection ?? _dataObjectProvider.GetDbConnection(_connectionString);
+            DbCommand dbCommand = dbConnectionInUse.CreateCommand();
+
+            try
+            {
+                if (dbTransaction != null)
+                    dbCommand.Transaction = dbTransaction;
+
+                dbCommand.CommandText = _sqlQuery;
+                dbCommand.CommandTimeout = dbCommandTimeOut ?? _defaultCommandTimeOut;
+                dbCommand.CommandType = commandType;
+
+                foreach (var param in _queryParameters)
+                {
+                    var dbParameter = dbCommand.CreateParameter();
+                    dbParameter.ParameterName = param.Key;
+                    dbParameter.Value = param.Value ?? (Object)DBNull.Value;
+
+                    if (_queryParameterSize.TryGetValue(dbParameter.ParameterName, out int paramSize))
+                        if (paramSize != 0)
+                            dbParameter.Size = paramSize;
+
+                    if (_queryParameterDbTye.TryGetValue(dbParameter.ParameterName, out DbType dbType))
+                        dbParameter.DbType = dbType;
+
+                    if (_queryParameterDirection.TryGetValue(dbParameter.ParameterName, out ParameterDirection parameterDirection))
+                        dbParameter.Direction = parameterDirection;
+
+
+                    dbCommand.Parameters.Add(dbParameter);
+                }
+
+                DbParameters = dbCommand.Parameters;
+
+                if (_databaseEngine == EDatabaseEngine.OleDb)
+                    ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
+
+                if (dbConnectionInUse.State != ConnectionState.Open)
+                    await dbConnectionInUse.OpenAsync();
+
+                long recordsAffected = await dbCommand.ExecuteNonQueryAsync();
+
                 return recordsAffected;
             }
             catch (Exception exception)
@@ -1023,12 +1107,16 @@ namespace SysWork.Data.Common.Utilities
         #endregion
         public object ExecuteScalar()
         {
-            return ExecuteScalar(_dbConnection, _dbTransaction, null,CommandType.Text);
+            return ExecuteScalar(_dbConnection, _dbTransaction, null, CommandType.Text);
+        }
+        public async Task<object> ExecuteScalarAsync()
+        {
+            return await ExecuteScalarAsync(_dbConnection, _dbTransaction, null, CommandType.Text);
         }
 
-        public object ExecuteScalar(CommandType commandType)
+        public async Task<object> ExecuteScalarAsync(CommandType commandType)
         {
-            return ExecuteScalar(_dbConnection, _dbTransaction, null, commandType);
+            return await ExecuteScalarAsync(_dbConnection, _dbTransaction, null, commandType);
         }
 
         #region DOCUMENTATION ExecuteScalar(int dbCommandTimeOut)
@@ -1095,13 +1183,13 @@ namespace SysWork.Data.Common.Utilities
         /// An object that must then be converted to obtain the query result value.
         /// </returns>
         #endregion 
-        public object ExecuteScalar(int dbCommandTimeOut)
+        public async Task<object> ExecuteScalarAsync(int dbCommandTimeOut)
         {
-            return ExecuteScalar(_dbConnection, _dbTransaction, dbCommandTimeOut,CommandType.Text);
+            return await ExecuteScalarAsync(_dbConnection, _dbTransaction, dbCommandTimeOut,CommandType.Text);
         }
-        public object ExecuteScalar(int dbCommandTimeOut, CommandType commandType)
+        public async Task<object> ExecuteScalarAsync(int dbCommandTimeOut, CommandType commandType)
         {
-            return ExecuteScalar(_dbConnection, _dbTransaction, dbCommandTimeOut, commandType);
+            return await ExecuteScalarAsync(_dbConnection, _dbTransaction, dbCommandTimeOut, commandType);
         }
 
         #region DOCUMENTATION private ExecuteScalarIDbConnection paramConnection, IDbTransaction dbTransaction, int dbCommandTimeOut = -1)
@@ -1158,7 +1246,7 @@ namespace SysWork.Data.Common.Utilities
 
                 if (dbTransaction != null)
                     dbCommand.Transaction = dbTransaction;
-                
+
                 dbCommand.CommandText = _sqlQuery;
                 dbCommand.CommandTimeout = dbCommandTimeOut ?? _defaultCommandTimeOut;
                 dbCommand.CommandType = commandType;
@@ -1210,6 +1298,79 @@ namespace SysWork.Data.Common.Utilities
                 }
             }
         }
+        private async Task<object> ExecuteScalarAsync(DbConnection dbConnection, DbTransaction dbTransaction, int? dbCommandTimeOut, CommandType commandType)
+        {
+            if (_isInsertQuery) NormalizeInsertQuery();
+            if (_isUpdateQuery) NormalizeUpdateQuery();
+
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
+
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
+
+            DbConnection dbConnectionInUse = dbConnection ?? _dataObjectProvider.GetDbConnection(_connectionString);
+            DbCommand dbCommand = dbConnectionInUse.CreateCommand();
+
+            try
+            {
+
+                if (dbTransaction != null)
+                    dbCommand.Transaction = dbTransaction;
+
+                dbCommand.CommandText = _sqlQuery;
+                dbCommand.CommandTimeout = dbCommandTimeOut ?? _defaultCommandTimeOut;
+                dbCommand.CommandType = commandType;
+
+                foreach (var param in _queryParameters)
+                {
+                    var dbParameter = dbCommand.CreateParameter();
+                    dbParameter.ParameterName = param.Key;
+                    dbParameter.Value = param.Value ?? (Object)DBNull.Value;
+
+                    if (_queryParameterSize.TryGetValue(dbParameter.ParameterName, out int paramSize))
+                        if (paramSize != 0)
+                            dbParameter.Size = paramSize;
+
+                    if (_queryParameterDbTye.TryGetValue(dbParameter.ParameterName, out DbType dbType))
+                        dbParameter.DbType = dbType;
+
+                    if (_queryParameterDirection.TryGetValue(dbParameter.ParameterName, out ParameterDirection parameterDirection))
+                        dbParameter.Direction = parameterDirection;
+
+                    dbCommand.Parameters.Add(dbParameter);
+                }
+
+                DbParameters = dbCommand.Parameters;
+
+                if (_databaseEngine == EDatabaseEngine.OleDb)
+                {
+                    ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
+                    if (_isInsertQuery)
+                    {
+                        dbCommand.ExecuteNonQuery();
+                        dbCommand.CommandText = "Select @@Identity";
+                        dbCommand.Parameters.Clear();
+                    }
+                }
+                if (dbConnectionInUse.State != ConnectionState.Open)
+                    await dbConnectionInUse.OpenAsync();
+
+                return await dbCommand.ExecuteScalarAsync();
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+            finally
+            {
+                if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
+                {
+                    dbConnectionInUse.Close();
+                    dbConnectionInUse.Dispose();
+                }
+            }
+        }
+
         #region DOCUMENTATION ExecuteReader()
         /// <summary>
         /// Run an IDbCommand with the SQLQuery using the ExecuteReader() method.
@@ -1264,12 +1425,20 @@ namespace SysWork.Data.Common.Utilities
         #endregion
         public IDataReader ExecuteReader()
         {
-            return ExecuteReader(_dbConnection, _dbTransaction,null, CommandType.Text);
+            return ExecuteReader(_dbConnection, _dbTransaction, null, CommandType.Text);
+        }
+        public async Task<IDataReader> ExecuteReaderAsync()
+        {
+            return await ExecuteReaderAsync(_dbConnection, _dbTransaction, null, CommandType.Text);
         }
 
         public IDataReader ExecuteReader(CommandType commandType)
         {
             return ExecuteReader(_dbConnection, _dbTransaction, null, commandType);
+        }
+        public async Task<IDataReader> ExecuteReaderAsync(CommandType commandType)
+        {
+            return await ExecuteReaderAsync(_dbConnection, _dbTransaction, null, commandType);
         }
 
         #region DOCUMENTATION ExecuteReader(int dbCommandTextTimeOut)
@@ -1327,13 +1496,21 @@ namespace SysWork.Data.Common.Utilities
         #endregion
         public IDataReader ExecuteReader(int dbCommandTimeOut)
         {
-            return ExecuteReader(_dbConnection, _dbTransaction, dbCommandTimeOut,CommandType.Text);
+            return ExecuteReader(_dbConnection, _dbTransaction, dbCommandTimeOut, CommandType.Text);
         }
-        public IDataReader ExecuteReader(int dbCommandTimeOut,CommandType commandType)
+        public async Task<IDataReader> ExecuteReaderAsync(int dbCommandTimeOut)
+        {
+            return await ExecuteReaderAsync(_dbConnection, _dbTransaction, dbCommandTimeOut, CommandType.Text);
+        }
+
+        public IDataReader ExecuteReader(int dbCommandTimeOut, CommandType commandType)
         {
             return ExecuteReader(_dbConnection, _dbTransaction, dbCommandTimeOut, commandType);
         }
-
+        public async Task<IDataReader> ExecuteReaderAsync(int dbCommandTimeOut, CommandType commandType)
+        {
+            return await ExecuteReaderAsync(_dbConnection, _dbTransaction, dbCommandTimeOut, commandType);
+        }
         /// <summary>
         /// Run an IDbCommand with the SQLQuery using the ExecuteReader(int dbCommandTextTimeOut) method.
         /// </summary>
@@ -1402,6 +1579,69 @@ namespace SysWork.Data.Common.Utilities
                 throw exception;
             }
         }
+
+        private async Task<IDataReader> ExecuteReaderAsync(DbConnection dbConnection, DbTransaction dbTransaction, int? dbCommandTimeout, CommandType commandType)
+        {
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
+            if (dbCommandTimeout == -1) dbCommandTimeout = DefaultCommandTimeOut;
+
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
+
+            DbConnection dbConnectionInUse = dbConnection ?? _dataObjectProvider.GetDbConnection(_connectionString);
+            DbCommand dbCommand = dbConnectionInUse.CreateCommand();
+
+            try
+            {
+                if (dbTransaction != null)
+                    dbCommand.Transaction = dbTransaction;
+
+                dbCommand.CommandText = _sqlQuery;
+                dbCommand.CommandTimeout = dbCommandTimeout ?? _defaultCommandTimeOut;
+                dbCommand.CommandType = commandType;
+
+                foreach (var param in _queryParameters)
+                {
+                    var dbParameter = dbCommand.CreateParameter();
+                    dbParameter.ParameterName = param.Key;
+                    dbParameter.Value = param.Value ?? (Object)DBNull.Value;
+
+                    if (_queryParameterSize.TryGetValue(dbParameter.ParameterName, out int paramSize))
+                        if (paramSize != 0)
+                            dbParameter.Size = paramSize;
+
+                    if (_queryParameterDbTye.TryGetValue(dbParameter.ParameterName, out DbType dbType))
+                        dbParameter.DbType = dbType;
+
+                    if (_queryParameterDirection.TryGetValue(dbParameter.ParameterName, out ParameterDirection parameterDirection))
+                        dbParameter.Direction = parameterDirection;
+
+                    dbCommand.Parameters.Add(dbParameter);
+                }
+
+                DbParameters = dbCommand.Parameters;
+
+                if (_databaseEngine == EDatabaseEngine.OleDb)
+                    ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
+
+                if (dbConnectionInUse.State != ConnectionState.Open)
+                    await dbConnectionInUse.OpenAsync();
+
+                return await dbCommand.ExecuteReaderAsync(closeConnection ? CommandBehavior.CloseConnection : CommandBehavior.Default);
+            }
+            catch (Exception exception)
+            {
+                if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open))
+                {
+                    dbConnectionInUse.Close();
+                    dbConnectionInUse.Dispose();
+                }
+
+                throw exception;
+            }
+        }
+
+
 
         private string FirstLetterCapital(string str)
         {

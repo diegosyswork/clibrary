@@ -8,15 +8,15 @@ using SysWork.Data.GenericRepository.Exceptions;
 
 namespace SysWork.Data.GenericViewManager
 {
-    public abstract partial class BaseViewManager<TEntity> : IGetAll<TEntity>
+    public abstract partial class BaseViewManager<TEntity> : IGetAllAsync<TEntity>
     {
         /// <summary>
         /// Gets all records of the table.
         /// </summary>
         /// <returns></returns>
-        public IList<TEntity> GetAll()
+        public async Task<IList<TEntity>> GetAllAsync()
         {
-            return GetAll(null, null, null);
+            return await GetAllAsync(null, null, null);
         }
 
         /// <summary>
@@ -24,9 +24,9 @@ namespace SysWork.Data.GenericViewManager
         /// </summary>
         /// <param name="commandTimeOut">The command time out.</param>
         /// <returns></returns>
-        public IList<TEntity> GetAll(int commandTimeOut)
+        public async Task<IList<TEntity>> GetAllAsync(int commandTimeOut)
         {
-            return GetAll(null, null, commandTimeOut);
+            return await GetAllAsync(null, null, commandTimeOut);
         }
 
         /// <summary>
@@ -34,9 +34,9 @@ namespace SysWork.Data.GenericViewManager
         /// </summary>
         /// <param name="dbConnection">The database connection.</param>
         /// <returns></returns>
-        public IList<TEntity> GetAll(IDbConnection dbConnection)
+        public async Task<IList<TEntity>> GetAllAsync(DbConnection dbConnection)
         {
-            return GetAll(dbConnection, null, null);
+            return await GetAllAsync(dbConnection, null, null);
         }
 
         /// <summary>
@@ -45,9 +45,9 @@ namespace SysWork.Data.GenericViewManager
         /// <param name="dbConnection">The database connection.</param>
         /// <param name="commandTimeOut">The command time out.</param>
         /// <returns></returns>
-        public IList<TEntity> GetAll(IDbConnection dbConnection, int commandTimeOut)
+        public async Task<IList<TEntity>> GetAllAsync(DbConnection dbConnection, int commandTimeOut)
         {
-            return GetAll(dbConnection, null, commandTimeOut);
+            return await GetAllAsync(dbConnection, null, commandTimeOut);
         }
 
         /// <summary>
@@ -55,9 +55,9 @@ namespace SysWork.Data.GenericViewManager
         /// </summary>
         /// <param name="dbTransaction">The database transaction.</param>
         /// <returns></returns>
-        public IList<TEntity> GetAll(IDbTransaction dbTransaction)
+        public async Task<IList<TEntity>> GetAllAsync(DbTransaction dbTransaction)
         {
-            return GetAll(null, dbTransaction, null);
+            return await GetAllAsync(null, dbTransaction, null);
         }
 
         /// <summary>
@@ -66,9 +66,9 @@ namespace SysWork.Data.GenericViewManager
         /// <param name="dbTransaction">The database transaction.</param>
         /// <param name="commandTimeOut">The command time out</param>
         /// <returns></returns>
-        public IList<TEntity> GetAll(IDbTransaction dbTransaction, int commandTimeOut)
+        public async Task<IList<TEntity>> GetAllAsync(DbTransaction dbTransaction, int commandTimeOut)
         {
-            return GetAll(null, dbTransaction, commandTimeOut);
+            return await GetAllAsync(null, dbTransaction, commandTimeOut);
         }
 
         /// <summary>
@@ -77,11 +77,11 @@ namespace SysWork.Data.GenericViewManager
         /// <param name="dbConnection">The database connection.</param>
         /// <param name="dbTransaction">The database transaction.</param>
         /// <returns></returns>
-        public IList<TEntity> GetAll(IDbConnection dbConnection, IDbTransaction dbTransaction)
+        public async Task<IList<TEntity>> GetAllAsync(DbConnection dbConnection, DbTransaction dbTransaction)
         {
-            return GetAll(dbConnection, dbTransaction, null);
+            return await GetAllAsync(dbConnection, dbTransaction, null);
         }
-        
+
         /// <summary>
         /// Gets all records of the table using an DbConnection, DbTransaction and a custom dbCommand timeout.
         /// </summary>
@@ -89,7 +89,7 @@ namespace SysWork.Data.GenericViewManager
         /// <param name="dbTransaction">The database transaction.</param>
         /// <param name="commandTimeOut">The command time out.</param>
         /// <returns></returns>
-        public IList<TEntity> GetAll(IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
+        public async Task<IList<TEntity>> GetAllAsync(DbConnection dbConnection, DbTransaction dbTransaction, int? commandTimeOut)
         {
             IList<TEntity> collection = new List<TEntity>();
 
@@ -98,9 +98,9 @@ namespace SysWork.Data.GenericViewManager
             if (dbConnection == null && dbTransaction != null)
                 dbConnection = dbTransaction.Connection;
 
-            IDbConnection dbConnectionInUse = dbConnection ?? GetIDbConnection();
+            DbConnection dbConnectionInUse = dbConnection ?? GetDbConnection();
 
-            IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
+            DbCommand dbCommand = dbConnectionInUse.CreateCommand();
             dbCommand.CommandText = string.Format("SELECT {0} FROM {1}", ColumnsForSelect, _syntaxProvider.GetSecureViewName(ViewName));
             dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
 
@@ -112,8 +112,8 @@ namespace SysWork.Data.GenericViewManager
                 if (dbTransaction != null)
                     dbCommand.Transaction = dbTransaction;
 
-                IDataReader reader = dbCommand.ExecuteReader();
-                collection = _mapper.Map<TEntity>(reader, EntityProperties, _databaseEngine);
+                DbDataReader reader = await dbCommand.ExecuteReaderAsync();
+                collection = await _mapper.MapAsync<TEntity>(reader, EntityProperties, _databaseEngine);
 
                 reader.Close(); reader.Dispose();
                 dbCommand.Dispose();
@@ -133,5 +133,11 @@ namespace SysWork.Data.GenericViewManager
 
             return collection;
         }
+
+
+
+
+
+
     }
 }
