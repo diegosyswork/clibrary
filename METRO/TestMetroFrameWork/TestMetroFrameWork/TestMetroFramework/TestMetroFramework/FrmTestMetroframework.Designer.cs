@@ -539,7 +539,7 @@
             this.DtpEntrega.FontSize = MetroFramework.MetroDateTimeSize.Small;
             this.DtpEntrega.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DtpEntrega.Location = new System.Drawing.Point(87, 73);
-            this.DtpEntrega.MinimumSize = new System.Drawing.Size(0, 25);
+            this.DtpEntrega.MinimumSize = new System.Drawing.Size(4, 25);
             this.DtpEntrega.Name = "DtpEntrega";
             this.DtpEntrega.Size = new System.Drawing.Size(90, 25);
             this.DtpEntrega.TabIndex = 27;
@@ -559,7 +559,7 @@
             this.DtpVencimiento.FontSize = MetroFramework.MetroDateTimeSize.Small;
             this.DtpVencimiento.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DtpVencimiento.Location = new System.Drawing.Point(87, 36);
-            this.DtpVencimiento.MinimumSize = new System.Drawing.Size(0, 25);
+            this.DtpVencimiento.MinimumSize = new System.Drawing.Size(4, 25);
             this.DtpVencimiento.Name = "DtpVencimiento";
             this.DtpVencimiento.Size = new System.Drawing.Size(90, 25);
             this.DtpVencimiento.TabIndex = 25;
@@ -579,7 +579,7 @@
             this.DtpFecha.FontSize = MetroFramework.MetroDateTimeSize.Small;
             this.DtpFecha.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DtpFecha.Location = new System.Drawing.Point(87, 3);
-            this.DtpFecha.MinimumSize = new System.Drawing.Size(0, 25);
+            this.DtpFecha.MinimumSize = new System.Drawing.Size(4, 25);
             this.DtpFecha.Name = "DtpFecha";
             this.DtpFecha.Size = new System.Drawing.Size(90, 25);
             this.DtpFecha.TabIndex = 23;
@@ -762,7 +762,7 @@
             // 
             this.GridArticulos.AllowUserToResizeRows = false;
             this.GridArticulos.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.GridArticulos.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.GridArticulos.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.GridArticulos.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.GridArticulos.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -882,7 +882,7 @@
             // 
             this.metroLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.metroLabel1.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.metroLabel1.Location = new System.Drawing.Point(757, 591);
+            this.metroLabel1.Location = new System.Drawing.Point(757, 573);
             this.metroLabel1.Name = "metroLabel1";
             this.metroLabel1.Size = new System.Drawing.Size(134, 23);
             this.metroLabel1.TabIndex = 12;
@@ -893,7 +893,7 @@
             // metroLabel2
             // 
             this.metroLabel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroLabel2.Location = new System.Drawing.Point(757, 638);
+            this.metroLabel2.Location = new System.Drawing.Point(757, 621);
             this.metroLabel2.Name = "metroLabel2";
             this.metroLabel2.Size = new System.Drawing.Size(134, 25);
             this.metroLabel2.TabIndex = 13;
@@ -904,11 +904,11 @@
             // LblImporteTotal
             // 
             this.LblImporteTotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.LblImporteTotal.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.LblImporteTotal.FontSize = MetroFramework.MetroLabelSize.ExtraLarge;
             this.LblImporteTotal.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.LblImporteTotal.Location = new System.Drawing.Point(757, 663);
+            this.LblImporteTotal.Location = new System.Drawing.Point(654, 642);
             this.LblImporteTotal.Name = "LblImporteTotal";
-            this.LblImporteTotal.Size = new System.Drawing.Size(134, 26);
+            this.LblImporteTotal.Size = new System.Drawing.Size(241, 52);
             this.LblImporteTotal.TabIndex = 14;
             this.LblImporteTotal.Text = "$ 1500.00";
             this.LblImporteTotal.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -919,18 +919,19 @@
             this.metroLabel4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.metroLabel4.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.metroLabel4.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel4.Location = new System.Drawing.Point(617, 663);
+            this.metroLabel4.Location = new System.Drawing.Point(509, 661);
             this.metroLabel4.Name = "metroLabel4";
             this.metroLabel4.Size = new System.Drawing.Size(134, 26);
             this.metroLabel4.TabIndex = 15;
             this.metroLabel4.Text = "Total";
             this.metroLabel4.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.metroLabel4.UseStyleColors = true;
+            this.metroLabel4.Click += new System.EventHandler(this.metroLabel4_Click);
             // 
             // metroLabel5
             // 
             this.metroLabel5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroLabel5.Location = new System.Drawing.Point(617, 591);
+            this.metroLabel5.Location = new System.Drawing.Point(617, 573);
             this.metroLabel5.Name = "metroLabel5";
             this.metroLabel5.Size = new System.Drawing.Size(134, 23);
             this.metroLabel5.TabIndex = 16;
@@ -941,7 +942,7 @@
             // metroLabel6
             // 
             this.metroLabel6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroLabel6.Location = new System.Drawing.Point(579, 638);
+            this.metroLabel6.Location = new System.Drawing.Point(579, 619);
             this.metroLabel6.Name = "metroLabel6";
             this.metroLabel6.Size = new System.Drawing.Size(172, 23);
             this.metroLabel6.TabIndex = 17;
@@ -1001,7 +1002,7 @@
             // LblIVA
             // 
             this.LblIVA.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.LblIVA.Location = new System.Drawing.Point(618, 614);
+            this.LblIVA.Location = new System.Drawing.Point(617, 596);
             this.LblIVA.Name = "LblIVA";
             this.LblIVA.Size = new System.Drawing.Size(134, 23);
             this.LblIVA.TabIndex = 21;
@@ -1012,7 +1013,7 @@
             // metroLabel7
             // 
             this.metroLabel7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.metroLabel7.Location = new System.Drawing.Point(758, 614);
+            this.metroLabel7.Location = new System.Drawing.Point(757, 596);
             this.metroLabel7.Name = "metroLabel7";
             this.metroLabel7.Size = new System.Drawing.Size(134, 23);
             this.metroLabel7.TabIndex = 20;

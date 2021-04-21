@@ -360,7 +360,8 @@ namespace SysWork.Data.Common.Utilities
         /// <code>
         /// <![CDATA[
         ///   new DbExecutor(connectionString)
-        ///     .UpdateQuery("Products"," SET cost = 0 WHERE IdCategory = @pIdCategory AND active = 0")
+        ///     .UpdateQuery("Products","WHERE IdCategory = @pIdCategory AND active = 0")
+        ///     .AddFieldWithValue("Cost",0)
         ///     .AddParameter("@pIdCategory",5)
         ///  .ExecuteNonQuery();
         ///  

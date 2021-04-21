@@ -93,13 +93,17 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
             dataType = dataType.Replace("System.", "");
             if (dataType == "Boolean")
                 dataType = "bool";
-            else if (dataType == "Int32" || dataType == "Int64")
+            else if (dataType == "Int32")
                 dataType = "long";
+            else if (dataType == "Int16")
+                dataType = "Int16";
+            else if (dataType.ToLower() == "binary" || dataType.ToLower() == "varbinary" || dataType.ToLower() == "image" || dataType.ToLower() == "file")
+                dataType = "byte[]";
             else if (dataType != "DateTime")
                 dataType = dataType.ToLower();
 
             if (allowDBNull && (dataType.ToLower() != "string") && (dataType.ToLower() != "bool"))
-                dataType = dataType + "?";
+                dataType += "?";
 
             return dataType;
         }

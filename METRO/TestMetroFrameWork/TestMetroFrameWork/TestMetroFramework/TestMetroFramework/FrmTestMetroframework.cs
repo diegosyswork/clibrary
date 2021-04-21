@@ -213,6 +213,11 @@ namespace TestMetroFramework
         {
             MetroMessageBox.Show(this, "Seleccionaste el cliente", "Carga de comprobantes de Ventas", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
+
+        private void metroLabel4_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
     public class DetalleGrilla

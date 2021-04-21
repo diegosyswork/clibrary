@@ -155,7 +155,7 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
 
             ret += $"\t\tprivate Lazy<{viewManager.ObjectName}> {viewManagerVariable};" + Environment.NewLine;
             if (_datamagerStyle == EDatamagerStyle.Classic)
-                ret += $"\t\tpublic {viewManager} {viewManager} {{get => GetInstance().{viewManagerVariable}.Value;}}" + Environment.NewLine;
+                ret += $"\t\tpublic {viewManager.ObjectName} {viewManager.PublicPropertyName} {{get => {viewManagerVariable}.Value;}}" + Environment.NewLine + Environment.NewLine;
             else
                 ret += $"\t\tpublic static {viewManager.ObjectName} {viewManager.PublicPropertyName} {{get => GetInstance().{viewManagerVariable}.Value;}}" + Environment.NewLine + Environment.NewLine;
 

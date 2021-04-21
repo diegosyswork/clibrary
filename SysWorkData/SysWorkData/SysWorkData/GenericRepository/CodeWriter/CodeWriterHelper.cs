@@ -94,11 +94,15 @@ namespace SysWork.Data.GenericRepository.CodeWriter
                 dataType = "bool";
             else if (dataType == "Int32")
                 dataType = "long";
+            else if (dataType == "Int16")
+                dataType = "Int16";
+            else if (dataType.ToLower() == "binary" || dataType.ToLower() == "varbinary" || dataType.ToLower() == "image" || dataType.ToLower() == "file")
+                dataType = "byte[]";
             else if (dataType != "DateTime")
                 dataType = dataType.ToLower();
 
             if (allowDBNull && (dataType.ToLower() != "string") && (dataType.ToLower() != "bool"))
-                dataType = dataType + "?";
+                dataType += "?";
 
             return dataType;
         }
@@ -117,7 +121,7 @@ namespace SysWork.Data.GenericRepository.CodeWriter
             ret = "\t\t[DbColumn(";
             ret += isIdentity ? "IsIdentity = true" : "";
             ret += isPrimary ? (isIdentity ? "," : "") + " IsPrimary = true" : "";
-            ret += ColumnName != null ? " ColumnName = \"" + ColumnName + "\"" : "";
+            ret += ColumnName != null ? (isPrimary|| isIdentity ? ",":"") + " ColumnName = \"" + ColumnName + "\"" : "";
             ret += ")]" ;
             return ret;
         }

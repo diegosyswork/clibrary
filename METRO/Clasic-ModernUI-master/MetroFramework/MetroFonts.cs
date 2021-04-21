@@ -35,7 +35,11 @@ namespace MetroFramework
     {
         Small,
         Medium,
-        Tall
+        Tall,
+        Large,
+        ExtraLarge,
+        XXL,
+        Giant
     }
 
     public enum MetroLabelWeight
@@ -434,6 +438,42 @@ namespace MetroFramework
                     return Default(18f);
                 if (labelWeight == MetroLabelWeight.Bold)
                     return DefaultBold(18f);
+            }
+            else if (labelSize == MetroLabelSize.Large)
+            {
+                if (labelWeight == MetroLabelWeight.Light)
+                    return DefaultLight(22f);
+                if (labelWeight == MetroLabelWeight.Regular)
+                    return Default(22f);
+                if (labelWeight == MetroLabelWeight.Bold)
+                    return DefaultBold(22f);
+            }
+            else if (labelSize == MetroLabelSize.ExtraLarge)
+            {
+                if (labelWeight == MetroLabelWeight.Light)
+                    return DefaultLight(30f);
+                if (labelWeight == MetroLabelWeight.Regular)
+                    return Default(30f);
+                if (labelWeight == MetroLabelWeight.Bold)
+                    return DefaultBold(30f);
+            }
+            else if (labelSize == MetroLabelSize.XXL)
+            {
+                if (labelWeight == MetroLabelWeight.Light)
+                    return DefaultLight(40f);
+                if (labelWeight == MetroLabelWeight.Regular)
+                    return Default(40f);
+                if (labelWeight == MetroLabelWeight.Bold)
+                    return DefaultBold(40f);
+            }
+            else if (labelSize == MetroLabelSize.Giant)
+            {
+                if (labelWeight == MetroLabelWeight.Light)
+                    return DefaultLight(60f);
+                if (labelWeight == MetroLabelWeight.Regular)
+                    return Default(60f);
+                if (labelWeight == MetroLabelWeight.Bold)
+                    return DefaultBold(60f);
             }
 
             return DefaultLight(14f);
