@@ -37,6 +37,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.GrpDetails = new System.Windows.Forms.GroupBox();
+            this.BtnAddRangeAsync = new System.Windows.Forms.Button();
             this.BtnGetAllAsync = new System.Windows.Forms.Button();
             this.BtnTestMapper = new System.Windows.Forms.Button();
             this.BtnGetByGenericWhere = new System.Windows.Forms.Button();
@@ -71,7 +72,7 @@
             this.BtnExistsTable = new System.Windows.Forms.Button();
             this.BtnUpdate = new System.Windows.Forms.Button();
             this.BtnAdd = new System.Windows.Forms.Button();
-            this.BtnAddRangeAsync = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.GrpParameters.SuspendLayout();
             this.GrpDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -171,6 +172,7 @@
             this.GrpDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.GrpDetails.Controls.Add(this.button1);
             this.GrpDetails.Controls.Add(this.BtnAddRangeAsync);
             this.GrpDetails.Controls.Add(this.BtnGetAllAsync);
             this.GrpDetails.Controls.Add(this.BtnTestMapper);
@@ -211,6 +213,16 @@
             this.GrpDetails.Size = new System.Drawing.Size(876, 438);
             this.GrpDetails.TabIndex = 93;
             this.GrpDetails.TabStop = false;
+            // 
+            // BtnAddRangeAsync
+            // 
+            this.BtnAddRangeAsync.Location = new System.Drawing.Point(250, 326);
+            this.BtnAddRangeAsync.Name = "BtnAddRangeAsync";
+            this.BtnAddRangeAsync.Size = new System.Drawing.Size(102, 21);
+            this.BtnAddRangeAsync.TabIndex = 149;
+            this.BtnAddRangeAsync.Text = "AddRange Async";
+            this.BtnAddRangeAsync.UseVisualStyleBackColor = true;
+            this.BtnAddRangeAsync.Click += new System.EventHandler(this.BtnAddRangeAsync_Click);
             // 
             // BtnGetAllAsync
             // 
@@ -545,15 +557,15 @@
             this.BtnAdd.UseVisualStyleBackColor = true;
             this.BtnAdd.Click += new System.EventHandler(this.BtnAdd_Click);
             // 
-            // BtnAddRangeAsync
+            // button1
             // 
-            this.BtnAddRangeAsync.Location = new System.Drawing.Point(250, 326);
-            this.BtnAddRangeAsync.Name = "BtnAddRangeAsync";
-            this.BtnAddRangeAsync.Size = new System.Drawing.Size(102, 21);
-            this.BtnAddRangeAsync.TabIndex = 149;
-            this.BtnAddRangeAsync.Text = "AddRange Async";
-            this.BtnAddRangeAsync.UseVisualStyleBackColor = true;
-            this.BtnAddRangeAsync.Click += new System.EventHandler(this.BtnAddRangeAsync_Click);
+            this.button1.Location = new System.Drawing.Point(431, 311);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(18, 15);
+            this.button1.TabIndex = 150;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // FrmDemoSysworkData
             // 
@@ -621,6 +633,7 @@
         private System.Windows.Forms.Button BtnTestMapper;
         private System.Windows.Forms.Button BtnGetAllAsync;
         private System.Windows.Forms.Button BtnAddRangeAsync;
+        private System.Windows.Forms.Button button1;
     }
 }
 

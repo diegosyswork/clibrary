@@ -16,7 +16,7 @@ namespace SysWork.Data.Common.DataObjectProvider
     /// </remarks> 
     public class DbObjectProvider
     {
-        private AbstractDataObjectCreator _dataObjectCreator;
+        private readonly AbstractDataObjectCreator _dataObjectCreator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DbObjectProvider"/> class.

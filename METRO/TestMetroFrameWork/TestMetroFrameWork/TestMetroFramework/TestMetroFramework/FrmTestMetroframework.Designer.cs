@@ -539,7 +539,7 @@
             this.DtpEntrega.FontSize = MetroFramework.MetroDateTimeSize.Small;
             this.DtpEntrega.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DtpEntrega.Location = new System.Drawing.Point(87, 73);
-            this.DtpEntrega.MinimumSize = new System.Drawing.Size(4, 25);
+            this.DtpEntrega.MinimumSize = new System.Drawing.Size(0, 25);
             this.DtpEntrega.Name = "DtpEntrega";
             this.DtpEntrega.Size = new System.Drawing.Size(90, 25);
             this.DtpEntrega.TabIndex = 27;
@@ -559,7 +559,7 @@
             this.DtpVencimiento.FontSize = MetroFramework.MetroDateTimeSize.Small;
             this.DtpVencimiento.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DtpVencimiento.Location = new System.Drawing.Point(87, 36);
-            this.DtpVencimiento.MinimumSize = new System.Drawing.Size(4, 25);
+            this.DtpVencimiento.MinimumSize = new System.Drawing.Size(0, 25);
             this.DtpVencimiento.Name = "DtpVencimiento";
             this.DtpVencimiento.Size = new System.Drawing.Size(90, 25);
             this.DtpVencimiento.TabIndex = 25;
@@ -579,7 +579,7 @@
             this.DtpFecha.FontSize = MetroFramework.MetroDateTimeSize.Small;
             this.DtpFecha.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.DtpFecha.Location = new System.Drawing.Point(87, 3);
-            this.DtpFecha.MinimumSize = new System.Drawing.Size(4, 25);
+            this.DtpFecha.MinimumSize = new System.Drawing.Size(0, 25);
             this.DtpFecha.Name = "DtpFecha";
             this.DtpFecha.Size = new System.Drawing.Size(90, 25);
             this.DtpFecha.TabIndex = 23;

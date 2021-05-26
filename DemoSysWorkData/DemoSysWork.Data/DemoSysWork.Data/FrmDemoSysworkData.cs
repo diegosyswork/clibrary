@@ -1649,5 +1649,12 @@ namespace Demo.SysWork.Data
             LogText($"Added 10.000 persons in: { chronoAsync.ElapsedMilliseconds} {Environment.NewLine} milliseconds");
 
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //_personRepository.GetByLambdaExpressionFilter(p => p.FirstName.Substring(1,2) == "Di");
+            _personRepository.GetByLambdaExpressionFilter(p => p.FirstName.Contains( "Diego"));
+            _personRepository.GetByLambdaExpressionFilter(p => p.FirstName.Trim() == "Diego");
+        }
     }
 }
