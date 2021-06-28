@@ -38,13 +38,16 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
             operationNode.Left = ResolveQuery((dynamic)binaryExpression.Left);
             operationNode.Operator = binaryExpression.NodeType;
             operationNode.Right = ResolveQuery((dynamic)binaryExpression.Right);
-
+            
             return operationNode;
         }
 
         private Node ResolveQuery(MethodCallExpression callExpression)
         {
             LikeMethod likeOperation;
+            TrimMethod trimOperation;
+
+            var zz = callExpression.Object;
 
             if (Enum.TryParse(callExpression.Method.Name, true, out likeOperation))
             {
@@ -52,15 +55,30 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
                 var fieldValue = (string)GetExpressionValue(callExpression.Arguments.First());
 
                 return new LikeNode()
-                           {
-                               MemberNode = new MemberNode()
-                                       {
-                                           TableName = GetTableName(member),
-                                           FieldName = GetColumnName(callExpression.Object)
-                                       },
-                               Method = likeOperation,
-                               Value = fieldValue
-                           };
+                {
+                    MemberNode = new MemberNode()
+                    {
+                        TableName = GetTableName(member),
+                        FieldName = GetColumnName(callExpression.Object)
+                    },
+                    Method = likeOperation,
+                    Value = fieldValue
+                };
+            }
+            else if (Enum.TryParse(callExpression.Method.Name, true, out trimOperation))
+            {
+                var member = callExpression.Object as MemberExpression;
+
+                return new TrimNode()
+                {
+                    MemberNode = new MemberNode()
+                    {
+                        TableName = GetTableName(member),
+                        FieldName = GetColumnName(callExpression.Object)
+                    },
+                    Method = trimOperation,
+                    obj = callExpression.Object
+                };
             }
             else
             {

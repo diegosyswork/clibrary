@@ -23,6 +23,24 @@
         /// <summary>
         /// The equals
         /// </summary>
-        Equals,
+        Equals
+    }
+
+    public enum TrimMethod
+    {
+        /// <summary>
+        /// The starts with
+        /// </summary>
+        Trim,
+
+        /// <summary>
+        /// The ends with
+        /// </summary>
+        TrimStart,
+
+        /// <summary>
+        /// Determines whether this instance contains the object.
+        /// </summary>
+        TrimEnd
     }
 }

@@ -1653,7 +1653,8 @@ namespace Demo.SysWork.Data
         private void button1_Click(object sender, EventArgs e)
         {
             //_personRepository.GetByLambdaExpressionFilter(p => p.FirstName.Substring(1,2) == "Di");
-            _personRepository.GetByLambdaExpressionFilter(p => p.FirstName.Contains( "Diego"));
+            //_personRepository.GetByLambdaExpressionFilter(p => p.FirstName.Contains( "Diego"));
+            //_personRepository.GetByLambdaExpressionFilter(p => p.FirstName == "Diego");
             _personRepository.GetByLambdaExpressionFilter(p => p.FirstName.Trim() == "Diego");
         }
     }

@@ -40,6 +40,25 @@ namespace SysWork.Data.Common.LambdaSqlBuilder.Resolver
             }
         }
 
+        void BuildSql(TrimNode node)
+        {
+            string value = node.Value;
+            switch (node.Method)
+            {
+                case TrimMethod.Trim:
+                    value = node.Value + "%";
+                    break;
+                case TrimMethod.TrimStart:
+                    value = "%" + node.Value;
+                    break;
+                case TrimMethod.TrimEnd:
+                    value = "%" + node.Value + "%";
+                    break;
+            }
+            _builder.QueryByFieldLike(node.MemberNode.TableName, node.MemberNode.FieldName, value);
+        }
+
+
         void BuildSql(OperationNode node)
         {
             BuildSql((dynamic)node.Left, (dynamic)node.Right, node.Operator);
