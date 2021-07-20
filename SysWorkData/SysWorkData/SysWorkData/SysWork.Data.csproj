@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;net452</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net48</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>2.0.1</Version>
     <Authors>Diego Martinez</Authors>
@@ -17,26 +17,23 @@
     <Optimize>false</Optimize>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Common\Attributes\Helpers\" />
-  </ItemGroup>
-
   <ItemGroup Condition="'$(TargetFramework)' == 'net461'">
     <PackageReference Include="System.Data.OleDb">
       <Version>4.7.1</Version>
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
-    <PackageReference Include="System.Data.OleDb">
-      <Version>4.7.1</Version>
-    </PackageReference>
+  <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="8.0.25" />
+    <PackageReference Include="System.Data.OleDb" Version="5.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.114.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MySql.Data" Version="8.0.21" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.113.1" />
+    <None Update="Queryable\Data\OleDb\packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
 
 </Project>

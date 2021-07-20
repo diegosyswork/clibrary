@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.Common;
 using SysWork.Data.Common.ValueObjects;
+using SysWork.Data;
 
 namespace SysWork.Data.Common.DataObjectProvider
 {
@@ -119,6 +120,16 @@ namespace SysWork.Data.Common.DataObjectProvider
         public DbDataAdapter GetDbDataAdapter()
         {
             return _dataObjectCreator.GetDbDataAdapter();
+        }
+
+        public DbEntityProvider GetQueryProvider(string connectionString)
+        {
+            return _dataObjectCreator.GetQueryProvider(connectionString);
+        }
+
+        public DbEntityProvider GetQueryProvider(DbConnection dbConnection)
+        {
+            return _dataObjectCreator.GetQueryProvider(dbConnection);
         }
     }
 }

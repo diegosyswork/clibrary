@@ -1,54 +1,91 @@
 ﻿using System;
 using System.Data;
-using System.Data.OleDb;
 using System.Linq.Expressions;
-using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
-using SysWork.Data.Common.LambdaSqlBuilder;
+using System.Data.Common;
 using SysWork.Data.GenericRepository.Exceptions;
-using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.GenericRepository
 {
     public abstract partial class BaseRepository<TEntity> 
     {
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter)
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter)
         {
-            return DeleteByLambdaExpressionFilter(lambdaExpressionFilter,null,null,null);
+            return DeleteByLambdaExpressionFilter(filter,null,null,null);
         }
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, int commandTimeOut)
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter, int commandTimeOut)
         {
-            return DeleteByLambdaExpressionFilter(lambdaExpressionFilter, null, null, commandTimeOut);
-        }
-
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection)
-        {
-            return DeleteByLambdaExpressionFilter(lambdaExpressionFilter, dbConnection,null , null);
+            return DeleteByLambdaExpressionFilter(filter, null, null, commandTimeOut);
         }
 
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, int commandTimeOut)
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter, IDbConnection dbConnection)
         {
-            return DeleteByLambdaExpressionFilter(lambdaExpressionFilter, dbConnection, null, commandTimeOut);
+            return DeleteByLambdaExpressionFilter(filter, dbConnection,null , null);
         }
 
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction dbTransaction)
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter, IDbConnection dbConnection, int commandTimeOut)
         {
-            return DeleteByLambdaExpressionFilter(lambdaExpressionFilter, null, dbTransaction, null);
+            return DeleteByLambdaExpressionFilter(filter, dbConnection, null, commandTimeOut);
         }
 
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction dbTransaction, int commandTimeOut)
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter, IDbTransaction dbTransaction)
         {
-            return DeleteByLambdaExpressionFilter(lambdaExpressionFilter, null, dbTransaction, commandTimeOut);
+            return DeleteByLambdaExpressionFilter(filter, null, dbTransaction, null);
         }
 
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, IDbTransaction dbTransaction)
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return DeleteByLambdaExpressionFilter(lambdaExpressionFilter, dbConnection, dbTransaction, null);
+            return DeleteByLambdaExpressionFilter(filter, null, dbTransaction, commandTimeOut);
         }
 
-        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter, IDbConnection dbConnection, IDbTransaction dbTransaction)
+        {
+            return DeleteByLambdaExpressionFilter(filter, dbConnection, dbTransaction, null);
+        }
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
+        {
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
+            long result;
+
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
+
+            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
+
+            try
+            {
+                if (dbConnectionInUse.State != ConnectionState.Open)
+                    dbConnectionInUse.Open();
+
+                DbEntityProvider entityProvider = _dbObjectProvider.GetQueryProvider((DbConnection)dbConnectionInUse);
+                if (dbTransaction != null)
+                {
+                    entityProvider.Transaction = (DbTransaction)dbTransaction;
+                    entityProvider.Isolation = dbTransaction.IsolationLevel;
+                }
+
+                var table = entityProvider.GetTable<TEntity>();
+                result = table.Delete<TEntity>(filter);
+
+            }
+            catch (Exception e)
+            {
+                throw new RepositoryException(e);
+            }
+            finally 
+            {
+                if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
+                {
+                    dbConnectionInUse.Close();
+                    dbConnectionInUse.Dispose();
+                }
+            }
+            return result;
+        }
+        /*
+        public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
         {
             SetSqlLamAdapter();
-            var query = new SqlLam<TEntity>(lambdaExpressionFilter);
+            var query = new SqlLam<TEntity>(filter);
 
             long recordsAffected = 0;
 
@@ -95,7 +132,7 @@ namespace SysWork.Data.GenericRepository
             }
             return recordsAffected;
         }
-
+        */
 
 
     }

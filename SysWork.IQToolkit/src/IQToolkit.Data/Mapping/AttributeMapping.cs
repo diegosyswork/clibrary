@@ -12,6 +12,7 @@ namespace SysWork.IQToolkit.Data.Mapping
 {
     using Common;
     using System.Collections.Concurrent;
+    using SysWork.Data.Common.Attributes;
 
     /// <summary>
     /// An attribute used to define information to help map between CLR types/members and database tables/columns.
@@ -26,6 +27,7 @@ namespace SysWork.IQToolkit.Data.Mapping
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface | AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     public class EntityAttribute : MappingAttribute
     {
+        
         /// <summary>
         /// The ID associated with the entity mapping.
         /// If not specified, the entity id will be the entity type's simple name.
@@ -272,6 +274,22 @@ namespace SysWork.IQToolkit.Data.Mapping
                 }
             }
 
+            var entityTypeInfo = entityType.GetTypeInfo();
+            var dataMembers = entityTypeInfo.GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
+
+            foreach (var member in dataMembers)
+            {
+                var memberType = TypeHelper.GetMemberType(member);
+                if (IsScalar(memberType))
+                {
+                    // members with scalar type are assumed to be columns
+                    list.Add(new ColumnAttribute { Member = member.Name});
+                }
+            }
+
+
+
+            /*
             var membersAlreadyMapped = new HashSet<string>(list.OfType<MemberAttribute>().Select(m => m.Member));
 
             // look for members that are not explicitly mapped and create column mappings for them.
@@ -300,7 +318,7 @@ namespace SysWork.IQToolkit.Data.Mapping
                     list.Add(new NestedEntityAttribute { Member = member.Name });
                 }
             }
-
+            */
             return list;
         }
 
@@ -517,6 +535,13 @@ namespace SysWork.IQToolkit.Data.Mapping
                     return entityAttr.Id;
                 }
             }
+
+            var att = entityType.GetTypeInfo().GetCustomAttribute<DbTableAttribute>();
+            if (att != null)
+            {
+                return att.Name;
+            }
+
 
             // use the entity type name as the entity id
             return entityType.Name;

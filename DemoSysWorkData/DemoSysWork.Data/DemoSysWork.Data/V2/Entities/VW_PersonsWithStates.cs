@@ -1,32 +1,33 @@
 ﻿using System;
 using SysWork.Data.Common.Attributes;
+using SysWork.Data.Mapping;
 
 namespace Demo.SysWork.Data.V2.Entities
 {
-    [DbView(Name = "VW_PersonsWithStates")]
+    [View(Name = "VW_PersonsWithStates")]
     public class VW_PersonsWithStates
     {
-        [DbColumn(IsIdentity = true, IsPrimary = true)]
+        [Column(IsIdentity = true, IsPrimaryKey = true)]
         public long IdPerson { get; set; }
-        [DbColumn()]
+        [Column()]
         public string FirstName { get; set; }
-        [DbColumn()]
+        [Column()]
         public string LastName { get; set; }
-        [DbColumn()]
+        [Column()]
         public string Passport { get; set; }
-        [DbColumn()]
+        [Column()]
         public string Address { get; set; }
-        [DbColumn()]
+        [Column()]
         public long? IdState { get; set; }
-        [DbColumn()]
+        [Column()]
         public string StateCode { get; set; }
-        [DbColumn()]
+        [Column()]
         public string Description { get; set; }
-        [DbColumn()]
+        [Column()]
         public DateTime? BirthDate { get; set; }
-        [DbColumn()]
+        [Column()]
         public bool Active { get; set; }
-        [DbColumn(ColumnName = "Long Name Field")]
+        [Column(Name = "Long Name Field")]
         public string LongNameField { get; set; }
 
     }

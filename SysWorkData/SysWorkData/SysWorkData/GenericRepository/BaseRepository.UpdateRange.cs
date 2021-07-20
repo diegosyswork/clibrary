@@ -9,6 +9,7 @@ using SysWork.Data.Common.Attributes;
 using SysWork.Data.Common.DbInfo;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.Common.ValueObjects;
+using SysWork.Data.Mapping;
 
 namespace SysWork.Data.GenericRepository
 {
@@ -126,15 +127,15 @@ namespace SysWork.Data.GenericRepository
 
                 foreach (PropertyInfo i in EntityProperties)
                 {
-                    var dbColumn = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
-                    var columnName = _syntaxProvider.GetSecureColumnName(dbColumn.ColumnName ?? i.Name);
+                    var column = i.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
+                    var columnName = _syntaxProvider.GetSecureColumnName(column.Name ?? i.Name);
 
                     parameterName = "@param_" + i.Name;
 
-                    if (!dbColumn.IsIdentity)
+                    if (!column.IsIdentity)
                         parameterList.Append(string.Format("{0} = {1},", columnName, parameterName));
 
-                    if (dbColumn.IsPrimary)
+                    if (column.IsPrimaryKey)
                     {
                         if (where.ToString() != String.Empty)
                             where.Append(" AND ");

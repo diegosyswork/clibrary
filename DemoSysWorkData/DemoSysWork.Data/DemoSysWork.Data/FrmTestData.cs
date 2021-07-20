@@ -5,12 +5,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using SysWork.Data.Common;
 using SysWork.Data.Common.SimpleQuery;
 using SysWork.Data.Common.Utilities;
 using Microsoft.VisualBasic;
-using SysWork.Data.Common.LambdaSqlBuilder;
-using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 using SysWork.Data.Common.DbConnector;
 using SysWork.Data.LoggerDb;
 using SysWork.Data.Common.ValueObjects;
@@ -964,6 +961,7 @@ namespace TestSysWorkData
 
         private void btnSQLLAMTest_Click(object sender, EventArgs e)
         {
+            /*
             SqlLam<Persona>.SetAdapter(SqlAdapter.MySql);
             var querySelectCountMySQL = new SqlLam<Persona>().SelectCount(p => p.IdPersona);//.Where(p => p.Dni == "27926043");
             // Obtiene la cantidad
@@ -988,6 +986,7 @@ namespace TestSysWorkData
                             .AddParameters(querySelectCountSQLite.QueryParameters)
                             .ExecuteScalar();
 
+        */
         }
 
         private void btnTestMSSqlServerConnector_Click(object sender, EventArgs e)

@@ -5,6 +5,7 @@ using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.Attributes;
 using SysWork.Data.Common.ValueObjects;
 using SysWork.Data.Common.Attributes.Helpers;
+using SysWork.Data.Mapping;
 
 namespace SysWork.Data.Common.Filters
 {
@@ -177,7 +178,7 @@ namespace SysWork.Data.Common.Filters
             TEntity t = new TEntity();
             bool isDbTable = false;
 
-            var table = t.GetType().GetCustomAttributes(false).OfType<DbTableAttribute>().FirstOrDefault();
+            var table = t.GetType().GetCustomAttributes(false).OfType<TableAttribute>().FirstOrDefault();
             if (table != null)
             {
                 isDbTable = true;
@@ -190,7 +191,7 @@ namespace SysWork.Data.Common.Filters
 
             if (!isDbTable)
             {
-                var view = t.GetType().GetCustomAttributes(false).OfType<DbViewAttribute>().FirstOrDefault();
+                var view = t.GetType().GetCustomAttributes(false).OfType<ViewAttribute>().FirstOrDefault();
                 if (view!= null)
                 {
                     _tableOrViewName = view.Name;
@@ -225,7 +226,7 @@ namespace SysWork.Data.Common.Filters
         /// <typeparam name="TEntity">The type of the entity.</typeparam>
         public void SetColumnsForSelect<TEntity>() where TEntity : class, new()
         {
-            _columnsForSelect = DbColumnHelper.GetColumnsForSelect<TEntity>();
+            _columnsForSelect = ColumnHelper.GetColumnsForSelect<TEntity>();
         }
 
         /// <summary>

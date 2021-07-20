@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.902
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SysWork.Data", "SysWorkData\SysWork.Data.csproj", "{339B3F42-9E9B-46A4-AAC5-C1E5D85D88C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{135AD167-8ABF-4415-A1CC-29F8F6A43572}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{339B3F42-9E9B-46A4-AAC5-C1E5D85D88C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{339B3F42-9E9B-46A4-AAC5-C1E5D85D88C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{339B3F42-9E9B-46A4-AAC5-C1E5D85D88C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{135AD167-8ABF-4415-A1CC-29F8F6A43572}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{135AD167-8ABF-4415-A1CC-29F8F6A43572}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{135AD167-8ABF-4415-A1CC-29F8F6A43572}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{135AD167-8ABF-4415-A1CC-29F8F6A43572}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

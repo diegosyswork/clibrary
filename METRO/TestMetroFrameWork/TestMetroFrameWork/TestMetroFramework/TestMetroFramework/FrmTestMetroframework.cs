@@ -225,10 +225,10 @@ namespace TestMetroFramework
         public string CodArticulo { get; set; }
         public string Descripcion { get; set; }
         public string CodLista { get; set; }
-        public Decimal Cantidad { get; set; }
-        public Decimal Unitario { get; set; }
-        public Decimal Descuento { get; set; }
-        public Decimal Total { get; set; }
+        public decimal Cantidad { get; set; }
+        public decimal Unitario { get; set; }
+        public decimal Descuento { get; set; }
+        public decimal Total { get; set; }
         public string  RutaImagen { get; set; }
     }
 }

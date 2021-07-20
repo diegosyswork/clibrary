@@ -1,8 +1,9 @@
 ﻿using SysWork.Data.Common.Attributes;
+using SysWork.Data.Mapping;
 
 namespace Demo.SysWork.Data.Entities
 {
-    [DbTable(Name = "States")]
+    [Table(Name = "States")]
     public class State
     {
         /// <summary>
@@ -18,11 +19,11 @@ namespace Demo.SysWork.Data.Entities
         /// **********************************************************************
         /// </summary>
 
-        [DbColumn(IsPrimary = true)]
+        [Column(IsPrimaryKey = true)]
         public long IdState { get; set; }
-        [DbColumn()]
+        [Column()]
         public string StateCode { get; set; }
-        [DbColumn()]
+        [Column()]
         public string Description { get; set; }
     }
 }

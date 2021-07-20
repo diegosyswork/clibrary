@@ -7,19 +7,17 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using SysWork.Data.Common.Attributes;
 using SysWork.Data.Common.Attributes.Helpers;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.DbInfo;
 using SysWork.Data.Common.Dictionaries;
 using SysWork.Data.Common.Filters;
-using SysWork.Data.Common.LambdaSqlBuilder;
-using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 using SysWork.Data.Common.Mapper;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.Utilities;
 using SysWork.Data.Common.ValueObjects;
 using SysWork.Data.GenericRepository.Interfaces;
+using SysWork.Data.Mapping;
 
 #pragma warning disable 1587
 /// <summary>
@@ -65,7 +63,6 @@ namespace SysWork.Data.GenericRepository
     #endregion
     public abstract partial class BaseRepository<TEntity>:IRepository<TEntity> where TEntity : class, new()
     {
-
         private string _connectionString;
         /// <summary>
         /// Gets the active ConnectionString.
@@ -87,6 +84,7 @@ namespace SysWork.Data.GenericRepository
         /// </summary>
         /// <value>The DbObjectProvider used in this class.</value>
         protected DbObjectProvider DbObjectProvider { get { return _dbObjectProvider; } }
+        
 
         private SyntaxProvider _syntaxProvider;
         /// <summary>
@@ -150,19 +148,19 @@ namespace SysWork.Data.GenericRepository
             _mapper.UseTypeCache = false;
 
             TEntity entity = new TEntity();
-            EntityProperties = DbColumnHelper.GetProperties(entity);
+            EntityProperties = ColumnHelper.GetProperties(entity);
 
             TableName = GetTableNameFromEntity(entity.GetType());
 
             if ((EntityProperties == null) || (EntityProperties.Count == 0))
-                throw new Exception(string.Format("The Entity {0}, has not linked attibutes to table: {1}, Use [DbColumn] attribute to link properties to the table.", entity.GetType().Name, TableName));
+                throw new Exception(string.Format("The Entity {0}, has not linked attibutes to table: {1}, Use [Column] attribute to link properties to the table.", entity.GetType().Name, TableName));
 
-            GetDbColumnsAndAtributes();
+            GetColumnsAndAtributes();
         }
 
         private string GetTableNameFromEntity(Type type)
         {
-            var DbTable = type.GetCustomAttributes(false).OfType<DbTableAttribute>().FirstOrDefault();
+            var DbTable = type.GetCustomAttributes(false).OfType<TableAttribute>().FirstOrDefault();
             if (DbTable != null)
                 return DbTable.Name ?? type.Name;
             else
@@ -236,16 +234,6 @@ namespace SysWork.Data.GenericRepository
         }
 
         /// <summary>
-        /// Return new instance of SqlLam.
-        /// </summary>
-        /// <returns></returns>
-        protected SqlLam<TEntity> BaseSqlLam()
-        {
-            SetSqlLamAdapter();
-            return new SqlLam<TEntity>();
-        }
-
-        /// <summary>
         /// Creates an query parameters list.
         /// </summary>
         /// <returns></returns>
@@ -255,7 +243,7 @@ namespace SysWork.Data.GenericRepository
             return parameters;
         }
 
-        private void GetDbColumnsAndAtributes()
+        private void GetColumnsAndAtributes()
         {
             TEntity entity = new TEntity();
 
@@ -267,15 +255,15 @@ namespace SysWork.Data.GenericRepository
                 conn.Open();
                 foreach (PropertyInfo i in EntityProperties)
                 {
-                    var customAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
-                    string columnName = _syntaxProvider.GetSecureColumnName(customAttribute.ColumnName ?? i.Name);
+                    var customAttribute = i.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
+                    string columnName = _syntaxProvider.GetSecureColumnName(customAttribute.Name ?? i.Name);
 
                     if (!customAttribute.IsIdentity)
                         sbColumnsInsert.Append(string.Format("{0},", columnName));
 
                     sbColumnsSelect.Append(string.Format("{0},", columnName));
 
-                    string schemaColumnName = _syntaxProvider.RemoveStartersAndEndersColumnName(customAttribute.ColumnName ?? i.Name);
+                    string schemaColumnName = _syntaxProvider.RemoveStartersAndEndersColumnName(customAttribute.Name ?? i.Name);
                     _columnListWithDbInfo.Add(i.Name, GetColumnDbInfo(schemaColumnName, conn));
                 }
                 conn.Close();
@@ -391,19 +379,21 @@ namespace SysWork.Data.GenericRepository
 
             return dataParameter;
         }
-
-        private void SetSqlLamAdapter()
+        internal DataTable ConvertToDatatable(IList<TEntity> list)
         {
-            if (_databaseEngine == EDatabaseEngine.MSSqlServer)
-                SqlLam<TEntity>.SetAdapter(SqlAdapter.SqlServer2012);
-            else if (_databaseEngine == EDatabaseEngine.OleDb)
-                SqlLam<TEntity>.SetAdapter(SqlAdapter.SqlServer2012);
-            else if (_databaseEngine == EDatabaseEngine.MySql)
-                SqlLam<TEntity>.SetAdapter(SqlAdapter.MySql);
-            else if (_databaseEngine == EDatabaseEngine.SqLite)
-                SqlLam<TEntity>.SetAdapter(SqlAdapter.SQLite);
-            else
-                throw new ArgumentOutOfRangeException("The databaseEngine is not supported by this method");
+            DataTable table = new DataTable();
+            foreach (PropertyInfo i in EntityProperties)
+                table.Columns.Add(i.Name, i.PropertyType);
+
+            object[] values = new object[EntityProperties.Count];
+            foreach (TEntity item in list)
+            {
+                for (int i = 0; i < values.Length; i++)
+                    values[i] = EntityProperties[i].GetValue(item);
+
+                table.Rows.Add(values);
+            }
+            return table;
         }
 
     }

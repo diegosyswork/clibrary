@@ -1,29 +1,32 @@
 ﻿using System;
 using SysWork.Data.Common.Attributes;
+using SysWork.Data.Mapping;
 
 namespace Demo.SysWork.Data.Entities
 {
-    [DbTable(Name = "Persons")]
+    [Table(Name = "Persons")]
     public class Person
     {
-        [DbColumn(IsIdentity = true, IsPrimary = true)]
+        [Column(IsIdentity = true, IsPrimaryKey = true)]
         public long IdPerson { get; set; }
-        [DbColumn()]
+        [Column()]
         public string FirstName { get; set; }
-        [DbColumn()]
+        [Column()]
         public string LastName { get; set; }
-        [DbColumn()]
+        [Column()]
         public string Passport { get; set; }
-        [DbColumn()]
+        [Column()]
         public string Address { get; set; }
-        [DbColumn()]
+        [Column()]
         public long? IdState { get; set; }
-        [DbColumn()]
+        [Column()]
         public DateTime? BirthDate { get; set; }
-        [DbColumn(ColumnName = "Long Name Field")]
+        [Column(Name = "Long Name Field")]
         public string LongNameField { get; set; }
-        [DbColumn()]
+        [Column()]
         public bool Active { get; set; }
+        [Column()]
+        public Guid GUID { get; set; }
         public Person()
         {
 

@@ -3,11 +3,11 @@ using System.Data;
 using System.Data.OleDb;
 using System.Reflection;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
-using SysWork.Data.Common.Attributes;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.Common.DbInfo;
 using System.Collections.Generic;
 using SysWork.Data.Common.ValueObjects;
+using SysWork.Data.Mapping;
 
 namespace SysWork.Data.GenericRepository
 {
@@ -3024,8 +3024,8 @@ namespace SysWork.Data.GenericRepository
                 string addRangeQuery = "";
                 foreach (PropertyInfo i in EntityProperties)
                 {
-                    var dbColumn = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
-                    if (!dbColumn.IsIdentity)
+                    var column = i.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
+                    if (!column.IsIdentity)
                     {
                         hasIdentity = true;
 

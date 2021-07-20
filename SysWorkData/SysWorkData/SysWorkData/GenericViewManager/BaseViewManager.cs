@@ -6,14 +6,12 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using SysWork.Data.Common.DataObjectProvider;
-using SysWork.Data.Common.Attributes;
-using SysWork.Data.Common.LambdaSqlBuilder;
-using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
 using SysWork.Data.Common.Filters;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.ValueObjects;
 using SysWork.Data.Common.Mapper;
 using SysWork.Data.Common.Attributes.Helpers;
+using SysWork.Data.Mapping;
 
 namespace SysWork.Data.GenericViewManager
 {
@@ -98,7 +96,7 @@ namespace SysWork.Data.GenericViewManager
             _mapper.UseTypeCache = false;
 
             TEntity entity = new TEntity();
-            EntityProperties = DbColumnHelper.GetProperties(entity);
+            EntityProperties = ColumnHelper.GetProperties(entity);
 
             ViewName = GetViewNameFromEntity(entity.GetType());
 
@@ -170,7 +168,7 @@ namespace SysWork.Data.GenericViewManager
         /// <returns></returns>
         private string GetViewNameFromEntity(Type type)
         {
-            var DbView = type.GetCustomAttributes(false).OfType<DbViewAttribute>().FirstOrDefault();
+            var DbView = type.GetCustomAttributes(false).OfType<ViewAttribute>().FirstOrDefault();
             if (DbView != null)
                 return DbView.Name ?? type.Name;
             else
@@ -185,8 +183,8 @@ namespace SysWork.Data.GenericViewManager
 
             foreach (PropertyInfo i in EntityProperties)
             {
-                var customAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
-                string columnName = _syntaxProvider.GetSecureColumnName(customAttribute.ColumnName ?? i.Name);
+                var customAttribute = i.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
+                string columnName = _syntaxProvider.GetSecureColumnName(customAttribute.Name ?? i.Name);
 
                 sbColumnsSelect.Append(string.Format("{0},", columnName));
             }
@@ -217,19 +215,6 @@ namespace SysWork.Data.GenericViewManager
         protected IDbConnection BaseIDbConnection()
         {
             return DataObjectProvider.GetIDbConnection(_connectionString);
-        }
-        private void SetSqlLamAdapter()
-        {
-            if (_databaseEngine == EDatabaseEngine.MSSqlServer)
-                SqlLam<TEntity>.SetAdapter(SqlAdapter.SqlServer2012);
-            else if (_databaseEngine == EDatabaseEngine.OleDb)
-                SqlLam<TEntity>.SetAdapter(SqlAdapter.SqlServer2012);
-            else if (_databaseEngine == EDatabaseEngine.MySql)
-                SqlLam<TEntity>.SetAdapter(SqlAdapter.MySql);
-            else if (_databaseEngine == EDatabaseEngine.SqLite)
-                SqlLam<TEntity>.SetAdapter(SqlAdapter.SQLite);
-            else
-                throw new ArgumentOutOfRangeException("The databaseEngine is not supported by this method");
         }
     }
 }

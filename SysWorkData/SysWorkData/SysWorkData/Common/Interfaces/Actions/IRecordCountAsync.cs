@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data.Common;
-using System.Linq.Expressions;
+﻿using System.Data.Common;
 using System.Threading.Tasks;
 using SysWork.Data.Common.Filters;
 
@@ -135,73 +133,5 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <param name="commandTimeOut">The command time out.</param>
         /// <returns></returns>
         Task<long> RecordCountAsync(GenericWhereFilter whereFilter, DbConnection dbConnection, DbTransaction dbTransaction, int? commandTimeOut);
-
-        /// <summary>
-        /// Counts all records in the Table that match with the LambdaExpressionFilter.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <returns></returns>
-        Task<long> RecordCountAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter);
-
-        /// <summary>
-        /// Counts all records in the Table that match with the LambdaExpressionFilter and a custom dbCommnad timeout.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <param name="commandTimeOut">The command time out.</param>
-        /// <returns></returns>
-        Task<long> RecordCountAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, int commandTimeOut);
-
-        /// <summary>
-        /// Counts all records in the Table that match with the LambdaExpressionFilter and DbTransacrion.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <param name="dbTransaction">The database transaction.</param>
-        /// <returns></returns>
-        Task<long> RecordCountAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbTransaction dbTransaction);
-
-        /// <summary>
-        /// Counts all records in the Table that match with the LambdaExpressionFilter, DbTransacrion and a custom dbCommnad timeout.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <param name="dbTransaction">The database transaction.</param>
-        /// <param name="commandTimeOut">The command time out.</param>
-        /// <returns></returns>
-        Task<long> RecordCountAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbTransaction dbTransaction, int commandTimeOut);
-
-        /// <summary>
-        /// Counts all records in the Table that match with the LambdaExpressionFilter and DbConnection.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <param name="dbConnection">The database connection.</param>
-        /// <returns></returns>
-        Task<long> RecordCountAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection);
-
-        /// <summary>
-        /// Counts all records in the Table that match with the LambdaExpressionFilter, DbConnection and a custom dbCommnad timeout.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <param name="dbConnection">The database connection.</param>
-        /// <param name="commandTimeOut">The command time out.</param>
-        /// <returns></returns>
-        Task<long> RecordCountAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, int commandTimeOut);
-
-        /// <summary>
-        /// Counts all records in the Table that match with the LambdaExpressionFilter, DbConnection and DbTransaction.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <param name="dbConnection">The database connection.</param>
-        /// <param name="dbTransaction">The database transaction.</param>
-        /// <returns></returns>
-        Task<long> RecordCountAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, DbTransaction dbTransaction);
-
-        /// <summary>
-        /// Counts all records in the Table that match with the LambdaExpressionFilter, DbConnection, DbTransaction and a custom dbCommnad timeout.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <param name="dbConnection">The database connection.</param>
-        /// <param name="dbTransaction">The database transaction.</param>
-        /// <param name="commandTimeOut">The command time out.</param>
-        /// <returns></returns>
-        Task<long> RecordCountAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, DbTransaction dbTransaction, int? commandTimeOut);
     }
 }

@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
-using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.ValueObjects;
 
@@ -203,18 +202,6 @@ namespace SysWork.Data.Common.Utilities
         public DbExecutor Query(string commandText)
         {
             _sqlQuery = commandText;
-            return this;
-        }
-        /// <summary>
-        /// Set the SqlLam query.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="query">The query.</param>
-        /// <returns></returns>
-        public DbExecutor SqlLamQuery(SqlLamBase query)
-        {
-            _sqlQuery = query.QueryString;
-            AddParameters(query.QueryParameters);
             return this;
         }
 

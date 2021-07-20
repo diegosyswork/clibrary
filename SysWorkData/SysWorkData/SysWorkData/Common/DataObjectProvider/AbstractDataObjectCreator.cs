@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Data.Common;
+using SysWork.Data;
 
 namespace SysWork.Data.Common.DataObjectProvider
 {
@@ -51,5 +52,8 @@ namespace SysWork.Data.Common.DataObjectProvider
         /// </summary>
         /// <returns></returns>
         public abstract DbDataAdapter GetDbDataAdapter();
+
+        public abstract DbEntityProvider GetQueryProvider(string connectionString);
+        public abstract DbEntityProvider GetQueryProvider(DbConnection dbConnection);
     }
 }

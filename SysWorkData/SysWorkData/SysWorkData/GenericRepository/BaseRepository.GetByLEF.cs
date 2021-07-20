@@ -1,52 +1,93 @@
 ﻿using System;
 using System.Data;
-using System.Data.OleDb;
 using System.Linq.Expressions;
-using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
-using SysWork.Data.Common.LambdaSqlBuilder;
+using System.Linq;
+using System.Data.Common;
 using SysWork.Data.GenericRepository.Exceptions;
-using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.GenericRepository
 {
     public abstract partial class BaseRepository<TEntity> 
     {
-        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter)
+        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter)
         {
-            return GetByLambdaExpressionFilter(lambdaExpressionFilter, null, null, null);
+            return GetByLambdaExpressionFilter(filter, null, null, null);
         }
 
-        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, int commandTimeOut)
+        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter, int commandTimeOut)
         {
-            return GetByLambdaExpressionFilter(lambdaExpressionFilter, null, null, commandTimeOut);
+            return GetByLambdaExpressionFilter(filter, null, null, commandTimeOut);
         }
 
-        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection)
+        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter, IDbConnection dbConnection)
         {
-            return GetByLambdaExpressionFilter(lambdaExpressionFilter, dbConnection, null, null);
+            return GetByLambdaExpressionFilter(filter, dbConnection, null, null);
         }
 
-        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, int commandTimeOut)
+        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter, IDbConnection dbConnection, int commandTimeOut)
         {
-            return GetByLambdaExpressionFilter(lambdaExpressionFilter, dbConnection, null, commandTimeOut);
+            return GetByLambdaExpressionFilter(filter, dbConnection, null, commandTimeOut);
         }
 
-        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction dbTransaction)
+        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter, IDbTransaction dbTransaction)
         {
-            return GetByLambdaExpressionFilter(lambdaExpressionFilter, null, dbTransaction, null);
+            return GetByLambdaExpressionFilter(filter, null, dbTransaction, null);
         }
 
-        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbTransaction dbTransaction, int commandTimeOut)
+        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter, IDbTransaction dbTransaction, int commandTimeOut)
         {
-            return GetByLambdaExpressionFilter(lambdaExpressionFilter, null, dbTransaction, commandTimeOut);
+            return GetByLambdaExpressionFilter(filter, null, dbTransaction, commandTimeOut);
         }
 
-        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, IDbTransaction dbTransaction)
+        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter, IDbConnection dbConnection, IDbTransaction dbTransaction)
         {
-            return GetByLambdaExpressionFilter(lambdaExpressionFilter, dbConnection, dbTransaction, null);
+            return GetByLambdaExpressionFilter(filter, dbConnection, dbTransaction, null);
         }
 
-        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> lambdaExpressionFilter, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
+
+        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
+        {
+            TEntity result = null;
+            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
+
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
+
+            IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
+
+            try
+            {
+                if (dbConnectionInUse.State != ConnectionState.Open)
+                    dbConnectionInUse.Open();
+
+                DbEntityProvider entityProvider = _dbObjectProvider.GetQueryProvider((DbConnection)dbConnectionInUse);
+                if (dbTransaction != null)
+                {
+                    entityProvider.Transaction = (DbTransaction)dbTransaction;
+                    entityProvider.Isolation = dbTransaction.IsolationLevel;
+                }
+
+                var table = entityProvider.GetTable<TEntity>();
+                result = table.Where(filter).FirstOrDefault();
+            }
+            catch (Exception e)
+            {
+                throw new RepositoryException(e);
+            }
+            finally 
+            {
+                if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
+                {
+                    dbConnectionInUse.Close();
+                    dbConnectionInUse.Dispose();
+                }
+            }
+            return result;
+        }
+
+
+        /*
+        public TEntity GetByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
         {
             TEntity entity = null;
 
@@ -60,7 +101,7 @@ namespace SysWork.Data.GenericRepository
 
             SetSqlLamAdapter();
 
-            var query = new SqlLam<TEntity>(lambdaExpressionFilter);
+            var query = new SqlLam<TEntity>(filter);
 
             string getQuery = string.Format("SELECT {0} FROM {1} {2}", ColumnsForSelect, _syntaxProvider.GetSecureTableName(TableName), query.QueryWhere);
 
@@ -105,6 +146,6 @@ namespace SysWork.Data.GenericRepository
                 }
             }
             return entity;
-        }
+        }*/
     }
 }

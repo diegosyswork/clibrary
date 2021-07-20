@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using SysWork.Data.Common.Syntax;
-using SysWork.Data.Common.ValueObjects;
 
 namespace SysWork.Data.Common.Attributes
 {
@@ -38,9 +36,9 @@ namespace SysWork.Data.Common.Attributes
     /// </example>
     #endregion
     [AttributeUsage(AttributeTargets.Property)]
+    [Obsolete("Use ColumnAttribute")]
     public class DbColumnAttribute : Attribute
     {
-        //<adasda>
         /// <summary>
         /// Gets or sets the name of the column. By default the Column Name is the property Column Name.
         /// In case the DbColum contains special charactes like " " (Spaces) "-" minus, etc, use this attribute to specify 
@@ -49,21 +47,23 @@ namespace SysWork.Data.Common.Attributes
         /// <value>
         /// The name of the column.
         /// </value>
-        public string ColumnName { get; set; } = null;
-        
+        [Obsolete("Use Name")]
+        public string ColumnName { get ;set ;}
         /// <summary>
         /// Sets true if requieres conversion.
         /// </summary>
         public bool Convert { get; set; }
-        
+
         /// <summary>
         /// Sets true, if is part of the primary key. In UPDATEs methods, uses this to deteminate what row update.
         /// </summary>
-        public bool IsPrimary { get; set; }
-        
+        [Obsolete("Use IsPrimaryKey")]
+        public bool IsPrimary  { get ;set ;}
+
         /// <summary>
         /// Sets true if is an Identity field.
         /// </summary>
-        public bool IsIdentity { get; set; }
+        [Obsolete("Use IsGenerated")]
+        public bool IsIdentity { get ;set ;}
     }
 }

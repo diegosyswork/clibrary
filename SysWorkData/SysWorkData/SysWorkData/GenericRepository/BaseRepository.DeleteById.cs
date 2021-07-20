@@ -4,10 +4,10 @@ using System.Data.OleDb;
 using System.Reflection;
 using System.Text;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
-using SysWork.Data.Common.Attributes;
 using SysWork.Data.Common.DbInfo;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.Common.ValueObjects;
+using SysWork.Data.Mapping;
 
 namespace SysWork.Data.GenericRepository
 {
@@ -108,8 +108,8 @@ namespace SysWork.Data.GenericRepository
             string parameterName;
             foreach (PropertyInfo i in EntityProperties)
             {
-                var customAttribute = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
-                var columnName = _syntaxProvider.GetSecureColumnName(customAttribute.ColumnName ?? i.Name);
+                var customAttribute = i.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
+                var columnName = _syntaxProvider.GetSecureColumnName(customAttribute.Name ?? i.Name);
 
                 parameterName = "@param_" + i.Name;
 

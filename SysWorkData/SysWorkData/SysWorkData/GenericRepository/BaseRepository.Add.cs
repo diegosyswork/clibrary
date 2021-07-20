@@ -5,10 +5,10 @@ using System.Reflection;
 using System.Text;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.Utilities;
-using SysWork.Data.Common.Attributes;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.Common.DbInfo;
 using SysWork.Data.Common.ValueObjects;
+using SysWork.Data.Mapping;
 
 namespace SysWork.Data.GenericRepository
 {
@@ -41,34 +41,34 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
-        /// [DbTable(Name = "Persons")]
+        /// [Table(Name = "Persons")]
         /// public class Person
         /// {
-        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     [Column(IsIdentity = true, IsPrimaryKey = true)]
         ///     public long IdPerson { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string FirstName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string LastName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Passport { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Address { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public long? IdState { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public DateTime? BirthDate { get; set; }
         ///
-        ///     [DbColumn(ColumnName = "Long Name Field")]
+        ///     [Column(Column = "Long Name Field")]
         ///     public string LongNameField { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public bool Active { get; set; }
         /// }
         /// 
@@ -154,34 +154,34 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
-        ///[DbTable(Name = "Persons")]
+        ///[Table(Name = "Persons")]
         ///public class Person
         ///{
-        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     [Column(IsIdentity = true, IsPrimaryKey = true)]
         ///     public long IdPerson { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string FirstName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string LastName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Passport { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Address { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public long? IdState { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public DateTime? BirthDate { get; set; }
         ///
-        ///     [DbColumn(ColumnName = "Long Name Field")]
+        ///     [Column(Column = "Long Name Field")]
         ///     public string LongNameField { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public bool Active { get; set; }
         /// }
         /// 
@@ -268,34 +268,34 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
-        /// [DbTable(Name = "Persons")]
+        /// [Table(Name = "Persons")]
         /// public class Person
         /// {
-        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     [Column(IsIdentity = true, IsPrimaryKey = true)]
         ///     public long IdPerson { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string FirstName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string LastName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Passport { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Address { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public long? IdState { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public DateTime? BirthDate { get; set; }
         ///
-        ///     [DbColumn(ColumnName = "Long Name Field")]
+        ///     [Column(Column = "Long Name Field")]
         ///     public string LongNameField { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public bool Active { get; set; }
         /// }
         /// 
@@ -390,34 +390,34 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
-        /// [DbTable(Name = "Persons")]
+        /// [Table(Name = "Persons")]
         /// public class Person
         /// {
-        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     [Column(IsIdentity = true, IsPrimaryKey = true)]
         ///     public long IdPerson { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string FirstName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string LastName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Passport { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Address { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public long? IdState { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public DateTime? BirthDate { get; set; }
         ///
-        ///     [DbColumn(ColumnName = "Long Name Field")]
+        ///     [Column(Column = "Long Name Field")]
         ///     public string LongNameField { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public bool Active { get; set; }
         /// }
         /// 
@@ -514,34 +514,34 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
-        /// [DbTable(Name = "Persons")]
+        /// [Table(Name = "Persons")]
         /// public class Person
         /// {
-        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     [Column(IsIdentity = true, IsPrimaryKey = true)]
         ///     public long IdPerson { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string FirstName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string LastName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Passport { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Address { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public long? IdState { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public DateTime? BirthDate { get; set; }
         ///
-        ///     [DbColumn(ColumnName = "Long Name Field")]
+        ///     [Column(Column = "Long Name Field")]
         ///     public string LongNameField { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public bool Active { get; set; }
         /// }
         /// 
@@ -641,34 +641,34 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
-        /// [DbTable(Name = "Persons")]
+        /// [Table(Name = "Persons")]
         /// public class Person
         /// {
-        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     [Column(IsIdentity = true, IsPrimaryKey = true)]
         ///     public long IdPerson { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string FirstName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string LastName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Passport { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Address { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public long? IdState { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public DateTime? BirthDate { get; set; }
         ///
-        ///     [DbColumn(ColumnName = "Long Name Field")]
+        ///     [Column(Column = "Long Name Field")]
         ///     public string LongNameField { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public bool Active { get; set; }
         /// }
         /// 
@@ -772,34 +772,34 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
-        /// [DbTable(Name = "Persons")]
+        /// [Table(Name = "Persons")]
         /// public class Person
         /// {
-        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     [Column(IsIdentity = true, IsPrimaryKey = true)]
         ///     public long IdPerson { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string FirstName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string LastName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Passport { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Address { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public long? IdState { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public DateTime? BirthDate { get; set; }
         ///
-        ///     [DbColumn(ColumnName = "Long Name Field")]
+        ///     [Column(Column = "Long Name Field")]
         ///     public string LongNameField { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public bool Active { get; set; }
         /// }
         /// 
@@ -903,34 +903,34 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
-        /// [DbTable(Name = "Persons")]
+        /// [Table(Name = "Persons")]
         /// public class Person
         /// {
-        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     [Column(IsIdentity = true, IsPrimaryKey = true)]
         ///     public long IdPerson { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string FirstName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string LastName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Passport { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Address { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public long? IdState { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public DateTime? BirthDate { get; set; }
         ///
-        ///     [DbColumn(ColumnName = "Long Name Field")]
+        ///     [Column(Column = "Long Name Field")]
         ///     public string LongNameField { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public bool Active { get; set; }
         /// }
         /// 
@@ -1015,8 +1015,8 @@ namespace SysWork.Data.GenericRepository
             StringBuilder parameterList = new StringBuilder();
             foreach (PropertyInfo i in EntityProperties)
             {
-                var dbColumn = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
-                if (!dbColumn.IsIdentity)
+                var column = i.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
+                if (!column.IsIdentity)
                 {
                     string parameterName = "@param_" + i.Name;
 
@@ -1114,34 +1114,34 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
-        /// [DbTable(Name = "Persons")]
+        /// [Table(Name = "Persons")]
         /// public class Person
         /// {
-        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     [Column(IsIdentity = true, IsPrimaryKey = true)]
         ///     public long IdPerson { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string FirstName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string LastName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Passport { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Address { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public long? IdState { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public DateTime? BirthDate { get; set; }
         ///
-        ///     [DbColumn(ColumnName = "Long Name Field")]
+        ///     [Column(Column = "Long Name Field")]
         ///     public string LongNameField { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public bool Active { get; set; }
         /// }
         /// 
@@ -1225,34 +1225,34 @@ namespace SysWork.Data.GenericRepository
         /// using SysWork.Data.Common.Attributes;
         /// using SysWork.Data.GenericRepository.Exceptions;
         /// 
-        /// [DbTable(Name = "Persons")]
+        /// [Table(Name = "Persons")]
         /// public class Person
         /// {
-        ///     [DbColumn(IsIdentity = true, IsPrimary = true)]
+        ///     [Column(IsIdentity = true, IsPrimaryKey = true)]
         ///     public long IdPerson { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string FirstName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string LastName { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Passport { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public string Address { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public long? IdState { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public DateTime? BirthDate { get; set; }
         ///
-        ///     [DbColumn(ColumnName = "Long Name Field")]
+        ///     [Column(Column = "Long Name Field")]
         ///     public string LongNameField { get; set; }
         ///
-        ///     [DbColumn()]
+        ///     [Column()]
         ///     public bool Active { get; set; }
         /// }
         /// 

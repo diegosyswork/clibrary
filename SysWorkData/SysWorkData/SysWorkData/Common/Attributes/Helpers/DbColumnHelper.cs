@@ -2,14 +2,16 @@
 using System.Linq;
 using System.Text;
 using System.Reflection;
-using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.ValueObjects;
+using SysWork.Data.Common.Syntax;
+using System;
 
 namespace SysWork.Data.Common.Attributes.Helpers
 {
     /// <summary>
     /// 
     /// </summary>
+    [Obsolete("Use ColumHelper")]
     public static class DbColumnHelper
     {
         /// <summary>
@@ -68,7 +70,7 @@ namespace SysWork.Data.Common.Attributes.Helpers
             var sbColumnsInsert = new StringBuilder();
             var syntaxProvider = new SyntaxProvider(databaseEngine);
 
-            string columnName ="";
+            string columnName;
             foreach (PropertyInfo i in GetProperties(entity))
             {
                 var dbColumn = i.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
@@ -92,7 +94,8 @@ namespace SysWork.Data.Common.Attributes.Helpers
         /// <returns></returns>
         public static  IList<PropertyInfo> GetProperties<T>(T t)
         {
-            return t.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList();
+            //return t.GetType().GetProperties().Where(p => p.GetCustomAttributes(typeof(ColumnAttribute), true).Count() != 0).ToList();
+            return t.GetType().GetProperties().Where(p => p.CustomAttributes.FirstOrDefault(x => x.AttributeType == typeof(DbColumnAttribute)) != null).ToList(); 
         }
     }
 }

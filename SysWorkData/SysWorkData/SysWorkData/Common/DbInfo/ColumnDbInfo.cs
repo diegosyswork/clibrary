@@ -6,9 +6,9 @@ namespace SysWork.Data.Common.DbInfo
     /// <summary>
     /// Internal Class for manage DbColumnInfo
     /// </summary>
-    internal class DbColumnInfo
+    public class DbColumnInfo
     {
-        internal DbType DbType { get; set; }
-        internal Int32? MaxLenght { get; set; }
+        public DbType DbType { get; set; }
+        public Int32? MaxLenght { get; set; }
     }
 }

@@ -35,8 +35,6 @@ namespace SysWork.Data.GenericRepository.Interfaces
         IGetListByGenericWhereFilterAsync<TEntity>,
         IGetListByLambdaExpressionFilter<TEntity>,
         IGetListByLambdaExpressionFilterAsync<TEntity>,
-        IGetListBySqlLam<TEntity>,
-        IGetListBySqlLamAsync<TEntity>,
         IRecordCount<TEntity>,
         IRecordCountAsync<TEntity>,
         IUpdate<TEntity>,

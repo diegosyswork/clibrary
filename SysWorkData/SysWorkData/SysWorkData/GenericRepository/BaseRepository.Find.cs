@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using System.Text;
-using SysWork.Data.Common.Attributes;
 using SysWork.Data.GenericRepository.Exceptions;
-using SysWork.Data.Common.Interfaces.Actions;
-using SysWork.Data.Common.Mapper;
+using SysWork.Data.Mapping;
 
 namespace SysWork.Data.GenericRepository
 {
@@ -63,10 +61,10 @@ namespace SysWork.Data.GenericRepository
 
             foreach (var pi in EntityProperties)
             {
-                var pk = pi.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
+                var pk = pi.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
                 if (pk != null && pk.IsIdentity)
                 {
-                    var columnName = _syntaxProvider.GetSecureColumnName(pk.ColumnName ?? pi.Name);
+                    var columnName = _syntaxProvider.GetSecureColumnName(pk.Name ?? pi.Name);
 
                     string _ids = string.Empty;
                     foreach (var id in ids)

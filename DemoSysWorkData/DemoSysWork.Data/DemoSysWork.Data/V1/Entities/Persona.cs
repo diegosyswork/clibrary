@@ -1,9 +1,10 @@
 using System;
 using SysWork.Data.Common.Attributes;
+using SysWork.Data.Mapping;
 
 namespace GerdannaDataManager.Entities
 {
-    [DbTable (Name = "personas")]
+    [Table (Name = "personas")]
 	public class Persona
 	{
 		/// <summary>
@@ -19,17 +20,17 @@ namespace GerdannaDataManager.Entities
 		/// **********************************************************************
 		/// </summary>
 
-		[DbColumn(IsIdentity = true, IsPrimary = true)]
+		[Column(IsIdentity = true, IsPrimaryKey = true)]
 		public long IdPersona { get; set; }
-		[DbColumn()]
+		[Column()]
 		public string Dni { get; set; }
-		[DbColumn()]
+		[Column()]
 		public string Apellido { get; set; }
-		[DbColumn()]
+		[Column()]
 		public string Nombre { get; set; }
-		[DbColumn()]
+		[Column()]
 		public DateTime FechaNacimiento { get; set; }
-		[DbColumn()]
+		[Column()]
 		public string Telefono { get; set; }
 
         public Persona()

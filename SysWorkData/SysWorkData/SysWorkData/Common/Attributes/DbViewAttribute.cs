@@ -33,6 +33,7 @@ namespace SysWork.Data.Common.Attributes
     /// </example>
     #endregion
     [AttributeUsage(AttributeTargets.Class)]
+    [Obsolete("Use ViewAttribute")]
     public class DbViewAttribute : Attribute
     {
         /// <summary>

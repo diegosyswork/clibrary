@@ -33,6 +33,7 @@ namespace SysWork.Data.Common.Attributes
     /// </example>
     #endregion
     [AttributeUsage(AttributeTargets.Class)]
+    [Obsolete("Use TableAttribute")]
     public class DbTableAttribute : Attribute
     {
         /// <summary>
@@ -43,6 +44,6 @@ namespace SysWork.Data.Common.Attributes
         /// <value>
         /// The name of the Table.
         /// </value>
-        public string Name { get; set; }
+        public  string Name { get ;set ;  }
     }
 }

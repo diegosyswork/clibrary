@@ -2,11 +2,9 @@
 using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.Filters;
-using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.Common.ValueObjects;
 using SysWork.Data.GenericRepository.Exceptions;
 
@@ -92,99 +90,6 @@ namespace SysWork.Data.GenericRepository
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                 var reader = await dbCommand.ExecuteReaderAsync(CommandBehavior.SingleRow);
-                result = reader.Read();
-
-                reader.Close();
-                reader.Dispose();
-                dbCommand.Dispose();
-
-            }
-            catch (Exception exception)
-            {
-                throw new RepositoryException(exception, dbCommand);
-            }
-            finally
-            {
-                if ((dbConnectionInUse != null) && (dbConnectionInUse.State == ConnectionState.Open) && (closeConnection))
-                {
-                    dbConnectionInUse.Close();
-                    dbConnectionInUse.Dispose();
-                }
-            }
-            return result;
-        }
-
-
-
-        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter)
-        {
-            return await ExistsAsync(lambdaExpressionFilter, null, null, null);
-        }
-        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, int commandTimeOut)
-        {
-            return await ExistsAsync(lambdaExpressionFilter, null, null, commandTimeOut);
-        }
-
-        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbTransaction dbTransaction)
-        {
-            return await ExistsAsync(lambdaExpressionFilter, null, dbTransaction, null);
-        }
-        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbTransaction dbTransaction, int commandTimeOut)
-        {
-            return await ExistsAsync(lambdaExpressionFilter, null, dbTransaction, commandTimeOut);
-        }
-
-        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection)
-        {
-            return await ExistsAsync(lambdaExpressionFilter, dbConnection, null, null);
-        }
-        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, int commandTimeOut)
-        {
-            return await ExistsAsync(lambdaExpressionFilter, dbConnection, null, commandTimeOut);
-        }
-
-        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, DbTransaction dbTransaction)
-        {
-            return await ExistsAsync(lambdaExpressionFilter, dbConnection, dbTransaction, null);
-        }
-
-        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, DbTransaction dbTransaction, int? commandTimeOut)
-        {
-            bool result = false;
-
-            bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
-
-            if (dbConnection == null && dbTransaction != null)
-                dbConnection = dbTransaction.Connection;
-
-            DbConnection dbConnectionInUse = dbConnection ?? BaseDbConnection();
-            DbCommand dbCommand = dbConnectionInUse.CreateCommand();
-
-            try
-            {
-                if (dbConnectionInUse.State != ConnectionState.Open)
-                    await dbConnectionInUse.OpenAsync();
-
-                if (dbTransaction != null)
-                    dbCommand.Transaction = dbTransaction;
-
-                SetSqlLamAdapter();
-
-                var query = new SqlLam<TEntity>(lambdaExpressionFilter);
-
-                string existsQuery = string.Format("{0} {1}",_syntaxProvider.GetQuerySelectTop_1_1(TableName), query.QueryWhere);
-
-                dbCommand.CommandText = existsQuery;
-                dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
-
-                foreach (var parameters in query.QueryParameters)
-                    dbCommand.Parameters.Add(CreateIDbDataParameter("@" + parameters.Key, parameters.Value));
-
-
-                if (_databaseEngine == EDatabaseEngine.OleDb)
-                    ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
-
-                DbDataReader reader = await dbCommand.ExecuteReaderAsync(CommandBehavior.SingleRow);
                 result = reader.Read();
 
                 reader.Close();

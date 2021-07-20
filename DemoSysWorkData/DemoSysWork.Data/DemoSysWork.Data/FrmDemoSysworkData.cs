@@ -3,20 +3,17 @@ using Demo.SysWork.Data.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using SysWork.Data.Common.DbConnector;
-using SysWork.Data.Common.LambdaSqlBuilder;
-using SysWork.Data.Common.LambdaSqlBuilder.ValueObjects;
-using SysWork.Data.Common.Utilities;
 using SysWork.Data.Common.Mapper;
+using SysWork.Data.Common.Syntax;
+using SysWork.Data.Common.Utilities;
+using SysWork.Data.Common.ValueObjects;
 using SysWork.Data.GenericRepository.CodeWriter;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.LoggerDb;
-using SysWork.Data.Common.Syntax;
-using SysWork.Data.Common.ValueObjects;
-using System.Threading.Tasks;
-using System.Diagnostics;
 
 namespace Demo.SysWork.Data
 {
@@ -69,7 +66,7 @@ namespace Demo.SysWork.Data
 
         private void SaveConfig()
         {
-            Properties.Settings.Default.CfgConnectrionString = TxtConnectionString.Text ;
+            Properties.Settings.Default.CfgConnectrionString = TxtConnectionString.Text;
             Properties.Settings.Default.CfgDatabaseEngine = ((EDatabaseEngine)CmbDatabaseEngine.SelectedValue).ToString();
             Properties.Settings.Default.Save();
         }
@@ -187,7 +184,7 @@ namespace Demo.SysWork.Data
             LogText(Environment.NewLine + "///      START Add Method DEMO         ///");
 
             long idPerson = 0;
-            string errMessage="";
+            string errMessage = "";
 
             IDbConnection conn;
             IDbTransaction transaction;
@@ -205,7 +202,7 @@ namespace Demo.SysWork.Data
             }
             catch (RepositoryException repoException)
             {
-                DbLogger.LogError(EDbErrorTag.InsertError,"", repoException);
+                DbLogger.LogError(EDbErrorTag.InsertError, "", repoException);
                 LogText("Catch GenericRepositoryException ");
             }
 
@@ -519,7 +516,7 @@ namespace Demo.SysWork.Data
             transaction = conn.BeginTransaction();
             try
             {
-                _personRepository.AddRange(list, conn,transaction);
+                _personRepository.AddRange(list, conn, transaction);
                 DbLogger.LogInfo(EDbInfoTag.InsertInfo, "100 persons was added");
                 LogText("100 persons was added");
 
@@ -685,7 +682,7 @@ namespace Demo.SysWork.Data
 
             try
             {
-                _personRepository.Update(person,conn,transaction);
+                _personRepository.Update(person, conn, transaction);
                 transaction.Commit();
                 LogText("Commit transaction");
 
@@ -794,7 +791,7 @@ namespace Demo.SysWork.Data
                 LogText("Commit transaction");
 
                 LogText("Get the first 5 updated persons and show modified data");
-                var first5Persons = _personRepository.Find(listIds,conn);
+                var first5Persons = _personRepository.Find(listIds, conn);
                 for (int i = 0; i < 5; i++)
                 {
                     LogText($"IdPerson {first5Persons[i].IdPerson} FN: {first5Persons[i].FirstName}, LN: {first5Persons[i].LastName}, PASSPORT: {first5Persons[i].Passport}");
@@ -831,7 +828,7 @@ namespace Demo.SysWork.Data
                 var conn = _personRepository.GetDbConnection();
 
 
-                _personRepository.AddRange(list, conn,  out IEnumerable<object> listIds);
+                _personRepository.AddRange(list, conn, out IEnumerable<object> listIds);
                 DbLogger.LogInfo(EDbInfoTag.InsertInfo, "100 persons was added");
                 LogText("100 persons was added");
 
@@ -902,11 +899,11 @@ namespace Demo.SysWork.Data
             LogText("Create 50 persons, name starts with @TEST1");
             var list = new List<Person>();
             for (int p = 0; p < 50; p++)
-                list.Add(GetRandomPerson("@TEST1",""));
+                list.Add(GetRandomPerson("@TEST1", ""));
 
             LogText("Create50 persons, name starts with @TEST2");
             for (int p = 0; p < 50; p++)
-                list.Add(GetRandomPerson("@TEST2",""));
+                list.Add(GetRandomPerson("@TEST2", ""));
 
             try
             {
@@ -955,7 +952,7 @@ namespace Demo.SysWork.Data
                 dataGridView1.DataSource = null;
                 dataGridView1.DataSource = DbUtil.ConvertToDatatable<Person>(_personRepository.GetListByLambdaExpressionFilter(p => p.FirstName.StartsWith("@P1")).ToList());
                 dataGridView1.Refresh();
-                LogText($"showing persons startsWith @p1 result {dataGridView1.Rows.Count-1} persons" );
+                LogText($"showing persons startsWith @p1 result {dataGridView1.Rows.Count - 1} persons");
                 MessageBox.Show("showing persons startsWith @p1", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 dataGridView1.DataSource = null;
@@ -964,7 +961,7 @@ namespace Demo.SysWork.Data
                 LogText($"showing persons with IdState <> null, result {dataGridView1.Rows.Count - 1}  persons");
 
                 dataGridView1.DataSource = null;
-                dataGridView1.DataSource = DbUtil.ConvertToDatatable<Person>(_personRepository.GetListByLambdaExpressionFilter(p => (p.Active ==  true) && (p.FirstName.Contains("FN")) && (p.IdState == null)).ToList());
+                dataGridView1.DataSource = DbUtil.ConvertToDatatable<Person>(_personRepository.GetListByLambdaExpressionFilter(p => (p.Active == true) && (p.FirstName.Contains("FN")) && (p.IdState == null)).ToList());
                 MessageBox.Show("showing persons with IdState == null and active == 1 and First name cotains (FN)", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 LogText($"showing persons with IdState == null and active == 1 and First name cotains (FN), result {dataGridView1.Rows.Count - 1}  persons");
 
@@ -980,9 +977,9 @@ namespace Demo.SysWork.Data
 
         public Person GetRandomPerson()
         {
-            return GetRandomPerson("","");
+            return GetRandomPerson("", "");
         }
-        public Person GetRandomPerson(string FirstNamePrefix,string LastNamePrefix)
+        public Person GetRandomPerson(string FirstNamePrefix, string LastNamePrefix)
         {
             Person person = new Person();
             person.FirstName = FirstNamePrefix + "FName " + RandomString(10);
@@ -992,6 +989,7 @@ namespace Demo.SysWork.Data
             person.Address = RandomString(20) + " " + RandomNumber(4);
             person.BirthDate = DateTime.Today.AddDays(int.Parse(RandomNumber(4)) * -1);
             person.Active = true;
+            person.GUID = Guid.NewGuid();
             return person;
         }
 
@@ -1025,6 +1023,7 @@ namespace Demo.SysWork.Data
 
         private void BtnSqlLAMTest_Click(object sender, EventArgs e)
         {
+            /*
             LogText(Environment.NewLine + "///      START SqlLam Method DEMO         ///");
 
             switch (DataManager.DatabaseEngine)
@@ -1073,7 +1072,7 @@ namespace Demo.SysWork.Data
             dataGridView1.DataSource = dt;
             dataGridView1.Refresh();
 
-            var test = new SqlLam<Person>().Where(p => ((p.FirstName.StartsWith("A") ) || (p.FirstName.StartsWith("b")) || (p.FirstName.StartsWith("E") )));
+            var test = new SqlLam<Person>().Where(p => ((p.FirstName.StartsWith("A")) || (p.FirstName.StartsWith("b")) || (p.FirstName.StartsWith("E"))));
 
             LogText("Result in datagridView");
             LogText(Environment.NewLine + "///      END SqlLam Method DEMO         ///");
@@ -1081,7 +1080,7 @@ namespace Demo.SysWork.Data
 
         private void BtnTestEntityClassFromDb_Click(object sender, EventArgs e)
         {
-            LogText(Environment.NewLine + "///      START EntityClassFromDb Method DEMO         ///"+ Environment.NewLine  );
+            LogText(Environment.NewLine + "///      START EntityClassFromDb Method DEMO         ///" + Environment.NewLine);
 
             SyntaxProvider syntaxProvider = new SyntaxProvider(DataManager.DatabaseEngine);
 
@@ -1093,6 +1092,7 @@ namespace Demo.SysWork.Data
             MessageBox.Show("Se copio la clase al portapapeles", "Aviso al operador", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             LogText(Environment.NewLine + "///      END EntityClassFromDb Method DEMO         ///" + Environment.NewLine);
+        */
         }
 
         private string GetScriptStates(EDatabaseEngine DatabaseEngine)
@@ -1217,7 +1217,7 @@ namespace Demo.SysWork.Data
         }
         private string GetScriptStatesMySql()
         {
-        
+
             var result = "CREATE TABLE `states` ( " + Environment.NewLine;
             result += " `IdState` INT NOT NULL AUTO_INCREMENT," + Environment.NewLine;
             result += " `StateCode` NVARCHAR(50) NOT NULL," + Environment.NewLine;
@@ -1303,7 +1303,7 @@ namespace Demo.SysWork.Data
             LogText(string.Format("Table {0} exists ={1} ", tableName, DbUtil.ExistsTable(DataManager.DatabaseEngine, DataManager.ConnectionString, tableName)));
 
             tableName = "OtherTable";
-            LogText(string.Format("Table {0} exists ={1} ",tableName, DbUtil.ExistsTable(DataManager.DatabaseEngine, DataManager.ConnectionString, tableName)));
+            LogText(string.Format("Table {0} exists ={1} ", tableName, DbUtil.ExistsTable(DataManager.DatabaseEngine, DataManager.ConnectionString, tableName)));
 
             LogText(Environment.NewLine + "///      END ExistsTable Method DEMO         ///" + Environment.NewLine);
         }
@@ -1314,7 +1314,7 @@ namespace Demo.SysWork.Data
 
             string table = "Persons";
             string column = "IdPerson";
-            LogText(string.Format("Table: {0} Column: {1} exists ={2} ", table, column, DbUtil.ExistsColumn(DataManager.DatabaseEngine, DataManager.ConnectionString, table,column)));
+            LogText(string.Format("Table: {0} Column: {1} exists ={2} ", table, column, DbUtil.ExistsColumn(DataManager.DatabaseEngine, DataManager.ConnectionString, table, column)));
 
             table = "Persons";
             column = "Long Name Field";
@@ -1385,7 +1385,7 @@ namespace Demo.SysWork.Data
 
             var reader = new DbExecutor(DataManager.ConnectionString, DataManager.DatabaseEngine)
                .Query($"SELECT {_personRepository.ColumnsForSelect} FROM Persons WHERE BirthDate BETWEEN @FromDate AND @ToDate")
-               .AddParameter("@FromDate", new DateTime(2000, 01, 01),DbType.DateTime)
+               .AddParameter("@FromDate", new DateTime(2000, 01, 01), DbType.DateTime)
                .AddParameter("@ToDate", new DateTime(2010, 12, 31), DbType.DateTime)
                .ExecuteReader();
 
@@ -1433,16 +1433,16 @@ namespace Demo.SysWork.Data
 
             // UPDATE
             var updateQuery = new DbExecutor(DataManager.ConnectionString, DataManager.DatabaseEngine)
-                .UpdateQuery("Persons"," IdPerson = @IdPerson")
+                .UpdateQuery("Persons", " IdPerson = @IdPerson")
                 .AddFieldWithValue("FirstName", "Updated-Diego")
                 .AddFieldWithValue("LastName", "Updated-Martinez")
-                .AddParameter("@IdPerson",idPerson)
+                .AddParameter("@IdPerson", idPerson)
                 .ExecuteNonQuery();
             LogText($"The idPerson {idPerson} was Updated");
 
             var updateQuery2 = new DbExecutor(DataManager.ConnectionString, DataManager.DatabaseEngine)
                 .UpdateQuery("Persons")
-                .AddFieldWithValue("Long Name Field","UPDATED!!!!")
+                .AddFieldWithValue("Long Name Field", "UPDATED!!!!")
                 .ExecuteNonQuery();
             LogText("Long Name Field was Updated for All Persons ");
 
@@ -1457,15 +1457,15 @@ namespace Demo.SysWork.Data
             var storeExecDelete = new DbExecutor(DataManager.ConnectionString, DataManager.DatabaseEngine)
                 .Query("DELETE_Person")
                 .AddParameter("@IdPerson", 3252)
-                .AddParameter("@Name", "Jhon Perez", DbType.String,200, ParameterDirection.Input)
+                .AddParameter("@Name", "Jhon Perez", DbType.String, 200, ParameterDirection.Input)
                 .AddOutputParameter("@DateTime", DbType.DateTime)
                 .AddOutputParameter("@Exists", DbType.Boolean)
-                .AddParameter("@ErrorMsg", "", DbType.String,200);
+                .AddParameter("@ErrorMsg", "", DbType.String, 200);
 
             var resultStoreExecDelete = storeExecDelete.ExecuteNonQuery(CommandType.StoredProcedure);
             foreach (var item in storeExecDelete.DbParameters)
             {
-                
+
             }
 
             LogText(Environment.NewLine + "///      END DbExecutor Method DEMO         ///" + Environment.NewLine);
@@ -1498,7 +1498,7 @@ namespace Demo.SysWork.Data
                 .AddParameter("@BirthDate", new DateTime(2014, 1, 1), DbType.DateTime);
 
             dataGridView1.DataSource = null;
-            dataGridView1.DataSource =VManagerPersonsWithStates.GetListByGenericWhereFilter(filter).ToList();
+            dataGridView1.DataSource = VManagerPersonsWithStates.GetListByGenericWhereFilter(filter).ToList();
             dataGridView1.Refresh();
             LogText(Environment.NewLine + "///      END ViewManager DEMO         ///" + Environment.NewLine);
 
@@ -1569,7 +1569,7 @@ namespace Demo.SysWork.Data
             list = _personRepository.GetAll().ToList();
         }
 
-        private async void  BtnGetAllAsync_Click(object sender, EventArgs e)
+        private async void BtnGetAllAsync_Click(object sender, EventArgs e)
         {
             dataGridView1.DataSource = null;
 
@@ -1608,8 +1608,8 @@ namespace Demo.SysWork.Data
 
         private async void BtnAddRangeAsync_Click(object sender, EventArgs e)
         {
-            
-             var personList = new List<Person>();
+
+            var personList = new List<Person>();
             /*for (int i = 0; i < 10000; i++)
                 personList.Add(GetRandomPerson());
 
@@ -1625,12 +1625,12 @@ namespace Demo.SysWork.Data
 
             Console.WriteLine($"Elapsed: {chrono.ElapsedMilliseconds}");
             */
-            LogText("Create a list of 10.000 persons" );
+            LogText("Create a list of 10.000 persons");
             personList.Clear();
             for (int i = 0; i < 10000; i++)
                 personList.Add(GetRandomPerson());
 
-            LogText("List Created" );
+            LogText("List Created");
 
             var dbConnectionAsync = _personRepository.GetDbConnection();
 
@@ -1656,6 +1656,11 @@ namespace Demo.SysWork.Data
             //_personRepository.GetByLambdaExpressionFilter(p => p.FirstName.Contains( "Diego"));
             //_personRepository.GetByLambdaExpressionFilter(p => p.FirstName == "Diego");
             _personRepository.GetByLambdaExpressionFilter(p => p.FirstName.Trim() == "Diego");
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //var person = _personRepository.GetById()
         }
     }
 }

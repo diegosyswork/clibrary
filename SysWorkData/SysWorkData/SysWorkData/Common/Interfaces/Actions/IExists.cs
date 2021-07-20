@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data.Common;
-using System.Linq.Expressions;
+﻿using System.Data.Common;
 using SysWork.Data.Common.Filters;
 
 namespace SysWork.Data.Common.Interfaces.Actions
@@ -78,73 +76,5 @@ namespace SysWork.Data.Common.Interfaces.Actions
         /// <param name="commandTimeOut">The command time out.</param>
         /// <returns></returns>
         bool Exists(GenericWhereFilter whereFilter, DbConnection dbConnection, DbTransaction dbTransaction, int? commandTimeOut);
-
-        /// <summary>
-        /// Checks if a record exists that match with the LambdaExpressionFilter.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <returns></returns>
-        bool Exists(Expression<Func<TEntity, bool>> lambdaExpressionFilter);
-
-        /// <summary>
-        /// Checks if a record exists that match with the LambdaExpressionFilter and a custom dbCommand timeout.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <param name="commandTimeOut">The command time out.</param>
-        /// <returns></returns>
-        bool Exists(Expression<Func<TEntity, bool>> lambdaExpressionFilter, int commandTimeOut);
-
-        /// <summary>
-        /// Checks if a record exists that match with the LambdaExpressionFilter and DbTransaction.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <param name="dbTransaction">The database transaction.</param>
-        /// <returns></returns>
-        bool Exists(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbTransaction dbTransaction);
-
-        /// <summary>
-        /// Checks if a record exists that match with the LambdaExpressionFilter, DbTransaction and a custom dbCommand timeout.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <param name="dbTransaction">The database transaction.</param>
-        /// <param name="commandTimeOut">The command time out.</param>
-        /// <returns></returns>
-        bool Exists(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbTransaction dbTransaction, int commandTimeOut);
-
-        /// <summary>
-        /// Checks if a record exists that match with the LambdaExpressionFilter and DbConnection.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <param name="dbConnection">The database connection.</param>
-        /// <returns></returns>
-        bool Exists(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection);
-
-        /// <summary>
-        /// Checks if a record exists that match with the LambdaExpressionFilter, DbConnection and a custom dbCommand timeout.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <param name="dbConnection">The database connection.</param>
-        /// <param name="commandTimeOut">The command time out.</param>
-        /// <returns></returns>
-        bool Exists(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, int commandTimeOut);
-
-        /// <summary>
-        /// Checks if a record exists that match with the LambdaExpressionFilter, DbConnection and DbTransacion.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <param name="dbConnection">The database connection.</param>
-        /// <param name="dbTransaction">The database transaction.</param>
-        /// <returns></returns>
-        bool Exists(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, DbTransaction dbTransaction);
-
-        /// <summary>
-        /// Checks if a record exists that match with the LambdaExpressionFilter, DbConnection, DbTransacion and a custom dbCommand timeout.
-        /// </summary>
-        /// <param name="lambdaExpressionFilter">The lambda expression filter.</param>
-        /// <param name="dbConnection">The database connection.</param>
-        /// <param name="dbTransaction">The database transaction.</param>
-        /// <param name="commandTimeOut">The command time out.</param>
-        /// <returns></returns>
-        bool Exists(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, DbTransaction dbTransaction, int? commandTimeOut);
     }
 }

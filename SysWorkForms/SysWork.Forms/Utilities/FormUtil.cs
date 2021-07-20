@@ -323,5 +323,14 @@ namespace SysWork.Forms.Utilities
             return null;
         }
 
+        public static DateTime DateTimeFrom0000(DateTime dateTime)
+        {
+            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0,0);
+        }
+        public static DateTime DateTimeTo2359(DateTime dateTime)
+        {
+            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 23, 59, 59);
+        }
+
     }
 }

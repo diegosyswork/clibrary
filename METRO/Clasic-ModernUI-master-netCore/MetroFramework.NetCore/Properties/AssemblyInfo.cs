@@ -10,7 +10,7 @@ using System.Security;
 [assembly: AssemblyTitle(MetroFrameworkAssembly.Title)]
 [assembly: AssemblyDescription(MetroFrameworkAssembly.Description)]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany(MetroFrameworkAssembly.Company)]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct(MetroFrameworkAssembly.Product)]
 [assembly: AssemblyCopyright(MetroFrameworkAssembly.Copyright)]
 [assembly: AssemblyTrademark("")]

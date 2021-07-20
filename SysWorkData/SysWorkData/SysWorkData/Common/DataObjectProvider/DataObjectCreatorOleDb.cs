@@ -1,6 +1,9 @@
 ﻿using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
+using SysWork.Data;
+using SysWork.Data.Access;
+using SysWork.Data.OleDb;
 
 namespace SysWork.Data.Common.DataObjectProvider
 {
@@ -79,6 +82,16 @@ namespace SysWork.Data.Common.DataObjectProvider
         public override DbDataAdapter GetDbDataAdapter()
         {
             return new OleDbDataAdapter();
+        }
+
+        public override DbEntityProvider GetQueryProvider(string connectionString)
+        {
+            return new AccessQueryProvider(connectionString);
+        }
+
+        public override DbEntityProvider GetQueryProvider(DbConnection dbConnection)
+        {
+            return new AccessQueryProvider(connection: (OleDbConnection) dbConnection);
         }
     }
 }

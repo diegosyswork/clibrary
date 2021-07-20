@@ -4,12 +4,12 @@ using System.Data.OleDb;
 using System.Reflection;
 using System.Text;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
-using SysWork.Data.Common.Attributes;
 using SysWork.Data.Common.DbInfo;
 using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.Common.ValueObjects;
 using System.Threading.Tasks;
 using System.Data.Common;
+using SysWork.Data.Mapping;
 
 namespace SysWork.Data.GenericRepository
 {
@@ -24,7 +24,6 @@ namespace SysWork.Data.GenericRepository
         {
             return await GetByIdAsync(id, null, null, commandTimeOut);
         }
-
 
         public async Task<TEntity> GetByIdAsync(object id, DbConnection dbConnection)
         {
@@ -67,10 +66,10 @@ namespace SysWork.Data.GenericRepository
 
             foreach (var pi in EntityProperties)
             {
-                var pk = pi.GetCustomAttribute(typeof(DbColumnAttribute)) as DbColumnAttribute;
+                var pk = pi.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
                 if (pk != null && pk.IsIdentity)
                 {
-                    var columnName = _syntaxProvider.GetSecureColumnName(pk.ColumnName ?? pi.Name);
+                    var columnName = _syntaxProvider.GetSecureColumnName(pk.Name?? pi.Name);
 
                     string parameterName = "@param_" + pi.Name;
                     clause.Append(string.Format("{0}={1}", columnName, id));
@@ -107,7 +106,7 @@ namespace SysWork.Data.GenericRepository
                     if (reader.Read())
                         entity = await _mapper.MapSingleAsync<TEntity>(reader, EntityProperties);
                     else
-                        entity = default(TEntity);
+                        entity = default;
 
                     reader.Close();
                     reader.Dispose();

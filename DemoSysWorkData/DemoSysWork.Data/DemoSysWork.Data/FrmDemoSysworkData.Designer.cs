@@ -37,6 +37,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.GrpDetails = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.BtnAddRangeAsync = new System.Windows.Forms.Button();
             this.BtnGetAllAsync = new System.Windows.Forms.Button();
             this.BtnTestMapper = new System.Windows.Forms.Button();
@@ -72,7 +73,7 @@
             this.BtnExistsTable = new System.Windows.Forms.Button();
             this.BtnUpdate = new System.Windows.Forms.Button();
             this.BtnAdd = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.GrpParameters.SuspendLayout();
             this.GrpDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -172,6 +173,7 @@
             this.GrpDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.GrpDetails.Controls.Add(this.button2);
             this.GrpDetails.Controls.Add(this.button1);
             this.GrpDetails.Controls.Add(this.BtnAddRangeAsync);
             this.GrpDetails.Controls.Add(this.BtnGetAllAsync);
@@ -213,6 +215,16 @@
             this.GrpDetails.Size = new System.Drawing.Size(876, 438);
             this.GrpDetails.TabIndex = 93;
             this.GrpDetails.TabStop = false;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(372, 299);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(18, 15);
+            this.button1.TabIndex = 150;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // BtnAddRangeAsync
             // 
@@ -309,7 +321,7 @@
             this.BtnEntityClassFromDb.TabIndex = 94;
             this.BtnEntityClassFromDb.Text = "Test EntityClassFromDb";
             this.BtnEntityClassFromDb.UseVisualStyleBackColor = true;
-            this.BtnEntityClassFromDb.Click += new System.EventHandler(this.BtnTestEntityClassFromDb_Click);
+            //this.BtnEntityClassFromDb.Click += new System.EventHandler(this.BtnTestEntityClassFromDb_Click);
             // 
             // BtnGetByLambdaExpression
             // 
@@ -557,15 +569,15 @@
             this.BtnAdd.UseVisualStyleBackColor = true;
             this.BtnAdd.Click += new System.EventHandler(this.BtnAdd_Click);
             // 
-            // button1
+            // button2
             // 
-            this.button1.Location = new System.Drawing.Point(431, 311);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(18, 15);
-            this.button1.TabIndex = 150;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button2.Location = new System.Drawing.Point(358, 324);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(100, 24);
+            this.button2.TabIndex = 151;
+            this.button2.Text = "GUID Test";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // FrmDemoSysworkData
             // 
@@ -634,6 +646,7 @@
         private System.Windows.Forms.Button BtnGetAllAsync;
         private System.Windows.Forms.Button BtnAddRangeAsync;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }
 

@@ -904,7 +904,7 @@
             // LblImporteTotal
             // 
             this.LblImporteTotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.LblImporteTotal.FontSize = MetroFramework.MetroLabelSize.ExtraLarge;
+            this.LblImporteTotal.FontSize = MetroFramework.MetroLabelSize.XXL;
             this.LblImporteTotal.FontWeight = MetroFramework.MetroLabelWeight.Bold;
             this.LblImporteTotal.Location = new System.Drawing.Point(654, 642);
             this.LblImporteTotal.Name = "LblImporteTotal";

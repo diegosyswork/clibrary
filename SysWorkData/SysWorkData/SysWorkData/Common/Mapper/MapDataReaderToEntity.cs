@@ -6,6 +6,7 @@ using SysWork.Data.Common.Attributes;
 using SysWork.Data.Common.ValueObjects;
 using SysWork.Data.Common.Attributes.Helpers;
 using System.Threading.Tasks;
+using SysWork.Data.Mapping;
 
 namespace SysWork.Data.Common.Mapper
 {
@@ -62,7 +63,7 @@ namespace SysWork.Data.Common.Mapper
             if (UseTypeCache) AddType(aux);
             var _properties = properties ??
                              (UseTypeCache ? GetCacheProperties(aux) :
-                             DbColumnHelper.GetProperties(aux));
+                             ColumnHelper.GetProperties(aux));
 
             IList<T> result = new List<T>();
             while (reader.Read())
@@ -73,16 +74,16 @@ namespace SysWork.Data.Common.Mapper
                 {
                     try
                     {
-                        var dbColumn = (DbColumnAttribute)i.GetCustomAttribute(typeof(DbColumnAttribute));
-                        var columnName = dbColumn.ColumnName ?? i.Name;
+                        var column = (ColumnAttribute)i.GetCustomAttribute(typeof(ColumnAttribute));
+                        var columnName = column.Name ?? i.Name;
 
-                        if ((dbColumn).Convert)
-                        {
-                            if (reader[columnName] != DBNull.Value)
-                                i.SetValue(obj, Convert.ChangeType(reader[columnName], i.PropertyType));
-                        }
-                        else
-                        {
+                        //if ((column).Convert)
+                        //{
+                        //    if (reader[columnName] != DBNull.Value)
+                        //        i.SetValue(obj, Convert.ChangeType(reader[columnName], i.PropertyType));
+                        //}
+                        //else
+                        //{
                             if (reader[columnName] != DBNull.Value)
                             {
                                 var value = reader[columnName];
@@ -91,7 +92,7 @@ namespace SysWork.Data.Common.Mapper
 
                                 i.SetValue(obj, safeValue);
                             }
-                        }
+                        //}
                     }
                     catch (Exception exception)
                     {
@@ -140,7 +141,7 @@ namespace SysWork.Data.Common.Mapper
             if (UseTypeCache) AddType(aux);
             var _properties = properties ??
                              (UseTypeCache ? GetCacheProperties(aux) :
-                             DbColumnHelper.GetProperties(aux));
+                             ColumnHelper.GetProperties(aux));
 
             IList<T> result = new List<T>();
 
@@ -153,16 +154,16 @@ namespace SysWork.Data.Common.Mapper
                     {
                         try
                         {
-                            var dbColumn = (DbColumnAttribute)i.GetCustomAttribute(typeof(DbColumnAttribute));
-                            var columnName = dbColumn.ColumnName ?? i.Name;
+                            var column = (ColumnAttribute)i.GetCustomAttribute(typeof(ColumnAttribute));
+                            var columnName = column.Name ?? i.Name;
 
-                            if ((dbColumn).Convert)
-                            {
-                                if (reader[columnName] != DBNull.Value)
-                                    i.SetValue(obj, Convert.ChangeType(reader[columnName], i.PropertyType));
-                            }
-                            else
-                            {
+                            //if ((column).Convert)
+                            //{
+                            //    if (reader[columnName] != DBNull.Value)
+                            //        i.SetValue(obj, Convert.ChangeType(reader[columnName], i.PropertyType));
+                            //}
+                            //else
+                            //{
                                 if (reader[columnName] != DBNull.Value)
                                 {
                                     var value = reader[columnName];
@@ -171,7 +172,7 @@ namespace SysWork.Data.Common.Mapper
 
                                     i.SetValue(obj, safeValue);
                                 }
-                            }
+                            //}
                         }
                         catch (Exception exception)
                         {
@@ -227,22 +228,22 @@ namespace SysWork.Data.Common.Mapper
             if (UseTypeCache) AddType(obj);
             var _properties = properties ??
                              (UseTypeCache ? GetCacheProperties(obj) :
-                             DbColumnHelper.GetProperties(obj));
+                             ColumnHelper.GetProperties(obj));
 
             foreach (PropertyInfo i in _properties)
             {
                 try
                 {
-                    var dbColumn = (DbColumnAttribute)i.GetCustomAttribute(typeof(DbColumnAttribute));
-                    var columnName = dbColumn.ColumnName ?? i.Name;
+                    var column = (ColumnAttribute)i.GetCustomAttribute(typeof(ColumnAttribute));
+                    var columnName = column.Name ?? i.Name;
 
-                    if (dbColumn.Convert)
-                    {
-                        if (reader[columnName] != DBNull.Value)
-                            i.SetValue(obj, Convert.ChangeType(reader[columnName], i.PropertyType));
-                    }
-                    else
-                    {
+                    //if (column.Convert)
+                    //{
+                    //    if (reader[columnName] != DBNull.Value)
+                    //        i.SetValue(obj, Convert.ChangeType(reader[columnName], i.PropertyType));
+                    //}
+                    //else
+                    //{
                         if (reader[columnName] != DBNull.Value)
                         {
                             var value = reader[columnName];
@@ -251,7 +252,7 @@ namespace SysWork.Data.Common.Mapper
 
                             i.SetValue(obj, safeValue);
                         }
-                    }
+                    //}
                 }
                 catch (Exception exception)
                 {
@@ -298,7 +299,7 @@ namespace SysWork.Data.Common.Mapper
             if (UseTypeCache) AddType(obj);
             var _properties = properties ??
                              (UseTypeCache ? GetCacheProperties(obj) :
-                             DbColumnHelper.GetProperties(obj));
+                             ColumnHelper.GetProperties(obj));
 
             var taskMap = new Task(()=> 
             {
@@ -306,16 +307,16 @@ namespace SysWork.Data.Common.Mapper
                 {
                     try
                     {
-                        var dbColumn = (DbColumnAttribute)i.GetCustomAttribute(typeof(DbColumnAttribute));
-                        var columnName = dbColumn.ColumnName ?? i.Name;
+                        var column = (ColumnAttribute)i.GetCustomAttribute(typeof(ColumnAttribute));
+                        var columnName = column.Name ?? i.Name;
 
-                        if (dbColumn.Convert)
-                        {
-                            if (reader[columnName] != DBNull.Value)
-                                i.SetValue(obj, Convert.ChangeType(reader[columnName], i.PropertyType));
-                        }
-                        else
-                        {
+                        //if (column.Convert)
+                        //{
+                        //    if (reader[columnName] != DBNull.Value)
+                        //        i.SetValue(obj, Convert.ChangeType(reader[columnName], i.PropertyType));
+                        //}
+                        //else
+                        //{
                             if (reader[columnName] != DBNull.Value)
                             {
                                 var value = reader[columnName];
@@ -324,7 +325,7 @@ namespace SysWork.Data.Common.Mapper
 
                                 i.SetValue(obj, safeValue);
                             }
-                        }
+                        //}
                     }
                     catch (Exception exception)
                     {
@@ -364,22 +365,22 @@ namespace SysWork.Data.Common.Mapper
             if (UseTypeCache) AddType(obj);
             var _properties = properties ??
                              (UseTypeCache ? GetCacheProperties(obj) :
-                             DbColumnHelper.GetProperties(obj));
+                             ColumnHelper.GetProperties(obj));
 
             foreach (PropertyInfo i in _properties)
             {
                 try
                 {
-                    var dbColumn = (DbColumnAttribute)i.GetCustomAttribute(typeof(DbColumnAttribute));
-                    var columName = dbColumn.ColumnName ?? i.Name;
+                    var column = (ColumnAttribute)i.GetCustomAttribute(typeof(ColumnAttribute));
+                    var columName = column.Name ?? i.Name;
 
-                    if (dbColumn.Convert)
-                    {
-                        if (dataRecord[columName] != DBNull.Value)
-                            i.SetValue(obj, Convert.ChangeType(dataRecord[columName], i.PropertyType));
-                    }
-                    else
-                    {
+                    //if (column.Convert)
+                    //{
+                    //    if (dataRecord[columName] != DBNull.Value)
+                    //        i.SetValue(obj, Convert.ChangeType(dataRecord[columName], i.PropertyType));
+                    //}
+                    //else
+                    //{
                         if (dataRecord[columName] != DBNull.Value)
                         {
                             var value = dataRecord[columName];
@@ -388,7 +389,7 @@ namespace SysWork.Data.Common.Mapper
 
                             i.SetValue(obj, safeValue);
                         }
-                    }
+                    //}
                 }
                 catch (Exception exception)
                 {
@@ -422,7 +423,7 @@ namespace SysWork.Data.Common.Mapper
             if (UseTypeCache) AddType(obj);
             var _properties = properties ??
                              (UseTypeCache ? GetCacheProperties(obj) :
-                             DbColumnHelper.GetProperties(obj));
+                             ColumnHelper.GetProperties(obj));
 
             var taskMap = new Task(()=> 
             {
@@ -430,16 +431,16 @@ namespace SysWork.Data.Common.Mapper
                 {
                     try
                     {
-                        var dbColumn = (DbColumnAttribute)i.GetCustomAttribute(typeof(DbColumnAttribute));
-                        var columName = dbColumn.ColumnName ?? i.Name;
+                        var column = (ColumnAttribute)i.GetCustomAttribute(typeof(ColumnAttribute));
+                        var columName = column.Name ?? i.Name;
 
-                        if (dbColumn.Convert)
-                        {
-                            if (dataRecord[columName] != DBNull.Value)
-                                i.SetValue(obj, Convert.ChangeType(dataRecord[columName], i.PropertyType));
-                        }
-                        else
-                        {
+                        //if (column.Convert)
+                        //{
+                        //    if (dataRecord[columName] != DBNull.Value)
+                        //        i.SetValue(obj, Convert.ChangeType(dataRecord[columName], i.PropertyType));
+                        //}
+                        //else
+                        //{
                             if (dataRecord[columName] != DBNull.Value)
                             {
                                 var value = dataRecord[columName];
@@ -448,7 +449,7 @@ namespace SysWork.Data.Common.Mapper
 
                                 i.SetValue(obj, safeValue);
                             }
-                        }
+                        //}
                     }
                     catch (Exception exception)
                     {
@@ -478,7 +479,7 @@ namespace SysWork.Data.Common.Mapper
 
             Type type = entity.GetType();
             if (!_typeCache.ContainsKey(type))
-                _typeCache.Add(type, DbColumnHelper.GetProperties(entity));
+                _typeCache.Add(type, ColumnHelper.GetProperties(entity));
         }
 
         private IList<PropertyInfo> GetCacheProperties<T>(T t)
@@ -489,6 +490,5 @@ namespace SysWork.Data.Common.Mapper
             else
                 throw new IndexOutOfRangeException($"The type {type.Assembly.ToString() + type.FullName.ToString()} is not in cache");
         }
-
     }
 }

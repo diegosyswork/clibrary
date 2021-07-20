@@ -1,6 +1,8 @@
 ﻿using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
+using SysWork.Data;
+using SysWork.Data.SQLite;
 
 namespace SysWork.Data.Common.DataObjectProvider
 {
@@ -85,6 +87,16 @@ namespace SysWork.Data.Common.DataObjectProvider
         public override DbDataAdapter GetDbDataAdapter()
         {
             return new SQLiteDataAdapter();
+        }
+
+        public override DbEntityProvider GetQueryProvider(string connectionString)
+        {
+            return new SQLiteQueryProvider(connectionString);
+        }
+
+        public override DbEntityProvider GetQueryProvider(DbConnection dbConnection)
+        {
+            return new SQLiteQueryProvider((SQLiteConnection) dbConnection);
         }
     }
 }

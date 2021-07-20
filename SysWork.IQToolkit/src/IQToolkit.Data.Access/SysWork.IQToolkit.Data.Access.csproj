@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SysWork.IQToolkit.Data.Access</RootNamespace>
     <AssemblyName>SysWork.IQToolkit.Data.Access</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -79,16 +79,6 @@
     <ProjectReference Include="..\IQToolkit.Data.Ado\SysWork.IQToolkit.Data.Ado.csproj">
       <Project>{130854d0-8529-49e1-8e56-8e7f64da3399}</Project>
       <Name>SysWork.IQToolkit.Data.Ado</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\IQToolkit.Data\SysWork.IQToolkit.Data.csproj">
-      <Project>{3A356510-9C25-4A94-87B9-EEB31B6A1303}</Project>
-      <Name>SysWork.IQToolkit.Data</Name>
-      <Private>False</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\IQToolkit\SysWork.IQToolkit.csproj">
-      <Project>{0DA62A7C-3B40-456F-A4B2-B3E19ED4080E}</Project>
-      <Name>SysWork.IQToolkit</Name>
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>

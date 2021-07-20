@@ -506,8 +506,7 @@ namespace SysWork.Data.Common.Utilities
             }
             return table;
         }
-
-
+        
         /// <summary>
         /// Verify the existence of a ConnectionString in app Configuration File.
         /// </summary>

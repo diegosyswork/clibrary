@@ -1,96 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.OleDb;
 using System.Linq.Expressions;
-using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
-using SysWork.Data.Common.LambdaSqlBuilder;
 using SysWork.Data.GenericRepository.Exceptions;
-using SysWork.Data.Common.ValueObjects;
 using System.Threading.Tasks;
 using System.Data.Common;
+using System.Linq;
 
 namespace SysWork.Data.GenericRepository
 {
     public abstract partial class BaseRepository<TEntity> 
     {
-        public async Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter)
+        public async Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> filter)
         {
-            return await GetListByLambdaExpressionFilterAsync(lambdaExpressionFilter, null, null, null);
+            return await GetListByLambdaExpressionFilterAsync(filter, null, null, null);
         }
 
-        public async Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, int commandTimeOut)
+        public async Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> filter, int commandTimeOut)
         {
-            return await GetListByLambdaExpressionFilterAsync(lambdaExpressionFilter, null, null, commandTimeOut);
+            return await GetListByLambdaExpressionFilterAsync(filter, null, null, commandTimeOut);
         }
 
-        public async Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection)
+        public async Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> filter, DbConnection dbConnection)
         {
-            return await GetListByLambdaExpressionFilterAsync(lambdaExpressionFilter, dbConnection, null, null);
+            return await GetListByLambdaExpressionFilterAsync(filter, dbConnection, null, null);
         }
 
-        public async Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, int commandTimeOut)
+        public async Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> filter, DbConnection dbConnection, int commandTimeOut)
         {
-            return await GetListByLambdaExpressionFilterAsync(lambdaExpressionFilter, dbConnection, null, commandTimeOut);
+            return await GetListByLambdaExpressionFilterAsync(filter, dbConnection, null, commandTimeOut);
         }
 
-        public async Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbTransaction dbTransaction)
+        public async Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> filter, DbTransaction dbTransaction)
         {
-            return await GetListByLambdaExpressionFilterAsync(lambdaExpressionFilter, null, dbTransaction, null);
+            return await GetListByLambdaExpressionFilterAsync(filter, null, dbTransaction, null);
         }
 
-        public async Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbTransaction dbTransaction, int commandTimeOut)
+        public async Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> filter, DbTransaction dbTransaction, int commandTimeOut)
         {
-            return await GetListByLambdaExpressionFilterAsync(lambdaExpressionFilter, null, dbTransaction, commandTimeOut);
+            return await GetListByLambdaExpressionFilterAsync(filter, null, dbTransaction, commandTimeOut);
         }
 
-        public async Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, DbTransaction dbTransaction)
+        public async Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> filter, DbConnection dbConnection, DbTransaction dbTransaction)
         {
-            return await GetListByLambdaExpressionFilterAsync(lambdaExpressionFilter, dbConnection, dbTransaction, null);
+            return await GetListByLambdaExpressionFilterAsync(filter, dbConnection, dbTransaction, null);
         }
 
-        public async Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> lambdaExpressionFilter, DbConnection dbConnection, DbTransaction dbTransaction, int? commandTimeOut)
+        public async Task<IList<TEntity>> GetListByLambdaExpressionFilterAsync(Expression<Func<TEntity, bool>> filter, DbConnection dbConnection, DbTransaction dbTransaction, int? commandTimeOut)
         {
             IList<TEntity> result = new List<TEntity>();
-            SetSqlLamAdapter();
-            var query = new SqlLam<TEntity>(lambdaExpressionFilter);
-
             bool closeConnection = ((dbConnection == null) && (dbTransaction == null));
 
             if (dbConnection == null && dbTransaction != null)
                 dbConnection = dbTransaction.Connection;
 
             DbConnection dbConnectionInUse = dbConnection ?? BaseDbConnection();
-            DbCommand dbCommand = dbConnectionInUse.CreateCommand();
-
             try
             {
                 if (dbConnectionInUse.State != ConnectionState.Open)
                     await dbConnectionInUse.OpenAsync();
 
+                DbEntityProvider entityProvider = _dbObjectProvider.GetQueryProvider((DbConnection)dbConnectionInUse);
                 if (dbTransaction != null)
-                    dbCommand.Transaction = dbTransaction;
+                {
+                    entityProvider.Transaction = (DbTransaction)dbTransaction;
+                    entityProvider.Isolation = dbTransaction.IsolationLevel;
+                }
 
-                dbCommand.CommandText = query.QueryString;
-                dbCommand.CommandTimeout = commandTimeOut ?? _defaultCommandTimeout;
-
-                foreach (var parameters in query.QueryParameters)
-                    dbCommand.Parameters.Add(CreateIDbDataParameter("@" + parameters.Key, parameters.Value));
-
-                if (_databaseEngine == EDatabaseEngine.OleDb)
-                    ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
-
-                IDataReader reader = await dbCommand.ExecuteReaderAsync();
-                result = await _mapper.MapAsync<TEntity>(reader, EntityProperties, _databaseEngine);
-
-                reader.Close();
-                reader.Dispose();
-                dbCommand.Dispose();
+                var table = entityProvider.GetTable<TEntity>();
+                result = table.Where(filter).ToList();
 
             }
             catch (Exception exception)
             {
-                throw new RepositoryException(exception, dbCommand);
+                throw new RepositoryException(exception);
             }
             finally
             {

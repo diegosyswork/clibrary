@@ -831,7 +831,7 @@ namespace MetroFramework.Controls
             baseTextBox.ChangeUICues += BaseTextBoxChangeUiCues;
             baseTextBox.Click += BaseTextBoxClick;
             baseTextBox.ClientSizeChanged += BaseTextBoxClientSizeChanged;
-            baseTextBox.ContextMenuChanged += BaseTextBoxContextMenuChanged;
+            //baseTextBox.ContextMenuChanged += BaseTextBoxContextMenuChanged;
             baseTextBox.ContextMenuStripChanged += BaseTextBoxContextMenuStripChanged;
             baseTextBox.CursorChanged += BaseTextBoxCursorChanged;
 

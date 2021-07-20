@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SysWork.SysWork.IQToolkit.Data.Ado</RootNamespace>
     <AssemblyName>SysWork.SysWork.IQToolkit.Data.Ado</AssemblyName>
-    <TargetFramework>netstandard1.4</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <!--<TargetFrameworkVersion>v4.5</TargetFrameworkVersion>-->
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -39,10 +39,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.Data.Common" Version="4.3.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\IQToolkit.Data\SysWork.IQToolkit.Data.csproj" />
-    <ProjectReference Include="..\IQToolkit\SysWork.IQToolkit.csproj" />
   </ItemGroup>
   <!--
   <ItemGroup>   

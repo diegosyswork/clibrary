@@ -1,6 +1,8 @@
 ﻿using MySql.Data.MySqlClient;
 using System.Data;
 using System.Data.Common;
+using SysWork.Data;
+using SysWork.Data.MySqlClient;
 
 namespace SysWork.Data.Common.DataObjectProvider
 {
@@ -74,6 +76,16 @@ namespace SysWork.Data.Common.DataObjectProvider
         public override DbDataAdapter GetDbDataAdapter()
         {
             return new MySqlDataAdapter();
+        }
+
+        public override DbEntityProvider GetQueryProvider(string connectionString)
+        {
+            return new MySqlQueryProvider(connectionString) ;
+        }
+
+        public override DbEntityProvider GetQueryProvider(DbConnection dbConnection)
+        {
+            return new MySqlQueryProvider((MySqlConnection)dbConnection);
         }
     }
 }
