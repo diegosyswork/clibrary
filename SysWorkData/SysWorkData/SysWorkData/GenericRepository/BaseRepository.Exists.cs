@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
-using System.Linq.Expressions;
 using SysWork.Data.Common.Extensions.OleDbCommandExtensions;
 using SysWork.Data.Common.Filters;
 using SysWork.Data.Common.ValueObjects;

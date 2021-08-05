@@ -1023,6 +1023,17 @@ namespace Demo.SysWork.Data
 
         private void BtnSqlLAMTest_Click(object sender, EventArgs e)
         {
+
+            var result = from person in _personRepository.Table()
+                         join state in _stateRepository.Table()
+                         on person.IdState equals state.IdState                       
+                         select new {person.FirstName, state.Description };
+
+            result.ToList();
+
+            var @for = "";
+
+
             /*
             LogText(Environment.NewLine + "///      START SqlLam Method DEMO         ///");
 

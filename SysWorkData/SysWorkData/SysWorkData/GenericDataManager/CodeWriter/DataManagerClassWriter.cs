@@ -23,7 +23,6 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
     {
         private string _connectionString;
         private EDatabaseEngine _databaseEngine;
-
         private EDatamagerStyle _datamagerStyle;
 
         private string _nameSpace;
@@ -47,23 +46,24 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
         /// Initializes a new instance of the <see cref="DataManagerClassWriter"/> class.
         /// </summary>
         /// <param name="databaseEngine">The database engine.</param>
-        /// <param name="ConnectionString">The connection string.</param>
+        /// <param name="connectionString">The connection string.</param>
         /// <param name="NameSpace">The name space.</param>
         /// <param name="Repositories"></param>
         /// <param name="ViewManagers"></param>
-        public DataManagerClassWriter(EDatabaseEngine databaseEngine, string ConnectionString, string NameSpace, List<DbObjectWriterProperty> Repositories, List<DbObjectWriterProperty> ViewManagers, EDatamagerStyle datamagerStyle)
+        public DataManagerClassWriter(EDatabaseEngine databaseEngine, string connectionString, string NameSpace, List<DbObjectWriterProperty> Repositories, List<DbObjectWriterProperty> ViewManagers, EDatamagerStyle datamagerStyle)
         {
-            DataManagerClassWriterConstructorResolver(databaseEngine, ConnectionString, NameSpace, Repositories, ViewManagers, datamagerStyle);
+            DataManagerClassWriterConstructorResolver(databaseEngine, connectionString, NameSpace, Repositories, ViewManagers, datamagerStyle);
         }
 
-        private void DataManagerClassWriterConstructorResolver(EDatabaseEngine databaseEngine, string ConnectionString, string NameSpace, List<DbObjectWriterProperty> Repositories, List<DbObjectWriterProperty> ViewManagers, EDatamagerStyle datamagerStyle)
+        private void DataManagerClassWriterConstructorResolver(EDatabaseEngine databaseEngine, string connectionString, string NameSpace, List<DbObjectWriterProperty> Repositories, List<DbObjectWriterProperty> ViewManagers, EDatamagerStyle datamagerStyle)
         {
-            _connectionString = ConnectionString;
+            _connectionString = connectionString;
             _databaseEngine = databaseEngine;
             _datamagerStyle = datamagerStyle;
             _nameSpace = NameSpace;
             _repositories = Repositories;
             _viewManagers = ViewManagers;
+            
         }
 
         private string GetRepositoryVariable(string repositoryName)

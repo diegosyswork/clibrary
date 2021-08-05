@@ -37,6 +37,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.GrpDetails = new System.Windows.Forms.GroupBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.BtnAddRangeAsync = new System.Windows.Forms.Button();
             this.BtnGetAllAsync = new System.Windows.Forms.Button();
@@ -73,7 +74,6 @@
             this.BtnExistsTable = new System.Windows.Forms.Button();
             this.BtnUpdate = new System.Windows.Forms.Button();
             this.BtnAdd = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.GrpParameters.SuspendLayout();
             this.GrpDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -92,7 +92,7 @@
             this.GrpParameters.Controls.Add(this.label1);
             this.GrpParameters.Location = new System.Drawing.Point(9, 1);
             this.GrpParameters.Name = "GrpParameters";
-            this.GrpParameters.Size = new System.Drawing.Size(877, 107);
+            this.GrpParameters.Size = new System.Drawing.Size(656, 107);
             this.GrpParameters.TabIndex = 92;
             this.GrpParameters.TabStop = false;
             this.GrpParameters.Text = "DB Parameters";
@@ -100,7 +100,7 @@
             // BtnUnconnect
             // 
             this.BtnUnconnect.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.BtnUnconnect.Location = new System.Drawing.Point(501, 78);
+            this.BtnUnconnect.Location = new System.Drawing.Point(391, 78);
             this.BtnUnconnect.Name = "BtnUnconnect";
             this.BtnUnconnect.Size = new System.Drawing.Size(129, 21);
             this.BtnUnconnect.TabIndex = 6;
@@ -111,7 +111,7 @@
             // BtnConnect
             // 
             this.BtnConnect.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.BtnConnect.Location = new System.Drawing.Point(321, 78);
+            this.BtnConnect.Location = new System.Drawing.Point(211, 78);
             this.BtnConnect.Name = "BtnConnect";
             this.BtnConnect.Size = new System.Drawing.Size(129, 21);
             this.BtnConnect.TabIndex = 5;
@@ -122,7 +122,7 @@
             // BtnGetParameters
             // 
             this.BtnGetParameters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnGetParameters.Location = new System.Drawing.Point(850, 49);
+            this.BtnGetParameters.Location = new System.Drawing.Point(629, 49);
             this.BtnGetParameters.Name = "BtnGetParameters";
             this.BtnGetParameters.Size = new System.Drawing.Size(18, 20);
             this.BtnGetParameters.TabIndex = 4;
@@ -136,7 +136,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TxtConnectionString.Location = new System.Drawing.Point(105, 49);
             this.TxtConnectionString.Name = "TxtConnectionString";
-            this.TxtConnectionString.Size = new System.Drawing.Size(739, 20);
+            this.TxtConnectionString.Size = new System.Drawing.Size(518, 20);
             this.TxtConnectionString.TabIndex = 3;
             // 
             // CmbDatabaseEngine
@@ -146,7 +146,7 @@
             this.CmbDatabaseEngine.FormattingEnabled = true;
             this.CmbDatabaseEngine.Location = new System.Drawing.Point(107, 19);
             this.CmbDatabaseEngine.Name = "CmbDatabaseEngine";
-            this.CmbDatabaseEngine.Size = new System.Drawing.Size(761, 21);
+            this.CmbDatabaseEngine.Size = new System.Drawing.Size(540, 21);
             this.CmbDatabaseEngine.TabIndex = 2;
             this.CmbDatabaseEngine.SelectedValueChanged += new System.EventHandler(this.CmbDatabaseEngine_SelectedValueChanged);
             // 
@@ -212,9 +212,19 @@
             this.GrpDetails.Controls.Add(this.BtnAdd);
             this.GrpDetails.Location = new System.Drawing.Point(9, 114);
             this.GrpDetails.Name = "GrpDetails";
-            this.GrpDetails.Size = new System.Drawing.Size(876, 438);
+            this.GrpDetails.Size = new System.Drawing.Size(655, 430);
             this.GrpDetails.TabIndex = 93;
             this.GrpDetails.TabStop = false;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(358, 324);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(100, 24);
+            this.button2.TabIndex = 151;
+            this.button2.Text = "GUID Test";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
             // 
@@ -321,7 +331,6 @@
             this.BtnEntityClassFromDb.TabIndex = 94;
             this.BtnEntityClassFromDb.Text = "Test EntityClassFromDb";
             this.BtnEntityClassFromDb.UseVisualStyleBackColor = true;
-            //this.BtnEntityClassFromDb.Click += new System.EventHandler(this.BtnTestEntityClassFromDb_Click);
             // 
             // BtnGetByLambdaExpression
             // 
@@ -356,7 +365,7 @@
             // BtnCLearLog
             // 
             this.BtnCLearLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnCLearLog.Location = new System.Drawing.Point(815, 10);
+            this.BtnCLearLog.Location = new System.Drawing.Point(594, 10);
             this.BtnCLearLog.Name = "BtnCLearLog";
             this.BtnCLearLog.Size = new System.Drawing.Size(53, 20);
             this.BtnCLearLog.TabIndex = 136;
@@ -380,7 +389,7 @@
             this.TxtLog.Location = new System.Drawing.Point(501, 34);
             this.TxtLog.Multiline = true;
             this.TxtLog.Name = "TxtLog";
-            this.TxtLog.Size = new System.Drawing.Size(367, 266);
+            this.TxtLog.Size = new System.Drawing.Size(146, 266);
             this.TxtLog.TabIndex = 134;
             // 
             // BtnTestGenericViewManager
@@ -421,7 +430,7 @@
             this.txtQuery.Multiline = true;
             this.txtQuery.Name = "txtQuery";
             this.txtQuery.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtQuery.Size = new System.Drawing.Size(862, 35);
+            this.txtQuery.Size = new System.Drawing.Size(641, 35);
             this.txtQuery.TabIndex = 127;
             // 
             // TxtPassport
@@ -526,7 +535,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(6, 394);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(862, 35);
+            this.dataGridView1.Size = new System.Drawing.Size(641, 27);
             this.dataGridView1.TabIndex = 116;
             // 
             // BtnExistsColumn
@@ -569,21 +578,11 @@
             this.BtnAdd.UseVisualStyleBackColor = true;
             this.BtnAdd.Click += new System.EventHandler(this.BtnAdd_Click);
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(358, 324);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(100, 24);
-            this.button2.TabIndex = 151;
-            this.button2.Text = "GUID Test";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // FrmDemoSysworkData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(894, 557);
+            this.ClientSize = new System.Drawing.Size(673, 549);
             this.Controls.Add(this.GrpDetails);
             this.Controls.Add(this.GrpParameters);
             this.Name = "FrmDemoSysworkData";

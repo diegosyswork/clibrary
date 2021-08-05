@@ -1,5 +1,6 @@
 ﻿
 using System;
+using SysWork.Data.Common.ValueObjects;
 using SysWork.Data.GenericDataManager;
 using SysWork.Data.GenericDataManager.Intefaces;
 
@@ -37,6 +38,7 @@ namespace Demo.SysWork.Data.Repositories
             _stateRepository = new Lazy<StateRepository>(()=>new StateRepository(ConnectionString, DatabaseEngine));
             _personRepository = new Lazy<PersonRepository>(() => new PersonRepository(ConnectionString, DatabaseEngine));
             VManagerPersonsWithStates = new VManagerPersonsWithStates(ConnectionString, DatabaseEngine);
+            Enum.TryParse("", true, out EDatabaseEngine result);
         }
     }
 }

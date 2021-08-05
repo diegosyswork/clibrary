@@ -16,6 +16,7 @@ using SysWork.Data.Common.Mapper;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.Utilities;
 using SysWork.Data.Common.ValueObjects;
+using SysWork.Data.GenericRepository.Exceptions;
 using SysWork.Data.GenericRepository.Interfaces;
 using SysWork.Data.Mapping;
 
@@ -61,7 +62,7 @@ namespace SysWork.Data.GenericRepository
     /// In case a transaction and a connection are specified, the ones provided will be used.
     /// </remarks>
     #endregion
-    public abstract partial class BaseRepository<TEntity>:IRepository<TEntity> where TEntity : class, new()
+    public abstract partial class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : class, new()
     {
         private string _connectionString;
         /// <summary>
@@ -84,7 +85,7 @@ namespace SysWork.Data.GenericRepository
         /// </summary>
         /// <value>The DbObjectProvider used in this class.</value>
         protected DbObjectProvider DbObjectProvider { get { return _dbObjectProvider; } }
-        
+
 
         private SyntaxProvider _syntaxProvider;
         /// <summary>
@@ -116,7 +117,7 @@ namespace SysWork.Data.GenericRepository
         /// <value>
         /// The default CommandTimeOut.
         /// </value>
-        protected int DefaultCommandTimeOut {get { return _defaultCommandTimeout; } set {_defaultCommandTimeout = value;}}
+        protected int DefaultCommandTimeOut { get { return _defaultCommandTimeout; } set { _defaultCommandTimeout = value; } }
 
         /// <summary>
         /// Initializes a new instance class. Using MSSqlServer as DatabaseEngine.
@@ -167,7 +168,7 @@ namespace SysWork.Data.GenericRepository
                 throw new Exception(string.Format("The Entity {0}, has not linked to any table, Use [DbTable] attribute to link it to a table.", type.Name));
 
         }
-        
+
         /// <summary>
         /// Gets a new instance of the GenericFilterQuery with the ColumnsForSelect and TableName setted.
         /// </summary>
@@ -296,7 +297,7 @@ namespace SysWork.Data.GenericRepository
             }
             catch (Exception)
             {
-                throw new IndexOutOfRangeException(string.Format("The column {0} in the table {1} not exists",columnName,TableName));
+                throw new IndexOutOfRangeException(string.Format("The column {0} in the table {1} not exists", columnName, TableName));
             }
 
             columnData.MaxLenght = null;
@@ -395,6 +396,64 @@ namespace SysWork.Data.GenericRepository
             }
             return table;
         }
+
+        public IEntityTable<TEntity> Table()
+        {
+            return Table(null, null);
+        }
+        public IEntityTable<TEntity> Table(IDbTransaction dbTransaction)
+        {
+            return Table(null, dbTransaction);
+        }
+        public IEntityTable<TEntity> Table(IDbConnection dbConnection)
+        {
+            return Table(dbConnection, null);
+        }
+        public IEntityTable<TEntity> Table(IDbConnection dbConnection, IDbTransaction dbTransaction)
+        {
+            IEntityTable<TEntity> result = null;
+
+            if (dbConnection == null && dbTransaction != null)
+                dbConnection = dbTransaction.Connection;
+
+            IDbConnection dbConnectionInUse = dbConnection ?? PersistentIDbConnection;
+
+            try
+            {
+                if (dbConnectionInUse.State != ConnectionState.Open)
+                    dbConnectionInUse.Open();
+
+                DbEntityProvider entityProvider = _dbObjectProvider.GetQueryProvider((DbConnection)dbConnectionInUse);
+                if (dbTransaction != null)
+                {
+                    entityProvider.Transaction = (DbTransaction)dbTransaction;
+                    entityProvider.Isolation = dbTransaction.IsolationLevel;
+                }
+
+                result= entityProvider.GetTable<TEntity>();
+            }
+            catch (Exception e)
+            {
+                throw new RepositoryException(e);
+            }
+            
+            return result;
+        }
+
+        private IDbConnection _persistentIDBConnection = null;
+        internal IDbConnection PersistentIDbConnection { get { return GetPersistentIDbConnection(); } }
+
+        internal IDbConnection GetPersistentIDbConnection()
+        {
+            if ((_persistentIDBConnection == null) || (_persistentIDBConnection.State != ConnectionState.Open))
+            {
+                _persistentIDBConnection = BaseIDbConnection();
+                _persistentIDBConnection.Open();
+            }
+
+            return _persistentIDBConnection;
+        }
+
 
     }
 }
