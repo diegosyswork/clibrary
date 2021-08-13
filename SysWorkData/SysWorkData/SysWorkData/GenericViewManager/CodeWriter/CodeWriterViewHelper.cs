@@ -49,7 +49,7 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
         public static string AddDbViewAttribute(string dbViewName)
         {
             string ret;
-            ret = string.Format("\t[DbView (Name = \"{0}\")]", dbViewName);
+            ret = string.Format("\t[View (Name = \"{0}\")]", dbViewName);
             return ret;
         }
 
@@ -113,12 +113,11 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
         /// </summary>
         /// <param name="ColumnName"></param>
         /// <returns></returns>
-        public static string AddDbColumnAttribute(string ColumnName = null)
+        public static string AddColumnAttribute(string ColumnName = null)
         {
-            string ret = "";
-
-            ret = "\t\t[DbColumn(";
-            ret += ColumnName != null ? " ColumnName = \"" + ColumnName + "\"" : "";
+            string ret;
+            ret = "\t\t[Column(";
+            ret += ColumnName != null ? " Name = \"" + ColumnName + "\"" : "";
             ret += ")]";
             return ret;
         }
@@ -139,6 +138,7 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
             return ret;
         }
 
+        /*
         /// <summary>
         /// Views the name of the name to class.
         /// </summary>
@@ -154,6 +154,8 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
             return result;
 
         }
+        */
+        /*
         private static string SingularizeWord(string word)
         {
             string ret = "";
@@ -209,12 +211,13 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
 
             return ret;
         }
-
+        */
         /// <summary>
         /// 
         /// </summary>
         /// <param name="camelCaseString"></param>
         /// <returns></returns>
+        /*
         public static string[] CamelCaseToSpaceSeparated(string camelCaseString)
         {
             if (string.IsNullOrEmpty(camelCaseString))
@@ -235,6 +238,6 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
             }
             return res.ToString().Split(' ');
         }
-
+        */
     }
 }

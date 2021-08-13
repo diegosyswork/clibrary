@@ -90,7 +90,7 @@ namespace SysWork.Data.GenericRepository
 
                 IDataReader reader = await dbCommand.ExecuteReaderAsync(CommandBehavior.SingleRow);
                 if (reader.Read())
-                    entity = await _mapper.MapSingleAsync<TEntity>(reader, EntityProperties);
+                    entity = await _mapper.MapSingleAsync<TEntity>(reader, _entityProperties);
                 else
                     entity = default(TEntity);
 

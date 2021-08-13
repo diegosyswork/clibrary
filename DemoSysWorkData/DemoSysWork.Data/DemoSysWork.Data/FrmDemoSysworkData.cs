@@ -1,5 +1,6 @@
 ﻿using Demo.SysWork.Data.Entities;
 using Demo.SysWork.Data.Repositories;
+using InterfaceB2B.Data.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -989,7 +990,7 @@ namespace Demo.SysWork.Data
             person.Address = RandomString(20) + " " + RandomNumber(4);
             person.BirthDate = DateTime.Today.AddDays(int.Parse(RandomNumber(4)) * -1);
             person.Active = true;
-            person.GUID = Guid.NewGuid();
+            //person.GUID = Guid.NewGuid();
             return person;
         }
 
@@ -1666,7 +1667,12 @@ namespace Demo.SysWork.Data
             //_personRepository.GetByLambdaExpressionFilter(p => p.FirstName.Substring(1,2) == "Di");
             //_personRepository.GetByLambdaExpressionFilter(p => p.FirstName.Contains( "Diego"));
             //_personRepository.GetByLambdaExpressionFilter(p => p.FirstName == "Diego");
-            _personRepository.GetByLambdaExpressionFilter(p => p.FirstName.Trim() == "Diego");
+            var xx = _personRepository.GetByLambdaExpressionFilter(p => p.FirstName.Trim() == "Diego");
+
+            var r = new V_MA_ARTICULOSRepository(connectionString: TxtConnectionString.Text, EDatabaseEngine.MSSqlServer);
+            var x = r.Table().Where(a => a.ABM== "").FirstOrDefault();
+            var x2 = r.GetByLambdaExpressionFilter(a => a.CODIGOARTPROVEEDOR.Trim() == null);
+
         }
 
         private void button2_Click(object sender, EventArgs e)

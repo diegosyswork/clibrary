@@ -34,7 +34,7 @@ namespace SysWork.Data.Common.Mapper
         /// <returns></returns>
         public IList<T> Map<T>(IDataReader reader) where T : class, new()
         {
-            return Map<T>(reader, null, EDatabaseEngine.MSSqlServer);
+            return Map<T>(reader, null, DefaultValues.DefaultDatabaseEngine);
         }
         /// <summary>
         /// Maps the specified reader.
@@ -112,7 +112,7 @@ namespace SysWork.Data.Common.Mapper
         /// <returns></returns>
         public async Task<IList<T>> MapAsync<T>(IDataReader reader) where T : class, new()
         {
-            return await MapAsync<T>(reader, null, EDatabaseEngine.MSSqlServer);
+            return await MapAsync<T>(reader, null, DefaultValues.DefaultDatabaseEngine);
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace SysWork.Data.Common.Mapper
         /// <returns></returns>
         public TEntity MapSingle<TEntity>(IDataReader reader) where TEntity : class, new()
         {
-            return MapSingle<TEntity>(reader, null, EDatabaseEngine.MSSqlServer);
+            return MapSingle<TEntity>(reader, null, DefaultValues.DefaultDatabaseEngine);
         }
 
         /// <summary>
@@ -271,7 +271,7 @@ namespace SysWork.Data.Common.Mapper
         /// <returns></returns>
         public async Task<TEntity> MapSingleAsync<TEntity>(IDataReader reader) where TEntity : class, new()
         {
-            return await MapSingleAsync<TEntity>(reader, null, EDatabaseEngine.MSSqlServer);
+            return await MapSingleAsync<TEntity>(reader, null, DefaultValues.DefaultDatabaseEngine);
         }
         /// <summary>
         /// Maps a single record DataReader asynchronous.

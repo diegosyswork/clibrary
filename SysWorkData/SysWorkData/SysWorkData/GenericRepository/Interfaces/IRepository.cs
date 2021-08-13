@@ -13,6 +13,8 @@ namespace SysWork.Data.GenericRepository.Interfaces
         IDeleteByGenericWhereFilterAsync<TEntity>,
         IDeleteById<TEntity>,
         IDeleteByIdAsync<TEntity>,
+        IDeleteByIdsIN<TEntity>,
+        IDeleteByIdsNotIN<TEntity>,
         IDeleteByLambdaExpressionFilter<TEntity>,
         IDeleteByLambdaExpressionFilterAsync<TEntity>,
         IExists<TEntity>,

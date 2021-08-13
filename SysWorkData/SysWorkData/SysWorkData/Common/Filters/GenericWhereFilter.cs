@@ -136,7 +136,7 @@ namespace SysWork.Data.Common.Filters
         /// </summary>
         public GenericWhereFilter()
         {
-            GenericFilterQueryConstructorResolver(EDatabaseEngine.MSSqlServer);
+            GenericFilterQueryConstructorResolver(DefaultValues.DefaultDatabaseEngine);
         }
 
         /// <summary>

@@ -28,7 +28,7 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
         /// <param name="DbViewName">Name of the database view.</param>
         public ViewManagerClassFromView(string ConnectionString, string EntityName, string NameSpace, string DbViewName)
         {
-            ViewManagerClassFromViewConstructorResolver(EDatabaseEngine.MSSqlServer, ConnectionString, EntityName, NameSpace, DbViewName);
+            ViewManagerClassFromViewConstructorResolver(DefaultValues.DefaultDatabaseEngine, ConnectionString, EntityName, NameSpace, DbViewName);
 
         }
 
@@ -65,7 +65,7 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
             builder.AppendLine(CodeWriterViewHelper.AddUsing("System.Text"));
             builder.AppendLine(CodeWriterViewHelper.AddUsing("SysWork.Data.Common"));
             builder.AppendLine(CodeWriterViewHelper.AddUsing("SysWork.Data.GenericViewManager"));
-            builder.AppendLine(CodeWriterViewHelper.AddUsing("SysWork.Data.Common.Attributes"));
+            builder.AppendLine(CodeWriterViewHelper.AddUsing("SysWork.Data.Mapping"));
             builder.AppendLine(CodeWriterViewHelper.AddUsing("SysWork.Data.Common.ValueObjects"));
             builder.AppendLine(CodeWriterViewHelper.AddUsing(_nameSpace + ".Entities"));
             builder.AppendLine(CodeWriterViewHelper.StartNamespace(_nameSpace + ".ViewManagers"));
@@ -95,17 +95,14 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
         {
 
             string ret = "\t/// <summary>\r\n";
-            ret += "\t/// This class was created automatically with the BaseViewManagerClassFromView class.\r\n";
+            ret += "\t/// This class was created automatically with the SysWork.EntityManager.\r\n";
             ret += "\t/// Inherited from GenericRepository which allows you to perform the following actions: \r\n";
-            ret += "\t/// GetById, \r\n";
-            ret += "\t/// GetByLambdaExpressionFilter, \r\n";
-            ret += "\t/// GetByGenericWhereFilter, \r\n";
             ret += "\t/// GetAll, \r\n";
+            ret += "\t/// GetAllAsyc, \r\n";
             ret += "\t/// GetListByLambdaExpressionFilter, \r\n";
-            ret += "\t/// GetDataTableByLambdaExpressionFilter, \r\n";
+            ret += "\t/// GetListByLambdaExpressionFilterAsync, \r\n";
             ret += "\t/// GetListByGenericWhereFilter, \r\n";
-            ret += "\t/// GetDataTableByGenericWhereFilter, \r\n";
-            ret += "\t/// Find \r\n";
+            ret += "\t/// GetListByGenericWhereFilterAsync, \r\n";
             ret += "\t/// </summary>\r\n";
 
             return ret;

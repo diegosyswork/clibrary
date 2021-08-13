@@ -91,7 +91,7 @@ namespace SysWork.Data.GenericRepository
 
                 IDataReader reader = dbCommand.ExecuteReader(CommandBehavior.SingleRow);
                 if (reader.Read())
-                    entity = _mapper.MapSingle<TEntity>(reader, EntityProperties);
+                    entity = _mapper.MapSingle<TEntity>(reader, _entityProperties);
                 else
                     entity = default(TEntity);
 

@@ -41,6 +41,7 @@ namespace SysWork.Data.GenericRepository
         {
             return DeleteByLambdaExpressionFilter(filter, dbConnection, dbTransaction, null);
         }
+
         public long DeleteByLambdaExpressionFilter(Expression<Func<TEntity, bool>> filter, IDbConnection dbConnection, IDbTransaction dbTransaction, int? commandTimeOut)
         {
             bool closeConnection = ((dbConnection == null) && (dbTransaction == null));

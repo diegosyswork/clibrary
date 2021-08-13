@@ -2,9 +2,7 @@
 using System.Data;
 using System.Data.Common;
 using System.Data.OleDb;
-using System.Reflection;
 using System.Text;
-using SysWork.Data.Common;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.Dictionaries;
 using SysWork.Data.Common.Syntax;
@@ -46,7 +44,7 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
         /// <param name="NameSpace">The name space.</param>
         public EntityClassFromView(string ConnectionString, string DbViewName, string ClassName, string NameSpace)
         {
-            EntityClassFromViewConstructorResolver(EDatabaseEngine.MSSqlServer, ConnectionString, DbViewName, ClassName, NameSpace);
+            EntityClassFromViewConstructorResolver(DefaultValues.DefaultDatabaseEngine, ConnectionString, DbViewName, ClassName, NameSpace);
         }
 
         private void EntityClassFromViewConstructorResolver(EDatabaseEngine databaseEngine, string ConnectionString, string DbViewName, string ClassName, string NameSpace)
@@ -71,7 +69,7 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
             builder.AppendLine(CodeWriterViewHelper.AddUsing("System.Collections.Generic"));
             builder.AppendLine(CodeWriterViewHelper.AddUsing("System.Linq"));
             builder.AppendLine(CodeWriterViewHelper.AddUsing("System.Text"));
-            builder.AppendLine(CodeWriterViewHelper.AddUsing("SysWork.Data.Common.Attributes"));
+            builder.AppendLine(CodeWriterViewHelper.AddUsing("SysWork.Data.Mapping"));
             builder.AppendLine(CodeWriterViewHelper.StartNamespace(_nameSpace + ".Entities"));
             builder.AppendLine(CodeWriterViewHelper.AddDbViewAttribute(_dbViewName));
             builder.AppendLine(CodeWriterViewHelper.StartClass(_className));
@@ -118,7 +116,7 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
 
                     dataType = CodeWriterViewHelper.GetDataType(dataType, isNullable);
 
-                    builder.AppendLine(CodeWriterViewHelper.AddDbColumnAttribute((propertyName != columnName) ? columnName : null));
+                    builder.AppendLine(CodeWriterViewHelper.AddColumnAttribute((propertyName != columnName) ? columnName : null));
                     builder.AppendLine(CodeWriterViewHelper.AddPublicProperty(dataType, propertyName));
                 }
 
@@ -134,7 +132,7 @@ namespace SysWork.Data.GenericViewManager.CodeWriter
         private string AddSummary()
         {
             string ret = "\t\t/// <summary>\r\n";
-            ret += "\t\t/// This class was created automatically with the class EntityClassFromView.\r\n";
+            ret += "\t\t/// This class was created automatically with SysWork.EntityManager.\r\n";
             ret += "\t\t/// Please check the DbTypes and the field names.\r\n";
             ret += "\t\t/// </summary>\r\n";
 

@@ -96,12 +96,13 @@ namespace SysWork.Data.GenericRepository
         /// <summary>
         /// Get the propertyInfo of the columns.
         /// </summary>
-        public IList<PropertyInfo> EntityProperties { get; private set; }
+        private IList<PropertyInfo> _entityProperties;
+        public IList<PropertyInfo> EntityProperties { get { return _entityProperties; }}
 
-        /// <summary>
-        /// Get a list of the columns to perform a INSERT sentence on the represented table, separated by commas. The Identity columns are excluded.
-        /// </summary>
-        public string ColumnsForInsert { get; private set; }
+    /// <summary>
+    /// Get a list of the columns to perform a INSERT sentence on the represented table, separated by commas. The Identity columns are excluded.
+    /// </summary>
+    public string ColumnsForInsert { get; private set; }
 
         /// <summary>
         /// Get a list of the columns to perform a SELECT sentence on the represented table, separated by commas.
@@ -125,7 +126,7 @@ namespace SysWork.Data.GenericRepository
         /// <param name="connectionString">The connection string.</param>
         public BaseRepository(string connectionString)
         {
-            BaseRepositoryConstructorResolver(connectionString, EDatabaseEngine.MSSqlServer);
+            BaseRepositoryConstructorResolver(connectionString, DefaultValues.DefaultDatabaseEngine);
         }
 
         /// <summary>
@@ -149,11 +150,11 @@ namespace SysWork.Data.GenericRepository
             _mapper.UseTypeCache = false;
 
             TEntity entity = new TEntity();
-            EntityProperties = ColumnHelper.GetProperties(entity);
+            _entityProperties = ColumnHelper.GetProperties(entity);
 
             TableName = GetTableNameFromEntity(entity.GetType());
 
-            if ((EntityProperties == null) || (EntityProperties.Count == 0))
+            if ((_entityProperties == null) || (_entityProperties.Count == 0))
                 throw new Exception(string.Format("The Entity {0}, has not linked attibutes to table: {1}, Use [Column] attribute to link properties to the table.", entity.GetType().Name, TableName));
 
             GetColumnsAndAtributes();
@@ -254,7 +255,7 @@ namespace SysWork.Data.GenericRepository
             using (DbConnection conn = BaseDbConnection())
             {
                 conn.Open();
-                foreach (PropertyInfo i in EntityProperties)
+                foreach (PropertyInfo i in _entityProperties)
                 {
                     var customAttribute = i.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
                     string columnName = _syntaxProvider.GetSecureColumnName(customAttribute.Name ?? i.Name);
@@ -383,14 +384,14 @@ namespace SysWork.Data.GenericRepository
         internal DataTable ConvertToDatatable(IList<TEntity> list)
         {
             DataTable table = new DataTable();
-            foreach (PropertyInfo i in EntityProperties)
+            foreach (PropertyInfo i in _entityProperties)
                 table.Columns.Add(i.Name, i.PropertyType);
 
-            object[] values = new object[EntityProperties.Count];
+            object[] values = new object[_entityProperties.Count];
             foreach (TEntity item in list)
             {
                 for (int i = 0; i < values.Length; i++)
-                    values[i] = EntityProperties[i].GetValue(item);
+                    values[i] = _entityProperties[i].GetValue(item);
 
                 table.Rows.Add(values);
             }
@@ -453,7 +454,5 @@ namespace SysWork.Data.GenericRepository
 
             return _persistentIDBConnection;
         }
-
-
     }
 }

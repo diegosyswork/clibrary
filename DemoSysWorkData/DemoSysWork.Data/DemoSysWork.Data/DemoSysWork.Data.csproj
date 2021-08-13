@@ -84,10 +84,12 @@
     <Compile Include="V2\Entities\Person.cs" />
     <Compile Include="V2\Entities\State.cs" />
     <Compile Include="V2\Entities\VW_PersonsWithStates.cs" />
+    <Compile Include="V2\Entities\V_MA_ARTICULOS.cs" />
     <Compile Include="V2\Repositories\DataManager .cs" />
     <Compile Include="V2\Repositories\PersonRepository.cs" />
     <Compile Include="V2\Repositories\StateRepository.cs" />
     <Compile Include="V2\Repositories\VManagerPersonsWithStates.cs" />
+    <Compile Include="V2\Repositories\V_MA_ARTICULORepository.cs" />
     <EmbeddedResource Include="FrmDemoSysworkData.resx">
       <DependentUpon>FrmDemoSysworkData.cs</DependentUpon>
     </EmbeddedResource>

@@ -68,7 +68,7 @@ namespace SysWork.Data.GenericRepository
                 }
 
                 var table = entityProvider.GetTable<TEntity>();
-                result = table.Where(filter).FirstOrDefault();
+                result = table.Where(filter).FirstOrDefault ();
             }
             catch (Exception e)
             {

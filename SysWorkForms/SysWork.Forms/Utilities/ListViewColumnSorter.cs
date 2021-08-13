@@ -57,11 +57,10 @@ namespace SysWork.Forms.Utilities
             if (!_compareAllAsString)
             {
                 // Intento Convertir a DateTime
-                DateTime x1, y1;
-                if (!DateTime.TryParse(listviewX.SubItems[_columnToSort].Text, out x1))
+                if (!DateTime.TryParse(listviewX.SubItems[_columnToSort].Text, out DateTime x1))
                     x1 = DateTime.MinValue;
 
-                if (!DateTime.TryParse(listviewY.SubItems[_columnToSort].Text, out y1))
+                if (!DateTime.TryParse(listviewY.SubItems[_columnToSort].Text, out DateTime y1))
                     y1 = DateTime.MinValue;
 
                 if (x1 != DateTime.MinValue && y1 != DateTime.MinValue)
@@ -71,11 +70,10 @@ namespace SysWork.Forms.Utilities
                 }
 
                 // Intento Convertir a Decimal
-                Decimal x2, y2;
-                if (!Decimal.TryParse(listviewX.SubItems[_columnToSort].Text, out x2))
+                if (!Decimal.TryParse(listviewX.SubItems[_columnToSort].Text, out decimal x2))
                     x2 = Decimal.MinValue;
 
-                if (!Decimal.TryParse(listviewY.SubItems[_columnToSort].Text, out y2))
+                if (!Decimal.TryParse(listviewY.SubItems[_columnToSort].Text, out decimal y2))
                     y2 = Decimal.MinValue;
 
                 if (x2 != Decimal.MinValue && y2 != Decimal.MinValue)

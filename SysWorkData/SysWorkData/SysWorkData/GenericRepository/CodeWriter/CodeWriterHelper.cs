@@ -45,10 +45,10 @@ namespace SysWork.Data.GenericRepository.CodeWriter
         /// </summary>
         /// <param name="dbTableName">Name of the database table.</param>
         /// <returns></returns>
-        public static string AddDbTableAttribute(string dbTableName)
+        public static string AddTableAttribute(string dbTableName)
         {
             string ret;
-            ret = string.Format("\t[DbTable (Name = \"{0}\")]", dbTableName) ;
+            ret = string.Format("\t[Table (Name = \"{0}\")]", dbTableName) ;
             return ret;
         }
 
@@ -61,7 +61,7 @@ namespace SysWork.Data.GenericRepository.CodeWriter
         public static string StartClass(string className, string inherits = null)
         {
 
-            string ret = "";
+            string ret;
             if (inherits==null) 
                 ret = string.Format("\tpublic class {0}", className) + Environment.NewLine;
             else
@@ -114,14 +114,14 @@ namespace SysWork.Data.GenericRepository.CodeWriter
         /// <param name="isPrimary">if set to <c>true</c> [is primary].</param>
         /// <param name="ColumnName"></param>
         /// <returns></returns>
-        public static string AddDbColumnAttribute(bool isIdentity = false, bool isPrimary = false, string ColumnName=null)
+        public static string AddColumnAttribute(bool isIdentity = false, bool isPrimary = false, string ColumnName=null)
         {
             string ret = "";
 
-            ret = "\t\t[DbColumn(";
+            ret = "\t\t[Column(";
             ret += isIdentity ? "IsIdentity = true" : "";
-            ret += isPrimary ? (isIdentity ? "," : "") + " IsPrimary = true" : "";
-            ret += ColumnName != null ? (isPrimary|| isIdentity ? ",":"") + " ColumnName = \"" + ColumnName + "\"" : "";
+            ret += isPrimary ? (isIdentity ? "," : "") + " IsPrimaryKey = true" : "";
+            ret += ColumnName != null ? (isPrimary|| isIdentity ? ",":"") + " Name = \"" + ColumnName + "\"" : "";
             ret += ")]" ;
             return ret;
         }
@@ -141,7 +141,7 @@ namespace SysWork.Data.GenericRepository.CodeWriter
 
             return ret;
         }
-
+        /*
         /// <summary>
         /// Tables the name of the name to class.
         /// </summary>
@@ -212,12 +212,15 @@ namespace SysWork.Data.GenericRepository.CodeWriter
 
             return ret;
         }
+        */
 
         /// <summary>
         /// Camels the case to space separated.
         /// </summary>
         /// <param name="camelCaseString">The camel case string.</param>
         /// <returns></returns>
+        
+        /*
         public static string[] CamelCaseToSpaceSeparated(string camelCaseString)
         {
             if (string.IsNullOrEmpty(camelCaseString))
@@ -238,7 +241,6 @@ namespace SysWork.Data.GenericRepository.CodeWriter
             }
             return res.ToString().Split(' ');
         }
-
-
+        */
     }
 }

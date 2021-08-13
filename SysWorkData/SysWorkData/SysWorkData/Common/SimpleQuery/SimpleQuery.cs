@@ -46,10 +46,10 @@ namespace SysWork.Data.Common.SimpleQuery
         /// <returns>An dynamic IEnumerable</returns>
         public static IEnumerable<dynamic> Execute(string connectionString, string commandText,bool closeConnection = true)
         {
-            DbConnection dbConnection = StaticDbObjectProvider.GetDbConnection(EDatabaseEngine.MSSqlServer);
+            DbConnection dbConnection = StaticDbObjectProvider.GetDbConnection(DefaultValues.DefaultDatabaseEngine);
             dbConnection.ConnectionString = connectionString;
 
-            return Execute(EDatabaseEngine.MSSqlServer, dbConnection, commandText, closeConnection);
+            return Execute(DefaultValues.DefaultDatabaseEngine, dbConnection, commandText, closeConnection);
         }
 
         /// <summary>

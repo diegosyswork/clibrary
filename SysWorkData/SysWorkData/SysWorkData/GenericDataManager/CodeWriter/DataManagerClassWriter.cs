@@ -7,15 +7,6 @@ using SysWork.Data.GenericDataManager.CodeWriter.Properties;
 
 namespace SysWork.Data.GenericDataManager.CodeWriter
 {
-    // TODO:  Agregar la  posibilidad de crear: Clasico Singleton, DbContext Singleton, Clasico Instanciable, DbContext Instanciable, agregado el 08/03/20021
-    public enum EDatamagerStyle
-    {
-        ClasicSingleton,
-        DbContextSingleton,
-        ClassicInstantiable,
-        DbContextInstantiable
-    }
-
     /// <summary>
     /// Write a DataManager Class
     /// </summary>
@@ -39,7 +30,7 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
         /// <param name="ViewManagers"></param>
         public DataManagerClassWriter(string ConnectionString, string NameSpace, List<DbObjectWriterProperty> Repositories,List<DbObjectWriterProperty> ViewManagers, EDatamagerStyle datamagerStyle)
         {
-            DataManagerClassWriterConstructorResolver(EDatabaseEngine.MSSqlServer, ConnectionString, NameSpace, Repositories, ViewManagers, datamagerStyle);
+            DataManagerClassWriterConstructorResolver(DefaultValues.DefaultDatabaseEngine, ConnectionString, NameSpace, Repositories, ViewManagers, datamagerStyle);
         }
 
         /// <summary>
@@ -90,7 +81,7 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
 
             builder.AppendLine(DataManagerCodeWriterHelper.StartNamespace(_nameSpace));
             builder.AppendLine(AddSummary());
-            if (_datamagerStyle == EDatamagerStyle.ClasicSingleton)
+            if (_datamagerStyle == EDatamagerStyle.Singleton)
                 builder.AppendLine(DataManagerCodeWriterHelper.StartClass("DataManager", "BaseDataManager<DataManager>, IDataManager"));
             else
                 builder.AppendLine(DataManagerCodeWriterHelper.StartClass("Db", "BaseDataManager<Db>, IDataManager"));
@@ -140,7 +131,7 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
             var repositoryVariable = GetRepositoryVariable(repository.ObjectName);
             ret += $"\t\tprivate Lazy<{repository.ObjectName}> {repositoryVariable};" + Environment.NewLine;
 
-            if (_datamagerStyle == EDatamagerStyle.ClasicSingleton)
+            if (_datamagerStyle == EDatamagerStyle.Singleton)
                 ret += $"\t\tpublic {repository.ObjectName} {repository.PublicPropertyName} {{get => {repositoryVariable}.Value;}}" + Environment.NewLine + Environment.NewLine;
             else
                 ret += $"\t\tpublic static {repository.ObjectName} {repository.PublicPropertyName} {{get => GetInstance().{repositoryVariable}.Value;}}" + Environment.NewLine + Environment.NewLine;
@@ -156,7 +147,7 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
             var viewManagerVariable = GetRepositoryVariable(viewManager.ObjectName);
 
             ret += $"\t\tprivate Lazy<{viewManager.ObjectName}> {viewManagerVariable};" + Environment.NewLine;
-            if (_datamagerStyle == EDatamagerStyle.ClasicSingleton)
+            if (_datamagerStyle == EDatamagerStyle.Singleton)
                 ret += $"\t\tpublic {viewManager.ObjectName} {viewManager.PublicPropertyName} {{get => {viewManagerVariable}.Value;}}" + Environment.NewLine + Environment.NewLine;
             else
                 ret += $"\t\tpublic static {viewManager.ObjectName} {viewManager.PublicPropertyName} {{get => GetInstance().{viewManagerVariable}.Value;}}" + Environment.NewLine + Environment.NewLine;
@@ -214,7 +205,7 @@ namespace SysWork.Data.GenericDataManager.CodeWriter
         {
             string ret = "";
 
-            if (_datamagerStyle == EDatamagerStyle.ClasicSingleton)
+            if (_datamagerStyle == EDatamagerStyle.Singleton)
                 ret += "\t\tprivate DataManager()" + Environment.NewLine;
             else
                 ret += "\t\tprivate Db()" + Environment.NewLine;

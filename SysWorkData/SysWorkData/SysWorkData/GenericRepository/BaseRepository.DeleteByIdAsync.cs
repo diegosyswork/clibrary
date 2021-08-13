@@ -70,7 +70,7 @@ namespace SysWork.Data.GenericRepository
             StringBuilder where = new StringBuilder();
 
             string parameterName;
-            foreach (PropertyInfo i in EntityProperties)
+            foreach (PropertyInfo i in _entityProperties)
             {
                 var customAttribute = i.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
                 var columnName = _syntaxProvider.GetSecureColumnName(customAttribute.Name ?? i.Name);

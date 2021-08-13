@@ -111,7 +111,7 @@ namespace SysWork.Data.GenericRepository
             bool hasPrimary = false;
 
             string parameterName;
-            foreach (PropertyInfo i in EntityProperties)
+            foreach (PropertyInfo i in _entityProperties)
             {
                 var column = i.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
                 parameterName = "@param_" + i.Name;

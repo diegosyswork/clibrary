@@ -46,7 +46,7 @@ namespace SysWork.Data.GenericRepository.CodeWriter
         /// <param name="DbTableName">Name of the database table.</param>
         public RepositoryClassFromTable(string ConnectionString, string EntityName, string NameSpace, string DbTableName)
         {
-            RepositoryClassFromDbConstructorResolver(EDatabaseEngine.MSSqlServer, ConnectionString, EntityName, NameSpace, DbTableName);
+            RepositoryClassFromDbConstructorResolver(DefaultValues.DefaultDatabaseEngine, ConnectionString, EntityName, NameSpace, DbTableName);
 
         }
         
@@ -83,7 +83,7 @@ namespace SysWork.Data.GenericRepository.CodeWriter
             builder.AppendLine(CodeWriterHelper.AddUsing("System.Text"));
             builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.Common"));
             builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.GenericRepository"));
-            builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.Common.Attributes"));
+            builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.Mapping"));
             builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.Common.ValueObjects"));
             builder.AppendLine(CodeWriterHelper.AddUsing(_nameSpace + ".Entities"));
             builder.AppendLine(CodeWriterHelper.StartNamespace(_nameSpace + ".Repositories"));
@@ -408,30 +408,50 @@ namespace SysWork.Data.GenericRepository.CodeWriter
 
         private string AddSummary()
         {
-
             string ret = "\t/// <summary>\r\n";
-            ret += "\t/// This class was created automatically with the RepositoryClassFromDb class.\r\n";
+            ret += "\t/// This class was created automatically with the SysWork.EntityManager.\r\n";
             ret += "\t/// Inherited from GenericRepository which allows you to perform the following actions: \r\n";
             ret += "\t/// Add , \r\n";
+            ret += "\t/// AddAsync , \r\n";
             ret += "\t/// AddRange , \r\n";
-            ret += "\t/// DeleteAll ,\r\n";
-            ret += "\t/// DeleteByGenericWhereFilter ,\r\n";
-            ret += "\t/// DeleteById ,\r\n";
-            ret += "\t/// DeleteByLambdaExpressionFilter ,\r\n";
-            ret += "\t/// Exists ,\r\n";
-            ret += "\t/// Find ,\r\n";
-            ret += "\t/// GetAll ,\r\n";
-            ret += "\t/// GetByGenericWhereFilter ,\r\n";
-            ret += "\t/// GetById ,\r\n";
-            ret += "\t/// GetByLambdaExpressionFilter ,\r\n";
-            ret += "\t/// GetDataTableByGenericWhereFilter ,\r\n";
-            ret += "\t/// GetDataTableByLambdaExpressionFilter ,\r\n";
-            ret += "\t/// GetListByGenericWhereFilter ,\r\n";
-            ret += "\t/// GetListByLambdaExpressionFilter ,\r\n";
-            ret += "\t/// RecordCount,\r\n";
-            ret += "\t/// Update,\r\n";
-            ret += "\t/// UpdateRange.\r\n";
-            ret += "\t/// ";
+            ret += "\t/// AddRangeAsync , \r\n";
+            ret += "\t/// IDeleteAll , \r\n";
+            ret += "\t/// IDeleteAllAsync , \r\n";
+            ret += "\t/// DeleteByGenericWhereFilter , \r\n";
+            ret += "\t/// DeleteByGenericWhereFilterAsync , \r\n";
+            ret += "\t/// DeleteById , \r\n";
+            ret += "\t/// DeleteByIdAsync , \r\n";
+            ret += "\t/// DeleteByIdsIN , \r\n";
+            ret += "\t/// DeleteByIdsNotIN , \r\n";
+            ret += "\t/// DeleteByLambdaExpressionFilter , \r\n";
+            ret += "\t/// DeleteByLambdaExpressionFilterAsync , \r\n";
+            ret += "\t/// Exists , \r\n";
+            ret += "\t/// ExistsAsync , \r\n";
+            ret += "\t/// Find , \r\n";
+            ret += "\t/// FindAsync , \r\n";
+            ret += "\t/// GetAll , \r\n";
+            ret += "\t/// GetAllAsync , \r\n";
+            ret += "\t/// GetByGenericWhereFilter , \r\n";
+            ret += "\t/// GetByGenericWhereFilterAsync , \r\n";
+            ret += "\t/// GetById , \r\n";
+            ret += "\t/// GetByIdAsync , \r\n";
+            ret += "\t/// GetByLambdaExpressionFilter , \r\n";
+            ret += "\t/// GetByLambdaExpressionFilterAsync , \r\n";
+            ret += "\t/// GetDataTableByGenericWhereFilter , \r\n";
+            ret += "\t/// GetDataTableByGenericWhereFilterAsync , \r\n";
+            ret += "\t/// GetDataTableByLambdaExpressionFilter , \r\n";
+            ret += "\t/// GetDataTableByLambdaExpressionFilterAsync , \r\n";
+            ret += "\t/// GetListByGenericWhereFilter , \r\n";
+            ret += "\t/// GetListByGenericWhereFilterAsync , \r\n";
+            ret += "\t/// GetListByLambdaExpressionFilter , \r\n";
+            ret += "\t/// GetListByLambdaExpressionFilterAsync , \r\n";
+            ret += "\t/// RecordCount , \r\n";
+            ret += "\t/// RecordCountAsync , \r\n";
+            ret += "\t/// Update , \r\n";
+            ret += "\t/// UpdateAsync , \r\n";
+            ret += "\t/// UpdateRange , \r\n";
+            ret += "\t/// UpdateRangeAsync , \r\n";
+            ret += "\t/// " + Environment.NewLine;
             ret += "\t/// Additionally, methods were also created for the unique keys.\r\n";
             ret += "\t/// </summary>\r\n";
             return ret;

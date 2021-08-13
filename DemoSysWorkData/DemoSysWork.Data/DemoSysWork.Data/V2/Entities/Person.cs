@@ -25,8 +25,8 @@ namespace Demo.SysWork.Data.Entities
         public string LongNameField { get; set; }
         [Column()]
         public bool Active { get; set; }
-        [Column()]
-        public Guid GUID { get; set; }
+        //[Column()]
+        //public Guid GUID { get; set; }
         public Person()
         {
 

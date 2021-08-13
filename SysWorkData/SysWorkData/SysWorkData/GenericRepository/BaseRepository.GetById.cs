@@ -63,7 +63,7 @@ namespace SysWork.Data.GenericRepository
             IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
             IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
-            foreach (var pi in EntityProperties)
+            foreach (var pi in _entityProperties)
             {
                 var pk = pi.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
                 if (pk != null && pk.IsIdentity)
@@ -103,7 +103,7 @@ namespace SysWork.Data.GenericRepository
                     IDataReader reader = dbCommand.ExecuteReader();
 
                     if (reader.Read())
-                        entity = _mapper.MapSingle<TEntity>(reader, EntityProperties);
+                        entity = _mapper.MapSingle<TEntity>(reader, _entityProperties);
                     else
                         entity = default;
 

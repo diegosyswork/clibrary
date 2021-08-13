@@ -62,7 +62,7 @@ namespace SysWork.Data.GenericRepository
             DbConnection dbConnectionInUse = dbConnection ?? BaseDbConnection();
             DbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
-            foreach (var pi in EntityProperties)
+            foreach (var pi in _entityProperties)
             {
                 var pk = pi.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
                 if (pk != null && pk.IsIdentity)
@@ -99,7 +99,7 @@ namespace SysWork.Data.GenericRepository
                     if (dbTransaction != null)
                         dbCommand.Transaction = dbTransaction;
 
-                    entities = await _mapper.MapAsync<TEntity>(await dbCommand.ExecuteReaderAsync(), EntityProperties, _databaseEngine);
+                    entities = await _mapper.MapAsync<TEntity>(await dbCommand.ExecuteReaderAsync(), _entityProperties, _databaseEngine);
 
                     dbCommand.Dispose();
                 }

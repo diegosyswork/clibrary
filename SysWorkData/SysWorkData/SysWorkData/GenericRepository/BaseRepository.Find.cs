@@ -59,20 +59,21 @@ namespace SysWork.Data.GenericRepository
             IDbConnection dbConnectionInUse = dbConnection ?? BaseIDbConnection();
             IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
-            foreach (var pi in EntityProperties)
+            foreach (var pi in _entityProperties)
             {
-                var pk = pi.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
-                if (pk != null && pk.IsIdentity)
+                var idCol = pi.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
+                
+                if (idCol != null && idCol.IsIdentity)
                 {
-                    var columnName = _syntaxProvider.GetSecureColumnName(pk.Name ?? pi.Name);
+                    var columnName = _syntaxProvider.GetSecureColumnName(idCol.Name ?? pi.Name);
 
                     string _ids = string.Empty;
                     foreach (var id in ids)
                     {
                         if (_ids != string.Empty)
-                            _ids = _ids + ",";
+                            _ids += ",";
 
-                        _ids = _ids + id.ToString();
+                        _ids += id.ToString();
                     }
 
                     clause.Append(string.Format("{0} IN ({1})", columnName, _ids));
@@ -97,7 +98,7 @@ namespace SysWork.Data.GenericRepository
                         dbCommand.Transaction = dbTransaction;
 
                     IDataReader reader = dbCommand.ExecuteReader();
-                    entities = _mapper.Map<TEntity>(reader, EntityProperties, _databaseEngine);
+                    entities = _mapper.Map<TEntity>(reader, _entityProperties, _databaseEngine);
 
                     reader.Close();
                     reader.Dispose();

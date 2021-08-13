@@ -123,7 +123,7 @@ namespace SysWork.Data.Common.Utilities
         /// <param name="connectionString">The connection string.</param>
         public DbExecutor(string connectionString)
         {
-            ConstructorResolver(null,null, connectionString, EDatabaseEngine.MSSqlServer);
+            ConstructorResolver(null,null, connectionString, DefaultValues.DefaultDatabaseEngine);
         }
 
         /// <summary>

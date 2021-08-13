@@ -68,7 +68,7 @@ namespace SysWork.Data.GenericRepository
                     dbCommand.Transaction = dbTransaction;
 
                 DbDataReader reader = await  dbCommand.ExecuteReaderAsync();
-                result = await _mapper.MapAsync<TEntity>(reader, EntityProperties, _databaseEngine);
+                result = await _mapper.MapAsync<TEntity>(reader, _entityProperties, _databaseEngine);
 
                 reader.Close(); reader.Dispose();
                 dbCommand.Dispose();

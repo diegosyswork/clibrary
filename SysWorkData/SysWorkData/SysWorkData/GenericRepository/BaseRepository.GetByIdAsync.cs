@@ -64,7 +64,7 @@ namespace SysWork.Data.GenericRepository
             DbConnection dbConnectionInUse = dbConnection ?? BaseDbConnection();
             DbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
-            foreach (var pi in EntityProperties)
+            foreach (var pi in _entityProperties)
             {
                 var pk = pi.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
                 if (pk != null && pk.IsIdentity)
@@ -104,7 +104,7 @@ namespace SysWork.Data.GenericRepository
                     IDataReader reader = await dbCommand.ExecuteReaderAsync();
 
                     if (reader.Read())
-                        entity = await _mapper.MapSingleAsync<TEntity>(reader, EntityProperties);
+                        entity = await _mapper.MapSingleAsync<TEntity>(reader, _entityProperties);
                     else
                         entity = default;
 

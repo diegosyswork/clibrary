@@ -125,7 +125,7 @@ namespace SysWork.Data.GenericRepository
                 string parameterName;
                 dbCommand = dbConnectionInUse.CreateCommand();
 
-                foreach (PropertyInfo i in EntityProperties)
+                foreach (PropertyInfo i in _entityProperties)
                 {
                     var column = i.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
                     var columnName = _syntaxProvider.GetSecureColumnName(column.Name ?? i.Name);

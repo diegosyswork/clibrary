@@ -31,7 +31,7 @@ namespace SysWork.Data.Common.Utilities
         /// </returns>
         public static bool ExistsTable(string connectionString, string tableName)
         {
-            return ExistsTable(EDatabaseEngine.MSSqlServer, connectionString, tableName);
+            return ExistsTable(DefaultValues.DefaultDatabaseEngine, connectionString, tableName);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace SysWork.Data.Common.Utilities
         /// <returns>List of tables in string format.</returns>
         public static List<string> GetTables(string connectionString)
         {
-            return GetTables(EDatabaseEngine.MSSqlServer, connectionString);
+            return GetTables(DefaultValues.DefaultDatabaseEngine, connectionString);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace SysWork.Data.Common.Utilities
         /// <returns></returns>
         public static List<string> GetViews(string connectionString)
         {
-            return GetViews(EDatabaseEngine.MSSqlServer, connectionString);
+            return GetViews(DefaultValues.DefaultDatabaseEngine, connectionString);
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace SysWork.Data.Common.Utilities
         /// <returns></returns>
         public static bool ExistsColumn(string connectionString, string tableName, string columnName)
         {
-            return ExistsColumn(EDatabaseEngine.MSSqlServer, connectionString, tableName, columnName);
+            return ExistsColumn(DefaultValues.DefaultDatabaseEngine, connectionString, tableName, columnName);
         }
 
         /// <summary>
@@ -210,7 +210,7 @@ namespace SysWork.Data.Common.Utilities
         /// <returns></returns>
         public static bool ExecuteBatchNonQuery(string query, string ConnectionString)
         {
-            return ExecuteBatchNonQuery(EDatabaseEngine.MSSqlServer, query, ConnectionString);
+            return ExecuteBatchNonQuery(DefaultValues.DefaultDatabaseEngine, query, ConnectionString);
         }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace SysWork.Data.Common.Utilities
         /// <returns></returns>
         public static bool ConnectionSuccess(string connectionString)
         {
-            return ConnectionSuccess(EDatabaseEngine.MSSqlServer, connectionString, out string errMessage);
+            return ConnectionSuccess(DefaultValues.DefaultDatabaseEngine, connectionString, out string errMessage);
         }
 
         /// <summary>
@@ -297,7 +297,7 @@ namespace SysWork.Data.Common.Utilities
         /// <returns></returns>
         public static bool ConnectionSuccess(string connectionString, out string errMessage)
         {
-            return ConnectionSuccess(EDatabaseEngine.MSSqlServer, connectionString, out errMessage);
+            return ConnectionSuccess(DefaultValues.DefaultDatabaseEngine, connectionString, out errMessage);
         }
 
         /// <summary>
@@ -347,7 +347,7 @@ namespace SysWork.Data.Common.Utilities
         /// </returns>
         public static bool IsValidConnectionString(string connectionString)
         {
-            return IsValidConnectionString(EDatabaseEngine.MSSqlServer, connectionString, out string errMessage);
+            return IsValidConnectionString(DefaultValues.DefaultDatabaseEngine, connectionString, out string errMessage);
         }
 
         /// <summary>
@@ -360,7 +360,7 @@ namespace SysWork.Data.Common.Utilities
         /// </returns>
         public static bool IsValidConnectionString(string connectionString, out string errMessage)
         {
-            return IsValidConnectionString(EDatabaseEngine.MSSqlServer, connectionString, out errMessage);
+            return IsValidConnectionString(DefaultValues.DefaultDatabaseEngine, connectionString, out errMessage);
         }
 
 

@@ -73,7 +73,7 @@ namespace SysWork.Data.GenericViewManager
         /// <param name="connectionString">The connection string.</param>
         public BaseViewManager(string connectionString)
         {
-            BaseGenericViewManagerConstructorResolver(connectionString, EDatabaseEngine.MSSqlServer);
+            BaseGenericViewManagerConstructorResolver(connectionString, DefaultValues.DefaultDatabaseEngine);
         }
 
         /// <summary>

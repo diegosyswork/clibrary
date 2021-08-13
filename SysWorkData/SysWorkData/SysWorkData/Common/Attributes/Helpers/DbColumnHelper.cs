@@ -21,7 +21,7 @@ namespace SysWork.Data.Common.Attributes.Helpers
         /// <returns></returns>
         public static string GetColumnsForSelect<TEntity>() where TEntity : class, new()
         {
-            return GetColumnsForSelect<TEntity>(EDatabaseEngine.MSSqlServer);
+            return GetColumnsForSelect<TEntity>(DefaultValues.DefaultDatabaseEngine);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace SysWork.Data.Common.Attributes.Helpers
         /// <returns></returns>
         public static string GetColumnsForInsert<TEntity>() where TEntity : class, new()
         {
-            return GetColumnsForInsert<TEntity>(EDatabaseEngine.MSSqlServer);
+            return GetColumnsForInsert<TEntity>(DefaultValues.DefaultDatabaseEngine);
         }
         /// <summary>
         /// Gets the columns for insert.

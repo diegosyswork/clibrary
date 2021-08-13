@@ -66,7 +66,7 @@ namespace SysWork.Data.GenericRepository
                     dbCommand.Transaction = dbTransaction;
 
                 IDataReader reader = dbCommand.ExecuteReader();
-                result = _mapper.Map<TEntity>(reader, EntityProperties, _databaseEngine);
+                result = _mapper.Map<TEntity>(reader, _entityProperties, _databaseEngine);
 
                 reader.Close(); reader.Dispose();
                 dbCommand.Dispose();

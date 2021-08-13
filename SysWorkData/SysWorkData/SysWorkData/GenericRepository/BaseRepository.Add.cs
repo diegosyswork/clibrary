@@ -1013,7 +1013,7 @@ namespace SysWork.Data.GenericRepository
             IDbCommand dbCommand = dbConnectionInUse.CreateCommand();
 
             StringBuilder parameterList = new StringBuilder();
-            foreach (PropertyInfo i in EntityProperties)
+            foreach (PropertyInfo i in _entityProperties)
             {
                 var column = i.GetCustomAttribute(typeof(ColumnAttribute)) as ColumnAttribute;
                 if (!column.IsIdentity)

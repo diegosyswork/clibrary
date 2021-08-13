@@ -89,7 +89,7 @@ namespace SysWork.Data.GenericRepository
                     ((OleDbCommand)dbCommand).ConvertNamedParametersToPositionalParameters();
 
                 var reader = dbCommand.ExecuteReader();
-                result = _mapper.Map<TEntity>(reader, EntityProperties, _databaseEngine);
+                result = _mapper.Map<TEntity>(reader, _entityProperties, _databaseEngine);
 
                 reader.Close();
                 reader.Dispose();

@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.Common;
 using System.Text;
-using SysWork.Data.Common;
 using SysWork.Data.Common.DataObjectProvider;
 using SysWork.Data.Common.Syntax;
 using SysWork.Data.Common.ValueObjects;
@@ -45,7 +44,7 @@ namespace SysWork.Data.GenericRepository.CodeWriter
         
         public EntityClassFromTable(string ConnectionString,string DbTableName,string ClassName,string NameSpace)
         {
-            EntityClassFromDbConstructorResolver(EDatabaseEngine.MSSqlServer, ConnectionString, DbTableName, ClassName, NameSpace);
+            EntityClassFromDbConstructorResolver(DefaultValues.DefaultDatabaseEngine, ConnectionString, DbTableName, ClassName, NameSpace);
         }
         
         private void EntityClassFromDbConstructorResolver(EDatabaseEngine databaseEngine, string ConnectionString, string DbTableName, string ClassName, string NameSpace)
@@ -70,9 +69,9 @@ namespace SysWork.Data.GenericRepository.CodeWriter
             builder.AppendLine(CodeWriterHelper.AddUsing("System.Collections.Generic"));
             builder.AppendLine(CodeWriterHelper.AddUsing("System.Linq"));
             builder.AppendLine(CodeWriterHelper.AddUsing("System.Text"));
-            builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.Common.Attributes"));
+            builder.AppendLine(CodeWriterHelper.AddUsing("SysWork.Data.Mapping"));
             builder.AppendLine(CodeWriterHelper.StartNamespace(_nameSpace + ".Entities"));
-            builder.AppendLine(CodeWriterHelper.AddDbTableAttribute(_dbTableName));
+            builder.AppendLine(CodeWriterHelper.AddTableAttribute(_dbTableName));
             builder.AppendLine(CodeWriterHelper.StartClass(_className));
             builder.AppendLine(AddSummary());
 
@@ -118,7 +117,7 @@ namespace SysWork.Data.GenericRepository.CodeWriter
 
                     string dataType = CodeWriterHelper.GetDataType(columnDataType, allowDbNull);
 
-                    builder.AppendLine(CodeWriterHelper.AddDbColumnAttribute(isIdentity, isPrimary,(propertyName != columnName) ? columnName : null));
+                    builder.AppendLine(CodeWriterHelper.AddColumnAttribute(isIdentity, isPrimary,(propertyName != columnName) ? columnName : null));
                     builder.AppendLine(CodeWriterHelper.AddPublicProperty(dataType, propertyName));
                 }
             }
@@ -132,7 +131,7 @@ namespace SysWork.Data.GenericRepository.CodeWriter
         private string AddSummary()
         {
             string ret = "\t\t/// <summary>\r\n";
-            ret += "\t\t/// This class was created automatically with the class EntityClassFromDb.\r\n";
+            ret += "\t\t/// This class was created automatically with SysWork.EntityManager.\r\n";
             ret += "\t\t/// Please check the DbTypes and the field names.\r\n";
             ret += "\t\t/// </summary>\r\n";
 
